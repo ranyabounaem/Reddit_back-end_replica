@@ -122,6 +122,7 @@ app.delete("/pm", (req, res) => {});
  * emitter.on("ev", (data) => {return data});
  * emitter.emit("ev", data);
  * @note don't think about SQL triggers, they're irrelevant in such case.
+ * @see https://nodejs.org/api/events.html
  */
 app.get("/notif", (req, res) => {});
 app.post("/notif", (req, res) => {});
