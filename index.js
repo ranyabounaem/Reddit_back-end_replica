@@ -116,7 +116,7 @@ app.delete("/pm", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  * @description Should get notifications, mark them as read & deletes them.
- * @description You can use EventEmitter in order to talk an action whenever something happens in the bakcend.
+ * @description You can use EventEmitter in order to take an action whenever something happens in the bakcend.
  * @example
  * let emitter = new EventEmitter();
  * emitter.on("ev", (data) => {return data});
