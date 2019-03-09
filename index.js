@@ -104,7 +104,39 @@ app.delete("/sr", (req, res) => {});
  * @name PMService
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
+ *//**
+ * @api {post} /PMService/:  Compose a Message
+ * @apiName ComposeMessage
+ * @apiGroup PrivateMessages
+ *
+ * @apiParam {Number} Receiverid  unique ID.
+ * @apiParam {string} Subject subject of the message.
+ * @apiParam {string} Text Body of the message.
+ * @apiParam {String} Sync-token  sent as header used to prevent CSRF attacks .
+ * @apiSuccess {boolean} is_delivered boolean true for delivery of the message 
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       “is_delivered”: true,
+ *   
+ *     }
+ *
+ * @apiError UserNotFound The <code>id</code> of the User was not found.
+ * @apiError BlockedFromSendingMessage The receiver is blocking this user from Receiving the Sender Messages
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "UserNotFound"
+ *     }
+ * @apiErrorExample Error-Response:
+ *    HTTP/10.4.4 403 Forbidden
+ *     {
+ *       "error": "BlockedFromSendingMessage"
+ *     }
  */
+
 app.get("/pm", (req, res) => {});
 app.post("/pm", (req, res) => {});
 app.put("/pm", (req, res) => {});
