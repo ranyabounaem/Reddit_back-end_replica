@@ -83,15 +83,8 @@ app.delete("/emoji", (req, res) => {});
 *     {
 *     }
 *
-* @apiError UserNotFound The <code>id</code> of the User was not found.
 * @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
 * @apiError OverlengthedFlair The string length of the flair is over 100 character.
-
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "UserNotFound"
-*     }
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
@@ -115,16 +108,9 @@ app.delete("/emoji", (req, res) => {});
 *     HTTP/1.1 200 OK
 *     {
 *     }
-* @apiError UserNotFound The <code>id</code> of the User was not found.
 * @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
 * @apiError OverlengthedFlair The string length of the flair user want to delete is over 100 character.
 * @apiError FlairNotFound The flair string user want to delete is not found.
-
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "UserNotFound"
-*     }
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
