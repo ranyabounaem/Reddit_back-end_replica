@@ -206,10 +206,8 @@ app.delete("/sr", (req, res) => {});
 
 /**
  * @name PMService
- * 
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
- * 
  */
 /** 
 * @api {post} /pm/    Compose a new message 
