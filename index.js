@@ -43,12 +43,654 @@
 
  const app = require("express")();
 
-
 /**
  * @name UserService
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
+
+/**
+ * @api {post} /comment/:id Post a New Comment
+ * @apiName PostComment
+ * @apiGroup Comment
+ * 
+ * @apiParam {String} id ID of thread or comment.
+ * @apiParam {String} Type specifies whether this is a reply or a comment  .
+ * @apiParam {String} content Text of the Comment.
+ * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
+ * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
+ * 
+ * @apiSuccess {String} c_id The Created Comment ID.
+ * 
+ * @apiError ThreadNotFound The id of the thread wasn't found.
+ * @apiError AccessDenied If the user isn't logged in.
+ */
+
+
+
+ /**
+  * @api {get} /comment/ Get Details About Comment or a Reply
+  * @apiName GetComment
+  * @apiGroup Comment
+  * 
+  * @apiParam {String} c_id Comment Unique ID.
+  * 
+  * @apiSuccess {String} content Text of the Comment.
+  * @apiSuccess {Date} c_date Date of the Posted Comment.
+  * @apiSuccess {Boolean} spoiler True if it is a Spoiler.
+  * @apiSuccess {Boolean} locked True if the Replies are Disallowed on this Comment.
+  * @apiSuccess {Boolean} saved True if it is Saved.
+  * @apiSuccess {Boolean} hidden True if it is Hidden.
+  * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
+  */
+
+/**
+ * @api {delete} /comment/:c_id Delete a Comment
+ * @apiName DeleteComment
+ * @apiGroup Comment
+ * 
+ * @apiParam {Number} c_id Comment Unique ID.
+ * 
+ * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError AccessDenied If this user can't delete this comment.
+ */
+
+ /**
+  * @api {put} /comment/:c_id Edit a Comment
+  * @apiName EditComment
+  * @apiGroup Comment
+  * 
+  * @apiParam {String} c_id Comment Unique ID.
+  * @apiParam {String} content Text of the Edited Comment.
+  * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
+  * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
+  * 
+  * @apiError CommentNotFound The id of the comment wasn't found.
+  * @apiError AccessDenied If this user can't edit this comment.
+  */
+
+  /**
+   * @api {put} /comment/:c_id Vote for a Comment
+   * @apiName VoteComment
+   * @apiGroup Comment
+   * 
+   * @apiParam {String} c_id Comment Unique ID.
+   * @apiParam {Number=1,0,-1} direction Direction of the Vote as 1 indicates Upvote, -1 indicates Downvote and 0 means unvoting.
+   * 
+   * @apiError CommentNotFound The id of the comment wasn't found.
+   * @apiError AccessDenied If the user isn't logged in.
+   */
+
+   /**
+    * @api {post} /comment/:c_id Save a Comment
+    * @apiName SaveComment
+    * @apiGroup Comment
+    * 
+    * @apiParam {String} c_id Comment Unique ID.
+    * 
+    * @apiError CommentNotFound The id of the comment wasn't found.
+    * @apiError CommentAlreadySaved The Comment has already been saved before.
+    * @apiError AccessDenied If the user isn't logged in.
+    */
+
+    /**
+     * @api {delete} /comment/:c_id UnSave a Comment
+     * @apiName UnSaveComment
+     * @apiGroup Comment
+     * 
+     * @apiParam {String} c_id Comment Unique ID.
+     * 
+     * @apiError CommentNotFound The id of the comment wasn't found.
+     * @apiError CommentNotSaved You can't unsave an unsaved comment.
+     * @apiError AccessDenied If the user isn't logged in.
+     */
+
+     /**
+      * @api {put} /comment/:c_id Hide a Comment
+      * @apiName HideComment
+      * @apiGroup Comment
+      * 
+      * @apiParam {String} c_id Comment Unique ID.
+      * 
+      * @apiError CommentNotFound The id of the comment wasn't found.
+      * @apiError CommentAlreadyHidden The Comment has already been hidden before.
+      * @apiError AccessDenied If the user isn't logged in.
+      */
+
+     /**
+      * @api {put} /comment/:c_id UnHide a Comment
+      * @apiName UnHideComment
+      * @apiGroup Comment
+      * 
+      * @apiParam {String} c_id Comment Unique ID.
+      * 
+      * @apiError CommentNotFound The id of the comment wasn't found.
+      * @apiError CommentAlreadyHidden The Comment is not hidden.
+      * @apiError AccessDenied If the user isn't logged in.
+      */
+
+      /**
+       * @api {put} /comment/:c_id Mark Comment as a Spoiler
+       * @apiName SpoilerComment
+       * @apiGroup Comment
+       * 
+       * @apiParam {String} c_id Comment Unique ID.
+       * 
+       * @apiError CommentNotFound The id of the comment wasn't found.
+       * @apiError CommentAlreadySpoiler The Comment is already marked.
+       * @apiError AccessDenied If the user isn't logged in.
+       */
+
+       /**
+       * @api {put} /comment/:c_id UnMark Comment as a Spoiler
+       * @apiName UnSpoilerComment
+       * @apiGroup Comment
+       * 
+       * @apiParam {String} c_id Comment Unique ID.
+       * 
+       * @apiError CommentNotFound The id of the comment wasn't found.
+       * @apiError CommentAlreadySpoiler The Comment is already unmarked.
+       * @apiError AccessDenied If the user isn't logged in.
+       */
+
+       /**
+       * @api {put} /comment/:c_id Lock a Comment to Disallow Replies on it
+       * @apiName LockComment
+       * @apiGroup Comment
+       * 
+       * @apiParam {String} c_id Comment Unique ID.
+       * 
+       * @apiError CommentNotFound The id of the comment wasn't found.
+       * @apiError CommentAlreadySpoiler The Comment is already locked.
+       * @apiError AccessDenied If the user isn't logged in.
+       */
+
+       /**
+       * @api {put} /comment/:c_id UnLock a Comment to Allow Replies on it
+       * @apiName UnLockComment
+       * @apiGroup Comment
+       * 
+       * @apiParam {String} c_id Comment Unique ID.
+       * 
+       * @apiError CommentNotFound The id of the comment wasn't found.
+       * @apiError CommentAlreadySpoiler The Comment is already unlocked.
+       * @apiError AccessDenied If the user isn't logged in.
+       */
+
+       /**
+        * @api {post} /comment/:c_id Report a Comment
+        * @apiName ReportComment
+        * @apiGroup Comment
+        * 
+        * @apiParam {String} c_id Comment Unique ID.
+        * @apiParam {String} text The reason of reporting this comment.
+        * 
+        * @apiError CommentNotFound The id of the comment wasn't found.
+        * @apiError AccessDenied If the user isn't logged in.
+        */
+
+        /**
+         * @api {get} /comment/:c_id Retrieve additional comments omitted from a base comment tree
+         * @apiName ExpandComment
+         * @apiGroup Comment
+         * 
+         * @apiParam {String} c_id Comment Unique ID.
+         * 
+         * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
+         * 
+         * @apiError CommentNotFound The id of the comment wasn't found.
+         */
+
+/**
+ * @api {get} /me/:username Request my account information
+ * @apiName Getmyinfo
+ * @apiGroup me
+ *
+ * @apiParam {String} username Users unique username.
+ *  @apiParam {String} Token SyncToken That is sent with authentication..
+ *
+ * @apiSuccess {String} Email email  of the User.
+ * @apiSuccess {String} About text to describe the User.
+ * @apiSuccess {String} Imageid Image id  of the User.
+ * @apiSuccess {Number} Karma Karma of the User.
+ * @apiSuccess {String} Cakeday Date of joining Reddit.
+ * @apiSuccess {String[]} Subscriptions  subreddit subscriptons  of the User.
+ * 
+ *  @apiParamExample {json} Input
+ *    {
+ *      "Username": "User1",     
+ *    }
+ * 
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "Email": "user@reddit.com",
+ *      "About": "Im a reddit user",
+ *      "Imageid": "100001"
+ *      "Subscriptions": ["subbreddit:askreddit","subbreddit:reddit"],
+ *      "Karma" :2,
+ *      "Cakeday" : "21-3-1440"
+ *    }
+ * 
+ * @apiErrorExample {json} List error
+ *    HTTP/1.1 404 User not found
+ *      {
+ *       "error": "User Not Found"
+ *     }
+ * @apiErrorExample {json} List error
+ *    HTTP/1.1 405 User not found
+ *      {
+ *       "error": "Not Authorized"
+ *     }
+ */
+
+
+
+/**
+ * @api {post} /me/Create Register new user
+ * @apiName CreateUser
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Email email  of the User.
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam  {String} Password Password  of the User.
+ * @apiSuccess {string} Token SyncToken That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Email": "user@reddit.com",
+ *      "Username": "User1",
+ *      "Password": "Password"
+      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *  "token":"we8749832b7498c2b78942"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    HTTP/1.1 500 Internal Server Error
+ */
+
+/**
+ * @api {put} /me/Login login attempt
+ * @apiName LoginUser
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Email email  of the User.
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam  {String} Password Password  of the User.
+ * 
+ * @apiSuccess {string} Token SyncToken That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Email": "user@reddit.com",
+ *      "Username": "User1",
+ *      "Password": "Password"
+      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *  "token":"we8749832b7498c2b78942"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    HTTP/1.1 405 Invalid
+ * {
+ *          "error"":"Invalid credentials""
+ * }
+ */
+
+
+
+
+ /**
+ * @api {Put} /me/:username/edit Edit  user
+ * @apiName EditUser-
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Email email  of the User.
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam  {String} Password Password  of the User.
+ * @apiParam  {String} ImageId ID of the User's image.
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Email": "user@reddit.com",
+ *      "Username": "User1",
+ *      "Password": "Password",
+ *      "ImageID" : 3
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User not found
+ *      {
+ *       "error": "UserNotFound"
+ *     }
+ */
+
+ /**
+ * @api {Post} /me/:username/Block/:BlockedUsername  Block user
+ * @apiName BlockUser
+ * @apiGroup me
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParam  {String} Username unique Username  of the User.
+ *  @apiParam  {String} BlockedUsername  unique Username  of the User to be blocked.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "User1",      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User not found
+ *      {
+ *       "error": "UserNotFound"
+ *     }
+ */
+
+
+
+ /**
+ * @api {get} /me/:username/Block/  Get Blocked users
+ * @apiName BlockedUsers
+ * @apiGroup me
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ *  @apiParam  {String} Username unique Username  of the User.
+ *   @apiSuccess  {String} BlockedUsername unique Username  of the User to be blocked.
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * 
+ *    [{
+ *      "BlockedUsername": "User1",    
+ *    }]
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 500 Server Error
+ *      
+ */
+
+ /**
+ * @api {Post} /me/:username/Report/:id  report user comment or post
+ * @apiName Report
+ * @apiGroup me
+ *
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+  *  @apiParam  {String} Username unique Username  of the User.
+ * @apiParam  {String} Id unique Id  of the post or comment.
+ *  @apiParam  {String} Type type is post or comment.
+ * 
+ * @apiParamExample {json} Input
+ *    {
+ *      "Id": "1", 
+ *      "Type":"Post"     
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User not found
+ *      {
+ *       "error": "Post Not found"
+ *     }
+ */
+
+ /**
+ * @api {Post} /me/:Username/Friend/:FriendUsername  Add new friend
+ * @apiName FriendAdd
+ * @apiGroup me
+ *
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParam  {String} Username unique Username  of user . 
+ * @apiParam  {String} FriendUsername unique Username  of user to add. 
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "user1", 
+      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User not found
+ *      {
+ *       "error": "User Not found"
+ *     }
+ */
+
+ /**
+ * @api {delete} /me/:Username/Friend/:FUsername   unfriend
+ * @apiName Frienddelete
+ * @apiGroup me
+ *
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+  * @apiParam  {String} Username unique Username  of user . 
+ * @apiParam  {String} FUsername unique Username  of user to delete. 
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "user1", 
+      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User not found
+ *      {
+ *       "error": "User Not found"
+ *     }
+ */
+
+ /**
+ * @api {Get} /me/:Username/Friend/   get friends
+ * @apiName FriendList
+ * @apiGroup me
+ *
+ * @apiParam  {String} Username unique Username  of the User.
+* @apiSuccess  {String} FUsername unique Username  of the User.
+ *  @apiSuccessExample {json} Success
+ *  
+ *   HTTP/1.1 200 OK
+ * 
+ *    [{
+ *      "FUsername": "User1",    
+ *    }]
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 500 server error
+ */
+
+ /**
+ * @api {delete} /me/:Username /Friend/:FUsername   delete friend request
+ * @apiName FriendReqdelete
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Username unique Username  of user .
+ *  @apiParam  {String} FUsername unique Username  of user to unadd.  
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "user1", 
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 500 server error
+ */
+
+ /**
+ * @api {get} /Moderator/Reports/   Get all reports
+ * @apiName Getreports
+ * @apiGroup Moderator
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apisuccess  {String} ReporId unique ReporId  of the Repor.
+
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * [{
+ *         "ReporId":"1010"
+ * }]
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 500 server error
+ */
+
+ /**
+ * @api {Put} /Moderator/Reports/:id   ignore report
+ * @apiName Ignoreports
+ * @apiGroup Moderator
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParam  {String} ReporId unique ReporId  of the Repor.
+* @apiParamExample {json} Input
+ *    {
+ *      "ReporId": "1101", 
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK   
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Report not found
+ * {
+ *          "error":"report not found"
+ * }
+ */
+
+ /**
+ * @api {delete} /Moderator/Reports/:id   delete report
+ * @apiName deletereports
+ * @apiGroup Moderator
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParam  {String} ReporId unique ReporId  of the Repor.
+* @apiParamExample {json} Input
+ *    {
+ *      "ReporId": "1101", 
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK   
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Report not found
+ * {
+ *          "error":"report not found"
+ * }
+ */
+
+  /**
+ * @api {post} /Moderator/Ban/:Username&:SubbreditName   ban user
+ * @apiName BanUser
+ * @apiGroup Moderator
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParam  {String} Username unique Username  of the User to be banned.
+ * @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit to be banned from.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "User0",
+ *      "SubbreditName":"Ask reddit" 
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK   
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Report not found
+ * {
+ *          "error":"user or subreddit not found"
+ * }
+ */
+
+ /**
+ * @api {delete} /Moderator/LeaveMod/:Username&:SubbreditName   Leave or remove Moderation
+ * @apiName LeaveMod
+ * @apiGroup Moderator
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParam  {String} Username unique Username  of the Moderaor to remove or leave .
+ * @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "User0",
+ *      "SubbreditName":"Ask reddit" 
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK   
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Report not found
+ * {
+ *          "error":"user or subreddit not found"
+ * }
+ */
+
+ /**
+ * @api {post} /Moderator/Invite/:Username&:SubbreditName   invite moderator
+ * @apiName Addmod
+ * @apiGroup Moderator
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParam  {String} Username unique Username  of the Moderaor to be added .
+ * @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
+ * @apiSuccess {String} ModREQid unique invite Id  of the request .
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "User0",
+ *      "SubbreditName":"Ask reddit" 
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK 
+ * {
+ * 
+ *          "ModREQid":"101"
+ * }  
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Report not found
+ * {
+ *          "error":"user or subreddit not found"
+ * }
+ */
+
+  /**
+ * @api {post} /Moderator/accept   accept invite moderator
+ * @apiName Acceptmod
+ * @apiGroup Moderator
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParam  {String} ModREQid unique invite id  of request.
+ * @apiParamExample {json} Input
+ *    {
+ *      "ModREQid": "1011",
+ *       
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK   
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Report not found
+ * {
+ *          "error":"request not found"
+ * }
+ */
+
+
+
+
+
+
 app.get("/users", (req, res) => {});
 app.post("/users", (req, res) => {});
 app.put("/users", (req, res) => {});
