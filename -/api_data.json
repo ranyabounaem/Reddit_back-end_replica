@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "type": "delete",
     "url": "/comment/:c_id",
     "title": "Delete a Comment",
@@ -32,10 +33,28 @@
             "optional": false,
             "field": "AccessDenied",
             "description": "<p>If this user can't delete this comment.</p>"
+=======
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "varname1",
+            "description": "<p>No type.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "varname2",
+            "description": "<p>With type.</p>"
+>>>>>>> Stashed changes
           }
         ]
       }
     },
+<<<<<<< Updated upstream
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "Comment"
@@ -846,6 +865,14 @@
     "group": "D__memestock_backend_apidoc_main_js",
     "groupTitle": "D__memestock_backend_apidoc_main_js",
     "name": ""
+=======
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "./apidoc/main.js",
+    "group": "D__memestock_backend_apidoc_main_js",
+    "groupTitle": "D__memestock_backend_apidoc_main_js",
+    "name": ""
   },
   {
     "type": "",
@@ -969,6 +996,252 @@
   },
   {
     "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/body-parser/lib/read.js",
+    "group": "D__memestock_backend_node_modules_body_parser_lib_read_js",
+    "groupTitle": "D__memestock_backend_node_modules_body_parser_lib_read_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/body-parser/lib/types/json.js",
+    "group": "D__memestock_backend_node_modules_body_parser_lib_types_json_js",
+    "groupTitle": "D__memestock_backend_node_modules_body_parser_lib_types_json_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/body-parser/lib/types/raw.js",
+    "group": "D__memestock_backend_node_modules_body_parser_lib_types_raw_js",
+    "groupTitle": "D__memestock_backend_node_modules_body_parser_lib_types_raw_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/body-parser/lib/types/text.js",
+    "group": "D__memestock_backend_node_modules_body_parser_lib_types_text_js",
+    "groupTitle": "D__memestock_backend_node_modules_body_parser_lib_types_text_js",
+    "name": "Private"
+>>>>>>> Stashed changes
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+<<<<<<< Updated upstream
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+=======
+    "filename": "./node_modules/body-parser/lib/types/text.js",
+    "group": "D__memestock_backend_node_modules_body_parser_lib_types_text_js",
+    "groupTitle": "D__memestock_backend_node_modules_body_parser_lib_types_text_js",
+>>>>>>> Stashed changes
+    "name": "Public"
+  },
+  {
+    "type": "",
+<<<<<<< Updated upstream
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+    "name": "Public"
+=======
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/body-parser/lib/types/urlencoded.js",
+    "group": "D__memestock_backend_node_modules_body_parser_lib_types_urlencoded_js",
+    "groupTitle": "D__memestock_backend_node_modules_body_parser_lib_types_urlencoded_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/body-parser/lib/types/urlencoded.js",
+    "group": "D__memestock_backend_node_modules_body_parser_lib_types_urlencoded_js",
+    "groupTitle": "D__memestock_backend_node_modules_body_parser_lib_types_urlencoded_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/body-parser/lib/types/urlencoded.js",
+    "group": "D__memestock_backend_node_modules_body_parser_lib_types_urlencoded_js",
+    "groupTitle": "D__memestock_backend_node_modules_body_parser_lib_types_urlencoded_js",
+    "name": "Private"
+>>>>>>> Stashed changes
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+<<<<<<< Updated upstream
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+=======
+    "filename": "./node_modules/braces/index.js",
+    "group": "D__memestock_backend_node_modules_braces_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_braces_index_js",
+>>>>>>> Stashed changes
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+<<<<<<< Updated upstream
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+=======
+    "filename": "./node_modules/braces/index.js",
+    "group": "D__memestock_backend_node_modules_braces_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_braces_index_js",
+>>>>>>> Stashed changes
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+<<<<<<< Updated upstream
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+=======
+    "filename": "./node_modules/braces/index.js",
+    "group": "D__memestock_backend_node_modules_braces_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_braces_index_js",
+>>>>>>> Stashed changes
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+<<<<<<< Updated upstream
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+=======
+    "filename": "./node_modules/braces/index.js",
+    "group": "D__memestock_backend_node_modules_braces_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_braces_index_js",
+>>>>>>> Stashed changes
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+<<<<<<< Updated upstream
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+=======
+    "filename": "./node_modules/braces/index.js",
+    "group": "D__memestock_backend_node_modules_braces_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_braces_index_js",
+>>>>>>> Stashed changes
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+<<<<<<< Updated upstream
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+=======
+    "filename": "./node_modules/braces/index.js",
+    "group": "D__memestock_backend_node_modules_braces_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_braces_index_js",
+>>>>>>> Stashed changes
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+<<<<<<< Updated upstream
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+=======
+    "filename": "./node_modules/braces/index.js",
+    "group": "D__memestock_backend_node_modules_braces_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_braces_index_js",
+>>>>>>> Stashed changes
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+<<<<<<< Updated upstream
+    "filename": "./node_modules/base/index.js",
+    "group": "D__memestock_backend_node_modules_base_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_base_index_js",
+=======
+    "filename": "./node_modules/braces/index.js",
+    "group": "D__memestock_backend_node_modules_braces_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_braces_index_js",
+>>>>>>> Stashed changes
+    "name": "Public"
+  },
+  {
+    "type": "",
+<<<<<<< Updated upstream
     "url": "private",
     "title": "",
     "version": "0.0.0",
@@ -1130,6 +1403,9 @@
   {
     "type": "",
     "url": "public",
+=======
+    "url": "public",
+>>>>>>> Stashed changes
     "title": "",
     "version": "0.0.0",
     "filename": "./node_modules/bson/browser_build/bson.js",
@@ -10467,6 +10743,7 @@
     "groupTitle": "D__memestock_backend_node_modules_snapdragon_util_index_js",
     "name": "Public"
   },
+<<<<<<< Updated upstream
   {
     "type": "",
     "url": "public",
@@ -11540,6 +11817,94 @@
     "title": "Retrieve",
     "name": "RetrieveMessages",
     "group": "PMService",
+=======
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/static-extend/index.js",
+    "group": "D__memestock_backend_node_modules_static_extend_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_static_extend_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/to-regex/index.js",
+    "group": "D__memestock_backend_node_modules_to_regex_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_to_regex_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/to-regex/index.js",
+    "group": "D__memestock_backend_node_modules_to_regex_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_to_regex_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/use/index.js",
+    "group": "D__memestock_backend_node_modules_use_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_use_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/use/index.js",
+    "group": "D__memestock_backend_node_modules_use_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_use_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/util-deprecate/browser.js",
+    "group": "D__memestock_backend_node_modules_util_deprecate_browser_js",
+    "groupTitle": "D__memestock_backend_node_modules_util_deprecate_browser_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/util-deprecate/browser.js",
+    "group": "D__memestock_backend_node_modules_util_deprecate_browser_js",
+    "groupTitle": "D__memestock_backend_node_modules_util_deprecate_browser_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/utils-merge/index.js",
+    "group": "D__memestock_backend_node_modules_utils_merge_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_utils_merge_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "put",
+    "url": "/flair/:Srid",
+    "title": "Creates  a  Flair",
+    "name": "Create",
+    "group": "FlairService",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
@@ -11552,6 +11917,7 @@
           },
           {
             "group": "Parameter",
+<<<<<<< Updated upstream
             "type": "Boolean",
             "optional": false,
             "field": "Mine",
@@ -11599,10 +11965,24 @@
             "optional": false,
             "field": "id",
             "description": "<p>Users unique ID. {if any}</p>"
+=======
+            "type": "Number",
+            "optional": false,
+            "field": "SubredditID",
+            "description": "<p>id of the subbreddit that  user wants to create flair for.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "FlairName",
+            "description": "<p>the flair string  added (maximum 100 characters) .</p>"
+>>>>>>> Stashed changes
           }
         ]
       }
     },
+<<<<<<< Updated upstream
     "success": {
       "fields": {
         "Success 200": [
@@ -11626,6 +12006,13 @@
         {
           "title": "Success-Response:",
           "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
+=======
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
@@ -11636,21 +12023,42 @@
           {
             "group": "Error 4xx",
             "optional": false,
+<<<<<<< Updated upstream
             "field": "UserNotFound",
             "description": "<p>The id of the User was not found.</p>"
+=======
+            "field": "SubbRedditNotFound",
+            "description": "<p>the subreddit the user want to add flair to is not found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OverlengthedFlair",
+            "description": "<p>The string length of the flair is over 100 character.</p>"
+>>>>>>> Stashed changes
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
+<<<<<<< Updated upstream
           "content": "    HTTP/1.1 404 Not Found\n    {\n      \"error\": \"UserNotFound\"\n    }\n//////////////////////////////////////",
+=======
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"SubbRedditNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OverlengthedSubject\"\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "ServiceName"
   },
   {
@@ -11659,11 +12067,22 @@
     "title": "Block user",
     "name": "BlockUser",
     "group": "me",
+=======
+    "groupTitle": "FlairService"
+  },
+  {
+    "type": "delete",
+    "url": "/flair/:SrId",
+    "title": "Delete",
+    "name": "Delete",
+    "group": "FlairService",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
+<<<<<<< Updated upstream
             "type": "string",
             "optional": false,
             "field": "Token",
@@ -11675,11 +12094,25 @@
             "optional": false,
             "field": "Username",
             "description": "<p>unique Username  of the User.</p>"
+=======
+            "type": "Number",
+            "optional": false,
+            "field": "SubredditID",
+            "description": "<p>id of the subbreddit that  user wants to delete flair for.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "FlairName",
+            "description": "<p>the flair string  user want to delete (maximum 100 characters) .</p>"
+>>>>>>> Stashed changes
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
+<<<<<<< Updated upstream
             "field": "BlockedUsername",
             "description": "<p>unique Username  of the User to be blocked.</p>"
           }
@@ -11692,27 +12125,79 @@
           "type": "json"
         }
       ]
+=======
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.</p>"
+          }
+        ]
+      }
+>>>>>>> Stashed changes
     },
     "success": {
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Success",
           "content": "HTTP/1.1 200 OK",
+=======
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "error": {
+<<<<<<< Updated upstream
       "examples": [
         {
           "title": "List error",
           "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"UserNotFound\"\n}",
+=======
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SubbRedditNotFound",
+            "description": "<p>the subreddit the user want to add flair to is not found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OverlengthedFlair",
+            "description": "<p>The string length of the flair user want to delete is over 100 character.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "FlairNotFound",
+            "description": "<p>The flair string user want to delete is not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"FlairNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"SubbRedditNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OverlengthedSubject\"\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "me"
   },
   {
@@ -11721,11 +12206,22 @@
     "title": "Get Blocked users",
     "name": "BlockedUsers",
     "group": "me",
+=======
+    "groupTitle": "FlairService"
+  },
+  {
+    "type": "get",
+    "url": "/flair/:SrID",
+    "title": "Flair Retrieval",
+    "name": "RetrieveFlairs",
+    "group": "FlairService",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
+<<<<<<< Updated upstream
             "type": "string",
             "optional": false,
             "field": "Token",
@@ -11737,6 +12233,19 @@
             "optional": false,
             "field": "Username",
             "description": "<p>unique Username  of the User.</p>"
+=======
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "SubredditID",
+            "description": "<p>id of the subbreddit that  user wants to get flair for.</p>"
+>>>>>>> Stashed changes
           }
         ]
       }
@@ -11746,32 +12255,62 @@
         "Success 200": [
           {
             "group": "Success 200",
+<<<<<<< Updated upstream
             "type": "String",
             "optional": false,
             "field": "BlockedUsername",
             "description": "<p>unique Username  of the User to be blocked.</p>"
+=======
+            "type": "Array",
+            "optional": false,
+            "field": "Flairs",
+            "description": "<p>Array of Flairs of the users for the subbredditID requested .</p>"
+>>>>>>> Stashed changes
           }
         ]
       },
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Success",
           "content": "HTTP/1.1 200 OK\n\n[{\n  \"BlockedUsername\": \"User1\",    \n}]",
+=======
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n \"Flairs\":[\n    {\n\"SubbredditID\":3\n,”FlairID”:1\n,”FlairString”:”Doctor”\n },\n{\"SubbredditID\":3 \n,”FlairID”:2,\n,\"FlairString\":”Math Teacher\"\n} \n]\n    }",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "error": {
+<<<<<<< Updated upstream
       "examples": [
         {
           "title": "List error",
           "content": "HTTP/1.1 500 Server Error",
+=======
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SubbRedditNotFound",
+            "description": "<p>the subreddit the user want to add flair to is not found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"SubbRedditNotFound\"\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "me"
   },
   {
@@ -11780,11 +12319,22 @@
     "title": "Register new user",
     "name": "CreateUser",
     "group": "me",
+=======
+    "groupTitle": "FlairService"
+  },
+  {
+    "type": "post",
+    "url": "/pm/",
+    "title": "Block",
+    "name": "Block",
+    "group": "PMService",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
+<<<<<<< Updated upstream
             "type": "String",
             "optional": false,
             "field": "Email",
@@ -11796,11 +12346,18 @@
             "optional": false,
             "field": "Username",
             "description": "<p>unique Username  of the User.</p>"
+=======
+            "type": "Number",
+            "optional": false,
+            "field": "ReceiverID",
+            "description": "<p>unique ID.</p>"
+>>>>>>> Stashed changes
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
+<<<<<<< Updated upstream
             "field": "Password",
             "description": "<p>Password  of the User.</p>"
           }
@@ -11830,11 +12387,25 @@
         {
           "title": "Success",
           "content": "   HTTP/1.1 200 OK\n{\n \"token\":\"we8749832b7498c2b78942\"\n}",
+=======
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "error": {
+<<<<<<< Updated upstream
       "examples": [
         {
           "title": "List error",
@@ -11890,11 +12461,33 @@
             "optional": false,
             "field": "Token",
             "description": "<p>SyncToken That is sent with authentication.</p>"
+=======
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>The <code>id</code> of the User was not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OnBlockList",
+            "description": "<p>The user you are trying to block is already on the block list</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SelfBlockAlert",
+            "description": "<p>an alert if there is a request for selfblock</p>"
+>>>>>>> Stashed changes
           }
         ]
       },
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Input",
           "content": "{\n  \"Email\": \"user@reddit.com\",\n  \"Username\": \"User1\",\n  \"Password\": \"Password\",\n  \"ImageID\" : 3\n}",
           "type": "json"
@@ -11915,12 +12508,27 @@
         {
           "title": "List error",
           "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"UserNotFound\"\n}",
+=======
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"UserNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OnBlockList\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"SelfBlockAlert\"\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "me"
   },
   {
@@ -11929,20 +12537,38 @@
     "title": "Add new friend",
     "name": "FriendAdd",
     "group": "me",
+=======
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "post",
+    "url": "/pm/",
+    "title": "Compose a new message",
+    "name": "Compose",
+    "group": "PMService",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
+<<<<<<< Updated upstream
             "type": "string",
             "optional": false,
             "field": "Token",
             "description": "<p>SyncToken That is sent with authentication.</p>"
+=======
+            "type": "Number",
+            "optional": false,
+            "field": "ReceiverID",
+            "description": "<p>unique ID.</p>"
+>>>>>>> Stashed changes
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
+<<<<<<< Updated upstream
             "field": "Username",
             "description": "<p>unique Username  of user .</p>"
           },
@@ -11962,17 +12588,44 @@
           "type": "json"
         }
       ]
+=======
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Subject",
+            "description": "<p>Subject of the sending message (no longer than 100 character).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "MessageBody",
+            "description": "<p>the text of the message sent.</p>"
+          }
+        ]
+      }
+>>>>>>> Stashed changes
     },
     "success": {
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Success",
           "content": "HTTP/1.1 200 OK",
+=======
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "error": {
+<<<<<<< Updated upstream
       "examples": [
         {
           "title": "List error",
@@ -12013,11 +12666,33 @@
             "optional": false,
             "field": "FUsername",
             "description": "<p>unique Username  of the User.</p>"
+=======
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>The <code>id</code> of the User was not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "BlockedFromSending",
+            "description": "<p>The user already blocking messages from the receiver</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OverlengthedSubject",
+            "description": "<p>The length of the subject is above 100 character</p>"
+>>>>>>> Stashed changes
           }
         ]
       },
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Success",
           "content": "\nHTTP/1.1 200 OK\n\n [{\n   \"FUsername\": \"User1\",    \n }]",
           "type": "json"
@@ -12029,12 +12704,27 @@
         {
           "title": "List error",
           "content": "HTTP/1.1 500 server error",
+=======
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"UserNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"BlockedFromSending\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OverlengthedSubject\"\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "me"
   },
   {
@@ -12043,20 +12733,38 @@
     "title": "/Friend/:FUsername   delete friend request",
     "name": "FriendReqdelete",
     "group": "me",
+=======
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "delete",
+    "url": "/pm/:Id",
+    "title": "Delete",
+    "name": "Delete",
+    "group": "PMService",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
+<<<<<<< Updated upstream
             "type": "String",
             "optional": false,
             "field": "Username",
             "description": "<p>unique Username  of user .</p>"
+=======
+            "type": "Number",
+            "optional": false,
+            "field": "MessageID",
+            "description": "<p>the id of the message going to be deleted.</p>"
+>>>>>>> Stashed changes
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
+<<<<<<< Updated upstream
             "field": "FUsername",
             "description": "<p>unique Username  of user to unadd.</p>"
           }
@@ -12069,27 +12777,57 @@
           "type": "json"
         }
       ]
+=======
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.</p>"
+          }
+        ]
+      }
+>>>>>>> Stashed changes
     },
     "success": {
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Success",
           "content": "HTTP/1.1 200 OK",
+=======
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "error": {
+<<<<<<< Updated upstream
       "examples": [
         {
           "title": "List error",
           "content": "HTTP/1.1 500 server error",
+=======
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "MessageNotFound",
+            "description": "<p>The <code>id</code> of the Message was not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"MessageNotFound\"\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "me"
   },
   {
@@ -12098,11 +12836,22 @@
     "title": "unfriend",
     "name": "Frienddelete",
     "group": "me",
+=======
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "put",
+    "url": "/pm/:Id",
+    "title": "Mark Read",
+    "name": "MarkAsRead",
+    "group": "PMService",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
+<<<<<<< Updated upstream
             "type": "string",
             "optional": false,
             "field": "Token",
@@ -12114,11 +12863,18 @@
             "optional": false,
             "field": "Username",
             "description": "<p>unique Username  of user .</p>"
+=======
+            "type": "Number",
+            "optional": false,
+            "field": "MessageID",
+            "description": "<p>the id of the message going to be marked as read.</p>"
+>>>>>>> Stashed changes
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
+<<<<<<< Updated upstream
             "field": "FUsername",
             "description": "<p>unique Username  of user to delete.</p>"
           }
@@ -12131,27 +12887,57 @@
           "type": "json"
         }
       ]
+=======
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          }
+        ]
+      }
+>>>>>>> Stashed changes
     },
     "success": {
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Success",
           "content": "HTTP/1.1 200 OK",
+=======
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "error": {
+<<<<<<< Updated upstream
       "examples": [
         {
           "title": "List error",
           "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"User Not found\"\n}",
+=======
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "MessageNotFound",
+            "description": "<p>The <code>id</code> of the Message was not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"MessageNotFound\"\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "me"
   },
   {
@@ -12160,6 +12946,16 @@
     "title": "Request my account information",
     "name": "Getmyinfo",
     "group": "me",
+=======
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "post",
+    "url": "/pm/",
+    "title": "Mark Read-all",
+    "name": "MarkReadALL",
+    "group": "PMService",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
@@ -12167,6 +12963,7 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
+<<<<<<< Updated upstream
             "field": "username",
             "description": "<p>Users unique username.</p>"
           },
@@ -12183,10 +12980,24 @@
         {
           "title": "Input",
           "content": "{\n  \"Username\": \"User1\",     \n}",
+=======
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
+<<<<<<< Updated upstream
     "success": {
       "fields": {
         "Success 200": [
@@ -12231,11 +13042,22 @@
             "optional": false,
             "field": "Subscriptions",
             "description": "<p>subreddit subscriptons  of the User.</p>"
+=======
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NoMessages",
+            "description": "<p>No messages to mark empty array</p>"
+>>>>>>> Stashed changes
           }
         ]
       },
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Success",
           "content": "HTTP/1.1 200 OK\n{\n  \"Email\": \"user@reddit.com\",\n  \"About\": \"Im a reddit user\",\n  \"Imageid\": \"100001\"\n  \"Subscriptions\": [\"subbreddit:askreddit\",\"subbreddit:reddit\"],\n  \"Karma\" :2,\n  \"Cakeday\" : \"21-3-1440\"\n}",
           "type": "json"
@@ -12252,12 +13074,17 @@
         {
           "title": "List error",
           "content": "HTTP/1.1 405 User not found\n  {\n   \"error\": \"Not Authorized\"\n }",
+=======
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"NoMessages\"\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "me"
   },
   {
@@ -12266,6 +13093,16 @@
     "title": "login attempt",
     "name": "LoginUser",
     "group": "me",
+=======
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "get",
+    "url": "/pm/",
+    "title": "Retrieve",
+    "name": "RetrieveMessages",
+    "group": "PMService",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
@@ -12273,6 +13110,7 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
+<<<<<<< Updated upstream
             "field": "Email",
             "description": "<p>email  of the User.</p>"
           },
@@ -12299,21 +13137,43 @@
           "type": "json"
         }
       ]
+=======
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Mine",
+            "description": "<p>True if u need to retrieve the inbox false if u need to retrieve the sent.</p>"
+          }
+        ]
+      }
+>>>>>>> Stashed changes
     },
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
+<<<<<<< Updated upstream
             "type": "string",
             "optional": false,
             "field": "Token",
             "description": "<p>SyncToken That is sent with authentication.</p>"
+=======
+            "type": "Array",
+            "optional": false,
+            "field": "Messages",
+            "description": "<p>Array of Messages    .</p>"
+>>>>>>> Stashed changes
           }
         ]
       },
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Success",
           "content": "   HTTP/1.1 200 OK\n{\n \"token\":\"we8749832b7498c2b78942\"\n}",
           "type": "json"
@@ -12325,12 +13185,17 @@
         {
           "title": "List error",
           "content": "   HTTP/1.1 405 Invalid\n{\n         \"error\"\":\"Invalid credentials\"\"\n}",
+=======
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n \"messages\":[{\n\"user”:{“Is_read”:false,”email”:”mar.kefo@gmail.com”,”user_id”:”1232”,”profile_url\":\"\"} \n,”subject”:”URGENT VIP”\n,”message”:”Dear, marwan please”,”\n },\n{\"user”:{“Is_read”:false,”email”:”marwankefah@gmail.com”,”user_id”:”1232”,”profile_url\":\"\"} \n,”subject”:”TEST VERIFIED”\n,”message”:”Dear, marwan TEST M2”,”\n} ]\n    }",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "me"
   },
   {
@@ -12339,11 +13204,22 @@
     "title": "report user comment or post",
     "name": "Report",
     "group": "me",
+=======
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "get",
+    "url": "/user/:id",
+    "title": "Request User information",
+    "name": "GetUser__method___endpoint_path_",
+    "group": "ServiceName",
+>>>>>>> Stashed changes
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
+<<<<<<< Updated upstream
             "type": "string",
             "optional": false,
             "field": "Token",
@@ -12369,11 +13245,38 @@
             "optional": false,
             "field": "Type",
             "description": "<p>type is post or comment.</p>"
+=======
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Users unique ID. {if any}</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "firstname",
+            "description": "<p>Firstname of the User.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "lastname",
+            "description": "<p>Lastname of the User.</p>"
+>>>>>>> Stashed changes
           }
         ]
       },
       "examples": [
         {
+<<<<<<< Updated upstream
           "title": "Input",
           "content": "{\n  \"Id\": \"1\", \n  \"Type\":\"Post\"     \n}",
           "type": "json"
@@ -12385,21 +13288,46 @@
         {
           "title": "Success",
           "content": "HTTP/1.1 200 OK",
+=======
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "error": {
+<<<<<<< Updated upstream
       "examples": [
         {
           "title": "List error",
           "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"Post Not found\"\n}",
+=======
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>The id of the User was not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "    HTTP/1.1 404 Not Found\n    {\n      \"error\": \"UserNotFound\"\n    }\n//////////////////////////////////////",
+>>>>>>> Stashed changes
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
+<<<<<<< Updated upstream
     "groupTitle": "me"
+=======
+    "groupTitle": "ServiceName"
+>>>>>>> Stashed changes
   }
 ]
