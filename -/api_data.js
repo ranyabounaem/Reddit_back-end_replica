@@ -1,5 +1,797 @@
 define({ "api": [
   {
+    "type": "delete",
+    "url": "/comment/:c_id",
+    "title": "Delete a Comment",
+    "name": "DeleteComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If this user can't delete this comment.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/:c_id",
+    "title": "Edit a Comment",
+    "name": "EditComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>Text of the Edited Comment.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "spoiler",
+            "defaultValue": "false",
+            "description": "<p>True if it is a Spoiler.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "locked",
+            "defaultValue": "false",
+            "description": "<p>True if Replies are Disallowed on this Comment.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If this user can't edit this comment.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "get",
+    "url": "/comment/:c_id",
+    "title": "Retrieve additional comments omitted from a base comment tree",
+    "name": "ExpandComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "replies",
+            "description": "<p>An array containing all the replies' IDs to this comment.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "get",
+    "url": "/comment/",
+    "title": "Get Details About Comment or a Reply",
+    "name": "GetComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>Text of the Comment.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "c_date",
+            "description": "<p>Date of the Posted Comment.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "spoiler",
+            "description": "<p>True if it is a Spoiler.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "locked",
+            "description": "<p>True if the Replies are Disallowed on this Comment.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "saved",
+            "description": "<p>True if it is Saved.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "hidden",
+            "description": "<p>True if it is Hidden.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "replies",
+            "description": "<p>An array containing all the replies' IDs to this comment.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/:c_id",
+    "title": "Hide a Comment",
+    "name": "HideComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentAlreadyHidden",
+            "description": "<p>The Comment has already been hidden before.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/:c_id",
+    "title": "Lock a Comment to Disallow Replies on it",
+    "name": "LockComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentAlreadySpoiler",
+            "description": "<p>The Comment is already locked.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "post",
+    "url": "/comment/:id",
+    "title": "Post a New Comment",
+    "name": "PostComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>ID of thread or comment.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Type",
+            "description": "<p>specifies whether this is a reply or a comment  .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>Text of the Comment.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "spoiler",
+            "defaultValue": "false",
+            "description": "<p>True if it is a Spoiler.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "locked",
+            "defaultValue": "false",
+            "description": "<p>True if Replies are Disallowed on this Comment.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>The Created Comment ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ThreadNotFound",
+            "description": "<p>The id of the thread wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "post",
+    "url": "/comment/:c_id",
+    "title": "Report a Comment",
+    "name": "ReportComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "text",
+            "description": "<p>The reason of reporting this comment.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "post",
+    "url": "/comment/:c_id",
+    "title": "Save a Comment",
+    "name": "SaveComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentAlreadySaved",
+            "description": "<p>The Comment has already been saved before.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/:c_id",
+    "title": "Mark Comment as a Spoiler",
+    "name": "SpoilerComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentAlreadySpoiler",
+            "description": "<p>The Comment is already marked.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/:c_id",
+    "title": "UnHide a Comment",
+    "name": "UnHideComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentAlreadyHidden",
+            "description": "<p>The Comment is not hidden.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/:c_id",
+    "title": "UnLock a Comment to Allow Replies on it",
+    "name": "UnLockComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentAlreadySpoiler",
+            "description": "<p>The Comment is already unlocked.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "delete",
+    "url": "/comment/:c_id",
+    "title": "UnSave a Comment",
+    "name": "UnSaveComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotSaved",
+            "description": "<p>You can't unsave an unsaved comment.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/:c_id",
+    "title": "UnMark Comment as a Spoiler",
+    "name": "UnSpoilerComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentAlreadySpoiler",
+            "description": "<p>The Comment is already unmarked.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/:c_id",
+    "title": "Vote for a Comment",
+    "name": "VoteComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "allowedValues": [
+              "1",
+              "0",
+              "-1"
+            ],
+            "optional": false,
+            "field": "direction",
+            "description": "<p>Direction of the Vote as 1 indicates Upvote, -1 indicates Downvote and 0 means unvoting.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
     "success": {
       "fields": {
         "Success 200": [
@@ -25,6 +817,34 @@ define({ "api": [
     "filename": "./-/main.js",
     "group": "D__memestock_backend___main_js",
     "groupTitle": "D__memestock_backend___main_js",
+    "name": ""
+  },
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "varname1",
+            "description": "<p>No type.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "varname2",
+            "description": "<p>With type.</p>"
+          }
+        ]
+      }
+    },
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "./apidoc/main.js",
+    "group": "D__memestock_backend_apidoc_main_js",
+    "groupTitle": "D__memestock_backend_apidoc_main_js",
     "name": ""
   },
   {
@@ -9728,6 +10548,238 @@ define({ "api": [
     "name": "Public"
   },
   {
+    "type": "put",
+    "url": "/flair/:Srid",
+    "title": "Creates  a  Flair",
+    "name": "Create",
+    "group": "FlairService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "SubredditID",
+            "description": "<p>id of the subbreddit that  user wants to create flair for.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "FlairName",
+            "description": "<p>the flair string  added (maximum 100 characters) .</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SubbRedditNotFound",
+            "description": "<p>the subreddit the user want to add flair to is not found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OverlengthedFlair",
+            "description": "<p>The string length of the flair is over 100 character.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"SubbRedditNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OverlengthedSubject\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "FlairService"
+  },
+  {
+    "type": "delete",
+    "url": "/flair/:SrId",
+    "title": "Delete",
+    "name": "Delete",
+    "group": "FlairService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "SubredditID",
+            "description": "<p>id of the subbreddit that  user wants to delete flair for.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "FlairName",
+            "description": "<p>the flair string  user want to delete (maximum 100 characters) .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SubbRedditNotFound",
+            "description": "<p>the subreddit the user want to add flair to is not found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OverlengthedFlair",
+            "description": "<p>The string length of the flair user want to delete is over 100 character.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "FlairNotFound",
+            "description": "<p>The flair string user want to delete is not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"FlairNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"SubbRedditNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OverlengthedSubject\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "FlairService"
+  },
+  {
+    "type": "get",
+    "url": "/flair/:SrID",
+    "title": "Flair Retrieval",
+    "name": "RetrieveFlairs",
+    "group": "FlairService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "SubredditID",
+            "description": "<p>id of the subbreddit that  user wants to get flair for.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "Flairs",
+            "description": "<p>Array of Flairs of the users for the subbredditID requested .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n \"Flairs\":[\n    {\n\"SubbredditID\":3\n,”FlairID”:1\n,”FlairString”:”Doctor”\n },\n{\"SubbredditID\":3 \n,”FlairID”:2,\n,\"FlairString\":”Math Teacher\"\n} \n]\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SubbRedditNotFound",
+            "description": "<p>the subreddit the user want to add flair to is not found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"SubbRedditNotFound\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "FlairService"
+  },
+  {
     "type": "post",
     "url": "/Moderator/accept",
     "title": "accept invite moderator",
@@ -9736,6 +10788,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -9784,6 +10843,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -9852,6 +10918,13 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "Username",
@@ -9902,6 +10975,19 @@ define({ "api": [
     "title": "Get all reports",
     "name": "Getreports",
     "group": "Moderator",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -9944,6 +11030,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -9992,6 +11085,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -10049,6 +11149,13 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "ReporId",
@@ -10087,6 +11194,466 @@ define({ "api": [
     "groupTitle": "Moderator"
   },
   {
+    "type": "post",
+    "url": "/pm/",
+    "title": "Block",
+    "name": "Block",
+    "group": "PMService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "ReceiverID",
+            "description": "<p>unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>The <code>id</code> of the User was not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OnBlockList",
+            "description": "<p>The user you are trying to block is already on the block list</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SelfBlockAlert",
+            "description": "<p>an alert if there is a request for selfblock</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"UserNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OnBlockList\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"SelfBlockAlert\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "post",
+    "url": "/pm/",
+    "title": "Compose a new message",
+    "name": "Compose",
+    "group": "PMService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "ReceiverID",
+            "description": "<p>unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Subject",
+            "description": "<p>Subject of the sending message (no longer than 100 character).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "MessageBody",
+            "description": "<p>the text of the message sent.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>The <code>id</code> of the User was not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "BlockedFromSending",
+            "description": "<p>The user already blocking messages from the receiver</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OverlengthedSubject",
+            "description": "<p>The length of the subject is above 100 character</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"UserNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"BlockedFromSending\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OverlengthedSubject\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "delete",
+    "url": "/pm/:Id",
+    "title": "Delete",
+    "name": "Delete",
+    "group": "PMService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "MessageID",
+            "description": "<p>the id of the message going to be deleted.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "MessageNotFound",
+            "description": "<p>The <code>id</code> of the Message was not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"MessageNotFound\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "put",
+    "url": "/pm/:Id",
+    "title": "Mark Read",
+    "name": "MarkAsRead",
+    "group": "PMService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "MessageID",
+            "description": "<p>the id of the message going to be marked as read.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "MessageNotFound",
+            "description": "<p>The <code>id</code> of the Message was not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"MessageNotFound\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "post",
+    "url": "/pm/",
+    "title": "Mark Read-all",
+    "name": "MarkReadALL",
+    "group": "PMService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NoMessages",
+            "description": "<p>No messages to mark empty array</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"NoMessages\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "get",
+    "url": "/pm/",
+    "title": "Retrieve",
+    "name": "RetrieveMessages",
+    "group": "PMService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Mine",
+            "description": "<p>True if u need to retrieve the inbox false if u need to retrieve the sent.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "Messages",
+            "description": "<p>Array of Messages    .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n \"messages\":[{\n\"user”:{“Is_read”:false,”email”:”mar.kefo@gmail.com”,”user_id”:”1232”,”profile_url\":\"\"} \n,”subject”:”URGENT VIP”\n,”message”:”Dear, marwan please”,”\n },\n{\"user”:{“Is_read”:false,”email”:”marwankefah@gmail.com”,”user_id”:”1232”,”profile_url\":\"\"} \n,”subject”:”TEST VERIFIED”\n,”message”:”Dear, marwan TEST M2”,”\n} ]\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "PMService"
+  },
+  {
+    "type": "get",
+    "url": "/user/:id",
+    "title": "Request User information",
+    "name": "GetUser__method___endpoint_path_",
+    "group": "ServiceName",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Users unique ID. {if any}</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "firstname",
+            "description": "<p>Firstname of the User.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "lastname",
+            "description": "<p>Lastname of the User.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>The id of the User was not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "    HTTP/1.1 404 Not Found\n    {\n      \"error\": \"UserNotFound\"\n    }\n//////////////////////////////////////",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "ServiceName"
+  },
+  {
     "type": "Post",
     "url": "/me/:username/Block/:BlockedUsername",
     "title": "Block user",
@@ -10095,6 +11662,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -10150,6 +11724,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -10234,10 +11815,21 @@ define({ "api": [
       ]
     },
     "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          }
+        ]
+      },
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK",
+          "content": "   HTTP/1.1 200 OK\n{\n \"token\":\"we8749832b7498c2b78942\"\n}",
           "type": "json"
         }
       ]
@@ -10259,7 +11851,7 @@ define({ "api": [
     "type": "Put",
     "url": "/me/:username/edit",
     "title": "Edit  user",
-    "name": "EditUser",
+    "name": "EditUser_",
     "group": "me",
     "parameter": {
       "fields": {
@@ -10284,13 +11876,27 @@ define({ "api": [
             "optional": false,
             "field": "Password",
             "description": "<p>Password  of the User.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ImageId",
+            "description": "<p>ID of the User's image.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Input",
-          "content": "{\n  \"Email\": \"user@reddit.com\",\n  \"Username\": \"User1\",\n  \"Password\": \"Password\"\n}",
+          "content": "{\n  \"Email\": \"user@reddit.com\",\n  \"Username\": \"User1\",\n  \"Password\": \"Password\",\n  \"ImageID\" : 3\n}",
           "type": "json"
         }
       ]
@@ -10326,6 +11932,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -10490,6 +12103,13 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "Username",
@@ -10549,6 +12169,13 @@ define({ "api": [
             "optional": false,
             "field": "username",
             "description": "<p>Users unique username.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication..</p>"
           }
         ]
       },
@@ -10621,6 +12248,84 @@ define({ "api": [
           "title": "List error",
           "content": "HTTP/1.1 404 User not found\n  {\n   \"error\": \"User Not Found\"\n }",
           "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 405 User not found\n  {\n   \"error\": \"Not Authorized\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "put",
+    "url": "/me/Login",
+    "title": "login attempt",
+    "name": "LoginUser",
+    "group": "me",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Email",
+            "description": "<p>email  of the User.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Username",
+            "description": "<p>unique Username  of the User.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Password",
+            "description": "<p>Password  of the User.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Email\": \"user@reddit.com\",\n  \"Username\": \"User1\",\n  \"Password\": \"Password\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{\n \"token\":\"we8749832b7498c2b78942\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "   HTTP/1.1 405 Invalid\n{\n         \"error\"\":\"Invalid credentials\"\"\n}",
+          "type": "json"
         }
       ]
     },
@@ -10637,6 +12342,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
