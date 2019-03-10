@@ -65,6 +65,40 @@ app.post("/emoji", (req, res) => {});
 app.put("/emoji", (req, res) => {});
 app.delete("/emoji", (req, res) => {});
 
+/**
+* @api {post} /emoji/   Create an emoji
+* @apiName CreateEmoji
+* @apiGroup EmojiService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} Image  Image(emoji) of the subreddit.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+* @apiSuccess {string} EMOJI_ID Unique id of image.
+*
+*/
+
+/**
+* @api {delete} /emoji/   Delete an emoji
+* @apiName DeleteEmoji
+* @apiGroup EmojiService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+*
+*/
+
+/**
+* @api {put} /emoji/   Edit an emoji (instead of deleting then creating)
+* @apiName EditEmoji
+* @apiGroup EmojiService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+* @apiParam {string} Image  Image(emoji) of the subreddit.
+* @apiSuccess {string} EMOJI_ID New unique id of new image.
+*
+*/
+
 
 /**
  * @name FlairService
