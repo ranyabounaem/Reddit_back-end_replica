@@ -49,6 +49,181 @@
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
+
+
+//TODO POSTS: listing posts for a subreddit or only popular posts
+
+
+
+/** 
+* @api {get} /user/listing?type=value List Posts 
+* @apiName ListPosts
+* @apiGroup UserService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
+* @apiParam {Number} LPostID id of the last post displayed
+* @apiSuccess {Object[]} Posts   Array of the listed Posts  .
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*  "Posts":[
+*  {
+* "SubbredditName": "r/funny"
+* ,"PostID":1
+* ,"Meme": data:image/jpeg;base64,...............
+*  },
+* {
+* "SubbredditName": "r/Damn"
+* ,"PostID":2
+* ,"Meme": data:image/jpeg;base64,...............
+*  } 
+]
+*     }
+*
+* @apiError PostsnotFound 
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 404 Not Found
+*     {
+*       "error": "Posts not Found"
+*     }
+*/
+
+// API for information about user
+
+/** 
+* @api {get} /user/:Username/about/ About
+* @apiName AboutUser
+* @apiGroup UserService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} Username username of the user that the information is about.
+* @apiSuccess {String} Name name of the user
+* @apiSuccess {String} Cakeday date of the user joining reddit.
+* @apiSuccess {Number} Karma karma of the user
+* @apiSuccess {JPG} Pic profile picture of the user
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "Username" : "TheRealBatman",
+*       "Name": "Mark",
+*       "Cakeday": "21-12-2019",
+*       "Karma": 1449,
+*       "Pic" : data:image/jpeg;base64,...............
+*      }
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 403 Forbidden
+*     {
+*       "error": "User not found"
+*     }
+*/
+
+
+//API for listings of comments 
+
+/** 
+* @api {get} /user/:Username/comments/listing?type=value  List Comments 
+* @apiName ListComments
+* @apiGroup UserService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} ListingType Type of the listing that the user wants for the Comments.
+* @apiSuccess {Object[]} Comments   Array of the listed Comments  .
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "Comments": [ {
+*       "SubbredditName": "r/Damn",
+*       "PostID" :3,
+*       "Content" : "Hussein is on fire "
+*       },
+*       {
+*       "SubbredditName": "r/funny",
+*       "PostID" :1,
+*       "Content" : "Let's see who wins this contest "
+*       }]
+*     }
+*
+* @apiError CommentsNotFound no comments found to be listed
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 404 Not Found
+*     {
+*       "error": "CommentsNotFound"
+*     }
+
+
+*/
+
+//TODO SUBMITTED (if it means posts or subreddits)
+
+// API for listing of Posts by a user
+
+/** 
+* @api {get} /user/:Username/listing?type=value List Posts 
+* @apiName ListPosts
+* @apiGroup UserService
+* @apiparam {String} Username Username of visited User.
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
+* @apiParam {Number} LPostID id of the last post displayed
+* @apiSuccess {Object[]} Posts   Array of the listed Posts  .
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*  "Posts":[
+*  {
+* "SubbredditName": "r/funny"
+* ,"PostID":1
+* ,"Meme": data:image/jpeg;base64,...............
+*  },
+* {
+* "SubbredditName": "r/Damn"
+* ,"PostID":2
+* ,"Meme": data:image/jpeg;base64,...............
+*  } 
+]
+*     }
+*
+* @apiError Server error no subreddits found to be listed
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 500 Server error
+*     {
+*       "error": "Server error"
+*     }
+*/
+
+//TODO VOTED
+
+/** 
+* @api {get} /user/:Username/Votes  Votes of User
+* @apiName Votes
+* @apiGroup UserService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiSuccess {Object[]} Votes   Array of the listed Votes  .
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "Votes": [ {
+        "Type" : "Upvote",
+*       "SubbredditName": "r/Damn",
+*       "PostID" :3
+*       },
+*       {
+        "Type" : "Upvote",
+*       "SubbredditName": "r/funny",
+*       "PostID" :1
+*       }]
+*     }
+*
+* @apiError CommentsNotFound no comments found to be listed
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 404 Not Found
+*     {
+*       "error": "CommentsNotFound"
+*     }
+
+
+*/
+
+//TODO SUBSCRIPTIONS 
+
 app.get("/users", (req, res) => {});
 app.post("/users", (req, res) => {});
 app.put("/users", (req, res) => {});
@@ -179,11 +354,6 @@ app.delete("/comment", (req, res) => {});
 
 
 
-/**
- * @name SrService
- * @note These are the routes for anything related to a user.
- * @note This is just general routing, You can modify as you want but before the delivery of the documentation
- */
 app.get("/sr", (req, res) => {});
 app.post("/sr", (req, res) => {});
 app.put("/sr", (req, res) => {});
