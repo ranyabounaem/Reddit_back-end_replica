@@ -1,17 +1,17 @@
 /**
  * @description This file should only call handler functions and specifying routes.
  * @description It's also the entry/main file of our application which listens for everything.
- * 
+ *
  * @example
  * const userService = require("./users");
  * const Handler = new userService();
  * app.get("/users", Handler.getUsers);
- * 
+ *
  * @note To use apiDoc, also don't commit the output file of apiDoc.
  * @note It's ignored in the .gitignore file.
  * @run npm install apidoc -g
  * @start apidoc -i myapp/ -o apidoc/
- * 
+ *
  * @example above the handler fn.
  * //////////////////////////////////////
  * @api {get} /user/:id Request User information
@@ -71,8 +71,8 @@ app.delete("/emoji", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-/** 
-* @api {put} /flair/:Srid   Creates  a  Flair 
+/**
+* @api {put} /flair/:Srid   Creates  a  Flair
 * @apiName Create
 * @apiGroup FlairService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -97,8 +97,8 @@ app.delete("/emoji", (req, res) => {});
 *     }
 */
 
-/** 
-* @api {delete} /flair/:SrId   Delete 
+/**
+* @api {delete} /flair/:SrId   Delete
 * @apiName Delete
 * @apiGroup FlairService
 * @apiParam {Number} SubredditID id of the subbreddit that  user wants to delete flair for.
@@ -129,8 +129,8 @@ app.delete("/emoji", (req, res) => {});
 */
 
 
-/** 
-* @api {get} /flair/:SrID  Flair Retrieval 
+/**
+* @api {get} /flair/:SrID  Flair Retrieval
 * @apiName RetrieveFlairs
 * @apiGroup FlairService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -145,10 +145,10 @@ app.delete("/emoji", (req, res) => {});
 * ,”FlairID”:1
 * ,”FlairString”:”Doctor”
 *  },
-* {"SubbredditID":3 
+* {"SubbredditID":3
 * ,”FlairID”:2,
 * ,"FlairString":”Math Teacher"
-* } 
+* }
 ]
 *     }
 
@@ -188,6 +188,106 @@ app.get("/sr", (req, res) => {});
 app.post("/sr", (req, res) => {});
 app.put("/sr", (req, res) => {});
 app.delete("/sr", (req, res) => {});
+/**
+* @api {post} /sr/:Id   Create a new subreddit
+* @apiName CreateSubreddit
+* @apiGroup SrService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} AdminId Id of user that created SR.
+* @apiParam {string} SrName  unique Name of the subreddit (no longer than 100 character).
+* @apiParam {string[]} SubredditRules list of subbreddit rules.
+* @apiParam {string[]} ModUsername  Subreddit moderators' usernames.
+*@apiSuccess {string} SR_ID Unique id of created sr.
+*
+*/
+
+/**
+* @api {get} /sr/:SubredditName/Listing/:type   ListSubreddits Generate a list of subreddits      //MOSTAFA
+* @apiName ListSubreddits
+* @apiGroup SrService
+*
+* @apiParam {string} Token.
+* @apiParam {string} SubredditName Name of subreddit
+* @apiParam {string} Type List according to certain type
+* @apiSuccess {string[]} SubredditIDs Returns list of sorted subreddits
+*/
+
+/**
+* @api {get} /sr/:SrName/meta   Views subreddit meta
+* @apiName ViewSrMeta
+* @apiGroup SrService
+*
+* @apiSuccess {string} Creator  unique ID.
+* @apiParam {string} SrName Subreddit name.
+* @apiSuccess {string[]} BannedUsers   ID of banned users.
+* @apiSuccess {string[]} ModIds   ID of Modertors.
+* @apiSuccess {string[]} PostIds   ID of posts in sr. 
+* @apiSuccess {string[]} Rules   Rules of sr.
+* @apiSuccess {string[]} UserIds   Ids of subscribed users .
+* @apiSuccess {Number[]} SubCount   Number of subscribers.
+* @apiParam {String} Date  date of creation .
+*/
+
+/**
+* @api {put} /sr/:SubredditName/    Edit a subreddit
+* @apiName EditSubreddit
+* @apiGroup SrService
+*
+* @apiParam {string[]} NewRules Updated rules.
+* @apiParam {string} SubredditName Old name
+* @apiParam {string} NewName  New name
+* @apiParam {string} About Updated about
+*/
+
+/**
+* @api {post} /sr/:SubredditName/thread    Create a thread inside subreddit
+* @apiName CreateSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} CreatorID Id of creator.
+* @apiParam {string} SubredditName Name of subreddit.
+* @apiParam {string} ThreadTitle Title of thread
+* @apiParam {string} ThreadData Data inside thread.
+* @apiParam {boolean} Spoiler [Spoiler==false] Mark if post is spoiler
+*/
+
+/**
+* @api {post} /sr/:SubredditName/subs  Subscribe to a Sr
+* @apiName SubredditSubscribtion
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} SubredditName
+*/
+
+/**
+* @api {delete} /sr/:SubredditName/subs   Unsubscribe to a Sr
+* @apiName SubredditUnsubscribtion
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} SubredditName
+*/
+
+/**
+* @api {delete} /sr/:Id/thread    Delete a thread inside subreddit
+* @apiName DeleteSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} SubredditName
+* @apiParam {string} PostID
+*/
+
+/**
+* @api {delete} /sr/:Id   Delete a subreddit
+* @apiName DeleteSubreddit
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} SubredditName
+*/
 
 
 /**
@@ -195,8 +295,8 @@ app.delete("/sr", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-/** 
-* @api {post} /pm/    Compose a new message 
+/**
+* @api {post} /pm/    Compose a new message
 * @apiName Compose
 * @apiGroup PMService
 *
@@ -230,8 +330,8 @@ app.delete("/sr", (req, res) => {});
 *     }
 */
 
-/** 
-* @api {post} /pm/   Block 
+/**
+* @api {post} /pm/   Block
 * @apiName Block
 * @apiGroup PMService
 *
@@ -240,7 +340,7 @@ app.delete("/sr", (req, res) => {});
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
-    
+
 *     }
 *
 * @apiError UserNotFound The <code>id</code> of the User was not found.
@@ -264,8 +364,8 @@ app.delete("/sr", (req, res) => {});
 */
 
 
-/** 
-* @api {delete} /pm/:Id   Delete 
+/**
+* @api {delete} /pm/:Id   Delete
 * @apiName Delete
 * @apiGroup PMService
 *
@@ -284,8 +384,8 @@ app.delete("/sr", (req, res) => {});
 *     }
 */
 
-/** 
-* @api {put} /pm/:Id   Mark Read 
+/**
+* @api {put} /pm/:Id   Mark Read
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
@@ -304,8 +404,8 @@ app.delete("/sr", (req, res) => {});
 *     }
 */
 
-/** 
-* @api {post} /pm/   Mark Read-all 
+/**
+* @api {post} /pm/   Mark Read-all
 * @apiName MarkReadALL
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -321,8 +421,8 @@ app.delete("/sr", (req, res) => {});
 *     }
 */
 
-/** 
-* @api {get} /pm/   Retrieve 
+/**
+* @api {get} /pm/   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -332,11 +432,11 @@ app.delete("/sr", (req, res) => {});
 *     HTTP/1.1 200 OK
 *     {
 *  "messages":[{
-* "user”:{“Is_read”:false,”email”:”mar.kefo@gmail.com”,”user_id”:”1232”,”profile_url":""} 
+* "user”:{“Is_read”:false,”email”:”mar.kefo@gmail.com”,”user_id”:”1232”,”profile_url":""}
 * ,”subject”:”URGENT VIP”
 * ,”message”:”Dear, marwan please”,”
 *  },
-* {"user”:{“Is_read”:false,”email”:”marwankefah@gmail.com”,”user_id”:”1232”,”profile_url":""} 
+* {"user”:{“Is_read”:false,”email”:”marwankefah@gmail.com”,”user_id”:”1232”,”profile_url":""}
 * ,”subject”:”TEST VERIFIED”
 * ,”message”:”Dear, marwan TEST M2”,”
 * } ]
