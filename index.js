@@ -98,6 +98,16 @@ app.delete("/emoji", (req, res) => {});
 * @apiSuccess {string} EMOJI_ID New unique id of new image.
 *
 */
+/**
+* @api {get} /emoji/   Edit an emoji (instead of deleting then creating)
+* @apiName GetEmoji
+* @apiGroup EmojiService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+* @apiSuccess {string} EMOJI_ID New unique id of new image.
+*
+*/
 
 
 /**
