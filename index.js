@@ -48,198 +48,180 @@
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-
 /**
- * @api {post} /comment/:id Post a New Comment
- * @apiName PostComment
- * @apiGroup Comment
- * 
- * @apiParam {String} id ID of thread or comment.
- * @apiParam {String} Type specifies whether this is a reply or a comment  .
- * @apiParam {String} content Text of the Comment.
- * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
- * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
- * 
- * @apiSuccess {String} c_id The Created Comment ID.
- * 
- * @apiError ThreadNotFound The id of the thread wasn't found.
- * @apiError AccessDenied If the user isn't logged in.
+ * @name UserService
+ * @note These are the routes for anything related to a user.
+ * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
 
 
+//TODO POSTS: listing posts for a subreddit or only popular posts
 
- /**
-  * @api {get} /comment/ Get Details About Comment or a Reply
-  * @apiName GetComment
-  * @apiGroup Comment
-  * 
-  * @apiParam {String} c_id Comment Unique ID.
-  * 
-  * @apiSuccess {String} content Text of the Comment.
-  * @apiSuccess {Date} c_date Date of the Posted Comment.
-  * @apiSuccess {Boolean} spoiler True if it is a Spoiler.
-  * @apiSuccess {Boolean} locked True if the Replies are Disallowed on this Comment.
-  * @apiSuccess {Boolean} saved True if it is Saved.
-  * @apiSuccess {Boolean} hidden True if it is Hidden.
-  * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
-  */
 
-/**
- * @api {delete} /comment/:c_id Delete a Comment
- * @apiName DeleteComment
- * @apiGroup Comment
- * 
- * @apiParam {Number} c_id Comment Unique ID.
- * 
- * @apiError CommentNotFound The id of the comment wasn't found.
- * @apiError AccessDenied If this user can't delete this comment.
- */
 
- /**
-  * @api {put} /comment/:c_id Edit a Comment
-  * @apiName EditComment
-  * @apiGroup Comment
-  * 
-  * @apiParam {String} c_id Comment Unique ID.
-  * @apiParam {String} content Text of the Edited Comment.
-  * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
-  * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
-  * 
-  * @apiError CommentNotFound The id of the comment wasn't found.
-  * @apiError AccessDenied If this user can't edit this comment.
-  */
+/** 
+* @api {get} /user/listing?type=value List Posts 
+* @apiName ListPosts
+* @apiGroup UserService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
+* @apiParam {Number} LPostID id of the last post displayed
+* @apiSuccess {Object[]} Posts   Array of the listed Posts  .
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*  "Posts":[
+*  {
+* "SubbredditName": "r/funny"
+* ,"PostID":1
+* ,"Meme": data:image/jpeg;base64,...............
+*  },
+* {
+* "SubbredditName": "r/Damn"
+* ,"PostID":2
+* ,"Meme": data:image/jpeg;base64,...............
+*  } 
+]
+*     }
+*
+* @apiError PostsnotFound 
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 404 Not Found
+*     {
+*       "error": "Posts not Found"
+*     }
+*/
 
-  /**
-   * @api {put} /comment/:c_id Vote for a Comment
-   * @apiName VoteComment
-   * @apiGroup Comment
-   * 
-   * @apiParam {String} c_id Comment Unique ID.
-   * @apiParam {Number=1,0,-1} direction Direction of the Vote as 1 indicates Upvote, -1 indicates Downvote and 0 means unvoting.
-   * 
-   * @apiError CommentNotFound The id of the comment wasn't found.
-   * @apiError AccessDenied If the user isn't logged in.
-   */
+// API for information about user
 
-   /**
-    * @api {post} /comment/:c_id Save a Comment
-    * @apiName SaveComment
-    * @apiGroup Comment
-    * 
-    * @apiParam {String} c_id Comment Unique ID.
-    * 
-    * @apiError CommentNotFound The id of the comment wasn't found.
-    * @apiError CommentAlreadySaved The Comment has already been saved before.
-    * @apiError AccessDenied If the user isn't logged in.
-    */
+/** 
+* @api {get} /user/:Username/about/ About
+* @apiName AboutUser
+* @apiGroup UserService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} Username username of the user that the information is about.
+* @apiSuccess {String} Name name of the user
+* @apiSuccess {String} Cakeday date of the user joining reddit.
+* @apiSuccess {Number} Karma karma of the user
+* @apiSuccess {JPG} Pic profile picture of the user
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "Username" : "TheRealBatman",
+*       "Name": "Mark",
+*       "Cakeday": "21-12-2019",
+*       "Karma": 1449,
+*       "Pic" : data:image/jpeg;base64,...............
+*      }
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 403 Forbidden
+*     {
+*       "error": "User not found"
+*     }
+*/
 
-    /**
-     * @api {delete} /comment/:c_id UnSave a Comment
-     * @apiName UnSaveComment
-     * @apiGroup Comment
-     * 
-     * @apiParam {String} c_id Comment Unique ID.
-     * 
-     * @apiError CommentNotFound The id of the comment wasn't found.
-     * @apiError CommentNotSaved You can't unsave an unsaved comment.
-     * @apiError AccessDenied If the user isn't logged in.
-     */
 
-     /**
-      * @api {put} /comment/:c_id Hide a Comment
-      * @apiName HideComment
-      * @apiGroup Comment
-      * 
-      * @apiParam {String} c_id Comment Unique ID.
-      * 
-      * @apiError CommentNotFound The id of the comment wasn't found.
-      * @apiError CommentAlreadyHidden The Comment has already been hidden before.
-      * @apiError AccessDenied If the user isn't logged in.
-      */
+//API for listings of comments 
 
-     /**
-      * @api {put} /comment/:c_id UnHide a Comment
-      * @apiName UnHideComment
-      * @apiGroup Comment
-      * 
-      * @apiParam {String} c_id Comment Unique ID.
-      * 
-      * @apiError CommentNotFound The id of the comment wasn't found.
-      * @apiError CommentAlreadyHidden The Comment is not hidden.
-      * @apiError AccessDenied If the user isn't logged in.
-      */
+/** 
+* @api {get} /user/:Username/comments/listing?type=value  List Comments 
+* @apiName ListComments
+* @apiGroup UserService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} ListingType Type of the listing that the user wants for the Comments.
+* @apiSuccess {Object[]} Comments   Array of the listed Comments  .
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "Comments": [ {
+*       "SubbredditName": "r/Damn",
+*       "PostID" :3,
+*       "Content" : "Hussein is on fire "
+*       },
+*       {
+*       "SubbredditName": "r/funny",
+*       "PostID" :1,
+*       "Content" : "Let's see who wins this contest "
+*       }]
+*     }
+*
+* @apiError CommentsNotFound no comments found to be listed
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 404 Not Found
+*     {
+*       "error": "CommentsNotFound"
+*     }
+*/
 
-      /**
-       * @api {put} /comment/:c_id Mark Comment as a Spoiler
-       * @apiName SpoilerComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already marked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
+//TODO SUBMITTED (if it means posts or subreddits)
 
-       /**
-       * @api {put} /comment/:c_id UnMark Comment as a Spoiler
-       * @apiName UnSpoilerComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already unmarked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
+// API for listing of Posts by a user
 
-       /**
-       * @api {put} /comment/:c_id Lock a Comment to Disallow Replies on it
-       * @apiName LockComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already locked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
+/** 
+* @api {get} /user/:Username/listing?type=value List Posts 
+* @apiName ListPosts
+* @apiGroup UserService
+* @apiparam {String} Username Username of visited User.
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
+* @apiParam {Number} LPostID id of the last post displayed
+* @apiSuccess {Object[]} Posts   Array of the listed Posts  .
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*  "Posts":[
+*  {
+* "SubbredditName": "r/funny"
+* ,"PostID":1
+* ,"Meme": data:image/jpeg;base64,...............
+*  },
+* {
+* "SubbredditName": "r/Damn"
+* ,"PostID":2
+* ,"Meme": data:image/jpeg;base64,...............
+*  } 
+]
+*     }
+*
+* @apiError Server error no subreddits found to be listed
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 500 Server error
+*     {
+*       "error": "Server error"
+*     }
+*/
 
-       /**
-       * @api {put} /comment/:c_id UnLock a Comment to Allow Replies on it
-       * @apiName UnLockComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already unlocked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
+//TODO VOTED
 
-       /**
-        * @api {post} /comment/:c_id Report a Comment
-        * @apiName ReportComment
-        * @apiGroup Comment
-        * 
-        * @apiParam {String} c_id Comment Unique ID.
-        * @apiParam {String} text The reason of reporting this comment.
-        * 
-        * @apiError CommentNotFound The id of the comment wasn't found.
-        * @apiError AccessDenied If the user isn't logged in.
-        */
+/** 
+* @api {get} /user/:Username/Votes  Votes of User
+* @apiName Votes
+* @apiGroup UserService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiSuccess {Object[]} Votes   Array of the listed Votes  .
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "Votes": [ {
+        "Type" : "Upvote",
+*       "SubbredditName": "r/Damn",
+*       "PostID" :3
+*       },
+*       {
+        "Type" : "Upvote",
+*       "SubbredditName": "r/funny",
+*       "PostID" :1
+*       }]
+*     }
+*
+* @apiError CommentsNotFound no comments found to be listed
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 404 Not Found
+*     {
+*       "error": "CommentsNotFound"
+*     }
+*/
 
-        /**
-         * @api {get} /comment/:c_id Retrieve additional comments omitted from a base comment tree
-         * @apiName ExpandComment
-         * @apiGroup Comment
-         * 
-         * @apiParam {String} c_id Comment Unique ID.
-         * 
-         * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
-         * 
-         * @apiError CommentNotFound The id of the comment wasn't found.
-         */
 
 /**
  * @api {get} /me/:username Request my account information
@@ -702,6 +684,65 @@ app.delete("/users", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
+/**
+* @api {get} /emoji/   Get's an emoji
+* @apiName GetEmoji
+* @apiGroup EmojiService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+* @apiSuccess {string} Image.
+* 
+*/
+
+ /**
+* @api {post} /emoji/   Create an emoji
+* @apiName CreateEmoji
+* @apiGroup EmojiService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} Image  Image(emoji) of the subreddit.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+* @apiSuccess {string} EMOJI_ID Unique id of image.
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Report not found
+* {
+*          "error":"request not found"
+* }
+*/
+
+/**
+* @api {delete} /emoji/   Delete an emoji
+* @apiName DeleteEmoji
+* @apiGroup EmojiService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+* @apiSuccess HTTP/1.1 200 Ok.
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Report not found {
+*          "error":"request not found"
+*  }
+*/
+
+/**
+* @api {put} /emoji/   Edit an emoji (instead of deleting then creating)
+* @apiName EditEmoji
+* @apiGroup EmojiService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+* @apiParam {string} Image  Image(emoji) of the subreddit.
+* @apiSuccess {string} EMOJI_ID New unique id of new image.
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Report not found {
+*          "error":"request not found"
+* }
+*/
+
 app.get("/emoji", (req, res) => {});
 app.post("/emoji", (req, res) => {});
 app.put("/emoji", (req, res) => {});
@@ -714,11 +755,11 @@ app.delete("/emoji", (req, res) => {});
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
 /** 
-* @api {put} /flair/:Srid   Creates  a  Flair 
+* @api {post} /flair/:Srid   Creates  a  Flair 
 * @apiName Create
 * @apiGroup FlairService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Number} SubredditID id of the subbreddit that  user wants to create flair for.
+* @apiParam {String} SubredditName of the subbreddit that  user wants to create flair for.
 * @apiParam {string} FlairName the flair string  added (maximum 100 characters) .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
@@ -743,7 +784,7 @@ app.delete("/emoji", (req, res) => {});
 * @api {delete} /flair/:SrId   Delete 
 * @apiName Delete
 * @apiGroup FlairService
-* @apiParam {Number} SubredditID id of the subbreddit that  user wants to delete flair for.
+* @apiParam {String} SubredditName of the subbreddit that  user wants to delete flair for.
 * @apiParam {string} FlairName the flair string  user want to delete (maximum 100 characters) .
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.
 * @apiSuccessExample Success-Response:
@@ -776,7 +817,7 @@ app.delete("/emoji", (req, res) => {});
 * @apiName RetrieveFlairs
 * @apiGroup FlairService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Number} SubredditID id of the subbreddit that  user wants to get flair for.
+* @apiParam {String} SubredditName of the subbreddit that  user wants to get flair for.
 * @apiSuccess {Array} Flairs   Array of Flairs of the users for the subbredditID requested .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
@@ -814,6 +855,198 @@ app.delete("/flair", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
+
+/**
+ * @api {post} /comment/:id Post a New Comment
+ * @apiName PostComment
+ * @apiGroup Comment
+ * 
+ * @apiParam {String} id ID of thread or comment.
+ * @apiParam {String} Type specifies whether this is a reply or a comment  .
+ * @apiParam {String} content Text of the Comment.
+ * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
+ * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
+ * 
+ * @apiSuccess {String} c_id The Created Comment ID.
+ * 
+ * @apiError ThreadNotFound The id of the thread wasn't found.
+ * @apiError AccessDenied If the user isn't logged in.
+ */
+
+
+
+ /**
+  * @api {get} /comment/ Get Details About Comment or a Reply
+  * @apiName GetComment
+  * @apiGroup Comment
+  * 
+  * @apiParam {String} c_id Comment Unique ID.
+  * 
+  * @apiSuccess {String} content Text of the Comment.
+  * @apiSuccess {Date} c_date Date of the Posted Comment.
+  * @apiSuccess {Boolean} spoiler True if it is a Spoiler.
+  * @apiSuccess {Boolean} locked True if the Replies are Disallowed on this Comment.
+  * @apiSuccess {Boolean} saved True if it is Saved.
+  * @apiSuccess {Boolean} hidden True if it is Hidden.
+  * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
+  */
+
+/**
+ * @api {delete} /comment/:c_id Delete a Comment
+ * @apiName DeleteComment
+ * @apiGroup Comment
+ * 
+ * @apiParam {Number} c_id Comment Unique ID.
+ * 
+ * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError AccessDenied If this user can't delete this comment.
+ */
+
+ /**
+  * @api {put} /comment/:c_id Edit a Comment
+  * @apiName EditComment
+  * @apiGroup Comment
+  * 
+  * @apiParam {String} c_id Comment Unique ID.
+  * @apiParam {String} content Text of the Edited Comment.
+  * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
+  * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
+  * 
+  * @apiError CommentNotFound The id of the comment wasn't found.
+  * @apiError AccessDenied If this user can't edit this comment.
+  */
+
+  /**
+   * @api {put} /comment/:c_id Vote for a Comment
+   * @apiName VoteComment
+   * @apiGroup Comment
+   * 
+   * @apiParam {String} c_id Comment Unique ID.
+   * @apiParam {Number=1,0,-1} direction Direction of the Vote as 1 indicates Upvote, -1 indicates Downvote and 0 means unvoting.
+   * 
+   * @apiError CommentNotFound The id of the comment wasn't found.
+   * @apiError AccessDenied If the user isn't logged in.
+   */
+
+   /**
+    * @api {post} /comment/:c_id Save a Comment
+    * @apiName SaveComment
+    * @apiGroup Comment
+    * 
+    * @apiParam {String} c_id Comment Unique ID.
+    * 
+    * @apiError CommentNotFound The id of the comment wasn't found.
+    * @apiError CommentAlreadySaved The Comment has already been saved before.
+    * @apiError AccessDenied If the user isn't logged in.
+    */
+
+    /**
+     * @api {delete} /comment/:c_id UnSave a Comment
+     * @apiName UnSaveComment
+     * @apiGroup Comment
+     * 
+     * @apiParam {String} c_id Comment Unique ID.
+     * 
+     * @apiError CommentNotFound The id of the comment wasn't found.
+     * @apiError CommentNotSaved You can't unsave an unsaved comment.
+     * @apiError AccessDenied If the user isn't logged in.
+     */
+
+     /**
+      * @api {put} /comment/:c_id Hide a Comment
+      * @apiName HideComment
+      * @apiGroup Comment
+      * 
+      * @apiParam {String} c_id Comment Unique ID.
+      * 
+      * @apiError CommentNotFound The id of the comment wasn't found.
+      * @apiError CommentAlreadyHidden The Comment has already been hidden before.
+      * @apiError AccessDenied If the user isn't logged in.
+      */
+
+     /**
+      * @api {put} /comment/:c_id UnHide a Comment
+      * @apiName UnHideComment
+      * @apiGroup Comment
+      * 
+      * @apiParam {String} c_id Comment Unique ID.
+      * 
+      * @apiError CommentNotFound The id of the comment wasn't found.
+      * @apiError CommentAlreadyHidden The Comment is not hidden.
+      * @apiError AccessDenied If the user isn't logged in.
+      */
+
+      /**
+       * @api {put} /comment/:c_id Mark Comment as a Spoiler
+       * @apiName SpoilerComment
+       * @apiGroup Comment
+       * 
+       * @apiParam {String} c_id Comment Unique ID.
+       * 
+       * @apiError CommentNotFound The id of the comment wasn't found.
+       * @apiError CommentAlreadySpoiler The Comment is already marked.
+       * @apiError AccessDenied If the user isn't logged in.
+       */
+
+       /**
+       * @api {put} /comment/:c_id UnMark Comment as a Spoiler
+       * @apiName UnSpoilerComment
+       * @apiGroup Comment
+       * 
+       * @apiParam {String} c_id Comment Unique ID.
+       * 
+       * @apiError CommentNotFound The id of the comment wasn't found.
+       * @apiError CommentAlreadySpoiler The Comment is already unmarked.
+       * @apiError AccessDenied If the user isn't logged in.
+       */
+
+       /**
+       * @api {put} /comment/:c_id Lock a Comment to Disallow Replies on it
+       * @apiName LockComment
+       * @apiGroup Comment
+       * 
+       * @apiParam {String} c_id Comment Unique ID.
+       * 
+       * @apiError CommentNotFound The id of the comment wasn't found.
+       * @apiError CommentAlreadySpoiler The Comment is already locked.
+       * @apiError AccessDenied If the user isn't logged in.
+       */
+
+       /**
+       * @api {put} /comment/:c_id UnLock a Comment to Allow Replies on it
+       * @apiName UnLockComment
+       * @apiGroup Comment
+       * 
+       * @apiParam {String} c_id Comment Unique ID.
+       * 
+       * @apiError CommentNotFound The id of the comment wasn't found.
+       * @apiError CommentAlreadySpoiler The Comment is already unlocked.
+       * @apiError AccessDenied If the user isn't logged in.
+       */
+
+       /**
+        * @api {post} /comment/:c_id Report a Comment
+        * @apiName ReportComment
+        * @apiGroup Comment
+        * 
+        * @apiParam {String} c_id Comment Unique ID.
+        * @apiParam {String} text The reason of reporting this comment.
+        * 
+        * @apiError CommentNotFound The id of the comment wasn't found.
+        * @apiError AccessDenied If the user isn't logged in.
+        */
+
+        /**
+         * @api {get} /comment/:c_id Retrieve additional comments omitted from a base comment tree
+         * @apiName ExpandComment
+         * @apiGroup Comment
+         * 
+         * @apiParam {String} c_id Comment Unique ID.
+         * 
+         * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
+         * 
+         * @apiError CommentNotFound The id of the comment wasn't found.
+         */
 app.get("/comment", (req, res) => {});
 app.post("/comment", (req, res) => {});
 app.put("/comment", (req, res) => {});
@@ -826,23 +1059,124 @@ app.delete("/comment", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
+/**
+* @api {post} /sr/:Id   Create a new subreddit
+* @apiName CreateSubreddit
+* @apiGroup SrService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {String} AdminId Id of user that created SR.
+* @apiParam {string} SrName  unique Name of the subreddit (no longer than 100 character).
+* @apiParam {string[]} SubredditRules list of subbreddit rules.
+* @apiParam {string[]} ModUsername  Subreddit moderators' usernames.
+*@apiSuccess {string} SR_ID Unique id of created sr.
+*
+*/
+
+/**
+* @api {get} /sr/:SubredditName/Listing/:type   ListSubreddits   Generate a list of subreddits 
+* @apiName ListSubreddits
+* @apiGroup SrService
+*
+* @apiParam {string} Token.
+* @apiParam {string} SubredditName Name of subreddit
+* @apiParam {string} Type List according to certain type
+* @apiSuccess {string[]} SubredditIDs Returns list of sorted subreddits
+*/
+
+/**
+* @api {get} /sr/:SrName/meta   Views subreddit meta
+* @apiName ViewSrMeta
+* @apiGroup SrService
+*
+* @apiSuccess {string} Username of Creator.
+* @apiParam {string} SrName Subreddit name.
+* @apiSuccess {string[]} BannedUsers   ID of banned users.
+* @apiSuccess {string[]} ModIds   ID of Modertors.
+* @apiSuccess {string[]} PostIds   ID of posts in sr. 
+* @apiSuccess {string[]} Rules   Rules of sr.
+* @apiSuccess {string[]} UserIds   Ids of subscribed users .
+* @apiSuccess {Number[]} SubCount   Number of subscribers.
+* @apiParam {String} Date  date of creation .
+*/
+
+/**
+* @api {put} /sr/:SubredditName/    Edit a subreddit
+* @apiName EditSubreddit
+* @apiGroup SrService
+*
+* @apiParam {string[]} NewRules Updated rules.
+* @apiParam {string} SubredditName Old name
+* @apiParam {string} NewName  New name
+* @apiParam {string} About Updated about
+*/
+
+/**
+* @api {post} /sr/:SubredditName/thread    Create a thread inside subreddit
+* @apiName CreateSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Username of creator.
+* @apiParam {string} SubredditName Name of subreddit.
+* @apiParam {string} ThreadTitle Title of thread
+* @apiParam {string} ThreadData Data inside thread.
+* @apiParam {boolean} Spoiler [Spoiler==false] Mark if post is spoiler
+*/
+
+/**
+* @api {post} /sr/:SubredditName/subs  Subscribe to a Sr
+* @apiName SubredditSubscribtion
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} SubredditName
+*/
+
+/**
+* @api {delete} /sr/:SubredditName/subs   Unsubscribe to a Sr
+* @apiName SubredditUnsubscribtion
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} SubredditName
+*/
+
+/**
+* @api {delete} /sr/:Id/thread    Delete a thread inside subreddit
+* @apiName DeleteSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} SubredditName
+* @apiParam {string} PostID
+*/
+
+/**
+* @api {delete} /sr/:Id   Delete a subreddit
+* @apiName DeleteSubreddit
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} SubredditName
+*/
+
+
 app.get("/sr", (req, res) => {});
 app.post("/sr", (req, res) => {});
 app.put("/sr", (req, res) => {});
 app.delete("/sr", (req, res) => {});
-
 
 /**
  * @name PMService
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-/** 
-* @api {post} /pm/    Compose a new message 
+/**
+* @api {post} /pm/    Compose a new message
 * @apiName Compose
 * @apiGroup PMService
 *
-* @apiParam {Number} ReceiverID unique ID.
+* @apiParam {String} ReceiverID unique username.
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {string} Subject Subject of the sending message (no longer than 100 character).
 * @apiParam {string} MessageBody the text of the message sent.
@@ -872,17 +1206,17 @@ app.delete("/sr", (req, res) => {});
 *     }
 */
 
-/** 
-* @api {post} /pm/   Block 
+/**
+* @api {post} /pm/   Block
 * @apiName Block
 * @apiGroup PMService
 *
-* @apiParam {Number} ReceiverID unique ID.
+* @apiParam {String} ReceiverID unique username.
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
-    
+
 *     }
 *
 * @apiError UserNotFound The <code>id</code> of the User was not found.
@@ -906,8 +1240,8 @@ app.delete("/sr", (req, res) => {});
 */
 
 
-/** 
-* @api {delete} /pm/:Id   Delete 
+/**
+* @api {delete} /pm/:Id   Delete
 * @apiName Delete
 * @apiGroup PMService
 *
@@ -926,8 +1260,8 @@ app.delete("/sr", (req, res) => {});
 *     }
 */
 
-/** 
-* @api {put} /pm/:Id   Mark Read 
+/**
+* @api {put} /pm/:Id   Mark Read
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
@@ -946,8 +1280,8 @@ app.delete("/sr", (req, res) => {});
 *     }
 */
 
-/** 
-* @api {post} /pm/   Mark Read-all 
+/**
+* @api {post} /pm/   Mark Read-all
 * @apiName MarkReadALL
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -963,22 +1297,22 @@ app.delete("/sr", (req, res) => {});
 *     }
 */
 
-/** 
-* @api {get} /pm/   Retrieve 
+/**
+* @api {get} /pm/   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {Boolean} Mine True if u need to retrieve the inbox false if u need to retrieve the sent.
-* @apiSuccess {Array} Messages   Array of Messages    .
+* @apiSuccess {Array} Messages Array of Messages    .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
 *  "messages":[{
-* "user”:{“Is_read”:false,”email”:”mar.kefo@gmail.com”,”user_id”:”1232”,”profile_url":""} 
+* "user”:{“Is_read”:false,”email”:”mar.kefo@gmail.com”,”user_id”:”1232”,”profile_url":""}
 * ,”subject”:”URGENT VIP”
 * ,”message”:”Dear, marwan please”,”
 *  },
-* {"user”:{“Is_read”:false,”email”:”marwankefah@gmail.com”,”user_id”:”1232”,”profile_url":""} 
+* {"user”:{“Is_read”:false,”email”:”marwankefah@gmail.com”,”user_id”:”1232”,”profile_url":""}
 * ,”subject”:”TEST VERIFIED”
 * ,”message”:”Dear, marwan TEST M2”,”
 * } ]
@@ -1005,9 +1339,25 @@ app.delete("/pm", (req, res) => {});
  * @note don't think about SQL triggers, they're irrelevant in such case.
  * @see https://nodejs.org/api/events.html
  */
+
+
+/**
+* @api {get} /notif/   Retrieve
+* @apiName RetrieveNotifications
+* @apiGroup NotificationsService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {Number} Starting ID of Notifications (If Omitted, latest notifications will be sent.).
+* @apiSuccess {Array} Array of Notifications.
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*  "notifications":[
+*    {"type": "message", "content": "Mustafa Ahmed Sent you a message", "ID": 5}
+*    {"type": "ban", "content": "You have been banned from subreddit /r/MemeGeeks", "ID": 3}
+*    ]
+*     }
+
+*/
 app.get("/notif", (req, res) => {});
-app.post("/notif", (req, res) => {});
-app.put("/notif", (req, res) => {});
-app.delete("/notif", (req, res) => {});
 
  app.listen(1337);
