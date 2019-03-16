@@ -41,8 +41,11 @@
  * @see http://apidocjs.com/
  */
 
- const app = require("express")();
+const app = require("express")();
+const userHandler = require("./src/user");
 
+console.log(userHandler.handleRegistration);
+app.post("/user", userHandler.handleRegistration);
 /**
  * @name UserService
  * @note These are the routes for anything related to a user.
