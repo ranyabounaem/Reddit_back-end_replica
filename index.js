@@ -42,6 +42,15 @@
  */
 
 const app = require("express")();
+const mongoose=require('mongoose');
+const bodyparser=require('body-parser');
+//contect to mongo
+mongoose.connect('mongodb://localhost/reddit');
+mongoose.Promise=global.Promise;
+
+
+app.use(bodyparser.json());
+
 const userHandler = require("./src/user");
 
 console.log(userHandler.handleRegistration);
@@ -801,13 +810,8 @@ app.delete("/emoji", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-<<<<<<< HEAD
 /** 
 * @api {post} /flair/:Srid   Creates  a  Flair 
-=======
-/**
-* @api {put} /flair/:Srid   Creates  a  Flair
->>>>>>> master
 * @apiName Create
 * @apiGroup FlairService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
