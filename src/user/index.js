@@ -19,8 +19,7 @@ class UserHandler {
                 if (user!==null)
                 {
                     res.send({error:'Username already exists'});
-                    Check=false
-                    
+                    Check=false;
                 }
                 
          })
@@ -37,15 +36,30 @@ class UserHandler {
                     if (validator.validate(req.body.Email)==false)
                     {
                         res.send({error:'Email invalid'});
-                        Check=false;
-                    };
+                        Check=false;                      
+                    }
+                    else {
+                        if(Check)
+                        { User.create(req.body).then(function(user){res.send(user);})}}
                 }
                 
          })
+    }
 
-         if(Check)
-            { User.create(req.body).then(function(user){res.send(user);})}
-            else { res.send({error:'test'});}
+    handleLogin(req,res)
+    {
+        User.findOne({Username:req.body.Username}).then(function(user)
+         {
+                if (user!==null)
+                {
+                    if(user.Password==req.body.Password){res.status(200).end();}
+                    else
+                    {res.send({error:'Invalid Password'})}
+                }
+                else  {res.send({error:'User doesnt exist'})}
+                
+         })
+
     }
 }
 

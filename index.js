@@ -56,7 +56,8 @@ app.use(bodyparser.json());
 const userHandler = require("./src/user");
 
 console.log(userHandler.handleRegistration);
-app.post("/user", userHandler.handleRegistration);
+app.post("/user/register", userHandler.handleRegistration);
+app.post("/user/login", userHandler.handleLogin);
 
 /**
  * @name UserService
