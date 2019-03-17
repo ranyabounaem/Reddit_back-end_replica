@@ -15,7 +15,10 @@ const SubredditPostSchema = new Schema({
 });
 
 const SubredditSchema = new Schema({
-    name: String,
+    name: {
+        type:String,
+        unique:true
+    },
     adminUsername: String,
     rules: [String],
     posts: [SubredditPostSchema],

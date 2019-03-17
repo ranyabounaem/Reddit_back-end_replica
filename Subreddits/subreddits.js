@@ -27,7 +27,7 @@ class SR {
                 if (err) {
                 // internal Server error 
                 res.status(500)
-                res.json({ error: 'internalServerError' });
+                res.json({ error: 'internalServerError or name may already exist' });
                 res.end()
 
                 }
