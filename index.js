@@ -64,11 +64,11 @@ app.use(function(req,res,next) {
 const userHandler = require("./src/user");
 
 // console.log(userHandler.handleRegistration);
-// app.post("/user/register", userHandler.handleRegistration);
-// app.post("/user/login", userHandler.handleLogin);
-// app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
-// app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
-// app.get("/me/About/:Username", userHandler.Getmyinfo)
+ app.post("/user/register", userHandler.handleRegistration);
+ app.post("/user/login", userHandler.handleLogin);
+ app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
+ app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
+ app.get("/me/About/:Username", userHandler.Getmyinfo);
 
 
 /**
@@ -1564,5 +1564,5 @@ app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res))
 app.get("/notif", (req, res) => {});
 
 
-var server=app.listen(1337,function(){console.log('listening')});
+var server=app.listen(4000,function(){console.log('listening')});
 module.exports=server;
