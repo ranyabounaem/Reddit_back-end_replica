@@ -47,6 +47,8 @@ const bodyparser=require('body-parser');
 //contect to mongo
 mongoose.connect('mongodb://localhost/reddit');
 mongoose.Promise=global.Promise;
+mongoose.connection.once('open',function(){console.log("Connection successful");}).on('error',function(error)
+{console.log("error:",error)});
 
 
 app.use(bodyparser.json());
@@ -55,6 +57,7 @@ const userHandler = require("./src/user");
 
 console.log(userHandler.handleRegistration);
 app.post("/user", userHandler.handleRegistration);
+
 /**
  * @name UserService
  * @note These are the routes for anything related to a user.
@@ -305,7 +308,25 @@ app.post("/user", userHandler.handleRegistration);
  *    
  * 
  * @apiErrorExample {json} List error
- *    HTTP/1.1 500 Internal Server Error
+ *    
+ * HTTP/1.1 401 password short
+ * {
+ * "error":"Password can't be less than 8 characters"
+ * }
+ * 
+ *  HTTP/1.1 402 username repeated 
+ * {
+ * "error":"This username already exists"
+ * }
+ * HTTP/1.1 403 email repeated 
+ * {
+ * "error":"This email already exists"
+ * }
+ * 
+ * HTTP/1.1 405 email format 
+ * {
+ * "error":"Invalid email format"
+ * }
  */
 
 /**
