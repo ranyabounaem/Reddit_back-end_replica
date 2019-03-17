@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 //create user Schema & model 
 const UserSchema = new Schema({
-    Name : {
+    Username : {
         type: String,
-        required: [true, "Name field is required"]
+        required: [true, "Username field is required"]
     },
     Email: {
         type: String,
