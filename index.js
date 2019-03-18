@@ -801,13 +801,8 @@ app.delete("/emoji", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-<<<<<<< HEAD
-/** 
-* @api {post} /flair/:Srid   Creates  a  Flair 
-=======
 /**
 * @api {put} /flair/:Srid   Creates  a  Flair
->>>>>>> master
 * @apiName Create
 * @apiGroup FlairService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -1328,19 +1323,19 @@ app.delete("/sr", (req, res) => {});
 * @apiName Compose
 * @apiGroup PMService
 *
-* @apiParam {String} ReceiverID unique username.
+* @apiParam {String} receiverUsername unique username.
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} Subject Subject of the sending message (no longer than 100 character).
-* @apiParam {string} MessageBody the text of the message sent.
+* @apiParam {String} subject Subject of the sending message (no longer than 100 character).
+* @apiParam {String} messageBody the text of the message sent.
+* @apiParam  {Date}  messageDate  the date of the message UTC default
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
 *     }
 *
-* @apiError UserNotFound The <code>id</code> of the User was not found.
-* @apiError BlockedFromSending The user already blocking messages from the receiver
-* @apiError OverlengthedSubject The length of the subject is above 100 character
-
+* @apiError userNotFound The <code>id</code> of the User was not found.
+* @apiError blockedFromSending The user already blocking messages from the receiver
+* @apiError overLengthedSubject The length of the subject is above 100 character
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
@@ -1349,12 +1344,12 @@ app.delete("/sr", (req, res) => {});
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
 *     {
-*       "error": "BlockedFromSending"
+*       "error": "blockedFromSending"
 *     }
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
 *     {
-*       "error": "OverlengthedSubject"
+*       "error": "overLengthedSubject"
 *     }
 */
 
@@ -1363,7 +1358,7 @@ app.delete("/sr", (req, res) => {});
 * @apiName Block
 * @apiGroup PMService
 *
-* @apiParam {String} ReceiverID unique username.
+* @apiParam {String} receiverUsername unique username.
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
@@ -1371,23 +1366,23 @@ app.delete("/sr", (req, res) => {});
 
 *     }
 *
-* @apiError UserNotFound The <code>id</code> of the User was not found.
-* @apiError OnBlockList The user you are trying to block is already on the block list
-* @apiError SelfBlockAlert an alert if there is a request for selfblock
+* @apiError userNotFound The <code>id</code> of the User was not found.
+* @apiError onBlockList The user you are trying to block is already on the block list
+* @apiError selfBlockAlert an alert if there is a request for selfblock
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "UserNotFound"
+*       "error": "userNotFound"
 *     }
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
 *     {
-*       "error": "OnBlockList"
+*       "error": "onBlockList"
 *     }
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
 *     {
-*       "error": "SelfBlockAlert"
+*       "error": "selfBlockAlert"
 *     }
 */
 
@@ -1397,18 +1392,18 @@ app.delete("/sr", (req, res) => {});
 * @apiName Delete
 * @apiGroup PMService
 *
-* @apiParam {Number} MessageID the id of the message going to be deleted.
+* @apiParam {String} messageId the id of the message going to be deleted.
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
 *     }
 *
-* @apiError MessageNotFound The <code>id</code> of the Message was not found.
+* @apiError messageNotFound The <code>id</code> of the Message was not found.
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "MessageNotFound"
+*       "error": "messageNotFound"
 *     }
 */
 
@@ -1417,18 +1412,18 @@ app.delete("/sr", (req, res) => {});
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
-* @apiParam {Number} MessageID the id of the message going to be marked as read.
+* @apiParam {String} messageID the id of the message going to be marked as read.
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
 *     }
 *
-* @apiError MessageNotFound The <code>id</code> of the Message was not found.
+* @apiError messageNotFound The <code>id</code> of the Message was not found.
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "MessageNotFound"
+*       "error": "messageNotFound"
 *     }
 */
 
@@ -1441,11 +1436,11 @@ app.delete("/sr", (req, res) => {});
 *     HTTP/1.1 200 OK
 *     {
 *     }
-* @apiError NoMessages No messages to mark empty array
+* @apiError noMessages No messages to mark empty array
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
 *     {
-*       "error": "NoMessages"
+*       "error": "noMessages"
 *     }
 */
 
@@ -1454,22 +1449,32 @@ app.delete("/sr", (req, res) => {});
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Boolean} Mine True if u need to retrieve the inbox false if u need to retrieve the sent.
-* @apiSuccess {Array} Messages Array of Messages    .
+* @apiParam {Boolean} mine True if u need to retrieve the inbox false if u need to retrieve the sent.
+* @apiSuccess {Array} messages Array of Messages    .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
-*     {
-*  "messages":[{
-* "user”:{“Is_read”:false,”email”:”mar.kefo@gmail.com”,”user_id”:”1232”,”profile_url":""}
-* ,”subject”:”URGENT VIP”
-* ,”message”:”Dear, marwan please”,”
+*          {
+*  {[{
+* "_id"         :"5c901c662f87870699fa62e6"
+* "sender”      :"kefah",
+* "receiver"    : "omar",
+* ”subject”     :”URGENT VIP”,
+* "messageBody" :”Dear, marwan please”,
+* "isRead"      :true
+* "messageDate" :"2019-03-18 22:32:06.000Z"
 *  },
-* {"user”:{“Is_read”:false,”email”:”marwankefah@gmail.com”,”user_id”:”1232”,”profile_url":""}
-* ,”subject”:”TEST VERIFIED”
-* ,”message”:”Dear, marwan TEST M2”,”
-* } ]
-*     }
-
+* {
+* "_id"         :"5c901c662f87870699fa62e9"
+* "sender”      :"mariam ",
+* "receiver"    : "kefah",
+* ”subject”     :”URGENT VIP”,
+* "messageBody" :”Dear, kefah i want to ,
+* "isRead"      :false
+* "messageDate" :"2019-03-13 22:32:06.000Z"
+*  }
+* ]}
+*     
+*          }
 */
 
 app.get("/pm", (req, res) => {});
