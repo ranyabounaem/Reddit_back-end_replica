@@ -1,55 +1,41 @@
 const User=require('../../models/UserSchema.js');
-const express=require('express');
 const validator = require("email-validator");
 
 class UserHandler {
     constructor(){}
 
-    handleRegistration(req, res) {
-        let Check=true;
+    async handleRegistration(req, res) {
 
          if (req.body.Password.length<8) 
-         {
-             res.send("password too short");
-             Check=false;
-            };
+         {res.send({error:'Password too short'});}
 
-         User.findOne({Username:req.body.Username}).then(function(user)
-         {
-                if (user!==null)
-                {
-                    res.send({error:'Username already exists'});
-                    Check=false;
-                }
-                
-         })
+         const user = await User.findOne({$or:[{Username:req.body.Username},{Email:req.body.Email}]})
+         
+            if(user!==null){  
 
-         User.findOne({Email:req.body.Email}).then(function(user)
-         {
-                if (user!==null)
+            if (req.body.Username==user.Username)
+               {res.send({error:'Username already exists'});}
+
+            else
+               { res.send({error:'Email already exists'});}
+     
+            }  
+            else 
                 {
-                    res.send({error:'Email already exists'});
-                    Check=false;
-                }
-                else 
-                {
-                    if (validator.validate(req.body.Email)==false)
-                    {
-                        res.send({error:'Email invalid'});
-                        Check=false;                      
+                 if (validator.validate(req.body.Email)==true)
+                     {
+                        const user = await User.create(req.body);
+                        res.send(user);
                     }
-                    else {
-                        if(Check)
-                        { User.create(req.body).then(function(user){res.send(user);})}}
-                }
-                
-         })
+                else  {res.send({error:'Invalid Email format'});}
+                } 
+         
     }
 
-    handleLogin(req,res)
+    async handleLogin(req,res)
     {
-        User.findOne({Username:req.body.Username}).then(function(user)
-         {
+        const user=await User.findOne({Username:req.body.Username})
+         
                 if (user!==null)
                 {
                     if(user.Password==req.body.Password){res.status(200).end();}
@@ -57,10 +43,6 @@ class UserHandler {
                     {res.send({error:'Invalid Password'})}
                 }
                 else  {res.send({error:'User doesnt exist'})}
-                
-         })
-
     }
 }
-
 module.exports = new UserHandler();
