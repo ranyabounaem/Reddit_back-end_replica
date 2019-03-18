@@ -58,6 +58,10 @@ const userHandler = require("./src/user");
 console.log(userHandler.handleRegistration);
 app.post("/user/register", userHandler.handleRegistration);
 app.post("/user/login", userHandler.handleLogin);
+app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
+app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
+app.get("/me/About/:Username", userHandler.Getmyinfo)
+
 
 /**
  * @name UserService
