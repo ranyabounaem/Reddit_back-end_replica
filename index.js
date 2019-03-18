@@ -1451,7 +1451,7 @@ app.delete("/sr", (req, res) => {});
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {Boolean} mine True if u need to retrieve the inbox false if u need to retrieve the sent.
-* @apiSuccess {Array} messages Array of Messages    .
+* @apiSuccess {Array} messages Array of Messages ,isBlocked is true whenever the sender is blocking the receiver.
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *          {
@@ -1461,8 +1461,9 @@ app.delete("/sr", (req, res) => {});
 * "receiver"    : "omar",
 * ”subject”     :”URGENT VIP”,
 * "messageBody" :”Dear, marwan please”,
-* "isRead"      :true
-* "messageDate" :"2019-03-18 22:32:06.000Z"
+* "isRead"      :true,
+* "messageDate" :"2019-03-18 22:32:06.000Z",
+*  "isBlocked"   :false
 *  },
 * {
 * "_id"         :"5c901c662f87870699fa62e9"
@@ -1470,8 +1471,9 @@ app.delete("/sr", (req, res) => {});
 * "receiver"    : "kefah",
 * ”subject”     :”URGENT VIP”,
 * "messageBody" :”Dear, kefah i want to ,
-* "isRead"      :false
-* "messageDate" :"2019-03-13 22:32:06.000Z"
+* "isRead"      :false,
+* "messageDate" :"2019-03-13 22:32:06.000Z",
+* "isBlocked"   : true
 *  }
 * ]}
 *     
