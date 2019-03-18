@@ -1360,6 +1360,7 @@ app.delete("/sr", (req, res) => {});
 *
 * @apiParam {String} receiverUsername unique username.
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {Boolean} unblock  false when user want to block ,true when he wants to unblock.
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
