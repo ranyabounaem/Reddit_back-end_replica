@@ -29,7 +29,7 @@ else
 {
 //  put here the check that user not found or the receiver not found
 // initialzing the message with our data 
-var message = new privatemessage({ sender: req.param('sender'), receiver: req.param('receiver'), subject: req.param('subject'),messagebody:req.param('messagebody') ,IsRead:false });
+var message = new privatemessage({ sender: req.param('sender'), receiver: req.param('receiver'), subject: req.param('subject'),messagebody:req.param('messagebody') ,isread:false });
  
 // save   with fire back function  to see the error 
 message.save(function(err,body){ 
@@ -51,7 +51,7 @@ Retrieve(req,res)
 //res.sendFile(__dirname+'/post.html');
 // implementing here the user not found sync token 
 // if the boolean is undefined bad request is being sent 
-/*
+
 if(req.param('mine'==undefined))
 {
 
@@ -59,44 +59,54 @@ res.send(400); // bad request is sent
 
 }
 
-if(req.param('mine')===true)  // retriving all the messages sent to me 
-{
+   if(req.param('mine')===true)  // retriving all the messages sent to me 
+   {
     // here kefah shall be replaced by the username from the synctoken
-    privatemessage.find({receiver:'kefah'},function(err,result){
-if(err)
-{
-res.send(500); // internal server error
+    privatemessage.find({receiver:'kefah'},{'sender':1, _id:0,'isread':1,'subject':1,'messagebody':1},function(err,result){
+        if(err)
+        {
+        res.send(500); // internal server error
+        
+        }
+        else
+        {
+        res.json(result); // stringfing and setting the header automatically 
+        
+        }
+        });
 
-}
-else
-{
-res.json(result); // stringfing and setting the header automatically 
-
-}
-});
-*/
-
-privatemessage.find({receiver:'kefah'},function(err,result){
-    if(err)
-    {
-    res.send(500); // internal server error
-    
     }
-    else
+    else if(req.param('mine'===false))
     {
-    res.json(result); // stringfing and setting the header automatically 
-    
+
+        privatemessage.find({sender:'kefah'},{'receiver':1, _id:0,'isread':1,'subject':1,'messagebody':1},function(err,result){
+            if(err)
+            {
+            res.send(500); // internal server error
+            
+            }
+            else
+            {
+            res.json(result); // stringfing and setting the header automatically 
+            
+            }
+            });
+
+
     }
-    });
-}  // end of the retrieve function
+    else{
+
+res.send(500); //internal server error
+      
+
+    }
+
+    }// end of the retrieve function
 
 
 
 
-} // end of the class
-
-
-
+}// end of the class
 
 
 
