@@ -285,7 +285,7 @@ app.post("/user/login", userHandler.handleLogin);
 
 
 /**
- * @api {post} /me/Create Register new user
+ * @api {post} /user/register Register new user
  * @apiName CreateUser
  * @apiGroup me
  *
@@ -310,23 +310,23 @@ app.post("/user/login", userHandler.handleLogin);
  * 
  * @apiErrorExample {json} List error
  *    
- * HTTP/1.1 401 password short
+ * HTTP/1.1 406 password short
  * {
- * "error":"Password can't be less than 8 characters"
+ * "error":"Password too short"
  * }
  * 
- *  HTTP/1.1 402 username repeated 
+ *  HTTP/1.1 406 username repeated 
  * {
- * "error":"This username already exists"
+ * "error":"Username already exists"
  * }
- * HTTP/1.1 403 email repeated 
+ * HTTP/1.1 406 email repeated 
  * {
- * "error":"This email already exists"
+ * "error":"Email already exists"
  * }
  * 
- * HTTP/1.1 405 email format 
+ * HTTP/1.1 406 email format 
  * {
- * "error":"Invalid email format"
+ * "error":"Invalid Email format"
  * }
  */
 
@@ -343,10 +343,8 @@ app.post("/user/login", userHandler.handleLogin);
  * @apiSuccess {string} Token SyncToken That is sent with authentication.
  * @apiParamExample {json} Input
  *    {
- *      "Email": "user@reddit.com",
  *      "Username": "User1",
  *      "Password": "Password"
-      
  *    }
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
@@ -356,9 +354,14 @@ app.post("/user/login", userHandler.handleLogin);
  *    
  * 
  * @apiErrorExample {json} List error
- *    HTTP/1.1 405 Invalid
+ *    HTTP/1.1 401 Invalid
  * {
- *          "error"":"Invalid credentials""
+ *          "error"":"Invalid Password"
+ * }
+ * 
+ *  HTTP/1.1 404 Invalid
+ * {
+ *        "error"":"User doesnt exist"
  * }
  */
 
@@ -786,6 +789,18 @@ app.delete("/emoji", (req, res) => {});
 * @api {post} /emoji/   Create an emoji
 * @apiName CreateEmoji
 * @apiGroup EmojiService
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} Image  Image(emoji) of the subreddit.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+* @apiSuccess {string} EMOJI_ID Unique id of image.
+*
+*/
+
+/**
+* @api {post} /emoji/   Create an emoji
+* @apiName CreateEmoji
+* @apiGroup test
 *
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {string} Image  Image(emoji) of the subreddit.
@@ -1538,4 +1553,5 @@ app.delete("/pm", (req, res) => {});
 */
 app.get("/notif", (req, res) => {});
 
-app.listen(4000,function(){console.log('listening')});
+var server=app.listen(4000,function(){console.log('listening')});
+module.exports=server;
