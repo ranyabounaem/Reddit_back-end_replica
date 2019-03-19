@@ -1,10 +1,12 @@
 const express= require('express');
 const bodyParser= require('body-parser');
-const privateMessage =require('./PMmongo'); 
-
+const PMmongo=require('./PMmongo');
+const privateMessage =PMmongo.pm;
+const blockList=PMmongo.messageBlockList;
 class PM {
     constructor()
     {
+      
     }
   
 Compose (req,res)    
@@ -32,7 +34,8 @@ var owner=req.param('username');
    
    {
        // bad request is sent
-    res.send(400); 
+       res.status(400)
+    res.json({error : 'undefined parameter'});
     
    }
 /** 
@@ -42,11 +45,12 @@ var owner=req.param('username');
 else if (!
     (typeof req.body.receiver     === 'string' 
     &typeof req.body.messageBody  === 'string'
-    & typeof req.body.subject     ==='string'
+    & typeof req.body.subject     === 'string'
     & typeof owner                === 'string'))
    {
        // bad request is sent 
-    res.send(400); 
+       res.status(400)
+       res.json({error : 'parameter Type error'});
     
    }
 /**
@@ -60,22 +64,37 @@ else if(
     || owner                    =='')
     { 
         // sending forbidden request 
-      res.send(403);  
+        
+       res.status(403)
+       res.json({error : 'parameterEmptyError'});
        
     }
-else
+else if(Object(req.body.subject).length>50)
+   {
+    res.status(403)
+    res.json({error : 'overLengthedSubject'});
+   }
+   else if(false)
+   {
+    res.status(403)
+    res.json({error : 'overLengthedSubject'});
+
+   }
+   else
    {
 //  put here the check that user not found or the receiver not found
+   
 
          // initialzing the message with our data 
-var message = new privateMessage(
+  var message = new privateMessage(
         { 
              sender:   owner, 
              receiver: req.body.receiver, 
              subject: req.body.subject,
              messageBody:req.body.messageBody ,
              isRead:false ,
-             messageDate: Date()
+             messageDate: Date(),
+             isBlocked:false
 
         }                        );
          // save   with fire back function  to see the error 
@@ -83,8 +102,10 @@ message.save(function(err)
         { 
                                  if(err)
                                  {
-                                   res.send(500); // internal Server error 
-                                   
+                                    // internal Server error 
+                                   res.status(500)
+                                   res.json({error : 'internalServerError'});
+
                                  }
                                   else
                                  {
@@ -92,9 +113,10 @@ message.save(function(err)
                                  }
         });
 
-    }
-  
+    
+   }
   // end of compose function
+  
 }
 
 Retrieve(req,res)
@@ -120,7 +142,8 @@ Retrieve(req,res)
              )
         {
                   // bad request is sent
-           res.send(400); 
+                  res.status(400)
+                  res.json({error : 'parameterPassingError'});
 
         }
         else
@@ -139,13 +162,15 @@ Retrieve(req,res)
                                'subject'      :1,
                                'messageBody'  :1,
                                'receiver'     :1,
-                               'messageDate'  :1
+                               'messageDate'  :1,
+                               'isBlocked'    :1
                               }
       ,function(err,result){
                              if(err)
                              {
                                  // internal server error
-                               res.send(500); 
+                                 res.status(500)
+                                 res.json({error : 'internalServerFindingError'}); 
                              }
                             else
                              {
@@ -166,13 +191,15 @@ Retrieve(req,res)
                                'subject'     :1,
                                'sender'      :1,
                                'messageBody' :1,
-                               'messageDate' :1
+                               'messageDate' :1,
+                               'isBlocked'   :1
                               },
          function(err,result){
                                  if(err)
                                 {     
                                          // internal server error
-                                    res.send(500); 
+                                         res.status(500)
+                                         res.json({error : 'internalServerFindingError'});
             
                                 }
                                 else
@@ -188,13 +215,15 @@ Retrieve(req,res)
   else
     {
                   //bad request 
-             res.send(400); 
+                  res.status(400)
+                  res.json({error : 'badRequest'});
       
 
     }
   }
   // end of the retrieve function
  }
+
 
 
 
