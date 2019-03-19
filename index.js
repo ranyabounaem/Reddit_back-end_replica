@@ -1319,7 +1319,7 @@ app.delete("/sr", (req, res) => {});
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
 /**
-* @api {post} /pm/    Compose a new message
+* @api {post} /pm/compose    Compose a new message
 * @apiName Compose
 * @apiGroup PMService
 *
