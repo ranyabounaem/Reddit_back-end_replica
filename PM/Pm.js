@@ -84,8 +84,24 @@ else if(Object(req.body.subject).length>50)
    {
 //  put here the check that user not found or the receiver not found
    
+blockList.findOne({blocked:{$in:[owner,req.body.receiver] } ,blocker:{$in:[owner,req.body.receiver] }}
+             ,function (err,result)
+             {
+                if(err)
+                {
+                  res.status(403)
+                  res.json({error : 'blockedFromSending'});
+                }
+                else if(result!=null)
+                {
+                  res.status(403)
+                  res.json({error : 'blockedFromSending'});
 
-         // initialzing the message with our data 
+                }
+                else
+                {
+
+// initialzing the message with our data 
   var message = new privateMessage(
         { 
              sender:   owner, 
@@ -112,6 +128,11 @@ message.save(function(err)
                                     res.send(200);   // if everything worked as mentioned 
                                  }
         });
+
+                }
+
+             });
+         
 
     
    }
@@ -151,7 +172,7 @@ Retrieve(req,res)
 
         
         
-        // retriving all the messages sent to me 
+        // retriving all the messages sent to me (inbox)
        if(req.body.mine===true)  
   {
         privateMessage.find( 
@@ -223,9 +244,72 @@ Retrieve(req,res)
   }
   // end of the retrieve function
  }
+block(req,res)
+{
+let owner= req.param('username');
+// check that the one going to be blocked alreay in our db
+let toBeBlocked= req.body.receiverUsername;
+if(toBeBlocked==undefined)
+{
+      res.status(400)
+      res.json({error : 'badRequest'});
+
+}
+ else if(toBeBlocked=='')
+{
+  res.status(400)
+  res.json({error : 'emptyParameter'});
+}
+else if(!(typeof toBeBlocked === "string"))
+{
+   res.status(400)
+   res.json({error : 'parameterTypeError'});
+}
+else if(owner==toBeBlocked)
+{
+   res.status(403)
+   res.json({error : 'selfBlockAlertError'});
+}
+else
+{
+   blockList.findOne({blocked:{$in:[owner,req.body.receiver] } ,blocker:{$in:[owner,req.body.receiver] }},
+   function(err,result){
+if(err)
+{
+   res.status(500)
+   res.json({error : 'internalServerBlockingError'});
+}
+else if(result!=null)
+{
+   res.status(403)
+   res.json({error : 'usersAlreadyOnBlockLists'});
+
+}
+else
+{
+blockList.create({blocker:owner,blocked:toBeBlocked},function(err)
+{
+if(err)
+{res.status(500)
+res.json({error : 'internalServerBlockingError'});
+}
+else
+{
+res.send(200);
+}
+});
+
+
+}
+ }); 
+ 
+// end of if condition
+} 
 
 
 
+// end of block implementation
+}
 
 }// end of the class
 
