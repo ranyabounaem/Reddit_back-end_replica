@@ -42,10 +42,23 @@
  */
 
 const app = require("express")();
+const mongoose=require('mongoose');
+const bodyparser=require('body-parser');
+//contect to mongo
+mongoose.connect('mongodb://localhost/reddit');
+mongoose.Promise=global.Promise;
+mongoose.connection.once('open',function(){console.log("Connection successful");}).on('error',function(error)
+{console.log("error:",error)});
+
+
+app.use(bodyparser.json());
+
 const userHandler = require("./src/user");
 
 console.log(userHandler.handleRegistration);
-app.post("/user", userHandler.handleRegistration);
+app.post("/user/register", userHandler.handleRegistration);
+app.post("/user/login", userHandler.handleLogin);
+
 /**
  * @name UserService
  * @note These are the routes for anything related to a user.
@@ -272,7 +285,7 @@ app.post("/user", userHandler.handleRegistration);
 
 
 /**
- * @api {post} /me/Create Register new user
+ * @api {post} /user/register Register new user
  * @apiName CreateUser
  * @apiGroup me
  *
@@ -296,7 +309,25 @@ app.post("/user", userHandler.handleRegistration);
  *    
  * 
  * @apiErrorExample {json} List error
- *    HTTP/1.1 500 Internal Server Error
+ *    
+ * HTTP/1.1 406 password short
+ * {
+ * "error":"Password too short"
+ * }
+ * 
+ *  HTTP/1.1 406 username repeated 
+ * {
+ * "error":"Username already exists"
+ * }
+ * HTTP/1.1 406 email repeated 
+ * {
+ * "error":"Email already exists"
+ * }
+ * 
+ * HTTP/1.1 406 email format 
+ * {
+ * "error":"Invalid Email format"
+ * }
  */
 
 /**
@@ -312,10 +343,8 @@ app.post("/user", userHandler.handleRegistration);
  * @apiSuccess {string} Token SyncToken That is sent with authentication.
  * @apiParamExample {json} Input
  *    {
- *      "Email": "user@reddit.com",
  *      "Username": "User1",
  *      "Password": "Password"
-      
  *    }
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
@@ -325,9 +354,14 @@ app.post("/user", userHandler.handleRegistration);
  *    
  * 
  * @apiErrorExample {json} List error
- *    HTTP/1.1 405 Invalid
+ *    HTTP/1.1 401 Invalid
  * {
- *          "error"":"Invalid credentials""
+ *          "error"":"Invalid Password"
+ * }
+ * 
+ *  HTTP/1.1 404 Invalid
+ * {
+ *        "error"":"User doesnt exist"
  * }
  */
 
@@ -764,6 +798,18 @@ app.delete("/emoji", (req, res) => {});
 */
 
 /**
+* @api {post} /emoji/   Create an emoji
+* @apiName CreateEmoji
+* @apiGroup test
+*
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string} Image  Image(emoji) of the subreddit.
+* @apiParam {string} SubredditName Name of subreddit to add image to.
+* @apiSuccess {string} EMOJI_ID Unique id of image.
+*
+*/
+
+/**
 * @api {delete} /emoji/   Delete an emoji
 * @apiName DeleteEmoji
 * @apiGroup EmojiService
@@ -801,8 +847,8 @@ app.delete("/emoji", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-/**
-* @api {put} /flair/:Srid   Creates  a  Flair
+/** 
+* @api {post} /flair/:Srid   Creates  a  Flair 
 * @apiName Create
 * @apiGroup FlairService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -1520,4 +1566,5 @@ app.delete("/pm", (req, res) => {});
 */
 app.get("/notif", (req, res) => {});
 
- app.listen(1337);
+var server=app.listen(4000,function(){console.log('listening')});
+module.exports=server;
