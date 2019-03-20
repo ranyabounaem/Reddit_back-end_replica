@@ -45,5 +45,74 @@ class UserHandler {
       res.status(404).send({ error: "User doesnt exist" });
     }
   }
+  EditUserEmail(req, res){
+    User.findOne({Username: req.params.Username}).then(function(RetUser){
+      if(RetUser === null){
+        res.send({ "error": "UserNotFound"});
+      }
+      else{
+        User.findOne({ Email: req.body.Email } ).then(function(RetEmail){
+          if(RetEmail === null)
+          {
+            if (validator.validate(req.body.Email) == true) {
+              User.findOneAndUpdate(
+                {Username: req.params.Username },
+                {Email: req.body.Email }).then(function(RetUser){
+                  //TODO RETURN 200
+                    res.send("update succesful");
+                  }); 
+            } 
+            else {
+              res.send({ error: "Invalid Email format" });
+            }
+                
+          }
+          else{
+            res.send({"error" : "Email already exists"});
+
+          }
+        });
+      }
+
+    });
+  }
+
+  EditUserPassword(req, res){
+    User.findOne({Username: req.params.Username}).then(function(RetUser){
+      if(RetUser === null){
+        res.send({ "error": "UserNotFound"});
+      }
+      else if (RetUser.Password !== req.body.OldPassword)
+      {
+        res.send({ "error": "Wrong Password"});
+      }
+      else if (req.body.NewPassword.length < 8) {
+          res.send({ error: "Password too short" });
+      }
+      else {
+        User.findOneAndUpdate(
+          {Username: req.params.Username },
+          {Password: req.body.NewPassword }).then(function(RetUser){
+            //TODO RETURN 200
+              res.send("Password succesfully updated");
+            });
+
+      }
+
+    });
+  }
+  Getmyinfo(req, res){
+    User.findOne({Username: req.params.Username}).then(function(RetUser){
+      if(RetUser === null){
+        res.send({ "error": "UserNotFound"});
+      }
+      else{
+        res.send({Username:req.params.Username ,Email:RetUser.Email});
+      }
+      
+    });
+  }
+  
+
 }
 module.exports = new UserHandler();

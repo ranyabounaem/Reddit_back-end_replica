@@ -21,7 +21,9 @@ describe("user tests", () => {
 
     beforeAll(done => {
       request.post(
-        "http://localhost:4000/user/register",{ json: true, body: testBody },(err, res, body) => {
+        "http://localhost:4000/user/register",
+        { json: true, body: testBody },
+        (err, res, body) => {
           data.body = body;
           data.status = res.statusCode;
           done();
@@ -31,7 +33,9 @@ describe("user tests", () => {
     it("checks creation of new User in database", () => {
       expect(data.status).toBe(200);
 
-      User.findOne({$and: [{ Username: testBody.Username }, { Email: testBody.Email }]}).then(function(user) {
+      User.findOne({
+        $and: [{ Username: testBody.Username }, { Email: testBody.Email }]
+      }).then(function(user) {
         expect(user).not.toBe(null);
       });
     });
@@ -47,7 +51,9 @@ describe("user tests", () => {
 
     beforeAll(done => {
       request.post(
-        "http://localhost:4000/user/register",{ json: true, body: testBody },(err, res, body) => {
+        "http://localhost:4000/user/register",
+        { json: true, body: testBody },
+        (err, res, body) => {
           data.body = body;
           data.status = res.statusCode;
           done();
