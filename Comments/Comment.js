@@ -23,19 +23,20 @@ class CommentHandler {
                 parent_id: req.params.th_id,
                 dateAdded: Date(),
                 votes: 0,
-                spoiler: false,
-                locked: false
+                spoiler: false,              //FOR CURRENT PHASE ONLY
+                locked: false,
+                reply: false,
             });
         }
     }
 
     handleGetComment(req,res){
-        Comment.findOne({c_id: req.params.c_id}).then(function(RetComment){
+        Comment.findOne({_id: req.params._id}).then(function(RetComment){
             if(RetComment == null){
                 res.send({'error':'The Comment ID is not found'});
             }else{
                 res.send({
-                    c_id: RetComment.c_id,
+                    _id: RetComment._id,
                     content: RetComment.content,
                     parent_id: RetComment.parent_id,
                     dateAdded: RetComment.dateAdded,
@@ -45,6 +46,14 @@ class CommentHandler {
                 });
             }
         });
+    }
+
+    handleGetAllComments(req,res){
+        /**
+         * TODOO
+         * SEARCH FOR THE THREAD ID IN THE DATABASE
+         * CHECK IF IT IS AVAILABLE
+         */
     }
 }
 

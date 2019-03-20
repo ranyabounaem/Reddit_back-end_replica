@@ -8,7 +8,8 @@ const CommentSchema = new Schema({
     dateAdded: Date,
     votes: Number,
     spoiler: Boolean,
-    locked: Boolean
+    locked: Boolean,
+    reply: Boolean    //false if this is a comment not a reply
 });
 
 const Comment = mongoose.model('Comment',CommentSchema);
