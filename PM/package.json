@@ -4,15 +4,17 @@
   "description": "implmentation for the private messagine",
   "main": "main.js",
   "scripts": {
-    "test": "jest"
+    "test": "jasmine"
   },
   "author": "marwankefah",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "jasmine": "^3.3.1",
     "jest": "^24.5.0",
     "mongoose": "^5.4.19",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "request": "^2.88.0"
   }
 }
