@@ -40,8 +40,20 @@
  * //////////////////////////////////////
  * @see http://apidocjs.com/
  */
-
 const app = require("express")();
+const mongoose=require('mongoose');
+const bodyparser=require('body-parser');
+//contect to mongo
+mongoose.connect('mongodb://localhost/comments',{ useNewUrlParser: true });
+mongoose.Promise=global.Promise;
+mongoose.connection.once('open',function(){console.log("Connection successful");}).on('error',function(error)
+{console.log("error:",error)});
+
+
+app.use(bodyparser.json());
+
+
+//const app = require("express")();
 const userHandler = require("./src/user");
 
 console.log(userHandler.handleRegistration);
@@ -1088,8 +1100,10 @@ app.delete("/flair", (req, res) => {});
          * 
          * @apiError CommentNotFound The id of the comment wasn't found.
          */
-app.get("/comment", (req, res) => {});
-app.post("/comment", (req, res) => {});
+const commentHandler = require('./Comments/Comment');
+app.get("/comment/:c_id",commentHandler.handleGetComment) ;
+app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
+app.post("/comment/:id",commentHandler.handlePostComment );
 app.put("/comment", (req, res) => {});
 app.delete("/comment", (req, res) => {});
 
@@ -1514,4 +1528,5 @@ app.delete("/pm", (req, res) => {});
 */
 app.get("/notif", (req, res) => {});
 
- app.listen(1337);
+var server=app.listen(4000,function(){console.log('listening')});
+module.exports=server;
