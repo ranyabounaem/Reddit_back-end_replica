@@ -1,6 +1,7 @@
 const express= require('express');
 const bodyParser= require('body-parser');
 const Comment = require('./commentSchema.js');
+const ObjectId = require('mongodb').ObjectID
 
 class CommentHandler {
     constructor(){
@@ -34,7 +35,8 @@ class CommentHandler {
     }
 
     handleGetComment(req,res){
-        Comment.findOne({_id: req.params._id}).then(function(RetComment){
+        let ID = new ObjectId(req.params.c_id);
+        Comment.findOne({_id: ID}).then(function(RetComment){
             if(RetComment == null){
                 res.status(404).send({'error':'The Comment ID is not found'});
             }else{
@@ -52,6 +54,7 @@ class CommentHandler {
     }
 
     handleGetAllComments(req,res){
+        let ID = new ObjectId(req.params.id);
         /**
          * TODOO
          * SEARCH FOR THE THREAD ID IN THE DATABASE

@@ -1,6 +1,10 @@
-const request = require("request");
+const Request = require("request");
 const Comment = require("../Comments/commentSchema");
 const mongoose = require("mongoose");
+const ObjectId = require('mongodb').ObjectID
+
+let c_id= new ObjectId('5c93e94033760a365cdd75fe');
+let isodate=new Date().toISOString();
 
 describe("comment tests", () => {
     let server;
@@ -9,12 +13,47 @@ describe("comment tests", () => {
     });
     afterAll(() => {
         server.close();
-      });
+    });
+    describe("Initialising a thread and some comments to it for the get methods",() => {
+
+    });
 
     describe("tests posting a new comment",() => {
         let data = {};
         let testBody = {
-            content: "Good Morning",
+            content: "Good Night3",
+            spoiler: false,
+            locked: false,
+            reply: false
+        };
+        beforeAll((done) => {
+            Request.post("http://localhost:4000/comment/999",
+            { json: true, body: testBody },
+            (err, res, body) => {
+              data.body = body;
+              data.status = res.statusCode;
+              done();
+            });
+        });
+        it("status 200 test", () => {
+            expect(data.status).toBe(200);
+            //I can't expect the data.body because it brings the ID of the generated comment
+        });
+        it("Mongo test", () => {
+            Comment.findOne({content:"Good Night3"}).then(function(RetComment){
+                expect(RetComment).not.toBe(null);
+                c_id= RetComment._id; //To use it in testing get comment below
+                c_date= RetComment.dateAdded;
+                console.log(RetComment.parent_id);
+            });
+        });
+    });
+
+    
+    describe("tests posting a new comment",() => {
+        let data = {};
+        let testBody = {
+            content: "",
             spoiler: false,
             locked: false,
             reply: false
@@ -28,18 +67,67 @@ describe("comment tests", () => {
               done();
             });
         });
-        it("status 200 test", () => {
-            expect(data.status).toBe(200);
-            //I can't expect the data.body because it brings the ID of the generated comment
+        it("status 401 test", () => {
+            expect(data.status).toBe(401);
+            expect(data.body.error).toBe('You can not post an empty Comment');
         });
         it("Mongo test", () => {
-            Comment.findOne({content:"Good Morning"}).then(function(RetComment){
-                expect(RetComment).not.toBe(null);
+            Comment.findOne({content:""}).then(function(RetComment){
+                expect(RetComment).toBe(null);
             });
         });
     });
 
-    describe("tests getting info a comment",() => {});
+    
+    describe("tests posting a new comment",() => {
+        let data = {};
+        let testBody = {
+            spoiler: false,
+            locked: false,
+            reply: false
+        };
+        beforeAll((done) => {
+            Request.post("http://localhost:4000/comment/:id",
+            { json: true, body: testBody },
+            (err, res, body) => {
+              data.body = body;
+              data.status = res.statusCode;
+              done();
+            });
+        });
+        it("status 403 test", () => {
+            expect(data.status).toBe(403);
+            expect(data.body.error).toBe('The request must include content of the comment');
+        });
+    });
 
-    describe("tests getting all comments of the thread",() => {});
+    describe("tests getting info a comment",() => {
+        let data = {};
+        beforeAll((done) => {
+            Request.get("http://localhost:4000/comment/5c93e94033760a365cdd75fe",
+            { json: true },
+            (err, res, body) => {
+              data.body = body;
+              data.status = res.statusCode;
+              done();
+            });
+        });
+        it("status 200 test", () => {
+            expect(data.status).toBe(200);
+            expect(data.body).toEqual({
+                _id: c_id.toString(),
+                content: "Good Night3",
+                parent_id: '999',
+                dateAdded: '2019-03-21T19:42:56.000Z',
+                votes: 0,
+                spoiler: false,
+                locked: false
+            });
+        });
+     });
+
+     describe("tests getting all comments of the thread",() => {});
 });
+
+    
+    
