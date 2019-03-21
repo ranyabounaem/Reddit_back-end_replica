@@ -58,7 +58,7 @@ class CommentHandler {
          * CHECK IF IT IS AVAILABLE
          */
         //Assuming that he sent a thread ID for this PHASE ONLY
-        Comment.find({parent_id: req.params.id,reply: false},function(err,comments){
+        Comment.find({$and: [{parent_id: req.params.id},{reply: false}]},function(err,comments){
             if (comments == null){
                 res.status(404).send({error: 'There is no Comments for this Thread'})
             }else{

@@ -4,7 +4,7 @@
   "description": "REST API package for memestock",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "jasmine": "^3.3.1",
+    "mocha": "^6.0.2",
     "mongoose": "^5.4.18",
     "nodemon": "^1.18.10"
   }
