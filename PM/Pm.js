@@ -19,6 +19,7 @@ class PM {
          || typeof owner != 'string'
          || typeof isReadRequest != 'boolean') {
          res.send(400);
+         return;
 
       }
       privateMessage.updateMany({ receiverUsername: owner }, { isRead: isReadRequest }, function (err, result) {
@@ -40,17 +41,18 @@ class PM {
    }
 
    delete(req, res) {
-      let messageid = req.body.messageid;
+      let messageId = req.body.messageId;
       let owner = req.params.username;
       // request is true when he needs to mark read and false when he needs to unread this message
       if (owner == undefined
-         || messageid == undefined
+         || messageId == undefined
          || typeof owner != 'string'
-         || typeof messageid != 'string') {
+         || typeof messageId != 'string') {
          res.send(400);
+         return;
 
       }
-      privateMessage.findOneAndDelete({ _id: messageid, receiverUsername: owner }, function (err, result) {
+      privateMessage.findOneAndDelete({ _id: messageId, receiverUsername: owner }, function (err, result) {
          if (err) {
             res.status(500);
             res.json({ "error": "internalServerError" });
@@ -70,19 +72,20 @@ class PM {
 
    }
    markread(req, res) {
-      let messageid = req.body.messageid;
+      let messageId = req.body.messageId;
       let owner = req.params.username;
       // request is true when he needs to mark read and false when he needs to unread this message
       let isReadRequest = req.body.isReadRequest;
       if (owner == undefined
-         || messageid == undefined
+         || messageId == undefined
          || typeof owner != 'string'
-         || typeof messageid != 'string'
+         || typeof messageId != 'string'
          || typeof isReadRequest != 'boolean') {
          res.send(400);
+         return;
 
       }
-      privateMessage.findOneAndUpdate({ _id: messageid, receiverUsername: owner }, { isRead: isReadRequest }, function (err, result) {
+      privateMessage.findOneAndUpdate({ _id: messageId, receiverUsername: owner }, { isRead: isReadRequest }, function (err, result) {
          if (err) {
             res.status(500);
             res.json({ "error": "internalServerError" });
