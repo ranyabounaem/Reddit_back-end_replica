@@ -1151,20 +1151,20 @@ app.delete("/comment", (req, res) => {});
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
 /**
-* @api {post} /sr/create   Create a new subreddit
+* @api {post} /Sr/Create   Create a new subreddit
 * @apiName CreateSubreddit
 * @apiGroup SrService
 *
 * @apiParam {string} username Id of user that created SR.
 * @apiParam {string} srName  unique Name of the subreddit (no longer than 100 character).
-* @apiParam {string[]} subredditRules list of subbreddit rules.
-* @apiParam {string}  NOT YET SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string[]} NOT YET ModUsername  Subreddit moderators' usernames.
+* @apiParam {string[]} srRules list of subbreddit rules.
+* @apiParam {string}  SyncToken  (NOT YET) Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string[]}  ModUsername (NOT YET)  Subreddit moderators' usernames.
 *
 */
 
 /**
-* @api {get} /sr/:SubredditName/Listing/:type   ListSubreddits   Generate a list of subreddits 
+* @api {get} /Sr/:SubredditName/Listing/:type   ListSubreddits   Generate a list of subreddits 
 * @apiName ListSubreddits
 * @apiGroup SrService
 *
@@ -1175,7 +1175,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {get} /sr/:SrName/meta   Views subreddit meta
+* @api {get} /Sr/:srName/Meta   Views subreddit meta
 * @apiName ViewSrMeta
 * @apiGroup SrService
 *
@@ -1184,36 +1184,36 @@ app.delete("/comment", (req, res) => {});
 * @apiSuccess {string} date  date of creation.
 * @apiSuccess {string[]} postIds ID of posts in sr. 
 * @apiSuccess {string[]} rules   Rules of sr.
-* @apiSuccess {string[]} BannedUsers NOT YET   ID of banned users.
-* @apiSuccess {string[]} ModIds NOT YET  ID of Modertors.
-* @apiSuccess {string[]} UserIds NOT YET  Ids of subscribed users .
-* @apiSuccess {Number[]} SubCount NOT YET  Number of subscribers.
+* @apiSuccess {string[]} BannedUsers (NOT YET)   ID of banned users.
+* @apiSuccess {string[]} ModIds (NOT YET)  ID of Modertors.
+* @apiSuccess {string[]} UserIds (NOT YET  Ids of subscribed users .
+* @apiSuccess {Number[]} SubCount (NOT YET)  Number of subscribers.
 
 */
 
 /**
-* @api {put} /sr/:SubredditName/    Edit a subreddit
+* @api {put} /Sr/:srName/    Edit a subreddit
 * @apiName EditSubreddit
 * @apiGroup SrService
 *
 * @apiParam {string[]} newRules Updated rules.
 * @apiParam {string} newName  New name
-* @apiParam {string} NOT YET About Updated about
+* @apiParam {string}  About (NOT YET) Updated about
 */
 
 /**
-* @api {post} /sr/:SubredditName/thread    Create a thread inside subreddit
+* @api {post} /Sr/:srName/thread    Create a thread inside subreddit
 * @apiName CreateSrThread
 * @apiGroup SrService
 *
-* @apiParam {string} username of creator.
+* @apiParam {string} username Username of creator.
 * @apiParam {string} title Title of thread
 * @apiParam {string} threadBody Body of the thread.
-* @apiParam {boolean} NOT YET Spoiler [Spoiler==false] Mark if post is spoiler
+* @apiParam {boolean}  Spoiler (NOT YET) [Spoiler==false] Mark if post is spoiler
 */
 
 /**
-* @api {post} /sr/:SubredditName/subs  Subscribe to a Sr
+* @api {post} /Sr/:srName/subs  Subscribe to a Sr
 * @apiName SubredditSubscribtion
 * @apiGroup SrService
 *
@@ -1222,7 +1222,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {delete} /sr/:SubredditName/subs   Unsubscribe to a Sr
+* @api {delete} /Sr/:srName/subs   Unsubscribe to a Sr
 * @apiName SubredditUnsubscribtion
 * @apiGroup SrService
 *
@@ -1231,7 +1231,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {delete} /sr/:Id/thread    Delete a thread inside subreddit
+* @api {delete} /Sr/:id/thread    Delete a thread inside subreddit
 * @apiName DeleteSrThread
 * @apiGroup SrService
 *
@@ -1241,7 +1241,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {delete} /sr/:Id   Delete a subreddit
+* @api {delete} /Sr/:Id   Delete a subreddit
 * @apiName DeleteSubreddit
 * @apiGroup SrService
 *
