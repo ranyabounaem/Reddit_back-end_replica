@@ -21,7 +21,7 @@ app.post('/:username/pm/compose', urlEncoded, (req, res) => privateMessage.compo
 app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
 app.post('/:username/pm/block', urlEncoded, (req, res) => privateMessage.block(req, res));
 app.put('/:username/pm/markread',(req, res) => privateMessage.markread(req, res));
-app.put('/:username/pm/markreadall',(req, res) => privateMessage.markreadall(req, res));
+app.post('/:username/pm/markreadall',(req, res) => privateMessage.markreadall(req, res));
 app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res));
 
 module.exports = server;
