@@ -14,7 +14,8 @@ const UserSchema = new Schema({
     Password: {
         type: String,
         required: [true, "Password field is required"]
-    }
+    },
+ Subscriptions :[String]
 });
 
 const User = mongoose.model("User", UserSchema);

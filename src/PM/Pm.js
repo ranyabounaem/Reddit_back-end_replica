@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const PMmongo = require('./PMmongo');
+const PMmongo = require('../../models/PMmongo');
 const privateMessage = PMmongo.pm;
 const blockList = PMmongo.messageBlockList;
 class PM {

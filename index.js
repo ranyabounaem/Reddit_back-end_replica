@@ -40,6 +40,7 @@
  * //////////////////////////////////////
  * @see http://apidocjs.com/
  */
+
 const app = require("express")();
 const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
@@ -1145,7 +1146,6 @@ app.put("/comment", (req, res) => {});
 app.delete("/comment", (req, res) => {});
 
 
-
 /**
  * @name SrService
  * @note These are the routes for anything related to a user.
@@ -1464,7 +1464,7 @@ app.delete("/sr", (req, res) => {});
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
-* @apiParam {String} messageID the id of the message going to be marked as read.
+* @apiParam {String} messageId the id of the message going to be marked as read.
 * @apiParam {Boolean} isReadRequest true when user wants to mark as read a message false when user wants to mark message as unread
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
@@ -1559,7 +1559,7 @@ mongoose.connection.once('open', function () {
 
     console.log('connection error:');
 });
-const privateMessage = require('./PM/Pm');
+const privateMessage = require('./src/PM/Pm');
 app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
 app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
 app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
