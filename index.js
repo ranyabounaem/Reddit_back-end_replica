@@ -40,7 +40,6 @@
  * //////////////////////////////////////
  * @see http://apidocjs.com/
  */
-
 const app = require("express")();
 const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
@@ -1138,8 +1137,10 @@ app.delete("/flair", (req, res) => {});
          * 
          * @apiError CommentNotFound The id of the comment wasn't found.
          */
-app.get("/comment", (req, res) => {});
-app.post("/comment", (req, res) => {});
+const commentHandler = require('./Comments/Comment');
+app.get("/comment/:c_id",commentHandler.handleGetComment) ;
+app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
+app.post("/comment/:id",commentHandler.handlePostComment );
 app.put("/comment", (req, res) => {});
 app.delete("/comment", (req, res) => {});
 
@@ -1439,7 +1440,7 @@ app.delete("/sr", (req, res) => {});
 
 
 /**
-* @api {delete} /pm/:Id   Delete
+* @api {delete} /:username/pm/delete   Delete
 * @apiName Delete
 * @apiGroup PMService
 *
@@ -1459,11 +1460,12 @@ app.delete("/sr", (req, res) => {});
 */
 
 /**
-* @api {put} /pm/:Id   Mark Read
+* @api {put} /:username/pm/markread   Mark Read
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
 * @apiParam {String} messageID the id of the message going to be marked as read.
+* @apiParam {Boolean} isReadRequest true when user wants to mark as read a message false when user wants to mark message as unread
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
@@ -1479,10 +1481,11 @@ app.delete("/sr", (req, res) => {});
 */
 
 /**
-* @api {post} /pm/   Mark Read-all
+* @api {post} /:username/pm/markreadall   Mark Read-all
 * @apiName MarkReadALL
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {Boolean} isReadRequest true when user wants to mark as read all message false when user wants to markall as unread
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
@@ -1548,11 +1551,23 @@ app.delete("/sr", (req, res) => {});
 *     
 *          }
 */
+mongoose.connect('mongodb://localhost/reddit');
+mongoose.connection.once('open', function () {
 
-app.get("/pm", (req, res) => {});
-app.post("/pm", (req, res) => {});
-app.put("/pm", (req, res) => {});
-app.delete("/pm", (req, res) => {});
+    console.log('connection carried succesfully');
+}).on('error', function () {
+
+    console.log('connection error:');
+});
+const privateMessage = require('./PM/Pm');
+app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
+app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
+app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
+app.post('/:username/pm/block', (req, res) => privateMessage.block(req, res));
+app.put('/:username/pm/markread',(req, res) => privateMessage.markread(req, res));
+app.post('/:username/pm/markreadall',(req, res) => privateMessage.markreadall(req, res));
+app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res));
+
 
 
 /**
