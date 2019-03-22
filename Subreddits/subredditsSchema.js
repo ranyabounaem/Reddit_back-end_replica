@@ -9,6 +9,7 @@ const SubredditPostSchema = new Schema({
 
 const SubredditSchema = new Schema({
     name: String,
+    admin_username: String,
     rules: [String],
     posts: [SubredditPostSchema],
     date: Date
