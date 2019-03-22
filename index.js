@@ -80,12 +80,12 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 
 
 /** 
-* @api {get} /user/listing?type=value List Posts 
+* @api {get} /:username/listing?type=value List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
-* @apiParam {Number} LPostID id of the last post displayed
+* @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
+* @apiParam {Number} startPosition Sending 15 posts per after the startposition  
 * @apiSuccess {Object[]} Posts   Array of the listed Posts  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
