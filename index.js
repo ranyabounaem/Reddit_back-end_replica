@@ -1439,7 +1439,7 @@ app.delete("/sr", (req, res) => {});
 
 
 /**
-* @api {delete} /pm/:Id   Delete
+* @api {delete} /:username/pm/delete   Delete
 * @apiName Delete
 * @apiGroup PMService
 *
@@ -1459,11 +1459,12 @@ app.delete("/sr", (req, res) => {});
 */
 
 /**
-* @api {put} /pm/:Id   Mark Read
+* @api {put} /:username/pm/markread   Mark Read
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
 * @apiParam {String} messageID the id of the message going to be marked as read.
+* @apiParam {Boolean} isReadRequest true when user wants to mark as read a message false when user wants to mark message as unread
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
@@ -1479,10 +1480,11 @@ app.delete("/sr", (req, res) => {});
 */
 
 /**
-* @api {post} /pm/   Mark Read-all
+* @api {post} /:username/pm/markreadall   Mark Read-all
 * @apiName MarkReadALL
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {Boolean} isReadRequest true when user wants to mark as read all message false when user wants to markall as unread
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
