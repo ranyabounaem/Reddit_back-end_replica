@@ -1560,9 +1560,9 @@ mongoose.connection.once('open', function () {
 });
 const privateMessage = require('./PM/Pm');
 app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
-app.post('/:username/pm/compose', urlEncoded, (req, res) => privateMessage.compose(req, res));
+app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
 app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
-app.post('/:username/pm/block', urlEncoded, (req, res) => privateMessage.block(req, res));
+app.post('/:username/pm/block', (req, res) => privateMessage.block(req, res));
 app.put('/:username/pm/markread',(req, res) => privateMessage.markread(req, res));
 app.post('/:username/pm/markreadall',(req, res) => privateMessage.markreadall(req, res));
 app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res));
