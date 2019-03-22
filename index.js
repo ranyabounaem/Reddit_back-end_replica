@@ -958,34 +958,55 @@ app.delete("/flair", (req, res) => {});
  * @apiName PostComment
  * @apiGroup Comment
  * 
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  * @apiParam {String} id ID of thread or comment.
- * @apiParam {String} Type specifies whether this is a reply or a comment  .
  * @apiParam {String} content Text of the Comment.
+ * @apiParam {Boolean} [reply=false] True if you want to post a reply to a comment.
  * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
  * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
  * 
  * @apiSuccess {String} c_id The Created Comment ID.
  * 
  * @apiError ThreadNotFound The id of the thread wasn't found.
+ * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If the user isn't logged in.
  */
 
 
 
  /**
-  * @api {get} /comment/ Get Details About Comment or a Reply
+  * @api {get} /comment/:c_id Get Details About Comment or a Reply
   * @apiName GetComment
   * @apiGroup Comment
   * 
+  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
   * @apiParam {String} c_id Comment Unique ID.
   * 
   * @apiSuccess {String} content Text of the Comment.
   * @apiSuccess {Date} c_date Date of the Posted Comment.
+  * @apiSuccess {Boolean} reply True if it is a reply.
   * @apiSuccess {Boolean} spoiler True if it is a Spoiler.
   * @apiSuccess {Boolean} locked True if the Replies are Disallowed on this Comment.
-  * @apiSuccess {Boolean} saved True if it is Saved.
-  * @apiSuccess {Boolean} hidden True if it is Hidden.
-  * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
+  * 
+  * @apiError CommentNotFound The id of the comment wasn't found.
+  * @apiError AccessDenied If this user can't get info of this comment.
+  */
+
+
+ /**
+  * @api {get} /comment/all/:id Get Comments or Replies for this ID
+  * @apiName GetAllComments
+  * @apiGroup Comment
+  * 
+  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+  * @apiParam {String} c_id Comment Unique ID.
+  * @apiParam {Boolean} [comment=false] True if the ID sent is a Comment ID not a Thread ID.
+  * 
+  * @apiSuccess {objects[]} comments Array of the comments or replies attached to this thread or comment.
+  * 
+  * @apiError ThreadNotFound The id of the thread wasn't found.
+  * @apiError CommentNotFound The id of the comment wasn't found.
+  * @apiError AccessDenied If this user can't get info of this comment.
   */
 
 /**
@@ -993,6 +1014,7 @@ app.delete("/flair", (req, res) => {});
  * @apiName DeleteComment
  * @apiGroup Comment
  * 
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  * @apiParam {Number} c_id Comment Unique ID.
  * 
  * @apiError CommentNotFound The id of the comment wasn't found.
@@ -1004,6 +1026,7 @@ app.delete("/flair", (req, res) => {});
   * @apiName EditComment
   * @apiGroup Comment
   * 
+  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
   * @apiParam {String} c_id Comment Unique ID.
   * @apiParam {String} content Text of the Edited Comment.
   * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
@@ -1014,10 +1037,11 @@ app.delete("/flair", (req, res) => {});
   */
 
   /**
-   * @api {put} /comment/:c_id Vote for a Comment
+   * @api {put} /comment/vote/:c_id Vote for a Comment
    * @apiName VoteComment
    * @apiGroup Comment
    * 
+   * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
    * @apiParam {String} c_id Comment Unique ID.
    * @apiParam {Number=1,0,-1} direction Direction of the Vote as 1 indicates Upvote, -1 indicates Downvote and 0 means unvoting.
    * 
@@ -1026,10 +1050,11 @@ app.delete("/flair", (req, res) => {});
    */
 
    /**
-    * @api {post} /comment/:c_id Save a Comment
+    * @api {post} /comment/save/:c_id Save a Comment
     * @apiName SaveComment
     * @apiGroup Comment
     * 
+    * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
     * @apiParam {String} c_id Comment Unique ID.
     * 
     * @apiError CommentNotFound The id of the comment wasn't found.
@@ -1038,46 +1063,24 @@ app.delete("/flair", (req, res) => {});
     */
 
     /**
-     * @api {delete} /comment/:c_id UnSave a Comment
+     * @api {delete} /comment/unsave/:c_id UnSave a Comment
      * @apiName UnSaveComment
      * @apiGroup Comment
      * 
+     * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
      * @apiParam {String} c_id Comment Unique ID.
      * 
      * @apiError CommentNotFound The id of the comment wasn't found.
-     * @apiError CommentNotSaved You can't unsave an unsaved comment.
+     * @apiError CommentAlreadySaved You can't unsave an unsaved comment.
      * @apiError AccessDenied If the user isn't logged in.
      */
 
-     /**
-      * @api {put} /comment/:c_id Hide a Comment
-      * @apiName HideComment
-      * @apiGroup Comment
-      * 
-      * @apiParam {String} c_id Comment Unique ID.
-      * 
-      * @apiError CommentNotFound The id of the comment wasn't found.
-      * @apiError CommentAlreadyHidden The Comment has already been hidden before.
-      * @apiError AccessDenied If the user isn't logged in.
-      */
-
-     /**
-      * @api {put} /comment/:c_id UnHide a Comment
-      * @apiName UnHideComment
-      * @apiGroup Comment
-      * 
-      * @apiParam {String} c_id Comment Unique ID.
-      * 
-      * @apiError CommentNotFound The id of the comment wasn't found.
-      * @apiError CommentAlreadyHidden The Comment is not hidden.
-      * @apiError AccessDenied If the user isn't logged in.
-      */
-
       /**
-       * @api {put} /comment/:c_id Mark Comment as a Spoiler
+       * @api {put} /comment/spoil/:c_id Mark Comment as a Spoiler
        * @apiName SpoilerComment
        * @apiGroup Comment
        * 
+       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
        * @apiParam {String} c_id Comment Unique ID.
        * 
        * @apiError CommentNotFound The id of the comment wasn't found.
@@ -1086,55 +1089,46 @@ app.delete("/flair", (req, res) => {});
        */
 
        /**
-       * @api {put} /comment/:c_id UnMark Comment as a Spoiler
+       * @api {put} /comment/unspoil/:c_id UnMark Comment as a Spoiler
        * @apiName UnSpoilerComment
        * @apiGroup Comment
        * 
+       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
        * @apiParam {String} c_id Comment Unique ID.
        * 
        * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already unmarked.
+       * @apiError CommentNotSpoiler The Comment is already unmarked.
        * @apiError AccessDenied If the user isn't logged in.
        */
 
        /**
-       * @api {put} /comment/:c_id Lock a Comment to Disallow Replies on it
+       * @api {put} /comment/lock/:c_id Lock a Comment to Disallow Replies on it
        * @apiName LockComment
        * @apiGroup Comment
        * 
+       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
        * @apiParam {String} c_id Comment Unique ID.
        * 
        * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already locked.
+       * @apiError CommentAlreadyLocked The Comment is already locked.
        * @apiError AccessDenied If the user isn't logged in.
        */
 
        /**
-       * @api {put} /comment/:c_id UnLock a Comment to Allow Replies on it
+       * @api {put} /comment/unlock/:c_id UnLock a Comment to Allow Replies on it
        * @apiName UnLockComment
        * @apiGroup Comment
        * 
+       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
        * @apiParam {String} c_id Comment Unique ID.
        * 
        * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already unlocked.
+       * @apiError CommentNotLocked The Comment is already unlocked.
        * @apiError AccessDenied If the user isn't logged in.
        */
 
-       /**
-        * @api {post} /comment/:c_id Report a Comment
-        * @apiName ReportComment
-        * @apiGroup Comment
-        * 
-        * @apiParam {String} c_id Comment Unique ID.
-        * @apiParam {String} text The reason of reporting this comment.
-        * 
-        * @apiError CommentNotFound The id of the comment wasn't found.
-        * @apiError AccessDenied If the user isn't logged in.
-        */
-
         /**
-         * @api {get} /comment/:c_id Retrieve additional comments omitted from a base comment tree
+         * @api {get} /comment/expand/:c_id Retrieve additional comments omitted from a base comment tree
          * @apiName ExpandComment
          * @apiGroup Comment
          * 
@@ -1369,7 +1363,7 @@ app.delete("/sr", (req, res) => {});
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
 /**
-* @api {post} /pm/compose    Compose a new message
+* @api {post} /:username/pm/compose    Compose a new message
 * @apiName Compose
 * @apiGroup PMService
 *
@@ -1377,7 +1371,6 @@ app.delete("/sr", (req, res) => {});
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {String} subject Subject of the sending message (no longer than 100 character).
 * @apiParam {String} messageBody the text of the message sent.
-* @apiParam  {Date}  messageDate  the date of the message UTC default
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
@@ -1386,6 +1379,7 @@ app.delete("/sr", (req, res) => {});
 * @apiError userNotFound The <code>id</code> of the User was not found.
 * @apiError blockedFromSending The user already blocking messages from the receiver
 * @apiError overLengthedSubject The length of the subject is above 100 character
+* @apiError internalServerError error from the bank end and database manipulation
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
@@ -1404,22 +1398,28 @@ app.delete("/sr", (req, res) => {});
 */
 
 /**
-* @api {post} /pm/   Block
+* @api {post} /:username/pm/block   Block
 * @apiName Block
 * @apiGroup PMService
 *
-* @apiParam {String} receiverUsername unique username.
+* @apiParam {String} blocked unique username to be blocked.
+* @apiParam {Boolean} block true when u need to block false when u need to unblock a user
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Boolean} unblock  false when user want to block ,true when he wants to unblock.
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
-
 *     }
 *
 * @apiError userNotFound The <code>id</code> of the User was not found.
-* @apiError onBlockList The user you are trying to block is already on the block list
+* @apiError usersAlreadyOnBlockLists The user you are trying to block is already on the block list
 * @apiError selfBlockAlert an alert if there is a request for selfblock
+* @apiError internalServerBlockingError  error from the internal server side
+* @apiError canNotBUnblockNonBlockedUser     unblocking not blocked user
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 403 forbidden 
+*     {
+*       "error": "canNotBUnblockNonBlockedUser"
+*     }
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
@@ -1496,12 +1496,12 @@ app.delete("/sr", (req, res) => {});
 */
 
 /**
-* @api {get} /pm/   Retrieve
+* @api {get} /:username/pm/   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {Boolean} mine True if u need to retrieve the inbox false if u need to retrieve the sent.
-* @apiSuccess {Array} messages Array of Messages ,isBlocked is true whenever the sender is blocking the receiver.
+* @apiSuccess {Array} messages Array of Messages    .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *          {
@@ -1511,9 +1511,8 @@ app.delete("/sr", (req, res) => {});
 * "receiver"    : "omar",
 * ”subject”     :”URGENT VIP”,
 * "messageBody" :”Dear, marwan please”,
-* "isRead"      :true,
-* "messageDate" :"2019-03-18 22:32:06.000Z",
-*  "isBlocked"   :false
+* "isRead"      :true
+* "messageDate" :"2019-03-18 22:32:06.000Z"
 *  },
 * {
 * "_id"         :"5c901c662f87870699fa62e9"
@@ -1521,9 +1520,29 @@ app.delete("/sr", (req, res) => {});
 * "receiver"    : "kefah",
 * ”subject”     :”URGENT VIP”,
 * "messageBody" :”Dear, kefah i want to ,
-* "isRead"      :false,
-* "messageDate" :"2019-03-13 22:32:06.000Z",
-* "isBlocked"   : true
+* "isRead"      :false
+* "messageDate" :"2019-03-13 22:32:06.000Z"
+*  }
+* ]}
+*     
+*          }
+*/
+/**
+* @api {get} /:username/pm/blocklist   Blocklist
+* @apiName retrieveBlockList
+* @apiGroup PMService
+* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiSuccess {Array} blocklist Array of people whom the user is blocking    .
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*          {
+*  {[{
+* "_id"         :"5c901c662f87870699fa62e6"
+* "blocked      :"kefah",
+*  },
+* {
+* "_id"         :"5c901c662f87870699fa62e9"
+* "blocked      :"marwan ",
 *  }
 * ]}
 *     
@@ -1569,6 +1588,7 @@ app.delete("/pm", (req, res) => {});
 
 */
 app.get("/notif", (req, res) => {});
+
 
 var server=app.listen(4000,function(){console.log('listening')});
 module.exports=server;
