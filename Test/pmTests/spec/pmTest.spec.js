@@ -96,7 +96,7 @@ describe('Server', function () {
             expect(data.body).toBe('OK');
         });
         it('Database Test', function () {
-            privateMessage.findOneAndDelete(messageTest1,
+            privateMessage.findOne(messageTest1,
                 function (err, result) { expect(result).not.toBe(null); });
         });
     });
@@ -120,7 +120,7 @@ describe('Server', function () {
             expect(data.body).toBe('OK');
         });
         it('Database Test', function () {
-            privateMessage.findOneAndDelete(messageTest1,
+            privateMessage.findOne(messageTest1,
                 function (err, result) {
                     expect(result).not.toBe(null);
                 });
@@ -262,7 +262,7 @@ describe('Server', function () {
             expect(data.body).toBe('OK');
         });
         it('Database Test', function () {
-            privateMessage.findOneAndDelete(messageTest1,
+            privateMessage.findOne(messageTest1,
                 function (err, result) {
                     expect(result).not.toBe(null);
                 });
