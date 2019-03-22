@@ -40,7 +40,6 @@
  * //////////////////////////////////////
  * @see http://apidocjs.com/
  */
-
 const app = require("express")();
 const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
@@ -1138,8 +1137,10 @@ app.delete("/flair", (req, res) => {});
          * 
          * @apiError CommentNotFound The id of the comment wasn't found.
          */
-app.get("/comment", (req, res) => {});
-app.post("/comment", (req, res) => {});
+const commentHandler = require('./Comments/Comment');
+app.get("/comment/:c_id",commentHandler.handleGetComment) ;
+app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
+app.post("/comment/:id",commentHandler.handlePostComment );
 app.put("/comment", (req, res) => {});
 app.delete("/comment", (req, res) => {});
 
