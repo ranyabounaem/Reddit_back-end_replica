@@ -1558,7 +1558,7 @@ mongoose.connection.once('open', function () {
 
     console.log('connection error:');
 });
-const privateMessage = require('./PM/Pm');
+const privateMessage = require('./src/PM/Pm');
 app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
 app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
 app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
