@@ -25,6 +25,7 @@
     "mocha": "^6.0.2",
     "mongoose": "^5.4.18",
     "nodemon": "^1.18.10",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "urlencode": "^1.1.0"
   }
 }
