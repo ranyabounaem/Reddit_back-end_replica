@@ -1463,7 +1463,7 @@ app.delete("/sr", (req, res) => {});
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
-* @apiParam {String} messageID the id of the message going to be marked as read.
+* @apiParam {String} messageId the id of the message going to be marked as read.
 * @apiParam {Boolean} isReadRequest true when user wants to mark as read a message false when user wants to mark message as unread
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
