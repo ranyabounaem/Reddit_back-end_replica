@@ -8,6 +8,98 @@ class PM {
 
    }
 
+
+   markreadall(req, res) {
+
+      let owner = req.params.username;
+      // request is true when he needs to mark read and false when he needs to unread this message
+      let isReadRequest = req.body.isReadRequest;
+      if (owner == undefined
+         || isReadRequest == undefined
+         || typeof owner != 'string'
+         || typeof isReadRequest != 'boolean') {
+         res.send(400);
+
+      }
+      privateMessage.updateMany({ receiverUsername: owner }, { isRead: isReadRequest }, function (err, result) {
+         if (err) {
+            res.status(500);
+            res.json({ "error": "internalServerError" });
+
+         }
+         else if (result == null) {
+            res.status(500);
+            res.json({ "error": "noMessageNotFound" });
+         }
+         else {
+            res.send(200);
+         }
+
+      });
+
+   }
+
+   delete(req, res) {
+      let messageid = req.body.messageid;
+      let owner = req.params.username;
+      // request is true when he needs to mark read and false when he needs to unread this message
+      if (owner == undefined
+         || messageid == undefined
+         || typeof owner != 'string'
+         || typeof messageid != 'string') {
+         res.send(400);
+
+      }
+      privateMessage.findOneAndDelete({ _id: messageid, receiverUsername: owner }, function (err, result) {
+         if (err) {
+            res.status(500);
+            res.json({ "error": "internalServerError" });
+
+         }
+         else if (result == null) {
+            res.status(500);
+            res.json({ "error": "messageNotFound" });
+         }
+         else {
+            res.send(200);
+         }
+
+      });
+
+
+
+   }
+   markread(req, res) {
+      let messageid = req.body.messageid;
+      let owner = req.params.username;
+      // request is true when he needs to mark read and false when he needs to unread this message
+      let isReadRequest = req.body.isReadRequest;
+      if (owner == undefined
+         || messageid == undefined
+         || typeof owner != 'string'
+         || typeof messageid != 'string'
+         || typeof isReadRequest != 'boolean') {
+         res.send(400);
+
+      }
+      privateMessage.findOneAndUpdate({ _id: messageid, receiverUsername: owner }, { isRead: isReadRequest }, function (err, result) {
+         if (err) {
+            res.status(500);
+            res.json({ "error": "internalServerError" });
+
+         }
+         else if (result == null) {
+            res.status(500);
+            res.json({ "error": "messageNotFound" });
+         }
+         else {
+            res.send(200);
+         }
+
+      });
+   }
+
+
    /**  
    *     a function that composes a message with sender and receiver 
    *       and save the message to the database
@@ -368,5 +460,5 @@ class PM {
 }// end of the class
 
 
-//
+
 module.exports = new PM();
