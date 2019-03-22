@@ -1155,9 +1155,9 @@ app.delete("/comment", (req, res) => {});
 * @apiName CreateSubreddit
 * @apiGroup SrService
 *
-* @apiParam {string} Admin_Username Id of user that created SR.
-* @apiParam {string} SrName  unique Name of the subreddit (no longer than 100 character).
-* @apiParam {string[]} SubredditRules list of subbreddit rules.
+* @apiParam {string} username Id of user that created SR.
+* @apiParam {string} srName  unique Name of the subreddit (no longer than 100 character).
+* @apiParam {string[]} subredditRules list of subbreddit rules.
 * @apiParam {string}  NOT YET SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {string[]} NOT YET ModUsername  Subreddit moderators' usernames.
 *
@@ -1179,11 +1179,11 @@ app.delete("/comment", (req, res) => {});
 * @apiName ViewSrMeta
 * @apiGroup SrService
 *
-* @apiParam {string} SrName Subreddit name.
-* @apiSuccess {string} Username of Creator.
-* @apiSuccess {string} Date  date of creation.
-* @apiSuccess {string[]} PostIds ID of posts in sr. 
-* @apiSuccess {string[]} Rules   Rules of sr.
+* @apiParam {string} srName Subreddit name.
+* @apiSuccess {string} username Username of Creator.
+* @apiSuccess {string} date  date of creation.
+* @apiSuccess {string[]} postIds ID of posts in sr. 
+* @apiSuccess {string[]} rules   Rules of sr.
 * @apiSuccess {string[]} BannedUsers NOT YET   ID of banned users.
 * @apiSuccess {string[]} ModIds NOT YET  ID of Modertors.
 * @apiSuccess {string[]} UserIds NOT YET  Ids of subscribed users .
@@ -1196,8 +1196,8 @@ app.delete("/comment", (req, res) => {});
 * @apiName EditSubreddit
 * @apiGroup SrService
 *
-* @apiParam {string[]} NewRules Updated rules.
-* @apiParam {string} NewName  New name
+* @apiParam {string[]} newRules Updated rules.
+* @apiParam {string} newName  New name
 * @apiParam {string} NOT YET About Updated about
 */
 
@@ -1206,9 +1206,9 @@ app.delete("/comment", (req, res) => {});
 * @apiName CreateSrThread
 * @apiGroup SrService
 *
-* @apiParam {string} Username of creator.
-* @apiParam {string} Title Title of thread
-* @apiParam {string} Body Body of the thread.
+* @apiParam {string} username of creator.
+* @apiParam {string} title Title of thread
+* @apiParam {string} threadBody Body of the thread.
 * @apiParam {boolean} NOT YET Spoiler [Spoiler==false] Mark if post is spoiler
 */
 
