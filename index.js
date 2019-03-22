@@ -40,6 +40,7 @@
  * //////////////////////////////////////
  * @see http://apidocjs.com/
  */
+
 const app = require("express")();
 const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
@@ -1137,10 +1138,8 @@ app.delete("/flair", (req, res) => {});
          * 
          * @apiError CommentNotFound The id of the comment wasn't found.
          */
-const commentHandler = require('./Comments/Comment');
-app.get("/comment/:c_id",commentHandler.handleGetComment) ;
-app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
-app.post("/comment/:id",commentHandler.handlePostComment );
+app.get("/comment", (req, res) => {});
+app.post("/comment", (req, res) => {});
 app.put("/comment", (req, res) => {});
 app.delete("/comment", (req, res) => {});
 
@@ -1464,7 +1463,7 @@ app.delete("/sr", (req, res) => {});
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
-* @apiParam {String} messageID the id of the message going to be marked as read.
+* @apiParam {String} messageId the id of the message going to be marked as read.
 * @apiParam {Boolean} isReadRequest true when user wants to mark as read a message false when user wants to mark message as unread
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
