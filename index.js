@@ -250,13 +250,14 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 
 
 /**
- * @api {get} /me/:username Request my account information
+ * @api {get} /me/About/:Username Request my account information
  * @apiName Getmyinfo
  * @apiGroup me
  *
- * @apiParam {String} username Users unique username.
- *  @apiParam {String} Token SyncToken That is sent with authentication..
+ * @apiParam {String} Username User's unique username.
+ * @apiParam {String} Token SyncToken That is sent with authentication..
  *
+ * @apiSuccess {String} Username username  of the User.
  * @apiSuccess {String} Email email  of the User.
  * @apiSuccess {String} About text to describe the User.
  * @apiSuccess {String} Imageid Image id  of the User.
@@ -272,6 +273,7 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
  *    {
+ *      "Username": "User1"
  *      "Email": "user@reddit.com",
  *      "About": "Im a reddit user",
  *      "Imageid": "100001"
@@ -404,9 +406,15 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
  *       "error": "UserNotFound"
  *     }
  * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User not found
+ *     HTTP/1.1 401 Wrong Password
  *      {
  *       "error": "Wrong Password"
+ *     }
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 406 Password too short
+ *      {
+ *        error: "Password too short"
  *     }
  */
 
@@ -434,10 +442,15 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
  *       "error": "UserNotFound"
  *     }
  * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User not found
+ *     HTTP/1.1 406 Invalid Email format
  *      {
  *       "error": "Invalid Email format"
  *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 406 Email already exists
+ *      {
+ *          "error" : "Email already exists"
+ *      }
  */
 
  /**
