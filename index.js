@@ -101,14 +101,14 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 *  [    
 *  {
 * "subredditName": "funny"
-* ,"_id":1
+* ,"_id":"sd232s2231"
 * ,"title":"love"
 * ,"postDate":"1998-04-23"
 * ,"body": "love is known for something"
 *  },
 * {
 * "subredditName": "nature"
-* ,"_id":2
+* ,"_id":"2dsds23123d"
 * ,"title":"vietnam nature"
 * ,"postDate":"1998-04-23"
 * ,"body": "vietnam nature is known for something"
