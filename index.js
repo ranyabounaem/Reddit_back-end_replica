@@ -260,13 +260,14 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
 
 
 /**
- * @api {get} /me/:username Request my account information
+ * @api {get} /me/About/:Username Request my account information
  * @apiName Getmyinfo
  * @apiGroup me
  *
- * @apiParam {String} username Users unique username.
- *  @apiParam {String} Token SyncToken That is sent with authentication..
+ * @apiParam {String} Username User's unique username.
+ * @apiParam {String} Token SyncToken That is sent with authentication..
  *
+ * @apiSuccess {String} Username username  of the User.
  * @apiSuccess {String} Email email  of the User.
  * @apiSuccess {String} About text to describe the User.
  * @apiSuccess {String} Imageid Image id  of the User.
@@ -282,6 +283,7 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
  *    {
+ *      "Username": "User1"
  *      "Email": "user@reddit.com",
  *      "About": "Im a reddit user",
  *      "Imageid": "100001"
@@ -387,17 +389,15 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
 
 
 
-
  /**
- * @api {Put} /me/:username/edit Edit  user
- * @apiName EditUser-
+ * @api {Put} /me/edit/Password/:Username Edit User password
+ * @apiName EditUserPassword
  * @apiGroup me
  *
  *
- * @apiParam  {String} Email email  of the User.
  * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Password Password  of the User.
- * @apiParam  {String} ImageId ID of the User's image.
+ * @apiParam  {String} NewPassword the new Password for the User.
+ * @apiParam  {String} OldPassword the Old Password of the User.
  * @apiParam {string} Token SyncToken That is sent with authentication.
  * @apiParamExample {json} Input
  *    {
@@ -415,6 +415,52 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
  *      {
  *       "error": "UserNotFound"
  *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 Wrong Password
+ *      {
+ *       "error": "Wrong Password"
+ *     }
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 406 Password too short
+ *      {
+ *        error: "Password too short"
+ *     }
+ */
+
+ /**
+ * @api {Put} /me/edit/email/:Username Edit User email
+ * @apiName EditUserEmail
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Email email  of the User.
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Email": "user@reddit.com",
+ *      "Username": "User1"
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User not found
+ *      {
+ *       "error": "UserNotFound"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 406 Invalid Email format
+ *      {
+ *       "error": "Invalid Email format"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 406 Email already exists
+ *      {
+ *          "error" : "Email already exists"
+ *      }
  */
 
  /**
