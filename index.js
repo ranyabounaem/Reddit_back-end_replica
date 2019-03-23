@@ -71,7 +71,8 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 /**
  * @name UserService
  * @note These are the routes for anything related to a user.
- * @note This is just general routing, You can modify as you want but before the delivery of the documentation
+ * @note This i
+ * s just general routing, You can modify as you want but before the delivery of the documentation
  */
 
 
@@ -338,7 +339,7 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
  */
 
 /**
- * @api {put} /me/Login login attempt
+ * @api {post} /user/Login login attempt
  * @apiName LoginUser
  * @apiGroup me
  *
