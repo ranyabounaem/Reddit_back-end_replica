@@ -23,15 +23,19 @@ class UserHandler {
         res.status(406).send({ error: "Password too short" });
       }
       else {
+
+        try{
         const user = await User.create(req.body);
         res.status(200).send({"Username":user.Username,"Email":user.Email});
+      }
+
+        catch(ex){res.status(406).send({error:ex.message})}
       }
       } else {
         res.status(406).send({ error: "Invalid Email format" });
       }
     }
   }
-
   async handleLogin(req, res) {
     const user = await User.findOne({ Username: req.body.Username });
 
