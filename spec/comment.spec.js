@@ -1,16 +1,49 @@
 const Request = require("request");
-const Comment = require("../Comments/commentSchema");
+const Comment = require("../models/commentSchema");
+const subredditsSchema = require("../models/subredditsSchema")
+const Subreddit = subredditsSchema.Subreddit;
+const Post = subredditsSchema.SubredditPostSchema;
 const mongoose = require("mongoose");
 const ObjectId = require('mongodb').ObjectID
 
 //let sSubreddit name or ID whatever the thread needs
-let th_id,c_id;
+let th_id;
+let c_id;
+let th_id2;
 let isodate=new Date().toISOString();
+
+let post1={
+    title: 'Football',
+    body: 'Who is the best player in the world?',
+    postDate: Date(),
+    subredditName: 'Sports'    
+};
+let post2={
+    title: 'Tennis',
+    body: 'Nadal injured again',
+    postDate: Date(),
+    subredditName: 'Sports' 
+};
+let sr={
+    name: 'Sports',
+    posts: [post1,post2],
+    date: Date()
+};
 
 describe("comment tests", () => {
     let server;
-    beforeAll(() => {
+    beforeAll((done) => {
       server = require("../index");
+      Post.create(post1).then(function(RetPost){
+        th_id=RetPost._id;
+        //console.log(th_id);
+      }).then(Post.create(post2).then(function(RetPost2){
+          th_id2=RetPost2._id;
+          //console.log(th_id2);
+      })).then(Subreddit.create(sr)).then(function(){
+          done();
+      });
+
     });
     afterAll(() => {
         server.close();
@@ -38,6 +71,8 @@ describe("comment tests", () => {
               data.body = body;
               data.status = res.statusCode;
               c_id= data.body.c_id;
+              console.log(c_id);
+              console.log(data.body);
               done();
             });
     });
@@ -69,7 +104,6 @@ describe("comment tests", () => {
             });
         });
     });
-
     describe("tests posting a new comment",() => {
         let data = {};
         let testBody = {
@@ -79,7 +113,7 @@ describe("comment tests", () => {
             reply: false
         };
         beforeAll((done) => {
-            Request.post("http://localhost:4000/comment/hf74h73",    //any false thread ID
+            Request.post("http://localhost:4000/comment/hf74h7666ty3",    //any false thread ID
             { json: true, body: testBody },
             (err, res, body) => {
               data.body = body;
@@ -163,9 +197,9 @@ describe("comment tests", () => {
         it("status 200 test", () => {
             expect(data.status).toBe(200);
             expect(data.body).toEqual({
-                _id: c_id.toString(),
+                _id: c_id,
                 content: "Mostafa",
-                parent_id: th_id,
+                parent_id: th_id.toString(),
                 dateAdded: isodate,
                 votes: 0,
                 spoiler: false,
@@ -176,7 +210,7 @@ describe("comment tests", () => {
      describe("tests getting info a comment",() => {
         let data ={};
        beforeAll((done) => {
-           Request.get("http://localhost:4000/comment/3455667hhh",    //any false Comment ID
+           Request.get("http://localhost:4000/comment/hf74h7666ty3",    //any false Comment ID
            { json: true },
            (err, res, body) => {
              data.body = body;
@@ -193,7 +227,7 @@ describe("comment tests", () => {
      describe("tests getting all comments of the thread",() => {
          let data ={};
         beforeAll((done) => {
-            Request.get("http://localhost:4000/comment/"+th_id,    //getting the comments for the created thread
+            Request.get("http://localhost:4000/comment/all/"+th_id,    //getting the comments for the created thread
             { json: true },
             (err, res, body) => {
               data.body = body;
@@ -209,7 +243,7 @@ describe("comment tests", () => {
      describe("tests getting all comments of the thread",() => {
         let data ={};
        beforeAll((done) => {
-           Request.get("http://localhost:4000/comment/3455667hhh",    //any false thread ID
+           Request.get("http://localhost:4000/comment/all/hf74h7666ty3",    //any false thread ID
            { json: true },
            (err, res, body) => {
              data.body = body;
