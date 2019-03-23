@@ -6,7 +6,12 @@ class SR {
     constructor(){
 
     }
-
+/**
+ * @description Create a subreddit.
+ * @param {object} Request - Request body: username, srName, srRules.
+ * @param {object} Response - 200 (Success).
+ * @returns {null}
+ */
     createSr (req, res) {
         var admin = req.body.username;
         var subredditName = req.body.srName;
@@ -17,27 +22,34 @@ class SR {
                 adminUsername: admin,
                 rules: subredditRules,
             });
-            subreddit.save(function (err) {
+            subreddit.save().then(function (err) {
                 if (err) {
                    // internal Server error 
                    res.status(500)
                    res.json({ error: 'internalServerError' });
+                   res.end();
 
                 }
                 else {
                    res.send(200);   // if everything worked as mentioned 
+                   res.end();
                 }
-            });
+
+                });
         }
         else
         {
             res.json({error: 'err',
             status:400});
-            res.end;
+            res.end();
         }
     };
 
-
+/**
+ * @description Edit a subreddit's details.
+ * @param {object} Request - Request paramaters: srName - Request body: newRules, newName .
+ * @param {object} Response - 200 (Success).
+ */
     edit (req, res){
 
         var subredditName = req.params.srName;
@@ -45,29 +57,34 @@ class SR {
         var updatedName = req.body.newName;
 
         if(subredditName && updatedRules && updatedName){
-            sr.findOneAndUpdate({name: subredditName}, {name:newName, rules:newRules}, function(err){
+            sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err){
                 if (err){
                     res.json({error: 'internal server err',
                     status:500});
-                    res.end;
+                    res.end();
                 }
                 else {
                     res.status(200);
-                    res.end;
+                    res.end();
                 };
             });
         }
         else {
             res.json({error: 'err',
             status:400});
-            res.end;
+            res.end();
         };         
     };
 
-
+/**
+ * @description Get a subreddit's info. 
+ * @param {object} Req -  Request paramaters: srName.
+ * @param {object} Res - Return subreddit's username, date, posts and rules - 200 (Success).
+ * @returns {object} Username - 
+ */
     info (req, res){
 
-        subredditName = req.params.srName;
+        var subredditName = req.params.srName;
 
         if(subredditName){
             sr.findOne({name: subredditName}, function(err){
@@ -75,7 +92,7 @@ class SR {
                 {
                     res.json({error: 'err',
                     status:500});
-                    res.end;
+                    res.end();
                 }
                 else
                 {
@@ -83,18 +100,23 @@ class SR {
                 }
             }).then(function(record){
                     res.json({username: record.admin_username, date: record.date, posts: record.posts, rules: record.rules})
-                    res.end;
+                    res.end();
                 });
             }
 
         else {
             res.json({error: 'err',
             status:400});
-            res.end;
+            res.end();
         };
 
     };
-
+/**
+ * @description Create a post inside subreddit.
+ * @param {object} Request - Request paramaters: srName - Request body: username, title, threadBody.
+ * @param {object} Response - 200 (Success).
+ * @returns {null}
+ */
     createPost(req, res){
 
         var subrName = req.params.srName;
@@ -113,20 +135,20 @@ class SR {
                 if(err){
                     res.json({error: 'err',
                     status:500});
-                    res.end;
+                    res.end();
                 }
             }).then(function(record){
                 record.posts.push(post);
                 record.save().then(function(){
                     res.status(200);
-                    res.end;
+                    res.end();
                 });
             });
         }
         else {
             res.json({error: 'err',
             status:400});
-            res.end;
+            res.end();
         };
     };
 };

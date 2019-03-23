@@ -45,7 +45,7 @@ const app = require("express")();
 const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
 //contect to mongo
-mongoose.connect('mongodb://localhost/reddit');
+mongoose.connect('mongodb://localhost:27017/reddit');
 mongoose.Promise=global.Promise;
 mongoose.connection.once('open',function(){console.log("Connection successful");}).on('error',function(error)
 {console.log("error:",error)});
@@ -53,14 +53,14 @@ mongoose.connection.once('open',function(){console.log("Connection successful");
 
 app.use(bodyparser.json());
 
-const userHandler = require("./src/user");
+// const userHandler = require("./src/user");
 
-console.log(userHandler.handleRegistration);
-app.post("/user/register", userHandler.handleRegistration);
-app.post("/user/login", userHandler.handleLogin);
-app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
-app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
-app.get("/me/About/:Username", userHandler.Getmyinfo)
+// console.log(userHandler.handleRegistration);
+// app.post("/user/register", userHandler.handleRegistration);
+// app.post("/user/login", userHandler.handleLogin);
+// app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
+// app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
+// app.get("/me/About/:Username", userHandler.Getmyinfo)
 
 
 /**
@@ -1250,9 +1250,9 @@ app.delete("/comment", (req, res) => {});
 */
 
 const subreddit = require('./Subreddits/subreddits')
-app.post("/sr/create", (req, res) => subreddit.create(req, res));
+app.post("/sr/create", (req, res) => subreddit.createSr(req, res));
 app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
-app.put("/sr/:srName/ ", (req, res) => subreddit.edit(req,res));
+app.put("/sr/:srName", (req, res) => subreddit.edit(req,res));
 app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 
 /**
@@ -1448,22 +1448,22 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     
 *          }
 */
-mongoose.connect('mongodb://localhost/reddit');
-mongoose.connection.once('open', function () {
+// mongoose.connect('mongodb://localhost/reddit');
+// mongoose.connection.once('open', function () {
 
-    console.log('connection carried succesfully');
-}).on('error', function () {
+//     console.log('connection carried succesfully');
+// }).on('error', function () {
 
-    console.log('connection error:');
-});
-const privateMessage = require('./PM/Pm');
-app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
-app.post('/:username/pm/compose', urlEncoded, (req, res) => privateMessage.compose(req, res));
-app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
-app.post('/:username/pm/block', urlEncoded, (req, res) => privateMessage.block(req, res));
-app.put('/:username/pm/markread',(req, res) => privateMessage.markread(req, res));
-app.post('/:username/pm/markreadall',(req, res) => privateMessage.markreadall(req, res));
-app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res));
+//     console.log('connection error:');
+// });
+// const privateMessage = require('./PM/Pm');
+// app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
+// app.post('/:username/pm/compose', urlEncoded, (req, res) => privateMessage.compose(req, res));
+// app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
+// app.post('/:username/pm/block', urlEncoded, (req, res) => privateMessage.block(req, res));
+// app.put('/:username/pm/markread',(req, res) => privateMessage.markread(req, res));
+// app.post('/:username/pm/markreadall',(req, res) => privateMessage.markreadall(req, res));
+// app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res));
 
 
 
@@ -1502,5 +1502,5 @@ app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res))
 app.get("/notif", (req, res) => {});
 
 
-var server=app.listen(4000,function(){console.log('listening')});
+var server=app.listen(1337,function(){console.log('listening')});
 module.exports=server;
