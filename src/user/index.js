@@ -58,6 +58,7 @@ class UserHandler {
       res.status(404).send({ error: "User doesnt exist" });
     }
   }
+  
   EditUserEmail(req, res){
     User.findOne({Username: req.params.Username}).then(function(RetUser){
       if(RetUser === null){
