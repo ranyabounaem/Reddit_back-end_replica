@@ -89,6 +89,7 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
+*  [    
 *  {
 * "SubbredditName": "r/funny"
 * ,"PostID":1
@@ -99,7 +100,7 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 * ,"PostID":2
 * ,"Meme": data:image/jpeg;base64,...............
 *  } 
-]
+*]
 *     }
 *
 * @apiError PostsnotFound 
