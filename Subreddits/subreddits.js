@@ -16,6 +16,7 @@ class SR {
         var admin = req.body.username;
         var subredditName = req.body.srName;
         var subredditRules = req.body.srRules;
+        //Check if they are null
         if(admin &&  subredditName && subredditRules){
             var subreddit = new sr({
                 name: subredditName,
@@ -36,6 +37,7 @@ class SR {
                 }
             });
         }
+        //If any are null.
         else
         {
             res.json({error: 'err',
@@ -48,13 +50,15 @@ class SR {
  * @description Edit a subreddit's details.
  * @param {object} Request - Request paramaters: srName - Request body: newRules, newName .
  * @param {object} Response - 200 (Success).
+ * @returns {null}
  */
     edit (req, res){
 
         var subredditName = req.params.srName;
         var updatedRules = req.body.newRules;
         var updatedName = req.body.newName;
-
+        
+        //Check if they are null
         if(subredditName && updatedRules && updatedName){
             sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err){
                 if (err){
@@ -68,6 +72,7 @@ class SR {
                 };
             });
         }
+        //If any are null.
         else {
             res.json({error: 'err',
             status:400});
@@ -79,12 +84,16 @@ class SR {
  * @description Get a subreddit's info. 
  * @param {object} Req -  Request paramaters: srName.
  * @param {object} Res - Return subreddit's username, date, posts and rules - 200 (Success).
- * @returns {object} Username - 
+ * @returns {string} Username - Name of creator
+ * @returns {Date} Date - Date of creation
+ * @returns {object} Posts - Returns posts of subreddit.
+ * @returns {string[]} Rules - Return array of rules.
  */
     info (req, res){
 
         var subredditName = req.params.srName;
 
+        //Check if subredditName isn't null
         if(subredditName){
             sr.findOne({name: subredditName}, function(err){
                 if(err)
@@ -98,11 +107,12 @@ class SR {
                     res.status(200);
                 }
             }).then(function(record){
-                    res.json({username: record.admin_username, date: record.date, posts: record.posts, rules: record.rules})
+                    res.json({username: record.admin_username, date: record.date, posts: record.posts, rules: record.rules});
                     res.end();
                 });
             }
 
+        //if subreddit name is null
         else {
             res.json({error: 'err',
             status:400});
@@ -129,6 +139,7 @@ class SR {
             subredditName: subrName
         };
 
+        //Check if body not null
         if(creator && postTitle && postBody){
             sr.findOne({name: subrName}, function(err){
                 if(err){
@@ -144,6 +155,7 @@ class SR {
                 });
             });
         }
+        //If body is null
         else {
             res.json({error: 'err',
             status:400});
