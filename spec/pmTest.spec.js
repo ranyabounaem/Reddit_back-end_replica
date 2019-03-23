@@ -1,7 +1,7 @@
 
 const request = require('request');
 const mongoose = require('mongoose');
-const PMmongo = require('../../../models/PMmongo');
+const PMmongo = require('../models/PMmongo');
 const privateMessage = PMmongo.pm;
 const users = require('../../../models/UserSchema');
 const blockList = PMmongo.messageBlockList;
