@@ -1151,7 +1151,7 @@ app.delete("/comment", (req, res) => {});
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
 /**
-* @api {post} /Sr/Create   Create a new subreddit
+* @api {post} /sr/create   Create a new subreddit
 * @apiName CreateSubreddit
 * @apiGroup SrService
 *
@@ -1164,7 +1164,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {get} /Sr/:SubredditName/Listing/:type   ListSubreddits   Generate a list of subreddits 
+* @api {get} /sr/:SubredditName/listing/:type   ListSubreddits   Generate a list of subreddits 
 * @apiName ListSubreddits
 * @apiGroup SrService
 *
@@ -1175,7 +1175,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {get} /Sr/:srName/Meta   Views subreddit meta
+* @api {get} /sr/:srName/meta   Views subreddit meta
 * @apiName ViewSrMeta
 * @apiGroup SrService
 *
@@ -1192,7 +1192,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {put} /Sr/:srName/    Edit a subreddit
+* @api {put} /sr/:srName/    Edit a subreddit
 * @apiName EditSubreddit
 * @apiGroup SrService
 *
@@ -1202,7 +1202,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {post} /Sr/:srName/thread    Create a thread inside subreddit
+* @api {post} /sr/:srName/thread    Create a thread inside subreddit
 * @apiName CreateSrThread
 * @apiGroup SrService
 *
@@ -1213,7 +1213,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {post} /Sr/:srName/subs  Subscribe to a Sr
+* @api {post} /sr/:srName/subs  Subscribe to a Sr
 * @apiName SubredditSubscribtion
 * @apiGroup SrService
 *
@@ -1222,7 +1222,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {delete} /Sr/:srName/subs   Unsubscribe to a Sr
+* @api {delete} /sr/:srName/subs   Unsubscribe to a Sr
 * @apiName SubredditUnsubscribtion
 * @apiGroup SrService
 *
@@ -1231,7 +1231,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {delete} /Sr/:id/thread    Delete a thread inside subreddit
+* @api {delete} /sr/:id/thread    Delete a thread inside subreddit
 * @apiName DeleteSrThread
 * @apiGroup SrService
 *
@@ -1241,7 +1241,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {delete} /Sr/:Id   Delete a subreddit
+* @api {delete} /sr/:Id   Delete a subreddit
 * @apiName DeleteSubreddit
 * @apiGroup SrService
 *
@@ -1249,11 +1249,11 @@ app.delete("/comment", (req, res) => {});
 * @apiParam {string} SubredditName
 */
 
-
-app.get("/sr", (req, res) => {});
-app.post("/sr", (req, res) => {});
-app.put("/sr", (req, res) => {});
-app.delete("/sr", (req, res) => {});
+const subreddit = require('./Subreddits/subreddits')
+app.post("/sr/create", (req, res) => subreddit.create(req, res));
+app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
+app.put("/sr/:srName/ ", (req, res) => subreddit.edit(req,res));
+app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 
 /**
  * @name PMService
