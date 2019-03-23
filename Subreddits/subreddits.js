@@ -22,26 +22,25 @@ class SR {
                 adminUsername: admin,
                 rules: subredditRules,
             });
-            subreddit.save().then(function (err) {
+            subreddit.save(function (err) {
                 if (err) {
-                   // internal Server error 
-                   res.status(500)
-                   res.json({ error: 'internalServerError' });
-                   res.end();
+                // internal Server error 
+                res.status(500)
+                res.json({ error: 'internalServerError' });
+                res.end()
 
                 }
                 else {
-                   res.send(200);   // if everything worked as mentioned 
-                   res.end();
+                res.send(200);   // if everything worked as mentioned 
+                res.end()
                 }
-
-                });
+            });
         }
         else
         {
             res.json({error: 'err',
             status:400});
-            res.end();
+            res.end()
         }
     };
 

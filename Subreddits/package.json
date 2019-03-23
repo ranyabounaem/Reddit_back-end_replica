@@ -4,13 +4,15 @@
   "description": "dependencies used in sr",
   "main": "subreddits.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "mongoose": "^5.4.19"
+    "jasmine": "^3.3.1",
+    "mongoose": "^5.4.19",
+    "request": "^2.88.0"
   }
 }
