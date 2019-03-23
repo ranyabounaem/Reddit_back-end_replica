@@ -1,4 +1,4 @@
-const User = require("../../models/UserSchema.js");
+const User = require("../../models/UserSchema");
 const validator = require("email-validator");
 
 class UserHandler {

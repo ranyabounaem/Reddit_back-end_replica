@@ -111,7 +111,7 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 *     }
 */
 
-const listings = require('./src/Listings/listings');
+const listings = require('./src/listings');
 app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
 
 
@@ -1141,7 +1141,7 @@ app.delete("/flair", (req, res) => {});
          * 
          * @apiError CommentNotFound The id of the comment wasn't found.
          */
-const commentHandler = require('./Comments/Comment');
+const commentHandler = require('./src/Comments/Comment');
 app.get("/comment/:c_id",commentHandler.handleGetComment) ;
 app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
 app.post("/comment/:id",commentHandler.handlePostComment );

@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const User = require('../../models/UserSchema');
-const userhandler = require('../user/index');
-const subbredditsSchema = require('../../models/subredditsSchema');
+const User = require('..//models/UserSchema');
+const userhandler = require('../src/user/index');
+const subbredditsSchema = require('../models/subredditsSchema');
 const subbreddits = subbredditsSchema.Subreddit;
 const posts = subbredditsSchema.SubredditPostSchema;
 class listings {
