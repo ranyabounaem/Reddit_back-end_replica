@@ -97,17 +97,21 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 * @apiSuccess {Object[]} Posts   Array of the listed Posts  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
-*     {
+*  {
 *  [    
 *  {
-* "SubbredditName": "r/funny"
-* ,"PostID":1
-* ,"Meme": data:image/jpeg;base64,...............
+* "subredditName": "funny"
+* ,"_id":1
+* ,"title":"love"
+* ,"postDate":"1998-04-23"
+* ,"body": "love is known for something"
 *  },
 * {
-* "SubbredditName": "r/Damn"
-* ,"PostID":2
-* ,"Meme": data:image/jpeg;base64,...............
+* "subredditName": "nature"
+* ,"_id":2
+* ,"title":"vietnam nature"
+* ,"postDate":"1998-04-23"
+* ,"body": "vietnam nature is known for something"
 *  } 
 *]
 *     }
