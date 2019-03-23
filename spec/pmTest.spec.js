@@ -3,7 +3,7 @@ const request = require('request');
 const mongoose = require('mongoose');
 const PMmongo = require('../models/PMmongo');
 const privateMessage = PMmongo.pm;
-const users = require('../../../models/UserSchema');
+const users = require('../models/UserSchema');
 const blockList = PMmongo.messageBlockList;
 const jasmine = require('jasmine');
 // testing compose/block/unblock/retrieveblock
