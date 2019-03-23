@@ -53,6 +53,12 @@ mongoose.connection.once('open',function(){console.log("Connection successful");
 
 app.use(bodyparser.json());
 
+app.use(function(req,res,next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods"," POST,PUT,GET,DELETE");
+    next();
+});
+
 const userHandler = require("./src/user");
 
 console.log(userHandler.handleRegistration);

@@ -103,8 +103,7 @@ require([
         });
     });
 
-    //
-    // sort api within a group by title ASC and custom order
+    //    // sort api within a group by title ASC and custom order
     //
     var newList = [];
     var umlauts = { 'ä': 'ae', 'ü': 'ue', 'ö': 'oe', 'ß': 'ss' }; // TODO: remove in version 1.0
