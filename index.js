@@ -45,7 +45,7 @@ const app = require("express")();
 const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
 //contect to mongo
-mongoose.connect('mongodb://localhost/reddit');
+mongoose.connect('mongodb://localhost:27017/reddit');
 mongoose.Promise=global.Promise;
 mongoose.connection.once('open',function(){console.log("Connection successful");}).on('error',function(error)
 {console.log("error:",error)});
@@ -63,12 +63,12 @@ app.use(function(req,res,next) {
 
 const userHandler = require("./src/user");
 
-console.log(userHandler.handleRegistration);
-app.post("/user/register", userHandler.handleRegistration);
-app.post("/user/login", userHandler.handleLogin);
-app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
-app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
-app.get("/me/About/:Username", userHandler.Getmyinfo)
+// console.log(userHandler.handleRegistration);
+// app.post("/user/register", userHandler.handleRegistration);
+// app.post("/user/login", userHandler.handleLogin);
+// app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
+// app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
+// app.get("/me/About/:Username", userHandler.Getmyinfo)
 
 
 /**
@@ -1168,21 +1168,20 @@ app.delete("/comment", (req, res) => {});
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
 /**
-* @api {post} /sr/:Id   Create a new subreddit
+* @api {post} /sr/create   Create a new subreddit
 * @apiName CreateSubreddit
 * @apiGroup SrService
 *
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} AdminId Id of user that created SR.
-* @apiParam {string} SrName  unique Name of the subreddit (no longer than 100 character).
-* @apiParam {string[]} SubredditRules list of subbreddit rules.
-* @apiParam {string[]} ModUsername  Subreddit moderators' usernames.
-*@apiSuccess {string} SR_ID Unique id of created sr.
+* @apiParam {string} username Id of user that created SR.
+* @apiParam {string} srName  unique Name of the subreddit (no longer than 100 character).
+* @apiParam {string[]} srRules list of subbreddit rules.
+* @apiParam {string}  SyncToken  (NOT YET) Sent as Header used for Synchronization and preventing CHRF Attack.
+* @apiParam {string[]}  ModUsername (NOT YET)  Subreddit moderators' usernames.
 *
 */
 
 /**
-* @api {get} /sr/:SubredditName/Listing/:type   ListSubreddits   Generate a list of subreddits 
+* @api {get} /sr/:SubredditName/listing/:type   ListSubreddits   Generate a list of subreddits 
 * @apiName ListSubreddits
 * @apiGroup SrService
 *
@@ -1193,46 +1192,45 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {get} /sr/:SrName/meta   Views subreddit meta
+* @api {get} /sr/:srName/meta   Views subreddit meta
 * @apiName ViewSrMeta
 * @apiGroup SrService
 *
-* @apiSuccess {string} Username of Creator.
-* @apiParam {string} SrName Subreddit name.
-* @apiSuccess {string[]} BannedUsers   ID of banned users.
-* @apiSuccess {string[]} ModIds   ID of Modertors.
-* @apiSuccess {string[]} PostIds   ID of posts in sr. 
-* @apiSuccess {string[]} Rules   Rules of sr.
-* @apiSuccess {string[]} UserIds   Ids of subscribed users .
-* @apiSuccess {Number[]} SubCount   Number of subscribers.
-* @apiParam {String} Date  date of creation .
+* @apiParam {string} srName Subreddit name.
+* @apiSuccess {string} username Username of Creator.
+* @apiSuccess {string} date  date of creation.
+* @apiSuccess {object[]} posts All posts. 
+* @apiSuccess {string[]} rules   Rules of sr.
+* @apiSuccess {string[]} BannedUsers (NOT YET)   ID of banned users.
+* @apiSuccess {string[]} ModIds (NOT YET)  ID of Modertors.
+* @apiSuccess {string[]} UserIds (NOT YET  Ids of subscribed users .
+* @apiSuccess {Number[]} SubCount (NOT YET)  Number of subscribers.
+
 */
 
 /**
-* @api {put} /sr/:SubredditName/    Edit a subreddit
+* @api {put} /sr/:srName/    Edit a subreddit
 * @apiName EditSubreddit
 * @apiGroup SrService
 *
-* @apiParam {string[]} NewRules Updated rules.
-* @apiParam {string} SubredditName Old name
-* @apiParam {string} NewName  New name
-* @apiParam {string} About Updated about
+* @apiParam {string[]} newRules Updated rules.
+* @apiParam {string} newName  New name
+* @apiParam {string}  About (NOT YET) Updated about
 */
 
 /**
-* @api {post} /sr/:SubredditName/thread    Create a thread inside subreddit
+* @api {post} /sr/:srName/thread    Create a thread inside subreddit
 * @apiName CreateSrThread
 * @apiGroup SrService
 *
-* @apiParam {string} Username of creator.
-* @apiParam {string} SubredditName Name of subreddit.
-* @apiParam {string} ThreadTitle Title of thread
-* @apiParam {string} ThreadData Data inside thread.
-* @apiParam {boolean} Spoiler [Spoiler==false] Mark if post is spoiler
+* @apiParam {string} username Username of creator.
+* @apiParam {string} title Title of thread
+* @apiParam {string} threadBody Body of the thread.
+* @apiParam {boolean}  Spoiler (NOT YET) [Spoiler==false] Mark if post is spoiler
 */
 
 /**
-* @api {post} /sr/:SubredditName/subs  Subscribe to a Sr
+* @api {post} /sr/:srName/subs  Subscribe to a Sr
 * @apiName SubredditSubscribtion
 * @apiGroup SrService
 *
@@ -1241,7 +1239,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {delete} /sr/:SubredditName/subs   Unsubscribe to a Sr
+* @api {delete} /sr/:srName/subs   Unsubscribe to a Sr
 * @apiName SubredditUnsubscribtion
 * @apiGroup SrService
 *
@@ -1250,7 +1248,7 @@ app.delete("/comment", (req, res) => {});
 */
 
 /**
-* @api {delete} /sr/:Id/thread    Delete a thread inside subreddit
+* @api {delete} /sr/:id/thread    Delete a thread inside subreddit
 * @apiName DeleteSrThread
 * @apiGroup SrService
 *
@@ -1268,111 +1266,11 @@ app.delete("/comment", (req, res) => {});
 * @apiParam {string} SubredditName
 */
 
-
-app.get("/sr", (req, res) => {});
-app.post("/sr", (req, res) => {});
-app.put("/sr", (req, res) => {});
-app.delete("/sr", (req, res) => {});
-/**
-* @api {post} /sr/:Id   Create a new subreddit
-* @apiName CreateSubreddit
-* @apiGroup SrService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} AdminId Id of user that created SR.
-* @apiParam {string} SrName  unique Name of the subreddit (no longer than 100 character).
-* @apiParam {string[]} SubredditRules list of subbreddit rules.
-* @apiParam {string[]} ModUsername  Subreddit moderators' usernames.
-*@apiSuccess {string} SR_ID Unique id of created sr.
-*
-*/
-
-/**
-* @api {get} /sr/:SubredditName/Listing/:type   ListSubreddits Generate a list of subreddits      //MOSTAFA
-* @apiName ListSubreddits
-* @apiGroup SrService
-*
-* @apiParam {string} Token.
-* @apiParam {string} SubredditName Name of subreddit
-* @apiParam {string} Type List according to certain type
-* @apiSuccess {string[]} SubredditIDs Returns list of sorted subreddits
-*/
-
-/**
-* @api {get} /sr/:SrName/meta   Views subreddit meta
-* @apiName ViewSrMeta
-* @apiGroup SrService
-*
-* @apiSuccess {string} Creator  unique ID.
-* @apiParam {string} SrName Subreddit name.
-* @apiSuccess {string[]} BannedUsers   ID of banned users.
-* @apiSuccess {string[]} ModIds   ID of Modertors.
-* @apiSuccess {string[]} PostIds   ID of posts in sr. 
-* @apiSuccess {string[]} Rules   Rules of sr.
-* @apiSuccess {string[]} UserIds   Ids of subscribed users .
-* @apiSuccess {Number[]} SubCount   Number of subscribers.
-* @apiParam {String} Date  date of creation .
-*/
-
-/**
-* @api {put} /sr/:SubredditName/    Edit a subreddit
-* @apiName EditSubreddit
-* @apiGroup SrService
-*
-* @apiParam {string[]} NewRules Updated rules.
-* @apiParam {string} SubredditName Old name
-* @apiParam {string} NewName  New name
-* @apiParam {string} About Updated about
-*/
-
-/**
-* @api {post} /sr/:SubredditName/thread    Create a thread inside subreddit
-* @apiName CreateSrThread
-* @apiGroup SrService
-*
-* @apiParam {string} CreatorID Id of creator.
-* @apiParam {string} SubredditName Name of subreddit.
-* @apiParam {string} ThreadTitle Title of thread
-* @apiParam {string} ThreadData Data inside thread.
-* @apiParam {boolean} Spoiler [Spoiler==false] Mark if post is spoiler
-*/
-
-/**
-* @api {post} /sr/:SubredditName/subs  Subscribe to a Sr
-* @apiName SubredditSubscribtion
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-*/
-
-/**
-* @api {delete} /sr/:SubredditName/subs   Unsubscribe to a Sr
-* @apiName SubredditUnsubscribtion
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-*/
-
-/**
-* @api {delete} /sr/:Id/thread    Delete a thread inside subreddit
-* @apiName DeleteSrThread
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-* @apiParam {string} PostID
-*/
-
-/**
-* @api {delete} /sr/:Id   Delete a subreddit
-* @apiName DeleteSubreddit
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-*/
+const subreddit = require('./Subreddits/subreddits')
+app.post("/sr/create", (req, res) => subreddit.createSr(req, res));
+app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
+app.put("/sr/:srName", (req, res) => subreddit.edit(req,res));
+app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 
 /**
  * @name PMService
@@ -1567,11 +1465,11 @@ app.delete("/sr", (req, res) => {});
 *     
 *          }
 */
-mongoose.connect('mongodb://localhost/reddit');
-mongoose.connection.once('open', function () {
+// mongoose.connect('mongodb://localhost/reddit');
+// mongoose.connection.once('open', function () {
 
-    console.log('connection carried succesfully');
-}).on('error', function () {
+//     console.log('connection carried succesfully');
+// }).on('error', function () {
 
     console.log('connection error:');
 });
@@ -1621,5 +1519,5 @@ app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res))
 app.get("/notif", (req, res) => {});
 
 
-var server=app.listen(4000,function(){console.log('listening')});
+var server=app.listen(1337,function(){console.log('listening')});
 module.exports=server;
