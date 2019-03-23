@@ -10,7 +10,7 @@ const jasmine = require('jasmine');
 describe('Server', function () {
     var server;
     beforeAll(function () {
-        server = require('../../../index.js');
+        server = require('../index.js');
         // cause there is no middleware yet i need to add users to check for messages
         users.create({ Username: "marwan", Password: "12345678", Email: "mostafa@m.com" });
         users.create({ Username: "kefah", Password: "12345678", Email: "mostafa@m.com" });
