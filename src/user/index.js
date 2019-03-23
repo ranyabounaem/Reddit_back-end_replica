@@ -59,16 +59,37 @@ class UserHandler {
     }
   }
   
+   /**  
+   *     a function that edits the email of the user
+   *     @function EditUserEmail
+   *     @returns {JSON} the response for the request
+   */
   EditUserEmail(req, res){
+    /**  
+    *    This checks if the Username received is a valid username in the database 
+    *    if the username doesn't exist in the database
+    *    the response will be { "error": "UserNotFound"} with status 404
+    */
     User.findOne({Username: req.params.Username}).then(function(RetUser){
       if(RetUser === null){
         res.status(404).send({ error: "UserNotFound"});
       }
-      else{
+    /**  
+    *    This checks if the Email received already exists in the database 
+    *    if the email exists in the database
+    */
+      else
+      {
         User.findOne({ Email: req.body.Email } ).then(function(RetEmail){
           if(RetEmail === null)
           {
-            if (validator.validate(req.body.Email) == true) {
+            /**  
+            *    This checks if the Email is valid and can be used
+            *    if the Email is valid it updates it in the database
+            *    and sends a response "update successful" with status 200
+            */
+            if (validator.validate(req.body.Email) == true)
+             {
               User.findOneAndUpdate(
                 {Username: req.params.Username },
                 {Email: req.body.Email }).then(function(RetUser){
@@ -76,14 +97,24 @@ class UserHandler {
                     res.status(200).send("update successful");
                   }); 
             } 
-            else {
+            /**  
+            *    If the Email is invalid it sends an error response 
+            *    { error: "Invalid Email format" } with status 406
+            */
+            else
+            {
               res.status(406).send({ error: "Invalid Email format" });
             }
                 
           }
-          else{
+          /**  
+          *    If the Email exists in the database
+          *    it sends an error response 
+          *    {error : "Email already exists"} with status 406
+          */
+          else
+          {
             res.status(406).send({error : "Email already exists"});
-
           }
         });
       }
@@ -91,23 +122,52 @@ class UserHandler {
     });
   }
 
+   /**  
+   *     a function that edits the Password of the user
+   *     @function EditUserPassword
+   *     @returns {JSON} the response for the request
+   */
   EditUserPassword(req, res){
+    /**  
+    *    This checks if the Username received is a valid username in the database 
+    *    if the username doesn't exist in the database
+    *    the response will be { "error": "UserNotFound"} with status 404
+    */
     User.findOne({Username: req.params.Username}).then(function(RetUser){
-      if(RetUser === null){
+      if(RetUser === null)
+      {
         res.status(404).send({ error: "UserNotFound"});
       }
+      /**  
+      *    This checks if the OldPassword entered by the user
+      *    is the same Password saved in the database 
+      *    if these password don't match 
+      *    the response will be { error: "Wrong Password"} with status 401
+      */
       else if (RetUser.Password !== req.body.OldPassword)
       {
         res.status(401).send({ error: "Wrong Password"});
       }
-      else if (req.body.NewPassword.length < 8) {
+      /**  
+      *    This checks if the NewPassword entered by the user
+      *    has a length greater than 8 characters
+      *    if it's length is less than 8 characters
+      *    the response will be { error: "Password too short" } with status 406
+      */
+      else if (req.body.NewPassword.length < 8)
+      {
           res.status(406).send({ error: "Password too short" });
       }
-      else {
+      /**  
+      *    This updates the password of the user to the new password 
+      *    the response will be "Password successfully updated" with status 200
+      */
+      else 
+      {
         User.findOneAndUpdate(
           {Username: req.params.Username },
           {Password: req.body.NewPassword }).then(function(RetUser){
-            //TODO RETURN 200
+
               res.status(200).send("Password successfully updated");
             });
 
@@ -115,12 +175,30 @@ class UserHandler {
 
     });
   }
+  /**  
+   *     a function that gets the info of the user
+   *     @function Getmyinfo 
+   *     @returns {JSON} the data of the user or the an error response
+   */
   Getmyinfo(req, res){
+    /**  
+    *    This checks if the Username received is a valid username in the database 
+    */
     User.findOne({Username: req.params.Username}).then(function(RetUser){
-      if(RetUser === null){
+      /** 
+      *    if the username doesn't exist in the database
+      *    the response will be { "error": "UserNotFound"} with status 404
+      */
+      if(RetUser === null)
+      {
         res.status(404).send({ "error": "UserNotFound"});
       }
-      else{
+      /**  
+      *    This returns the info of the user  
+      *    the response will be {Username : "", Email : ""} with status 200
+      */
+      else
+      {
         res.status(200).send({Username:req.params.Username ,Email:RetUser.Email});
       }
       
