@@ -4,22 +4,14 @@ const PMmongo = require('../../models/PMmongo');
 const privateMessage = PMmongo.pm;
 const blockList = PMmongo.messageBlockList;
 const User = require('../../models/UserSchema');
+const userhandler = require('../user/index');
 class PM {
    constructor() {
 
    }
 
    // suppose to be middle ware to check for the username sent
-   async isUserFound(owner) {
-      let y = await User.findOne({ Username: owner });
-      if (y != null) {
-         return true;
-      }
-      else {
-         return false;
-      }
 
-   }
    async markreadall(req, res) {
       let owner = req.params.username;
       // shall be demolished by a middleware
@@ -34,7 +26,7 @@ class PM {
          return;
 
       }
-      if (!(await this.isUserFound(owner))) {
+      if (!(await userhandler.isUserFound(owner))) {
          res.status(404);
          res.send({ "error": "userNotFound" });
          return;
@@ -72,7 +64,7 @@ class PM {
          return;
 
       }
-      if (!(await this.isUserFound(owner))) {
+      if (!(await userhandler.isUserFound(owner))) {
          res.status(404);
 
          res.send({ "error": "userNotFound" });
@@ -116,7 +108,7 @@ class PM {
          return;
 
       }
-      if (!(await this.isUserFound(owner))) {
+      if (!(await userhandler.isUserFound(owner))) {
          res.status(404);
 
          res.send({ "error": "userNotFound" });
@@ -209,7 +201,7 @@ class PM {
       }
       else {
          //  put here the check that user not found or the receiver not found
-         if (!(await this.isUserFound(owner) && await this.isUserFound(receiverUsername))) {
+         if (!(await userhandler.isUserFound(owner) && await userhandler.isUserFound(receiverUsername))) {
             res.status(404);
 
             res.send({ "error": "userNotFound" });
@@ -299,7 +291,7 @@ class PM {
       else {
 
          // shall be demolished by a middleware
-         if (!(await this.isUserFound(owner))) {
+         if (!(await userhandler.isUserFound(owner))) {
             res.status(404);
 
             res.send({ "error": "userNotFound" });
@@ -402,7 +394,7 @@ class PM {
       }
       else {
          // shall be demolished by a middleware
-         if (!(await this.isUserFound(owner) && await this.isUserFound(toBeBlocked))) {
+         if (!(await userhandler.isUserFound(owner) && await userhandler.isUserFound(toBeBlocked))) {
 
             res.status(404);
             res.send({ "error": "userNotFound" });
@@ -490,7 +482,7 @@ class PM {
       }
       else {
          // shall be demolished by a middleware
-         if (!(await this.isUserFound(owner))) {
+         if (!(await userhandler.isUserFound(owner))) {
             res.status(404);
 
             res.send({ "error": "userNotFound" });
