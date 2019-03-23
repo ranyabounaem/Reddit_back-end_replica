@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 //Create schema and model
 const SubredditPostSchema = new Schema({
     title: String,
-    body: String
+    body: String,
+    postDate: Date,
+    subredditName:String
 });
 
 const SubredditSchema = new Schema({
@@ -15,6 +17,8 @@ const SubredditSchema = new Schema({
 });
 
 
-
 const Subreddit = mongoose.model('subreddit', SubredditSchema);
-module.exports = Subreddit;
+const posts = mongoose.model('posts', SubredditPostSchema);
+
+module.exports.Subreddit= Subreddit;
+module.exports.SubredditPostSchema= posts;
