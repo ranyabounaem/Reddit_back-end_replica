@@ -16,7 +16,7 @@ class SR {
                 name: subredditName,
                 admin_username: admin,
                 rules: subredditRules,
-                date = date().now
+                date = Date().now
             })
             subreddit.save(function(err){
                 if (err){
@@ -83,7 +83,7 @@ class SR {
                     res.status(200);
                 }
             }).then(function(record){
-                    res.json({username: record.admin_username, date: record.date, postIds: record.posts._id, rules: record.rules})
+                    res.json({username: record.admin_username, date: record.date, posts: record.posts, rules: record.rules})
                     res.end;
                 });
             }
@@ -96,10 +96,39 @@ class SR {
 
     };
 
-    createPost(req, res)
-    {
-        
-    }
+    createPost(req, res){
 
+        var subrName = req.params.srName;
+        var creator = req.body.username;
+        var postTitle = req.body.title;
+        var postBody = req.body.threadBody;
+        var post = {
+            title: postTitle,
+            body: postBody,
+            creatorUsername: creator,
+            postDate: Date().now,
+            subredditName: subrName
+        };
 
+        if(creator && postTitle && postBody){
+            sr.findOne({name: subrName}, function(err){
+                if(err){
+                    res.json({error: 'err',
+                    status:500});
+                    res.end;
+                }
+            }).then(function(record){
+                record.posts.push(post);
+                record.save().then(function(){
+                    res.status(200);
+                    res.end;
+                });
+            });
+        }
+        else {
+            res.json({error: 'err',
+            status:400});
+            res.end;
+        };
+    };
 };

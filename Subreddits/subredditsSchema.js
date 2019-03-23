@@ -4,7 +4,10 @@ const Schema = mongoose.Schema;
 //Create schema and model
 const SubredditPostSchema = new Schema({
     title: String,
-    body: String
+    body: String,
+    creatorUsername: String,
+    postDate: Date,
+    subredditName: String
 });
 
 const SubredditSchema = new Schema({
