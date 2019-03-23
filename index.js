@@ -77,26 +77,26 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 /**
  * @name UserService
  * @note These are the routes for anything related to a user.
- * @note This is just general routing, You can modify as you want but before the delivery of the documentation
+ * @note This i
+ * s just general routing, You can modify as you want but before the delivery of the documentation
  */
 
 
 //TODO POSTS: listing posts for a subreddit or only popular posts
 
 
-
 /** 
-* @api {get} /user/listing?type=value List Posts 
+* @api {get} /:username/listing?type=value List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
-* @apiParam {Number} LPostID id of the last post displayed
+* @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
+* @apiParam {Number} startPosition Sending 15 posts per after the startposition  
 * @apiSuccess {Object[]} Posts   Array of the listed Posts  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
-*  "Posts":[
+*  [    
 *  {
 * "SubbredditName": "r/funny"
 * ,"PostID":1
@@ -107,16 +107,20 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 * ,"PostID":2
 * ,"Meme": data:image/jpeg;base64,...............
 *  } 
-]
+*]
 *     }
 *
 * @apiError PostsnotFound 
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "Posts not Found"
+*       "error": "postsNotFound"
 *     }
 */
+
+const listings = require('./src/listings');
+app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
+
 
 // API for information about user
 
@@ -341,7 +345,7 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
  */
 
 /**
- * @api {put} /me/Login login attempt
+ * @api {post} /user/Login login attempt
  * @apiName LoginUser
  * @apiGroup me
  *
@@ -1144,7 +1148,7 @@ app.delete("/flair", (req, res) => {});
          * 
          * @apiError CommentNotFound The id of the comment wasn't found.
          */
-const commentHandler = require('./Comments/Comment');
+const commentHandler = require('./src/Comments/Comment');
 app.get("/comment/:c_id",commentHandler.handleGetComment) ;
 app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
 app.post("/comment/:id",commentHandler.handlePostComment );
