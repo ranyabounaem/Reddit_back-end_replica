@@ -11,7 +11,8 @@ class CommentHandler {
     }
 
     handlePostComment(req,res) {
-        Post.findOne({_id: req.params.id}).then(function(RetPost){
+        let ID = new ObjectId(req.params.id);
+        Post.findOne({_id: ID}).then(function(RetPost){
             if(RetPost == null){
                 res.status(404).send({'error': 'There is no post with this ID'});
             }else{
@@ -58,7 +59,7 @@ class CommentHandler {
     handleGetAllComments(req,res){
         let ID = new ObjectId(req.params.id);
         //Assuming that he sent a thread ID for this PHASE ONLY
-        Post.findOne({_id: req.params.id}).then(function(RetPost){
+        Post.findOne({_id: ID}).then(function(RetPost){
             if(RetPost == null){
                 res.status(404).send({'error': 'There is no post with this ID'});
             }else{
