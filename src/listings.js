@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const User = require('..//models/UserSchema');
-const userhandler = require('../src/user/index');
+const User = require('../models/UserSchema');
+const userhandler = require('./user/index');
 const subbredditsSchema = require('../models/subredditsSchema');
 const subbreddits = subbredditsSchema.Subreddit;
 const posts = subbredditsSchema.SubredditPostSchema;
@@ -13,7 +13,7 @@ class listings {
         // getting the names of the subbreddit a user is subscribed to 
         let subscribedSubbreddit = await User.findOne({ Username: owner }, { Subscriptions: 1, _id: 0 });
         // finding the posts that the subbreddit posted to retrieve for the user 
-        let newPosts = await posts.find({ subredditName: subscribedSubbreddit.Subscriptions }, { _v: 0 }).sort({ postDate: -1 })
+        let newPosts = await posts.find({ subredditName: subscribedSubbreddit.Subscriptions }, { __v: 0 }).sort({ postDate: -1 })
             .skip(startPosition * 15).limit(15);
         return newPosts;
     }
@@ -44,7 +44,7 @@ class listings {
             // awaiting for the retriving the new posts and checking  the result
             newPosts = await this.listingPostsbyNew(owner, startPosition);
             // if there is no error and it is not null send it 
-            if (newPosts != null) {
+            if (newPosts != null && newPosts.length !=0){
                 res.status(200);
                 res.json(newPosts);
                 return;
