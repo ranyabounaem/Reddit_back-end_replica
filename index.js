@@ -78,7 +78,6 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 //TODO POSTS: listing posts for a subreddit or only popular posts
 
 
-
 /** 
 * @api {get} /:username/listing?type=value List Posts 
 * @apiName ListPosts
@@ -90,7 +89,7 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
-*  "Posts":[
+*  [    
 *  {
 * "SubbredditName": "r/funny"
 * ,"PostID":1
@@ -101,16 +100,20 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 * ,"PostID":2
 * ,"Meme": data:image/jpeg;base64,...............
 *  } 
-]
+*]
 *     }
 *
 * @apiError PostsnotFound 
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "Posts not Found"
+*       "error": "postsNotFound"
 *     }
 */
+
+const listings = require('./src/Listings/listings');
+app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
+
 
 // API for information about user
 
