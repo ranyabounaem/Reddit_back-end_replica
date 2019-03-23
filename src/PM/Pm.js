@@ -1,17 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const PMmongo = require('./PMmongo');
+const PMmongo = require('../../models/PMmongo');
 const privateMessage = PMmongo.pm;
 const blockList = PMmongo.messageBlockList;
+const User = require('../../models/UserSchema');
+const userhandler = require('../user/index');
 class PM {
    constructor() {
 
    }
 
+   // suppose to be middle ware to check for the username sent
 
-   markreadall(req, res) {
-
+   async markreadall(req, res) {
       let owner = req.params.username;
+      // shall be demolished by a middleware
+
       // request is true when he needs to mark read and false when he needs to unread this message
       let isReadRequest = req.body.isReadRequest;
       if (owner == undefined
@@ -21,6 +25,11 @@ class PM {
          res.send(400);
          return;
 
+      }
+      if (!(await userhandler.isUserFound(owner))) {
+         res.status(404);
+         res.send({ "error": "userNotFound" });
+         return;
       }
       privateMessage.updateMany({ receiverUsername: owner }, { isRead: isReadRequest }, function (err, result) {
          if (err) {
@@ -40,9 +49,12 @@ class PM {
 
    }
 
-   delete(req, res) {
+   async delete(req, res) {
+
       let messageId = req.body.messageId;
       let owner = req.params.username;
+      // shall be demolished by a middleware
+
       // request is true when he needs to mark read and false when he needs to unread this message
       if (owner == undefined
          || messageId == undefined
@@ -52,6 +64,13 @@ class PM {
          return;
 
       }
+      if (!(await userhandler.isUserFound(owner))) {
+         res.status(404);
+
+         res.send({ "error": "userNotFound" });
+         return;
+      }
+
       privateMessage.findOneAndDelete({ _id: messageId, receiverUsername: owner }, function (err, result) {
          if (err) {
             res.status(500);
@@ -71,9 +90,13 @@ class PM {
 
 
    }
-   markread(req, res) {
+   async  markread(req, res) {
+
       let messageId = req.body.messageId;
       let owner = req.params.username;
+      // shall be demolished by a middleware
+
+
       // request is true when he needs to mark read and false when he needs to unread this message
       let isReadRequest = req.body.isReadRequest;
       if (owner == undefined
@@ -84,6 +107,12 @@ class PM {
          res.send(400);
          return;
 
+      }
+      if (!(await userhandler.isUserFound(owner))) {
+         res.status(404);
+
+         res.send({ "error": "userNotFound" });
+         return;
       }
       privateMessage.findOneAndUpdate({ _id: messageId, receiverUsername: owner }, { isRead: isReadRequest }, function (err, result) {
          if (err) {
@@ -107,7 +136,7 @@ class PM {
    *     a function that composes a message with sender and receiver 
    *       and save the message to the database
    */
-   compose(req, res) {
+   async compose(req, res) {
       /**  
       *     To be implmented here checking the validtiy of the sender 
       *     and the receiver is found in database
@@ -127,6 +156,7 @@ class PM {
       let subject = req.body.subject;
       let messageBody = req.body.messageBody;
       let receiverUsername = req.body.receiverUsername;
+
       if (owner == undefined
          || receiverUsername == undefined
          || subject == undefined
@@ -171,7 +201,12 @@ class PM {
       }
       else {
          //  put here the check that user not found or the receiver not found
+         if (!(await userhandler.isUserFound(owner) && await userhandler.isUserFound(receiverUsername))) {
+            res.status(404);
 
+            res.send({ "error": "userNotFound" });
+            return;
+         }
          blockList.findOne({ blocked: { $in: [owner, receiverUsername] }, blocker: { $in: [owner, receiverUsername] } }
             , function (err, result) {
                if (err) {
@@ -225,7 +260,7 @@ class PM {
    *     a function that retrieve the inbox or sent 
    *       according to a boolean 'mine'
    */
-   retrieve(req, res) {
+   async retrieve(req, res) {
       // implementing here the user not found sync token 
 
 
@@ -241,6 +276,7 @@ class PM {
 
       // if the boolean or sender is undefined or empty bad request is being sent 
       let owner = req.params.username;
+
       let mine = req.body.mine;
 
       if (mine == undefined
@@ -254,7 +290,13 @@ class PM {
       }
       else {
 
+         // shall be demolished by a middleware
+         if (!(await userhandler.isUserFound(owner))) {
+            res.status(404);
 
+            res.send({ "error": "userNotFound" });
+            return;
+         }
 
          // retriving all the messages sent to me (inbox)
          if (mine === true) {
@@ -323,12 +365,13 @@ class PM {
       }
       // end of the retrieve function
    }
-   block(req, res) {
+   async block(req, res) {
       // owner and to be blocked need to be known how to be sent
       let owner = req.params.username;
       // check that the one going to be blocked alreay in our db
       let toBeBlocked = req.body.blocked;
       let block = req.body.block;
+
       // if it is sent as param no undefined will appear
       if (toBeBlocked == undefined || owner == undefined
          || block == undefined) {
@@ -350,6 +393,13 @@ class PM {
          res.json({ error: 'selfBlockAlertError' });
       }
       else {
+         // shall be demolished by a middleware
+         if (!(await userhandler.isUserFound(owner) && await userhandler.isUserFound(toBeBlocked))) {
+
+            res.status(404);
+            res.send({ "error": "userNotFound" });
+            return;
+         }
          // finding from the blocklist the user 
          blockList.findOne({ blocked: { $in: [toBeBlocked] }, blocker: { $in: [owner] } },
             function (err, result) {
@@ -414,7 +464,7 @@ class PM {
          // end of block implementati
       }
    }
-   retrieveBlock(req, res) {
+   async retrieveBlock(req, res) {
       // here there is a middleware to verify the owner
       let owner = req.params.username;
 
@@ -431,6 +481,13 @@ class PM {
          res.json({ error: 'paramterTypeError' });
       }
       else {
+         // shall be demolished by a middleware
+         if (!(await userhandler.isUserFound(owner))) {
+            res.status(404);
+
+            res.send({ "error": "userNotFound" });
+            return;
+         }
          blockList.find(
             { blocker: owner },
             {

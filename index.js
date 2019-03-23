@@ -40,6 +40,7 @@
  * //////////////////////////////////////
  * @see http://apidocjs.com/
  */
+
 const app = require("express")();
 const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
@@ -77,19 +78,18 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 //TODO POSTS: listing posts for a subreddit or only popular posts
 
 
-
 /** 
-* @api {get} /user/listing?type=value List Posts 
+* @api {get} /:username/listing?type=value List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
-* @apiParam {Number} LPostID id of the last post displayed
+* @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
+* @apiParam {Number} startPosition Sending 15 posts per after the startposition  
 * @apiSuccess {Object[]} Posts   Array of the listed Posts  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
-*  "Posts":[
+*  [    
 *  {
 * "SubbredditName": "r/funny"
 * ,"PostID":1
@@ -100,16 +100,20 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 * ,"PostID":2
 * ,"Meme": data:image/jpeg;base64,...............
 *  } 
-]
+*]
 *     }
 *
 * @apiError PostsnotFound 
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "Posts not Found"
+*       "error": "postsNotFound"
 *     }
 */
+
+const listings = require('./src/Listings/listings');
+app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
+
 
 // API for information about user
 
@@ -1145,7 +1149,6 @@ app.put("/comment", (req, res) => {});
 app.delete("/comment", (req, res) => {});
 
 
-
 /**
  * @name SrService
  * @note These are the routes for anything related to a user.
@@ -1464,7 +1467,7 @@ app.delete("/sr", (req, res) => {});
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
-* @apiParam {String} messageID the id of the message going to be marked as read.
+* @apiParam {String} messageId the id of the message going to be marked as read.
 * @apiParam {Boolean} isReadRequest true when user wants to mark as read a message false when user wants to mark message as unread
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
@@ -1559,7 +1562,7 @@ mongoose.connection.once('open', function () {
 
     console.log('connection error:');
 });
-const privateMessage = require('./PM/Pm');
+const privateMessage = require('./src/PM/Pm');
 app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
 app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
 app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));

@@ -3,7 +3,16 @@ const validator = require("email-validator");
 
 class UserHandler {
   constructor() {}
+  async isUserFound(owner) {
+    let y = await User.findOne({ Username: owner });
+    if (y != null) {
+       return true;
+    }
+    else {
+       return false;
+    }
 
+ }
   async handleRegistration(req, res) {
    
 
