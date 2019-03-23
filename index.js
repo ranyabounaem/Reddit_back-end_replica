@@ -377,17 +377,15 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
 
 
 
-
  /**
- * @api {Put} /me/:username/edit Edit  user
- * @apiName EditUser-
+ * @api {Put} /me/edit/Password/:Username Edit User password
+ * @apiName EditUserPassword
  * @apiGroup me
  *
  *
- * @apiParam  {String} Email email  of the User.
  * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Password Password  of the User.
- * @apiParam  {String} ImageId ID of the User's image.
+ * @apiParam  {String} NewPassword the new Password for the User.
+ * @apiParam  {String} OldPassword the Old Password of the User.
  * @apiParam {string} Token SyncToken That is sent with authentication.
  * @apiParamExample {json} Input
  *    {
@@ -404,6 +402,41 @@ app.get("/me/About/:Username", userHandler.Getmyinfo)
  *     HTTP/1.1 404 User not found
  *      {
  *       "error": "UserNotFound"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User not found
+ *      {
+ *       "error": "Wrong Password"
+ *     }
+ */
+
+ /**
+ * @api {Put} /me/edit/email/:Username Edit User email
+ * @apiName EditUserEmail
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Email email  of the User.
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam {string} Token SyncToken That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Email": "user@reddit.com",
+ *      "Username": "User1"
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User not found
+ *      {
+ *       "error": "UserNotFound"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User not found
+ *      {
+ *       "error": "Invalid Email format"
  *     }
  */
 
