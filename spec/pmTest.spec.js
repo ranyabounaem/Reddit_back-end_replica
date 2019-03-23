@@ -1,17 +1,79 @@
 
 const request = require('request');
 const mongoose = require('mongoose');
-const PMmongo = require('../models/PMmongo');
+const PMmongo = require('../../../models/PMmongo');
 const privateMessage = PMmongo.pm;
+const users = require('../../../models/UserSchema');
 const blockList = PMmongo.messageBlockList;
 const jasmine = require('jasmine');
+// testing compose/block/unblock/retrieveblock
 describe('Server', function () {
     var server;
     beforeAll(function () {
-        server = require('../index');
+        server = require('../../../index.js');
+        // cause there is no middleware yet i need to add users to check for messages
+        users.create({ Username: "marwan", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "kefah", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "ahmed", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "ahmedmohamed", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "marawan", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "hamada", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "lolo", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "koko", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "mohamed", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "saidahmed", Password: "12345678", Email: "mostafa@m.com" });
+        users.create({ Username: "soso", Password: "12345678", Email: "mostafa@m.com" });
+
+
     });
-    afterAll(function () {
+     afterAll(function () {
         server.close();
+    });
+    describe('senderNotFoundError', function () {
+        let messageTest1 = {
+            sender: 'usernotindb', receiverUsername: "kefah", subject: "VIP", messageBody: "i love you"
+        };
+        let data = {};
+        beforeAll(function (done) {  // mocking the post request with message test
+            request.post('http://localhost:4000/' + messageTest1.sender + '/pm/compose',
+                { json: true, body: messageTest1 }, function (error, response, body) {
+                    data.status = response.statusCode;
+                    data.body = body;
+                    done();
+                });
+        });
+        //  status 404 for not found
+        it('Status 404', function () {
+            expect(data.status).toBe(404);
+            expect(data.body.error).toBe('userNotFound');
+        });
+        it('Database Test', function () {
+            privateMessage.findOne(messageTest1,
+                function (err, result) { expect(result).toBe(null); });
+        });
+    });
+    describe('receiverNotFoundError', function () {
+        let messageTest1 = {
+            sender: 'kefah', receiverUsername: "usernotindb", subject: "VIP", messageBody: "i love you"
+        };
+        let data = {};
+        beforeAll(function (done) {  // mocking the post request with message test
+            request.post('http://localhost:4000/' + messageTest1.sender + '/pm/compose',
+                { json: true, body: messageTest1 }, function (error, response, body) {
+                    data.status = response.statusCode;
+                    data.body = body;
+                    done();
+                });
+        });
+        //  status 404 for notfound
+        it('Status 404', function () {
+            expect(data.status).toBe(404);
+            expect(data.body.error).toBe('userNotFound');
+        });
+        it('Database Test', function () {
+            privateMessage.findOne(messageTest1,
+                function (err, result) { expect(result).toBe(null); });
+        });
     });
 
     // testing message composing with no error
@@ -59,7 +121,9 @@ describe('Server', function () {
         });
         it('Database Test', function () {
             privateMessage.findOne(messageTest1,
-                function (err, result) { expect(result).not.toBe(null); });
+                function (err, result) {
+                    expect(result).not.toBe(null);
+                });
         });
     });
     describe('Message Compose receiver username undefined param', function () {
@@ -76,7 +140,7 @@ describe('Server', function () {
                     done();
                 });
         });
-        //  status 200 for ok
+        //  status 400 for badrequest
         it('Status 400', function () {
             expect(data.status).toBe(400);
         });
@@ -100,7 +164,7 @@ describe('Server', function () {
                     done();
                 });
         });
-        //  status 200 for ok
+        //  status 400 for badrequest
         it('Status 400', function () {
             expect(data.status).toBe(400);
         });
@@ -123,7 +187,7 @@ describe('Server', function () {
                     done();
                 });
         });
-        //  status 200 for ok
+        //  status 400 for badrequest
         it('Status 400', function () {
             expect(data.status).toBe(400);
         });
@@ -147,8 +211,8 @@ describe('Server', function () {
                     done();
                 });
         });
-        //  status 200 for ok
-        it('Status 200', function () {
+        //  status 400 for badrequest
+        it('Status 400', function () {
             expect(data.status).toBe(400);
         });
         it('Database Test', function () {
@@ -170,7 +234,7 @@ describe('Server', function () {
                     done();
                 });
         });
-        //  status 200 for ok
+        //  status 403 f
         it('Status 403', function () {
             expect(data.status).toBe(403);
         });
@@ -199,7 +263,9 @@ describe('Server', function () {
         });
         it('Database Test', function () {
             privateMessage.findOne(messageTest1,
-                function (err, result) { expect(result).not.toBe(null); });
+                function (err, result) {
+                    expect(result).not.toBe(null);
+                });
         });
     });
 
@@ -226,8 +292,8 @@ describe('Server', function () {
 
 
         });
-        //  status 200 for ok
-        it('Status 200', function () {
+        //  status 403 for badrequest
+        it('Status 403', function () {
             expect(data.status).toBe(403);
             expect(data.body.error).toBe('blockedFromSending');
         });
@@ -268,7 +334,7 @@ describe('Server', function () {
 
 
         });
-        //  status 200 for ok
+        //  status 403 
         it('Status 403', function () {
             expect(data.status).toBe(403);
             expect(data.body.error).toBe('blockedFromSending');
@@ -302,8 +368,8 @@ describe('Server', function () {
                     done();
                 });
         });
-        //  status 200 for ok
-        it('Status 200', function () {
+        //  status 400 for badrequest
+        it('Status 400', function () {
             expect(data.status).toBe(400);
         });
         it('Database Test', function () {
@@ -354,7 +420,7 @@ describe('Server', function () {
                     done();
                 });
         });
-        //  status 200 for ok
+        //  status 400 for badrequest
         it('Status 400', function () {
             expect(data.status).toBe(400);
         });
@@ -384,8 +450,8 @@ describe('Server', function () {
                     done();
                 });
         });
-        //  status 200 for ok
-        it('Status 200', function () {
+        //  status 400 for badrequest
+        it('Status 400', function () {
             expect(data.status).toBe(400);
         });
         it('Database Test', function () {
@@ -541,7 +607,6 @@ describe('Server', function () {
         it('body', function () {
 
             privateMessage.findOne({ receiverUsername: owner }, function (err, result) {
-
                 expect(result).not.toBe(null);
 
             });
@@ -611,13 +676,13 @@ describe('Server', function () {
     describe('unblocking Someone not in  block list', function () {
         // receiver username is undefined
         let messageTest1 = {
-            blocked: 'sskdnsdjnsdnjds',
-            blocker: 'jnsdjnsdjnsdjds'
+            blocked: 'lolo',
+            blocker: 'koko'
             , block: false
         };
         let messageTestFind = {
-            blocked: 'sskdnsdjnsdnjds',
-            blocker: 'jnsdjnsdjnsdjds'
+            blocked: 'lolo',
+            blocker: 'koko'
         };
         let data = {};
         beforeAll(function (done) {  // mocking the post request with message test
@@ -645,22 +710,22 @@ describe('Server', function () {
     describe('retriving  block list', function () {
         // receiver username is undefined
         let messageTest1 = {
-            blocked: 'SOSOSOOSOSOSOSOS',
-            blocker: 'LOLOLOLOLO'
+            blocked: 'soso',
+            blocker: 'lolo'
             , block: true
         };
         let messageTest2 = {
-            blocked: 'KOKOKOKOKOKOKO',
-            blocker: 'LOLOLOLOLO'
+            blocked: 'koko',
+            blocker: 'lolo'
             , block: true
         };
         let messageTestFind = {
-            blocker: 'LOLOLOLOLO',
-            blocked: 'KOKOKOKOKOKOKO'
+            blocker: 'lolo',
+            blocked: 'koko'
         };
         let messageTestFind2 = {
-            blocker: 'LOLOLOLOLO',
-            blocked: 'SOSOSOOSOSOSOSOS'
+            blocker: 'lolo',
+            blocked: 'soso'
         };
         let data = {};
         // makking a user block two others and then retriving them
@@ -705,12 +770,10 @@ describe('Server', function () {
         });
         it('Database Test', function () {
             blockList.findOneAndDelete(messageTestFind2,
-                function (err, result) {
-                    expect(result).not.toBe(null);
-                });
-                
+                function (err, result) { expect(result).not.toBe(null); });
+
         });
-       
+
 
 
     });
