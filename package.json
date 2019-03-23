@@ -4,7 +4,8 @@
   "description": "REST API package for memestock",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine"
+    "test-init": "./node_modules/jasmine/bin/jasmine.js init",
+    "test": "./node_modules/jasmine/bin/jasmine.js"
   },
   "repository": {
     "type": "git",

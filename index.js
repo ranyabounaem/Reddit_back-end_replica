@@ -1502,5 +1502,5 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 app.get("/notif", (req, res) => {});
 
 
-var server=app.listen(1337,function(){console.log('listening')});
+var server=app.listen(4000,function(){console.log('listening')});
 module.exports=server;
