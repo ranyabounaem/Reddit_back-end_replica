@@ -6,17 +6,23 @@ const SubredditPostSchema = new Schema({
     title: String,
     body: String,
     creatorUsername: String,
-    postDate: Date,
+    postDate: {
+        type: Date,
+        default: Date.now
+    },
     subredditName: String
 });
 
 const SubredditSchema = new Schema({
     name: String,
-    admin_username: String,
+    adminUsername: String,
     rules: [String],
     posts: [SubredditPostSchema],
     subscribed_users: [String],
-    date: Date
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 

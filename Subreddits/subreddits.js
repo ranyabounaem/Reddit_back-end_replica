@@ -1,5 +1,5 @@
 const express = require('express');
-const sr = require('subredditSchema');
+const sr = require('./subredditsSchema');
 const mongoose = require('mongoose');
 
 class SR {
@@ -7,34 +7,33 @@ class SR {
 
     }
 
-    create (req, res) {
+    createSr (req, res) {
         var admin = req.body.username;
         var subredditName = req.body.srName;
         var subredditRules = req.body.srRules;
-        if(admin && subredditName && subredditRules){
+        if(admin &&  subredditName && subredditRules){
             var subreddit = new sr({
                 name: subredditName,
-                admin_username: admin,
+                adminUsername: admin,
                 rules: subredditRules,
-                date = Date().now
-            })
-            subreddit.save(function(err){
-                if (err){
-                    res.status(500);
-                    res.json({error: 'err',
-                    status:500});
-                    res.end;
+            });
+            subreddit.save(function (err) {
+                if (err) {
+                   // internal Server error 
+                   res.status(500)
+                   res.json({ error: 'internalServerError' });
+
                 }
-                else{
-                    res.status(200);
-                    res.end;
+                else {
+                   res.send(200);   // if everything worked as mentioned 
                 }
             });
         }
-        else{
+        else
+        {
             res.json({error: 'err',
-                status:400});
-                res.end;
+            status:400});
+            res.end;
         }
     };
 
@@ -106,7 +105,6 @@ class SR {
             title: postTitle,
             body: postBody,
             creatorUsername: creator,
-            postDate: Date().now,
             subredditName: subrName
         };
 
@@ -132,3 +130,4 @@ class SR {
         };
     };
 };
+module.exports = new SR();
