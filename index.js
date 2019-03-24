@@ -1517,8 +1517,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 //     console.log('connection carried succesfully');
 // }).on('error', function () {
 
-    console.log('connection error:');
-});
+
 const privateMessage = require('./src/PM/Pm');
 app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
 app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
