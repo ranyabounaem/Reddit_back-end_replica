@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Comment.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Comment.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const express= require('express');
+const bodyParser= require('body-parser');
+const Comment = require('../../models/commentSchema.js');
+const subredditsSchema = require('../../models/subredditsSchema.js');
+const Post = subredditsSchema.SubredditPostSchema;
+const ObjectId = require('mongodb').ObjectID
+
+class CommentHandler {
+    constructor(){
+
+    }
+    /**
+     * A function that posts a new comment or a reply
+     * @function handlePostComment
+     * @summary Takes the details of the comment from the request and checks if this post is valid or not before adding it to the database.
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON}
+     */
+    handlePostComment(req,res) {
+        let ID = new ObjectId(req.params.id);
+        Post.findOne({_id: ID}).then(function(RetPost){
+            if(RetPost == null){
+                res.status(404).send({'error': 'There is no post with this ID'});
+            }else{
+                if(req.body.content == undefined){
+                    res.status(403).send({'error': 'The request must include content of the comment' });
+                }else if(req.body.content === ''){
+                    res.status(401).send({'error': 'You can not post an empty Comment' });
+                }else{
+                    const c = new Comment({
+                    content: req.body.content,
+                    parent_id: req.params.id,
+                    dateAdded: Date(),
+                    votes: 0,
+                    spoiler: false,              //FOR CURRENT PHASE ONLY
+                    locked: false,
+                    reply: false,
+                 })
+                c.save();
+                res.status(200).send({c_id:c._id});
+                }
+            }
+        });
+    }
+    /**
+     * A function that gets the details of a comment or a reply
+     * @function handleGetComment
+     * @summary Takes the id of a comment and returns its details if found.
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON}
+     */
+
+    handleGetComment(req,res){
+        let ID = new ObjectId(req.params.c_id);
+        Comment.findOne({_id: ID}).then(function(RetComment){
+            if(RetComment == null){
+                res.status(404).send({'error':'The Comment ID is not found'});
+            }else{
+                res.status(200).send({
+                    _id: RetComment._id,
+                    content: RetComment.content,
+                    parent_id: RetComment.parent_id,
+                    dateAdded: RetComment.dateAdded,
+                    votes: RetComment.votes,
+                    spoiler: RetComment.spoiler,
+                    locked: RetComment.locked
+                });
+            }
+        });
+    }
+    /**
+     * A function that posts a new comment or a reply
+     * @function handleGetAllComments
+     * @summary Takes the ID of a post(comment) and returns all its comments(replies) if there are any.
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON}
+     */
+    handleGetAllComments(req,res){
+        let ID = new ObjectId(req.params.id);
+        //Assuming that he sent a thread ID for this PHASE ONLY
+        Post.findOne({_id: ID}).then(function(RetPost){
+            if(RetPost == null){
+                res.status(404).send({'error': 'There is no post with this ID'});
+            }else{
+                Comment.find({$and: [{parent_id: req.params.id},{reply: false}]},function(err,comments){
+                if (comments == null){
+                    res.status(404).send({error: 'There are no Comments for this Thread'})
+                }else{
+                    res.status(200).send(comments);
+                }
+                });
+            }
+        });
+    }
+}
+
+module.exports = new CommentHandler();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#handleGetAllComments">handleGetAllComments</a></li><li><a href="global.html#handleGetComment">handleGetComment</a></li><li><a href="global.html#handlePostComment">handlePostComment</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Mar 24 2019 04:45:04 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
