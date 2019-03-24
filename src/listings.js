@@ -5,12 +5,10 @@ const userhandler = require('./user/index');
 const subbredditsSchema = require('../models/subredditsSchema');
 const subbreddits = subbredditsSchema.Subreddit;
 const posts = subbredditsSchema.SubredditPostSchema;
-/**
- * @fileOverview Listings functions.
- * @author <a href="mailto:marwankefah@gmail.com">marwan kefah</a>
- * @version 3.1.2
+
+/** 
+ * @class listings
  */
-/** @class listings */
 class listings {
     constructor() {
 
@@ -48,9 +46,13 @@ class listings {
      * // returns   {"error": "errorType"} if there is an error in the request see Api for error response
      * listings.listPosts(req,res);
      * @example
-     *      // returns OK status 200 with the json file of the posts 
+     * // returns OK status 200 with the json file of the posts 
      * listings.listPosts(req,res);
      * @returns {JSON} [{"subredditName": "funny","_id":1,"title":"love","postDate":"1998-04-23","body": "love is known for something"},{"subredditName": "nature","_id":2,"title":"vietnam nature","postDate":"1998-04-23","body": "vietnam nature is known for something"} ]
+     * @returns {JSON} {error: 'undefinedQuery'} 
+     * @returns {JSON} {error: 'userNotFound'} 
+     * @returns {JSON} {error: 'postsNotFound'} 
+     * @returns {JSON} {error: 'internalServerError'} 
      */
 
     async listPosts(req, res) {
@@ -120,5 +122,4 @@ class listings {
 
 
 }
-
-module.exports = new listings();
+module.exports =  new listings();
