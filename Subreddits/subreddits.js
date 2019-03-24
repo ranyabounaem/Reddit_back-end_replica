@@ -1,5 +1,6 @@
 const express = require('express');
-const sr = require('./subredditsSchema');
+const srs = require('../models/subredditsSchema');
+const sr=srs.Subreddit;
 const mongoose = require('mongoose');
 
 class SR {
