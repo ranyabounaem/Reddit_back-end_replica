@@ -294,7 +294,7 @@ describe("Subreddits testing", function () {
 
         it("Deleting a subreddit status test", function(){
             expect(data.status).toBe(200);
-            //expect(data.body).toBe(undefined); FINDONEANDDELETE RETURNS UNDEFINED ????!!!!
+           // expect(data.body).toBe(undefined);// FINDONEANDDELETE RETURNS UNDEFINED ????!!!!
 
         });
 
