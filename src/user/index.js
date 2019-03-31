@@ -1,5 +1,8 @@
 const User = require("../../models/UserSchema");
 const validator = require("email-validator");
+const JWTconfig  = require("../../JWT/giveToken");
+
+
 
 class UserHandler {
   constructor() {}
@@ -63,7 +66,12 @@ class UserHandler {
 
         try{
         const user = await User.create(req.body);
-        res.status(200).send({"Username":user.Username,"Email":user.Email});
+        /**  
+            *   This creates a new token 
+            */
+        const token=await JWTconfig.getToken(user);
+        
+        res.status(200).send({"Username":user.Username,"Email":user.Email,token});
       }
 
         catch(ex){res.status(406).send({error:ex.message})}
@@ -105,7 +113,10 @@ class UserHandler {
     */  
 
       if (user.Password == req.body.Password) {
-        res.status(200).send("successful login");
+
+        const token=await JWTconfig.getToken(user);
+
+        res.status(200).send({message:"successful login",token});
       } else {
         res.status(401).send({ error: "Invalid Password" });
       }
@@ -120,6 +131,8 @@ class UserHandler {
    *     @returns {JSON} the response for the request
    */
   EditUserEmail(req, res){
+
+    if (JWTconfig.authenticate(req,req.params.Username)==false){res.status(403).send({error:"Not Authorized"});}
     /**  
     *    This checks if the Username received is a valid username in the database 
     *    if the username doesn't exist in the database
@@ -136,6 +149,7 @@ class UserHandler {
       else
       {
         User.findOne({ Email: req.body.Email } ).then(function(RetEmail){
+          
           if(RetEmail === null)
           {
             /**  

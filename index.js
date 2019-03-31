@@ -44,6 +44,9 @@
 const app = require("express")();
 const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
+const passport=require('passport');
+const passportConf=require('./JWT/passport');
+
 //contect to mongo
 mongoose.connect('mongodb://localhost:27017/reddit');
 mongoose.Promise=global.Promise;
@@ -51,13 +54,13 @@ mongoose.connection.once('open',function(){console.log("Connection successful");
 {console.log("error:",error)});
 
 
+//middlewares 
 app.use(bodyparser.json());
-
+app.use(passport.initialize());
 app.use(function(req,res,next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods"," POST,PUT,GET,DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    
     next();
 });
 
@@ -66,7 +69,7 @@ const userHandler = require("./src/user");
 // console.log(userHandler.handleRegistration);
  app.post("/user/register", userHandler.handleRegistration);
  app.post("/user/login", userHandler.handleLogin);
- app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
+ app.put("/me/edit/email/:Username",passport.authenticate('jwt',{session:false}),userHandler.EditUserEmail);
  app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
  app.get("/me/About/:Username", userHandler.Getmyinfo);
 
@@ -315,7 +318,7 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
  * @apiParam  {String} Email email  of the User.
  * @apiParam  {String} Username unique Username  of the User.
  * @apiParam  {String} Password Password  of the User.
- * @apiSuccess {string} Token SyncToken That is sent with authentication.
+ * @apiSuccess {string} Token Token That is sent with authentication.
  * @apiParamExample {json} Input
  *    {
  *      "Email": "user@reddit.com",
@@ -362,7 +365,7 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
  * @apiParam  {String} Username unique Username  of the User.
  * @apiParam  {String} Password Password  of the User.
  * 
- * @apiSuccess {string} Token SyncToken That is sent with authentication.
+ * @apiSuccess {string} Token Token That is sent with authentication.
  * @apiParamExample {json} Input
  *    {
  *      "Username": "User1",
