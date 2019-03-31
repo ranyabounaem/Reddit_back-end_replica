@@ -2,18 +2,31 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Create schema and model
+//Create schema and model
 const SubredditPostSchema = new Schema({
     title: String,
     body: String,
-    postDate: Date,
-    subredditName:String
+    creatorUsername: String,
+    postDate: {
+        type: Date,
+        default: Date.now
+    },
+    subredditName: String
 });
 
 const SubredditSchema = new Schema({
-    name: String,
+    name: {
+        type:String,
+        unique:true
+    },
+    adminUsername: String,
     rules: [String],
     posts: [SubredditPostSchema],
-    date: Date
+    subscribed_users: [String],
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 

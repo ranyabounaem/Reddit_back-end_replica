@@ -1,0 +1,18 @@
+{
+  "name": "subreddits",
+  "version": "1.0.0",
+  "description": "dependencies used in sr",
+  "main": "subreddits.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jasmine": "^3.3.1",
+    "mongoose": "^5.4.19",
+    "request": "^2.88.0"
+  }
+}

@@ -9,9 +9,17 @@ class CommentHandler {
     constructor(){
 
     }
-
+    /**
+     * A function that posts a new comment or a reply
+     * @function handlePostComment
+     * @summary Takes the details of the comment from the request and checks if this post is valid or not before adding it to the database.
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON}
+     */
     handlePostComment(req,res) {
-        Post.findOne({_id: req.params.id}).then(function(RetPost){
+        let ID = new ObjectId(req.params.id);
+        Post.findOne({_id: ID}).then(function(RetPost){
             if(RetPost == null){
                 res.status(404).send({'error': 'There is no post with this ID'});
             }else{
@@ -35,6 +43,14 @@ class CommentHandler {
             }
         });
     }
+    /**
+     * A function that gets the details of a comment or a reply
+     * @function handleGetComment
+     * @summary Takes the id of a comment and returns its details if found.
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON}
+     */
 
     handleGetComment(req,res){
         let ID = new ObjectId(req.params.c_id);
@@ -54,11 +70,18 @@ class CommentHandler {
             }
         });
     }
-
+    /**
+     * A function that posts a new comment or a reply
+     * @function handleGetAllComments
+     * @summary Takes the ID of a post(comment) and returns all its comments(replies) if there are any.
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON}
+     */
     handleGetAllComments(req,res){
         let ID = new ObjectId(req.params.id);
         //Assuming that he sent a thread ID for this PHASE ONLY
-        Post.findOne({_id: req.params.id}).then(function(RetPost){
+        Post.findOne({_id: ID}).then(function(RetPost){
             if(RetPost == null){
                 res.status(404).send({'error': 'There is no post with this ID'});
             }else{
