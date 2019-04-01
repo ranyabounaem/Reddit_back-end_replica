@@ -1207,7 +1207,7 @@ const commentHandler = require('./src/Comments/Comment');
 app.get("/comment/:c_id",commentHandler.handleGetComment) ;
 app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
 app.post("/comment/:id",commentHandler.handlePostComment );
-app.put("/comment", (req, res) => {});
+app.put("/comment/:c_id", commentHandler.handleEditComment);
 app.delete("/comment", (req, res) => {});
 
 
