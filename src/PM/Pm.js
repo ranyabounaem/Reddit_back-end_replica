@@ -5,7 +5,11 @@ const privateMessage = PMmongo.pm;
 const blockList = PMmongo.messageBlockList;
 const User = require('../../models/UserSchema');
 const userhandler = require('../user/index');
+
+
+/** @class privateMessaging */
 class PM {
+
    constructor() {
 
    }
@@ -131,27 +135,33 @@ class PM {
       });
    }
 
+   /**
+    * Handles request List Posts
+    * @param {Object} req  The request.
+    * @param {Object} res  The response.
+    * @param {String} req.params.username  the username of the user that wants to list his subreddit
+    * @param {String} req.body.subject  the type of listings he wants to hot,new,popular
+    * @param {String} req.body.receiverUsername  the type of listings he wants to hot,new,popular
+    * @param {String} req.body.messageBody  the number of scrolls the user did 
+    * @example
+    * // returns   {"error": "errorType"} if there is an error in the request see Api for error response
+    * PM.compose(req,res);
+    * @example
+    * // returns OK status 200 that message wad composed successfully
+    * PM.compose(req,res);
+    * @returns {JSON} 
+    * @returns {JSON} {error: 'undefinedParameter'} 
+    * @returns {JSON} {error: 'parameterTypeError'} 
+    * @returns {JSON} {error: 'overLengthedSubject'} 
+    * @returns {JSON} {error: 'internalServerError'} 
+    *  @returns {JSON} {error: 'blockedFromSending'} 
+    *  @returns {JSON} {error: 'userNotFound'} 
+    * @returns {JSON} {error: 'internalServerError'} 
+    */
 
-   /**  
-   *     a function that composes a message with sender and receiver 
-   *       and save the message to the database
-   */
    async compose(req, res) {
-      /**  
-      *     To be implmented here checking the validtiy of the sender 
-      *     and the receiver is found in database
-      */
-      // if the subject or the message or the receiver or the sender is undefined sending bad request
 
-      /**   if the url query is not as usual
-      *    if( Object.keys(req.param).length!=2)
-      * {
-      *
-      * // bad request is sent
-      * res.send(400); 
-      *
-      * }
-      */
+      // middle ware shall be used for checking for the validation for the user 
       let owner = req.params.username;
       let subject = req.body.subject;
       let messageBody = req.body.messageBody;
@@ -166,9 +176,9 @@ class PM {
          res.json({ error: 'undefinedParameter' });
 
       }
-      /** 
-       * checking that all the parameters are string  
-       * bad request is sent in case they are not of type strings
+      /* 
+        checking that all the parameters are string  
+        bad request is sent in case they are not of type strings
        */
       else if (!
          (typeof receiverUsername === 'string'
@@ -180,9 +190,9 @@ class PM {
          res.json({ error: 'parameterTypeError' });
 
       }
-      /**
-      *   if the subject or message body or the receiver username 
-      *   is empty sending forbidden request
+      /*
+        if the subject or message body or the receiver username 
+         is empty sending forbidden request
       */
       else if (
          receiverUsername == ''
@@ -256,9 +266,9 @@ class PM {
 
    }
 
-   /**  
-   *     a function that retrieve the inbox or sent 
-   *       according to a boolean 'mine'
+   /*
+      a function that retrieve the inbox or sent 
+      according to a boolean 'mine'
    */
    async retrieve(req, res) {
       // implementing here the user not found sync token 
