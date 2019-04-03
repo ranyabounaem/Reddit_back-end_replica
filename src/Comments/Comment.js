@@ -18,49 +18,14 @@ class CommentHandler {
      * @returns {JSON}
      */
     handlePostComment(req, res) {
-        let ID = new ObjectId(req.params.id);
-        if (req.body.reply != true) {         //If this is not a reply or if it's not specified in the request then it is a comment to a post
-            Post.findOne({ _id: ID }).then(function (RetPost) {
-                if (RetPost == null) {
-                    res.status(404).send({ 'error': 'There is no post with this ID' });
-                } else {
-                    let s, l;
-                    if (req.body.spoiler != true) {
-                        s = false;
-                    } else {
-                        s = true;
-                    }
-                    if (req.body.locked != true) {
-                        l = false;
-                    } else {
-                        l = true;
-                    }
-                    if (req.body.content == undefined) {
-                        res.status(403).send({ 'error': 'The request must include content of the comment' });
-                    } else if (req.body.content === '') {
-                        res.status(401).send({ 'error': 'You can not post an empty Comment' });
-                    } else {
-                        const c = new Comment({
-                            content: req.body.content,
-                            parent_id: req.params.id,
-                            dateAdded: Date(),
-                            votes: 0,
-                            spoiler: s,              //FOR CURRENT PHASE ONLY
-                            locked: l,
-                            reply: false,
-                        })
-                        c.save();
-                        res.status(200).send({ c_id: c._id });
-                    }
-                }
-            });
+        if (!ObjectId.isValid(req.params.id)) {
+            res.status(400).send({ 'error': 'This is not a valid ID' });
         } else {
-            Comment.findOne({ _id: ID }).then(function (retComment) {
-                if (retComment == null) {
-                    res.status(404).send({ 'error': 'There is no Comment with this ID' });
-                } else {
-                    if (retComment.locked == true) {
-                        res.status(403).send({ 'error': 'You can not reply to a locked comment' });
+            let ID = new ObjectId(req.params.id);
+            if (req.body.reply != true) {         //If this is not a reply or if it's not specified in the request then it is a comment to a post
+                Post.findOne({ _id: ID }).then(function (retPost) {
+                    if (retPost == null) {
+                        res.status(404).send({ 'error': 'There is no post with this ID' });
                     } else {
                         let s, l;
                         if (req.body.spoiler != true) {
@@ -74,9 +39,9 @@ class CommentHandler {
                             l = true;
                         }
                         if (req.body.content == undefined) {
-                            res.status(403).send({ 'error': 'The request must include content of the comment' });
+                            res.status(400).send({ 'error': 'The request must include content of the comment' });
                         } else if (req.body.content === '') {
-                            res.status(401).send({ 'error': 'You can not post an empty Comment' });
+                            res.status(400).send({ 'error': 'You can not post an empty Comment' });
                         } else {
                             const c = new Comment({
                                 content: req.body.content,
@@ -85,14 +50,53 @@ class CommentHandler {
                                 votes: 0,
                                 spoiler: s,              //FOR CURRENT PHASE ONLY
                                 locked: l,
-                                reply: true,
+                                reply: false,
                             })
                             c.save();
                             res.status(200).send({ c_id: c._id });
                         }
                     }
-                }
-            });
+                });
+            } else {
+                Comment.findOne({ _id: ID }).then(function (retComment) {
+                    if (retComment == null) {
+                        res.status(404).send({ 'error': 'There is no Comment with this ID' });
+                    } else {
+                        if (retComment.locked == true) {
+                            res.status(403).send({ 'error': 'You can not reply to a locked comment' });
+                        } else {
+                            let s, l;
+                            if (req.body.spoiler != true) {
+                                s = false;
+                            } else {
+                                s = true;
+                            }
+                            if (req.body.locked != true) {
+                                l = false;
+                            } else {
+                                l = true;
+                            }
+                            if (req.body.content == undefined) {
+                                res.status(400).send({ 'error': 'The request must include content of the comment' });
+                            } else if (req.body.content === '') {
+                                res.status(400).send({ 'error': 'You can not post an empty Comment' });
+                            } else {
+                                const c = new Comment({
+                                    content: req.body.content,
+                                    parent_id: req.params.id,
+                                    dateAdded: Date(),
+                                    votes: 0,
+                                    spoiler: s,              //FOR CURRENT PHASE ONLY
+                                    locked: l,
+                                    reply: true,
+                                })
+                                c.save();
+                                res.status(200).send({ c_id: c._id });
+                            }
+                        }
+                    }
+                });
+            }
         }
     }
     /**
@@ -105,22 +109,26 @@ class CommentHandler {
      */
 
     handleGetComment(req, res) {
-        let ID = new ObjectId(req.params.c_id);
-        Comment.findOne({ _id: ID }).then(function (retComment) {
-            if (retComment == null) {
-                res.status(404).send({ 'error': 'The Comment ID is not found' });
-            } else {
-                res.status(200).send({
-                    _id: retComment._id,
-                    content: retComment.content,
-                    parent_id: retComment.parent_id,
-                    dateAdded: retComment.dateAdded,
-                    votes: retComment.votes,
-                    spoiler: retComment.spoiler,
-                    locked: retComment.locked
-                });
-            }
-        });
+        if (!ObjectId.isValid(req.params.c_id)) {
+            res.status(400).send({ 'error': 'This is not a valid ID' });
+        } else {
+            let ID = new ObjectId(req.params.c_id);
+            Comment.findOne({ _id: ID }).then(function (retComment) {
+                if (retComment == null) {
+                    res.status(404).send({ 'error': 'The Comment ID is not found' });
+                } else {
+                    res.status(200).send({
+                        _id: retComment._id,
+                        content: retComment.content,
+                        parent_id: retComment.parent_id,
+                        dateAdded: retComment.dateAdded,
+                        votes: retComment.votes,
+                        spoiler: retComment.spoiler,
+                        locked: retComment.locked
+                    });
+                }
+            });
+        }
     }
     /**
      * A function that posts a new comment or a reply
@@ -131,54 +139,108 @@ class CommentHandler {
      * @returns {JSON}
      */
     handleGetAllComments(req, res) {
-        let ID = new ObjectId(req.params.id);
-        //Assuming that he sent a thread ID for this PHASE ONLY
-        Post.findOne({ _id: ID }).then(function (RetPost) {
-            if (RetPost == null) {
-                res.status(404).send({ 'error': 'There is no post with this ID' });
-            } else {
-                Comment.find({ $and: [{ parent_id: req.params.id }, { reply: false }] }, function (err, comments) {
-                    if (comments == null) {
-                        res.status(404).send({ error: 'There are no Comments for this Thread' })
+        if (!ObjectId.isValid(req.params.id)) {
+            res.status(400).send({ 'error': 'This is not a valid ID' });
+        } else {
+            let ID = new ObjectId(req.params.id);
+            if (req.body.comment != true) {
+                Post.findOne({ _id: ID }).then(function (retPost) {
+                    if (retPost == null) {
+                        res.status(404).send({ 'error': 'There is no post with this ID' });
                     } else {
-                        res.status(200).send(comments);
+                        Comment.find({ $and: [{ parent_id: ID }, { reply: false }] }, function (err, comments) {
+                            if (comments == null) {
+                                res.status(404).send({ 'error': 'There are no Comments for this Thread' })
+                            } else {
+                                res.status(200).send(comments);
+                            }
+                        });
+                    }
+                });
+            } else {
+                Comment.findOne({ _id: ID }).then(function (retComment) {
+                    if (retComment == null) {
+                        res.status(404).send({ 'error': 'There is no comment with this ID' });
+                    } else {
+                        Comment.find({ $and: [{ parent_id: ID }, { reply: true }] }, function (err, comments) {
+                            if (comments == null) {
+                                res.status(404).send({ 'error': 'There are no Replies for this Comment' })
+                            } else {
+                                res.status(200).send(comments);
+                            }
+                        });
                     }
                 });
             }
-        });
+        }
     }
 
     handleEditComment(req, res) {
-        let ID = new ObjectId(req.params.c_id);
-        let s, l;
-        Comment.findOne({ _id: ID }).then(function (RetCommment) {
-            if (RetCommment == null) {
-                res.status(404).send({ 'error': 'There is no Comment with this ID' });
-            } else {
-                if (req.body.content == undefined) {
-                    res.status(403).send({ 'error': 'The request must include content of the comment' });
-                } else if (req.body.content === '') {
-                    res.status(401).send({ 'error': 'You can not post an empty Comment' });
+        if (!ObjectId.isValid(req.params.c_id)) {
+            res.status(400).send({ 'error': 'This is not a valid ID' });
+        } else {
+            let ID = new ObjectId(req.params.c_id);
+            let s, l;
+            Comment.findOne({ _id: ID }).then(function (RetCommment) {
+                if (RetCommment == null) {
+                    res.status(404).send({ 'error': 'There is no Comment with this ID' });
                 } else {
-                    if (req.body.spoiler == true || req.body.spoiler == false) {
-                        s = req.body.spoiler;
+                    if (req.body.content == undefined) {
+                        res.status(403).send({ 'error': 'The request must include content of the comment' });
+                    } else if (req.body.content === '') {
+                        res.status(401).send({ 'error': 'You can not post an empty Comment' });
                     } else {
-                        s = RetCommment.spoiler;         //the spoiler unchanged
+                        if (req.body.spoiler == true || req.body.spoiler == false) {
+                            s = req.body.spoiler;
+                        } else {
+                            s = RetCommment.spoiler;         //the spoiler unchanged
+                        }
+                        if (req.body.locked == true || req.body.locked == false) {
+                            l = req.body.locked;
+                        } else {
+                            l = RetCommment.locked;         //the locked unchanged
+                        }
+                        Comment.findOneAndUpdate({ _id: ID },
+                            { content: req.body.content, locked: l, spoiler: s }).then(function (retComment) {
+                                res.status(200).json("update successful");
+                            });
                     }
-                    if (req.body.locked == true || req.body.locked == false) {
-                        l = req.body.locked;
-                    } else {
-                        l = RetCommment.locked;         //the locked unchanged
-                    }
-                    Comment.findOneAndUpdate({ _id: ID },
-                        { content: req.body.content, locked: l, spoiler: s }).then(function (retComment) {
-                            res.status(200).send("update successful");
-                        });
+
+
                 }
+            });
+        }
+    }
 
-
-            }
-        });
+    handleDeleteComent(req, res) {
+        if (!ObjectId.isValid(req.params.c_id)) {    //If it isn't a valid ID
+            res.status(400).send({ 'error': 'This is not a valid ID' });
+        } else {
+            let ID = new ObjectId(req.params.c_id);
+            Comment.findOne({ _id: ID }).then(function (RetCommment) {
+                if (RetCommment == null) {
+                    res.status(404).send({ 'error': 'There is no Comment with this ID' });
+                } else {
+                    Comment.findOneAndDelete({ _id: ID }, function (err) {
+                        if (err) {
+                            res.status(500);
+                            res.send({ "error": "internalServerError" });
+                        }
+                        else {
+                            Comment.deleteMany({ parent_id: ID }, function (err) {
+                                if (err) {
+                                    res.status(500);
+                                    res.send({ "error": "internalServerError" });
+                                } else {
+                                    res.status(200);
+                                    res.json("Delete Successful");
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
     }
 }
 

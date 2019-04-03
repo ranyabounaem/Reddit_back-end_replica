@@ -113,7 +113,7 @@
 //             reply: false
 //         };
 //         beforeAll((done) => {
-//             Request.post("http://localhost:4000/comment/hf74h7666ty3",    //any false thread ID
+//             Request.post("http://localhost:4000/comment/000000hf74h7666ty3000000",    //any false thread ID
 //             { json: true, body: testBody },
 //             (err, res, body) => {
 //               data.body = body;
@@ -210,7 +210,7 @@
 //      describe("tests getting info a comment",() => {
 //         let data ={};
 //        beforeAll((done) => {
-//            Request.get("http://localhost:4000/comment/hf74h7666ty3",    //any false Comment ID
+//            Request.get("http://localhost:4000/comment/000000hf74h7666ty3000000",    //any false Comment ID
 //            { json: true },
 //            (err, res, body) => {
 //              data.body = body;
@@ -243,7 +243,7 @@
 //      describe("tests getting all comments of the thread",() => {
 //         let data ={};
 //        beforeAll((done) => {
-//            Request.get("http://localhost:4000/comment/all/hf74h7666ty3",    //any false thread ID
+//            Request.get("http://localhost:4000/comment/all/000000hf74h7666ty3000000",    //any false thread ID
 //            { json: true },
 //            (err, res, body) => {
 //              data.body = body;
