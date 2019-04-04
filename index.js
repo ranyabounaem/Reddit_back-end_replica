@@ -68,11 +68,223 @@ const userHandler = require("./src/user");
 
 // console.log(userHandler.handleRegistration);
  app.post("/user/register", userHandler.handleRegistration);
+ 
+/**
+ * @api {post} /user/register Register new user
+ * @apiName CreateUser
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Email email  of the User.
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam  {String} Password Password  of the User.
+ * @apiSuccess {string} Token Token That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Email": "user@reddit.com",
+ *      "Username": "User1",
+ *      "Password": "Password"
+      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *  "token":"we8749832b7498c2b78942"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    
+ * HTTP/1.1 406 password short
+ * {
+ * "error":"Password too short"
+ * }
+ * 
+ *  HTTP/1.1 406 username repeated 
+ * {
+ * "error":"Username already exists"
+ * }
+ * HTTP/1.1 406 email repeated 
+ * {
+ * "error":"Email already exists"
+ * }
+ * 
+ * HTTP/1.1 406 email format 
+ * {
+ * "error":"Invalid Email format"
+ * }
+ */
+
  app.post("/user/login", userHandler.handleLogin);
- app.put("/me/edit/email/:Username",passport.authenticate('jwt',{session:false}),userHandler.EditUserEmail);
+ /**
+ * @api {post} /user/Login login attempt
+ * @apiName LoginUser
+ * @apiGroup me
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam  {String} Password Password  of the User.
+ * 
+ * @apiSuccess {string} Token Token That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "User1",
+ *      "Password": "Password"
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *  "token":"we8749832b7498c2b78942"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    HTTP/1.1 401 Invalid
+ * {
+ *          "error"":"Invalid Password"
+ * }
+ * 
+ *  HTTP/1.1 404 Invalid
+ * {
+ *        "error"":"User doesnt exist"
+ * }
+ */
+
+ app.put("/me/edit/email/:Username",userHandler.EditUserEmail);
  app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
  app.get("/me/About/:Username", userHandler.Getmyinfo);
 
+
+ app.get("/user/info",userHandler.getUserInfo);
+ /**
+ * @api {get} /user/info get user info if NOT logged in
+ * @apiName GetUserInfo
+ * @apiGroup me
+ *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
+ * @apiParamExample {json} Input
+ *    {
+ *      "userToView": "User1"    
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 
+ * {
+ *      "Username":"user1",
+      Subscriptions:["sub1","sub2","sub3"]
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 user doesnt exist
+ *      {
+ *      "message": "User doesnt exist"
+ *     }
+ */
+
+ app.get("/me/user/info",passport.authenticate('jwt',{session:false}),userHandler.getUserInfoLogged)
+/**
+ * @api {get} /me/user/info get user info if logged in
+ * @apiName GetUserInfoLogged
+ * @apiGroup me
+* @apiHeader {String} auth Users unique token .
+ *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
+ * @apiParamExample {json} Input
+ *    {
+ *      "userToView": "User1"    
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 
+ * {
+ *      "Username":"user1",
+      Subscriptions:["sub1","sub2","sub3"]
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 user blocked you or doesnt exist
+ *      {
+ *      "message": "User doesnt exist"
+ *     }
+ */
+
+app.get("/me/blockedusers",passport.authenticate('jwt',{session:false}),userHandler.getBlockedUsers)
+
+/**
+ * @api {get} /me/blockedusers  Get Blocked users
+ * @apiName BlockedUsers
+ * @apiHeader {String} auth Users unique token .
+ * @apiGroup me
+ *   @apiSuccess  [String] BlockedUsername unique Username  of the User to be blocked.
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * 
+ *    [
+ *      "User1",
+ *      "User2",
+ *      "User3",
+ *      "User4"     
+ *    ]    
+ */
+
+ app.put("/me/user/unblock",passport.authenticate('jwt',{session:false}),userHandler.unblockUser);
+ /**
+ * @api {put} /me/user/unblock  unblock user
+ * @apiName UnblockUser
+ * @apiGroup me
+* @apiHeader {String} auth Users unique token .
+ *  @apiParam  {String} unblockedUser  unique Username  of the User to be unblocked.
+ * @apiParamExample {json} Input
+ *    {
+ *      "unblockedUser": "User1"    
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 
+ * {
+ *     "User unblocked"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 user isnt blocked
+ *      {
+ *      error:"the user you want to unblock isnt blocked""
+ *     }
+ */
+
+ app.put("/me/user/block",passport.authenticate('jwt',{session:false}),userHandler.blockUser);
+ /**
+ * @api {put} /me/user/block  Block user
+ * @apiName BlockUser
+ * @apiGroup me
+* @apiHeader {String} auth Users unique token .
+ *  @apiParam  {String} blockedUser  unique Username  of the User to be blocked.
+ * @apiParamExample {json} Input
+ *    {
+ *      "blockedUser": "User1"      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 
+ * {
+ *     "User Blocked"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 user already blocked
+ *      {
+ *      error:"the user you want to block is already blocked"
+ *     },
+ * HTTP/1.1 404 User not found
+ *      {
+ *     error:"the user you want to block doesnt exist"
+ *     },
+ * HTTP/1.1 404 User blocking himself
+ *      {
+ *       error:"you cant block yourself"
+ *     }
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 
 /**
  * @name UserService
@@ -309,88 +521,6 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
 
 
 
-/**
- * @api {post} /user/register Register new user
- * @apiName CreateUser
- * @apiGroup me
- *
- *
- * @apiParam  {String} Email email  of the User.
- * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Password Password  of the User.
- * @apiSuccess {string} Token Token That is sent with authentication.
- * @apiParamExample {json} Input
- *    {
- *      "Email": "user@reddit.com",
- *      "Username": "User1",
- *      "Password": "Password"
-      
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {
- *  "token":"we8749832b7498c2b78942"
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *    
- * HTTP/1.1 406 password short
- * {
- * "error":"Password too short"
- * }
- * 
- *  HTTP/1.1 406 username repeated 
- * {
- * "error":"Username already exists"
- * }
- * HTTP/1.1 406 email repeated 
- * {
- * "error":"Email already exists"
- * }
- * 
- * HTTP/1.1 406 email format 
- * {
- * "error":"Invalid Email format"
- * }
- */
-
-/**
- * @api {post} /user/Login login attempt
- * @apiName LoginUser
- * @apiGroup me
- *
- *
- * @apiParam  {String} Email email  of the User.
- * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Password Password  of the User.
- * 
- * @apiSuccess {string} Token Token That is sent with authentication.
- * @apiParamExample {json} Input
- *    {
- *      "Username": "User1",
- *      "Password": "Password"
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {
- *  "token":"we8749832b7498c2b78942"
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *    HTTP/1.1 401 Invalid
- * {
- *          "error"":"Invalid Password"
- * }
- * 
- *  HTTP/1.1 404 Invalid
- * {
- *        "error"":"User doesnt exist"
- * }
- */
-
-
 
  /**
  * @api {Put} /me/edit/Password/:Username Edit User password
@@ -466,49 +596,8 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
  *      }
  */
 
- /**
- * @api {Post} /me/:username/Block/:BlockedUsername  Block user
- * @apiName BlockUser
- * @apiGroup me
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} Username unique Username  of the User.
- *  @apiParam  {String} BlockedUsername  unique Username  of the User to be blocked.
- * @apiParamExample {json} Input
- *    {
- *      "Username": "User1",      
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User not found
- *      {
- *       "error": "UserNotFound"
- *     }
- */
-
-
-
- /**
- * @api {get} /me/:username/Block/  Get Blocked users
- * @apiName BlockedUsers
- * @apiGroup me
- * @apiParam {string} Token SyncToken That is sent with authentication.
- *  @apiParam  {String} Username unique Username  of the User.
- *   @apiSuccess  {String} BlockedUsername unique Username  of the User to be blocked.
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * 
- *    [{
- *      "BlockedUsername": "User1",    
- *    }]
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 500 Server Error
- *      
- */
+ 
+ 
 
  /**
  * @api {Post} /me/:username/Report/:id  report user comment or post

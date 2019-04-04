@@ -182,7 +182,7 @@
 //         }
 //       );
 //     });
-//     it("adding new users", () => {
+//     it("says that user doesnt exist", () => {
 //       expect(data.body.error).toBe("User doesnt exist");
 //       expect(data.status).toBe(404);
 //     });
@@ -233,7 +233,7 @@
 //     });
 //     it("adding new users", () => {
 //       expect(data.status).toBe(200);
-//       expect(data.body).toBe("successful login");
+//       expect(data.body.message).toBe("successful login");
 //     });
 //   });
 
