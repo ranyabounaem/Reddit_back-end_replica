@@ -303,7 +303,7 @@ app.get("/me/blockedusers",passport.authenticate('jwt',{session:false}),userHand
 
 
 /** 
-* @api {get} /:username/listing?type=value List Posts 
+* @api {post} /:username/listing?type=value List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -340,7 +340,7 @@ app.get("/me/blockedusers",passport.authenticate('jwt',{session:false}),userHand
 */
 
 const listings = require('./src/listings');
-app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
+app.post('/:username/listing', (req, res) => listings.listPosts(req, res));
 
 
 // API for information about user
@@ -1551,7 +1551,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 */
 
 /**
-* @api {get} /:username/pm/   Retrieve
+* @api {post} /:username/pm/   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -1611,7 +1611,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 
 
 const privateMessage = require('./src/PM/Pm');
-app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
+app.post('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
 app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
 app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
 app.post('/:username/pm/block', (req, res) => privateMessage.block(req, res));
