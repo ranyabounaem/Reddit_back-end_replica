@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const Comment = require('../../models/commentSchema.js');
 const subredditsSchema = require('../../models/subredditsSchema.js');
 const Post = subredditsSchema.SubredditPostSchema;
-const ObjectId = require('mongodb').ObjectID
+const ObjectId = require('mongodb').ObjectID;
+const jwt = require('../../JWT/giveToken');
+const getUser = jwt.getUsernameFromToken;
 
 class CommentHandler {
     constructor() {
@@ -44,6 +46,7 @@ class CommentHandler {
                             res.status(400).send({ 'error': 'You can not post an empty Comment' });
                         } else {
                             const c = new Comment({
+                                username: getUser(req),
                                 content: req.body.content,
                                 parent_id: req.params.id,
                                 dateAdded: Date(),
@@ -82,6 +85,7 @@ class CommentHandler {
                                 res.status(400).send({ 'error': 'You can not post an empty Comment' });
                             } else {
                                 const c = new Comment({
+                                    username: getUser(req),
                                     content: req.body.content,
                                     parent_id: req.params.id,
                                     dateAdded: Date(),
@@ -119,6 +123,7 @@ class CommentHandler {
                 } else {
                     res.status(200).send({
                         _id: retComment._id,
+                        username: retComment.username,
                         content: retComment.content,
                         parent_id: retComment.parent_id,
                         dateAdded: retComment.dateAdded,
@@ -177,7 +182,7 @@ class CommentHandler {
 
     handleEditComment(req, res) {
         if (!ObjectId.isValid(req.params.c_id)) {
-            res.status(400).send({ 'error': 'This is not a valid ID' });
+            res.status(400).send({ 'error': 'This is not a valid comment ID' });
         } else {
             let ID = new ObjectId(req.params.c_id);
             let s, l;
@@ -185,28 +190,31 @@ class CommentHandler {
                 if (RetCommment == null) {
                     res.status(404).send({ 'error': 'There is no Comment with this ID' });
                 } else {
-                    if (req.body.content == undefined) {
-                        res.status(403).send({ 'error': 'The request must include content of the comment' });
-                    } else if (req.body.content === '') {
-                        res.status(401).send({ 'error': 'You can not post an empty Comment' });
+                    let user = RetCommment.username;
+                    if (user != getUser(req)) {
+                        res.status(403).send({ 'error': 'You can only edit your own comments' });
                     } else {
-                        if (req.body.spoiler == true || req.body.spoiler == false) {
-                            s = req.body.spoiler;
+                        if (req.body.content == undefined) {
+                            res.status(400).send({ 'error': 'The request must include content of the comment' });
+                        } else if (req.body.content === '') {
+                            res.status(400).send({ 'error': 'You can not post an empty Comment' });
                         } else {
-                            s = RetCommment.spoiler;         //the spoiler unchanged
+                            if (req.body.spoiler == true || req.body.spoiler == false) {
+                                s = req.body.spoiler;
+                            } else {
+                                s = RetCommment.spoiler;         //the spoiler unchanged
+                            }
+                            if (req.body.locked == true || req.body.locked == false) {
+                                l = req.body.locked;
+                            } else {
+                                l = RetCommment.locked;         //the locked unchanged
+                            }
+                            Comment.findOneAndUpdate({ _id: ID },
+                                { content: req.body.content, locked: l, spoiler: s }).then(function (retComment) {
+                                    res.status(200).json("update successful");
+                                });
                         }
-                        if (req.body.locked == true || req.body.locked == false) {
-                            l = req.body.locked;
-                        } else {
-                            l = RetCommment.locked;         //the locked unchanged
-                        }
-                        Comment.findOneAndUpdate({ _id: ID },
-                            { content: req.body.content, locked: l, spoiler: s }).then(function (retComment) {
-                                res.status(200).json("update successful");
-                            });
                     }
-
-
                 }
             });
         }
@@ -221,23 +229,28 @@ class CommentHandler {
                 if (RetCommment == null) {
                     res.status(404).send({ 'error': 'There is no Comment with this ID' });
                 } else {
-                    Comment.findOneAndDelete({ _id: ID }, function (err) {
-                        if (err) {
-                            res.status(500);
-                            res.send({ "error": "internalServerError" });
-                        }
-                        else {
-                            Comment.deleteMany({ parent_id: ID }, function (err) {
-                                if (err) {
-                                    res.status(500);
-                                    res.send({ "error": "internalServerError" });
-                                } else {
-                                    res.status(200);
-                                    res.json("Delete Successful");
-                                }
-                            });
-                        }
-                    });
+                    let user = RetCommment.username;
+                    if (user != getUser(req)) {
+                        res.status(403).send({ 'error': 'You can only delete your own comments' });
+                    } else {
+                        Comment.findOneAndDelete({ _id: ID }, function (err) {
+                            if (err) {
+                                res.status(500);
+                                res.send({ "error": "internalServerError" });
+                            }
+                            else {
+                                Comment.deleteMany({ parent_id: ID }, function (err) {
+                                    if (err) {
+                                        res.status(500);
+                                        res.send({ "error": "internalServerError" });
+                                    } else {
+                                        res.status(200);
+                                        res.json("Delete Successful");
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             });
         }
