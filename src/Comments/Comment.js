@@ -268,10 +268,9 @@ class CommentHandler {
                                 res.send({ "error": "internalServerError" });
                             }
                             else {
-                                //checked on reddit and it doesn't delete the replies if the comment is deleted
-                                res.status(200);
-                                res.json("Delete Successful");
-                                /*
+                                //different from reddit
+                                
+                                //deleting replies of the deleted comments
                                 Comment.deleteMany({ parent_id: ID }, function (err) {
                                     if (err) {
                                         res.status(500);
@@ -281,7 +280,6 @@ class CommentHandler {
                                         res.json("Delete Successful");
                                     }
                                 });
-                                */
                             }
                         });
                     }
