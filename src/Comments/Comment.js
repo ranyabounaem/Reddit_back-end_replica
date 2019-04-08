@@ -20,15 +20,21 @@ class CommentHandler {
      * @returns {JSON}
      */
     handlePostComment(req, res) {
+        //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
         if (!ObjectId.isValid(req.params.id)) {
             res.status(400).send({ 'error': 'This is not a valid ID' });
         } else {
+            //creating variable ID which contains the thread or comment ID sent in the url
             let ID = new ObjectId(req.params.id);
-            if (req.body.reply != true) {         //If this is not a reply or if it's not specified in the request then it is a comment to a post
+            //If this is not a reply or if it's not specified in the request then it is a comment to a post
+            if (req.body.reply != true) {
+                //checking that the thread ID is in the database
                 Post.findOne({ _id: ID }).then(function (retPost) {
                     if (retPost == null) {
                         res.status(404).send({ 'error': 'There is no post with this ID' });
                     } else {
+                        //setting the s(spoiler) & l(locked) variables to their default value which is false
+                        //if the request doesn't contain them or if it is not equal to true (the request is bad).
                         let s, l;
                         if (req.body.spoiler != true) {
                             s = false;
@@ -40,6 +46,7 @@ class CommentHandler {
                         } else {
                             l = true;
                         }
+                        //making sure the request contains the content of the comment and the content isn't empty
                         if (req.body.content == undefined) {
                             res.status(400).send({ 'error': 'The request must include content of the comment' });
                         } else if (req.body.content === '') {
@@ -60,14 +67,18 @@ class CommentHandler {
                         }
                     }
                 });
+                //if this is a reply to a comment
             } else {
                 Comment.findOne({ _id: ID }).then(function (retComment) {
+                    //checking that the ID is in the database and that the comment isn't locked(can't reply to it)
                     if (retComment == null) {
                         res.status(404).send({ 'error': 'There is no Comment with this ID' });
                     } else {
                         if (retComment.locked == true) {
                             res.status(403).send({ 'error': 'You can not reply to a locked comment' });
                         } else {
+                            //setting the s(spoiler) & l(locked) variables to their default value which is false
+                            //if the request doesn't contain them or if it is not equal to true (the request is bad).
                             let s, l;
                             if (req.body.spoiler != true) {
                                 s = false;
@@ -79,6 +90,7 @@ class CommentHandler {
                             } else {
                                 l = true;
                             }
+                            //making sure the request contains the content of the comment and the content isn't empty
                             if (req.body.content == undefined) {
                                 res.status(400).send({ 'error': 'The request must include content of the comment' });
                             } else if (req.body.content === '') {
@@ -113,9 +125,11 @@ class CommentHandler {
      */
 
     handleGetComment(req, res) {
+        //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
         if (!ObjectId.isValid(req.params.c_id)) {
             res.status(400).send({ 'error': 'This is not a valid ID' });
         } else {
+            //checking that the comment is in the database
             let ID = new ObjectId(req.params.c_id);
             Comment.findOne({ _id: ID }).then(function (retComment) {
                 if (retComment == null) {
@@ -144,15 +158,19 @@ class CommentHandler {
      * @returns {JSON}
      */
     handleGetAllComments(req, res) {
+        //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
         if (!ObjectId.isValid(req.params.id)) {
             res.status(400).send({ 'error': 'This is not a valid ID' });
         } else {
             let ID = new ObjectId(req.params.id);
+            //if the ID sent is a Thread ID not a comment ID
             if (req.body.comment != true) {
+                //checking that the ID is in the database
                 Post.findOne({ _id: ID }).then(function (retPost) {
                     if (retPost == null) {
                         res.status(404).send({ 'error': 'There is no post with this ID' });
                     } else {
+                        //returning the found comments of the thread
                         Comment.find({ $and: [{ parent_id: ID }, { reply: false }] }, function (err, comments) {
                             if (comments == null) {
                                 res.status(404).send({ 'error': 'There are no Comments for this Thread' })
@@ -162,11 +180,14 @@ class CommentHandler {
                         });
                     }
                 });
+                //if the ID sent is a Comment ID not a Thread
             } else {
+                //checking that the ID is in the database
                 Comment.findOne({ _id: ID }).then(function (retComment) {
                     if (retComment == null) {
                         res.status(404).send({ 'error': 'There is no comment with this ID' });
                     } else {
+                        //returning the replies of this comment if found
                         Comment.find({ $and: [{ parent_id: ID }, { reply: true }] }, function (err, comments) {
                             if (comments == null) {
                                 res.status(404).send({ 'error': 'There are no Replies for this Comment' })
@@ -181,16 +202,19 @@ class CommentHandler {
     }
 
     handleEditComment(req, res) {
+        //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
         if (!ObjectId.isValid(req.params.c_id)) {
             res.status(400).send({ 'error': 'This is not a valid comment ID' });
         } else {
             let ID = new ObjectId(req.params.c_id);
             let s, l;
+            //cehcking that the ID is in the database
             Comment.findOne({ _id: ID }).then(function (RetCommment) {
                 if (RetCommment == null) {
                     res.status(404).send({ 'error': 'There is no Comment with this ID' });
                 } else {
                     let user = RetCommment.username;
+                    //making sure that the user that sent the request is the same user that posted the comment
                     if (user != getUser(req)) {
                         res.status(403).send({ 'error': 'You can only edit your own comments' });
                     } else {
@@ -209,6 +233,7 @@ class CommentHandler {
                             } else {
                                 l = RetCommment.locked;         //the locked unchanged
                             }
+                            //edit the comment after making all the validations
                             Comment.findOneAndUpdate({ _id: ID },
                                 { content: req.body.content, locked: l, spoiler: s }).then(function (retComment) {
                                     res.status(200).json("update successful");
@@ -221,24 +246,32 @@ class CommentHandler {
     }
 
     handleDeleteComent(req, res) {
+        //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
         if (!ObjectId.isValid(req.params.c_id)) {    //If it isn't a valid ID
             res.status(400).send({ 'error': 'This is not a valid ID' });
         } else {
             let ID = new ObjectId(req.params.c_id);
+            //checking that the ID is in the database
             Comment.findOne({ _id: ID }).then(function (RetCommment) {
                 if (RetCommment == null) {
                     res.status(404).send({ 'error': 'There is no Comment with this ID' });
                 } else {
                     let user = RetCommment.username;
+                    //making sure that the user that sent the request is the same user that posted the comment
                     if (user != getUser(req)) {
                         res.status(403).send({ 'error': 'You can only delete your own comments' });
                     } else {
+                        //deleting the comment and all the replies to it
                         Comment.findOneAndDelete({ _id: ID }, function (err) {
                             if (err) {
                                 res.status(500);
                                 res.send({ "error": "internalServerError" });
                             }
                             else {
+                                //checked on reddit and it doesn't delete the replies if the comment is deleted
+                                res.status(200);
+                                res.json("Delete Successful");
+                                /*
                                 Comment.deleteMany({ parent_id: ID }, function (err) {
                                     if (err) {
                                         res.status(500);
@@ -248,6 +281,7 @@ class CommentHandler {
                                         res.json("Delete Successful");
                                     }
                                 });
+                                */
                             }
                         });
                     }
