@@ -2,6 +2,30 @@ const User = require("../../models/UserSchema");
 const validator = require("email-validator");
 const JWTconfig = require("../../JWT/giveToken");
 
+
+function checkIfBlockedByMe (user,username)
+{
+  const blockedUser = user.blockedUsers.find(function(userInBlockedArray) {
+    return userInBlockedArray === username;
+  });
+
+  if(blockedUser){return true}
+  else return false;
+}
+
+function checkIfBlockedByHim (user,username){
+  
+  const blockedUser = user.blockedUsers.find(function(userInBlockedArray)
+  {
+   return userInBlockedArray === username;
+ })
+
+ if(blockedUser){return true}
+ else return false;
+ 
+ ;}
+
+
 class UserHandler {
   constructor() {}
   async isUserFound(owner) {
@@ -271,7 +295,9 @@ class UserHandler {
 
     if (username == req.body.blockedUser) {
       res.status(404).send({ error: "you cant block yourself" });
-    } else {
+    } 
+    
+    else {
       if (!userToBlock) {
         res
           .status(404)
@@ -282,12 +308,8 @@ class UserHandler {
        *    This finds if the user you want to block already is blocked
        * if he is the the response will be "this user is already blocked"
        */
-        const previouslyBlockedUser = user.blockedUsers.find(function(
-          userInBlockedArray
-        ) {
-          return userInBlockedArray === req.body.blockedUser;
-        });
-
+        const previouslyBlockedUser =checkIfBlockedByMe(user,req.body.blockedUser);
+       
         if (previouslyBlockedUser) {
           res
             .status(404)
@@ -322,11 +344,9 @@ class UserHandler {
      * returns "the user you want to unblock isnt blocked" if he isnt blocked with status 200
      */
 
-    const blockedUser = user.blockedUsers.find(function(userInBlockedArray) {
-      return userInBlockedArray === req.body.unblockedUser;
-    });
+    const blocked=checkIfBlockedByMe(user,req.body.unblockedUser);
 
-    if (!blockedUser) {
+    if (!blocked) {
       res
         .status(404)
         .send({ error: "the user you want to unblock isnt blocked" });
@@ -367,7 +387,6 @@ class UserHandler {
    */
   async getUserInfoLogged(req,res)
   {
-
     /**
        *get username from token
        */
@@ -380,23 +399,22 @@ class UserHandler {
     /**
        *Check if viewed blocked the viewing user
        */
-    const blockedUser = userViewed.blockedUsers.find(function(userInBlockedArray)
-     {
-      return userInBlockedArray === username;
-    });
+    const blockedUser = checkIfBlockedByHim(userViewed,username);
+
     if(blockedUser){res.status(404).send({message:"User doesnt exist"})}
 
+    else{
     /**
        *return info 
        */
-    let userinfo=
+    const userinfo=
     {
       Username:req.body.userToView,
       Subscriptions: userViewed.Subscriptions
     }
 
     res.status(200).send(userinfo);
-  }
+  }}
 
   
 /**
@@ -416,7 +434,7 @@ class UserHandler {
     /**
        *return info 
        */
-    let userinfo=
+    const userinfo=
     {
       Username:req.body.userToView,
       Subscriptions: userViewed.Subscriptions
