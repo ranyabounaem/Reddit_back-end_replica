@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Create schema and model
+//Create schema and model
 const SubredditPostSchema = new Schema({
     title: String,
     body: String,
@@ -14,7 +15,10 @@ const SubredditPostSchema = new Schema({
 });
 
 const SubredditSchema = new Schema({
-    name: String,
+    name: {
+        type:String,
+        unique:true
+    },
     adminUsername: String,
     rules: [String],
     posts: [SubredditPostSchema],
@@ -26,6 +30,8 @@ const SubredditSchema = new Schema({
 });
 
 
-
 const Subreddit = mongoose.model('subreddit', SubredditSchema);
-module.exports = Subreddit;
+const posts = mongoose.model('posts', SubredditPostSchema);
+
+module.exports.Subreddit= Subreddit;
+module.exports.SubredditPostSchema= posts;

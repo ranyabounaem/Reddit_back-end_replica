@@ -44,6 +44,9 @@
 const app = require("express")();
 const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
+const passport=require('passport');
+const passportConf=require('./JWT/passport');
+
 //contect to mongo
 mongoose.connect('mongodb://localhost:27017/reddit');
 mongoose.Promise=global.Promise;
@@ -51,17 +54,237 @@ mongoose.connection.once('open',function(){console.log("Connection successful");
 {console.log("error:",error)});
 
 
+//middlewares 
 app.use(bodyparser.json());
+app.use(passport.initialize());
+app.use(function(req,res,next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods"," POST,PUT,GET,DELETE");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
-// const userHandler = require("./src/user");
+const userHandler = require("./src/user");
 
 // console.log(userHandler.handleRegistration);
-// app.post("/user/register", userHandler.handleRegistration);
-// app.post("/user/login", userHandler.handleLogin);
-// app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
-// app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
-// app.get("/me/About/:Username", userHandler.Getmyinfo)
+ app.post("/user/register", userHandler.handleRegistration);
+ 
+/**
+ * @api {post} /user/register Register new user
+ * @apiName CreateUser
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Email email  of the User.
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam  {String} Password Password  of the User.
+ * @apiSuccess {string} Token Token That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Email": "user@reddit.com",
+ *      "Username": "User1",
+ *      "Password": "Password"
+      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *  "token":"we8749832b7498c2b78942"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    
+ * HTTP/1.1 406 password short
+ * {
+ * "error":"Password too short"
+ * }
+ * 
+ *  HTTP/1.1 406 username repeated 
+ * {
+ * "error":"Username already exists"
+ * }
+ * HTTP/1.1 406 email repeated 
+ * {
+ * "error":"Email already exists"
+ * }
+ * 
+ * HTTP/1.1 406 email format 
+ * {
+ * "error":"Invalid Email format"
+ * }
+ */
 
+ app.post("/user/login", userHandler.handleLogin);
+ /**
+ * @api {post} /user/Login login attempt
+ * @apiName LoginUser
+ * @apiGroup me
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam  {String} Password Password  of the User.
+ * 
+ * @apiSuccess {string} Token Token That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "User1",
+ *      "Password": "Password"
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *  "token":"we8749832b7498c2b78942"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    HTTP/1.1 401 Invalid
+ * {
+ *          "error"":"Invalid Password"
+ * }
+ * 
+ *  HTTP/1.1 404 Invalid
+ * {
+ *        "error"":"User doesnt exist"
+ * }
+ */
+
+ app.put("/me/edit/email/:Username",userHandler.EditUserEmail);
+ app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
+ app.get("/me/About/:Username", userHandler.Getmyinfo);
+
+
+ app.get("/user/info",userHandler.getUserInfo);
+ /**
+ * @api {get} /user/info get user info if NOT logged in
+ * @apiName GetUserInfo
+ * @apiGroup me
+ *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
+ * @apiParamExample {json} Input
+ *    {
+ *      "userToView": "User1"    
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 
+ * {
+ *      "Username":"user1",
+      Subscriptions:["sub1","sub2","sub3"]
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 user doesnt exist
+ *      {
+ *      "message": "User doesnt exist"
+ *     }
+ */
+
+ app.get("/me/user/info",passport.authenticate('jwt',{session:false}),userHandler.getUserInfoLogged)
+/**
+ * @api {get} /me/user/info get user info if logged in
+ * @apiName GetUserInfoLogged
+ * @apiGroup me
+* @apiHeader {String} auth Users unique token .
+ *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
+ * @apiParamExample {json} Input
+ *    {
+ *      "userToView": "User1"    
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 
+ * {
+ *      "Username":"user1",
+      Subscriptions:["sub1","sub2","sub3"]
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 user blocked you or doesnt exist
+ *      {
+ *      "message": "User doesnt exist"
+ *     }
+ */
+
+app.get("/me/blockedusers",passport.authenticate('jwt',{session:false}),userHandler.getBlockedUsers)
+
+/**
+ * @api {get} /me/blockedusers  Get Blocked users
+ * @apiName BlockedUsers
+ * @apiHeader {String} auth Users unique token .
+ * @apiGroup me
+ *   @apiSuccess  [String] BlockedUsername unique Username  of the User to be blocked.
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * 
+ *    [
+ *      "User1",
+ *      "User2",
+ *      "User3",
+ *      "User4"     
+ *    ]    
+ */
+
+ app.put("/me/user/unblock",passport.authenticate('jwt',{session:false}),userHandler.unblockUser);
+ /**
+ * @api {put} /me/user/unblock  unblock user
+ * @apiName UnblockUser
+ * @apiGroup me
+* @apiHeader {String} auth Users unique token .
+ *  @apiParam  {String} unblockedUser  unique Username  of the User to be unblocked.
+ * @apiParamExample {json} Input
+ *    {
+ *      "unblockedUser": "User1"    
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 
+ * {
+ *     "User unblocked"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 user isnt blocked
+ *      {
+ *      error:"the user you want to unblock isnt blocked""
+ *     }
+ */
+
+ app.put("/me/user/block",passport.authenticate('jwt',{session:false}),userHandler.blockUser);
+ /**
+ * @api {put} /me/user/block  Block user
+ * @apiName BlockUser
+ * @apiGroup me
+* @apiHeader {String} auth Users unique token .
+ *  @apiParam  {String} blockedUser  unique Username  of the User to be blocked.
+ * @apiParamExample {json} Input
+ *    {
+ *      "blockedUser": "User1"      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 
+ * {
+ *     "User Blocked"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 user already blocked
+ *      {
+ *      error:"the user you want to block is already blocked"
+ *     },
+ * HTTP/1.1 404 User not found
+ *      {
+ *     error:"the user you want to block doesnt exist"
+ *     },
+ * HTTP/1.1 404 User blocking himself
+ *      {
+ *       error:"you cant block yourself"
+ *     }
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 
 /**
  * @name UserService
@@ -71,46 +294,54 @@ app.use(bodyparser.json());
 /**
  * @name UserService
  * @note These are the routes for anything related to a user.
- * @note This is just general routing, You can modify as you want but before the delivery of the documentation
+ * @note This i
+ * s just general routing, You can modify as you want but before the delivery of the documentation
  */
 
 
 //TODO POSTS: listing posts for a subreddit or only popular posts
 
 
-
 /** 
-* @api {get} /user/listing?type=value List Posts 
+* @api {post} /:username/listing?type=value List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
-* @apiParam {Number} LPostID id of the last post displayed
+* @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
+* @apiParam {Number} startPosition Sending 15 posts per after the startposition  
 * @apiSuccess {Object[]} Posts   Array of the listed Posts  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
-*     {
-*  "Posts":[
 *  {
-* "SubbredditName": "r/funny"
-* ,"PostID":1
-* ,"Meme": data:image/jpeg;base64,...............
+*  [    
+*  {
+* "subredditName": "funny"
+* ,"_id":"sd232s2231"
+* ,"title":"love"
+* ,"postDate":"1998-04-23"
+* ,"body": "love is known for something"
 *  },
 * {
-* "SubbredditName": "r/Damn"
-* ,"PostID":2
-* ,"Meme": data:image/jpeg;base64,...............
+* "subredditName": "nature"
+* ,"_id":"2dsds23123d"
+* ,"title":"vietnam nature"
+* ,"postDate":"1998-04-23"
+* ,"body": "vietnam nature is known for something"
 *  } 
-]
+*]
 *     }
 *
 * @apiError PostsnotFound 
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "Posts not Found"
+*       "error": "postsNotFound"
 *     }
 */
+
+const listings = require('./src/listings');
+app.post('/:username/listing', (req, res) => listings.listPosts(req, res));
+
 
 // API for information about user
 
@@ -244,13 +475,14 @@ app.use(bodyparser.json());
 
 
 /**
- * @api {get} /me/:username Request my account information
+ * @api {get} /me/About/:Username Request my account information
  * @apiName Getmyinfo
  * @apiGroup me
  *
- * @apiParam {String} username Users unique username.
- *  @apiParam {String} Token SyncToken That is sent with authentication..
+ * @apiParam {String} Username User's unique username.
+ * @apiParam {String} Token SyncToken That is sent with authentication..
  *
+ * @apiSuccess {String} Username username  of the User.
  * @apiSuccess {String} Email email  of the User.
  * @apiSuccess {String} About text to describe the User.
  * @apiSuccess {String} Imageid Image id  of the User.
@@ -266,6 +498,7 @@ app.use(bodyparser.json());
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
  *    {
+ *      "Username": "User1"
  *      "Email": "user@reddit.com",
  *      "About": "Im a reddit user",
  *      "Imageid": "100001"
@@ -288,100 +521,16 @@ app.use(bodyparser.json());
 
 
 
-/**
- * @api {post} /user/register Register new user
- * @apiName CreateUser
- * @apiGroup me
- *
- *
- * @apiParam  {String} Email email  of the User.
- * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Password Password  of the User.
- * @apiSuccess {string} Token SyncToken That is sent with authentication.
- * @apiParamExample {json} Input
- *    {
- *      "Email": "user@reddit.com",
- *      "Username": "User1",
- *      "Password": "Password"
-      
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {
- *  "token":"we8749832b7498c2b78942"
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *    
- * HTTP/1.1 406 password short
- * {
- * "error":"Password too short"
- * }
- * 
- *  HTTP/1.1 406 username repeated 
- * {
- * "error":"Username already exists"
- * }
- * HTTP/1.1 406 email repeated 
- * {
- * "error":"Email already exists"
- * }
- * 
- * HTTP/1.1 406 email format 
- * {
- * "error":"Invalid Email format"
- * }
- */
-
-/**
- * @api {put} /me/Login login attempt
- * @apiName LoginUser
- * @apiGroup me
- *
- *
- * @apiParam  {String} Email email  of the User.
- * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Password Password  of the User.
- * 
- * @apiSuccess {string} Token SyncToken That is sent with authentication.
- * @apiParamExample {json} Input
- *    {
- *      "Username": "User1",
- *      "Password": "Password"
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {
- *  "token":"we8749832b7498c2b78942"
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *    HTTP/1.1 401 Invalid
- * {
- *          "error"":"Invalid Password"
- * }
- * 
- *  HTTP/1.1 404 Invalid
- * {
- *        "error"":"User doesnt exist"
- * }
- */
-
-
-
 
  /**
- * @api {Put} /me/:username/edit Edit  user
- * @apiName EditUser-
+ * @api {Put} /me/edit/Password/:Username Edit User password
+ * @apiName EditUserPassword
  * @apiGroup me
  *
  *
- * @apiParam  {String} Email email  of the User.
  * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Password Password  of the User.
- * @apiParam  {String} ImageId ID of the User's image.
+ * @apiParam  {String} NewPassword the new Password for the User.
+ * @apiParam  {String} OldPassword the Old Password of the User.
  * @apiParam {string} Token SyncToken That is sent with authentication.
  * @apiParamExample {json} Input
  *    {
@@ -399,18 +548,32 @@ app.use(bodyparser.json());
  *      {
  *       "error": "UserNotFound"
  *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 Wrong Password
+ *      {
+ *       "error": "Wrong Password"
+ *     }
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 406 Password too short
+ *      {
+ *        error: "Password too short"
+ *     }
  */
 
  /**
- * @api {Post} /me/:username/Block/:BlockedUsername  Block user
- * @apiName BlockUser
+ * @api {Put} /me/edit/email/:Username Edit User email
+ * @apiName EditUserEmail
  * @apiGroup me
- * @apiParam {string} Token SyncToken That is sent with authentication.
+ *
+ *
+ * @apiParam  {String} Email email  of the User.
  * @apiParam  {String} Username unique Username  of the User.
- *  @apiParam  {String} BlockedUsername  unique Username  of the User to be blocked.
+ * @apiParam {string} Token SyncToken That is sent with authentication.
  * @apiParamExample {json} Input
  *    {
- *      "Username": "User1",      
+ *      "Email": "user@reddit.com",
+ *      "Username": "User1"
  *    }
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
@@ -421,29 +584,20 @@ app.use(bodyparser.json());
  *      {
  *       "error": "UserNotFound"
  *     }
- */
-
-
-
- /**
- * @api {get} /me/:username/Block/  Get Blocked users
- * @apiName BlockedUsers
- * @apiGroup me
- * @apiParam {string} Token SyncToken That is sent with authentication.
- *  @apiParam  {String} Username unique Username  of the User.
- *   @apiSuccess  {String} BlockedUsername unique Username  of the User to be blocked.
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * 
- *    [{
- *      "BlockedUsername": "User1",    
- *    }]
- *    
- * 
  * @apiErrorExample {json} List error
- *     HTTP/1.1 500 Server Error
- *      
+ *     HTTP/1.1 406 Invalid Email format
+ *      {
+ *       "error": "Invalid Email format"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 406 Email already exists
+ *      {
+ *          "error" : "Email already exists"
+ *      }
  */
+
+ 
+ 
 
  /**
  * @api {Post} /me/:username/Report/:id  report user comment or post
@@ -979,7 +1133,6 @@ app.delete("/flair", (req, res) => {});
   * @apiName GetComment
   * @apiGroup Comment
   * 
-  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
   * @apiParam {String} c_id Comment Unique ID.
   * 
   * @apiSuccess {String} content Text of the Comment.
@@ -998,7 +1151,6 @@ app.delete("/flair", (req, res) => {});
   * @apiName GetAllComments
   * @apiGroup Comment
   * 
-  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
   * @apiParam {String} c_id Comment Unique ID.
   * @apiParam {Boolean} [comment=false] True if the ID sent is a Comment ID not a Thread ID.
   * 
@@ -1075,58 +1227,6 @@ app.delete("/flair", (req, res) => {});
      * @apiError AccessDenied If the user isn't logged in.
      */
 
-      /**
-       * @api {put} /comment/spoil/:c_id Mark Comment as a Spoiler
-       * @apiName SpoilerComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already marked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-       /**
-       * @api {put} /comment/unspoil/:c_id UnMark Comment as a Spoiler
-       * @apiName UnSpoilerComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentNotSpoiler The Comment is already unmarked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-       /**
-       * @api {put} /comment/lock/:c_id Lock a Comment to Disallow Replies on it
-       * @apiName LockComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadyLocked The Comment is already locked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-       /**
-       * @api {put} /comment/unlock/:c_id UnLock a Comment to Allow Replies on it
-       * @apiName UnLockComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentNotLocked The Comment is already unlocked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
         /**
          * @api {get} /comment/expand/:c_id Retrieve additional comments omitted from a base comment tree
          * @apiName ExpandComment
@@ -1138,11 +1238,12 @@ app.delete("/flair", (req, res) => {});
          * 
          * @apiError CommentNotFound The id of the comment wasn't found.
          */
-app.get("/comment", (req, res) => {});
-app.post("/comment", (req, res) => {});
+const commentHandler = require('./src/Comments/Comment');
+app.get("/comment/:c_id",commentHandler.handleGetComment) ;
+app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
+app.post("/comment/:id",commentHandler.handlePostComment );
 app.put("/comment", (req, res) => {});
 app.delete("/comment", (req, res) => {});
-
 
 
 /**
@@ -1361,7 +1462,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
-* @apiParam {String} messageID the id of the message going to be marked as read.
+* @apiParam {String} messageId the id of the message going to be marked as read.
 * @apiParam {Boolean} isReadRequest true when user wants to mark as read a message false when user wants to mark message as unread
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiSuccessExample Success-Response:
@@ -1396,7 +1497,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 */
 
 /**
-* @api {get} /:username/pm/   Retrieve
+* @api {post} /:username/pm/   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -1454,16 +1555,15 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 //     console.log('connection carried succesfully');
 // }).on('error', function () {
 
-//     console.log('connection error:');
-// });
-// const privateMessage = require('./PM/Pm');
-// app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
-// app.post('/:username/pm/compose', urlEncoded, (req, res) => privateMessage.compose(req, res));
-// app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
-// app.post('/:username/pm/block', urlEncoded, (req, res) => privateMessage.block(req, res));
-// app.put('/:username/pm/markread',(req, res) => privateMessage.markread(req, res));
-// app.post('/:username/pm/markreadall',(req, res) => privateMessage.markreadall(req, res));
-// app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res));
+
+const privateMessage = require('./src/PM/Pm');
+app.post('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
+app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
+app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
+app.post('/:username/pm/block', (req, res) => privateMessage.block(req, res));
+app.put('/:username/pm/markread',(req, res) => privateMessage.markread(req, res));
+app.post('/:username/pm/markreadall',(req, res) => privateMessage.markreadall(req, res));
+app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res));
 
 
 

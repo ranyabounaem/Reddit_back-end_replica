@@ -4,8 +4,7 @@
   "description": "REST API package for memestock",
   "main": "index.js",
   "scripts": {
-    "test-init": "./node_modules/jasmine/bin/jasmine.js init",
-    "test": "./node_modules/jasmine/bin/jasmine.js"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -23,9 +22,15 @@
     "express": "^4.16.4",
     "jasmine": "^3.3.1",
     "jest": "^24.5.0",
+    "jsdoc": "^3.5.5",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^2.2.0",
     "mocha": "^6.0.2",
     "mongoose": "^5.4.18",
     "nodemon": "^1.18.10",
-    "request": "^2.88.0"
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "request": "^2.88.0",
+    "urlencode": "^1.1.0"
   }
 }
