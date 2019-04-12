@@ -1602,5 +1602,5 @@ app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res))
 app.get("/notif", (req, res) => {});
 
 
-var server=app.listen(4000,function(){console.log('listening')});
+var server=app.listen(80,function(){console.log('listening')});
 module.exports=server;
