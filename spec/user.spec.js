@@ -8,7 +8,7 @@ describe("user tests", () => {
     server = require("../index");
   });
   
-
+//
   describe("tests registering new users", () => {
     let data = {};
     let testBody = {
