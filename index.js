@@ -148,9 +148,9 @@ const userHandler = require("./src/user");
  * }
  */
 
- app.put("/me/edit/email/:Username",passport.authenticate('jwt',{session:false}), userHandler.EditUserEmail);
- app.put("/me/edit/Password/:Username",passport.authenticate('jwt',{session:false}),userHandler.EditUserPassword);
- app.get("/me/About/:Username",passport.authenticate('jwt',{session:false}), userHandler.Getmyinfo);
+ app.put("/me/edit/email/:Username",userHandler.EditUserEmail);
+ app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
+ app.get("/me/About/:Username", userHandler.Getmyinfo);
 
 
  app.get("/user/info",userHandler.getUserInfo);
