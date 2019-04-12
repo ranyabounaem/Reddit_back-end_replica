@@ -1,7 +1,8 @@
 const User = require("../../models/UserSchema");
 const validator = require("email-validator");
 const JWTconfig = require("../../JWT/giveToken");
-
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 function checkIfBlockedByMe (user,username)
 {
@@ -78,6 +79,10 @@ class UserHandler {
            */
 
           try {
+            const salt = await bcrypt.genSalt(saltRounds);
+            const hashed=await bcrypt.hash(req.body.Password,salt);
+            req.body.Password=hashed;
+
             const user = await User.create(req.body);
             /**
              *   This creates a new token
@@ -127,7 +132,9 @@ class UserHandler {
        *    the response will be { "error": successful login"} with status 200
        */
 
-      if (user.Password == req.body.Password) {
+
+      const bycryptComp=await bcrypt.compare(req.body.Password,user.Password);
+      if (bycryptComp) {
         const token = await JWTconfig.getToken(user);
 
         res.status(200).send({ message: "successful login", token });
@@ -210,7 +217,14 @@ class UserHandler {
     User.findOne({ Username: req.params.Username }).then(function(RetUser) {
       if (RetUser === null) {
         res.status(404).send({ error: "UserNotFound" });
-      } else if (RetUser.Password !== req.body.OldPassword) {
+        
+      } else {
+        
+        bcrypt.compare(req.body.OldPassword,RetUser.Password ).then(function(result){
+
+        if (!result) {
+
+        
       /**
        *    This checks if the OldPassword entered by the user
        *    is the same Password saved in the database
@@ -231,13 +245,19 @@ class UserHandler {
        *    This updates the password of the user to the new password
        *    the response will be "Password successfully updated" with status 200
        */
+
+      bcrypt.hash(req.body.NewPassword,saltRounds).then(function(hash){
+
         User.findOneAndUpdate(
           { Username: req.params.Username },
-          { Password: req.body.NewPassword }
+          { Password: hash}
         ).then(function(RetUser) {
           res.status(200).send("Password successfully updated");
         });
+      })
       }
+      })
+    }
     });
   }
   /**
