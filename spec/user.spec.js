@@ -7,10 +7,7 @@ describe("user tests", () => {
   beforeAll(() => {
     server = require("../index");
   });
-  afterAll(() => {
-    server.close();
-  });
-
+ 
   describe("tests registering new users", () => {
     let data = {};
     let testBody = {
