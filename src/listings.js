@@ -58,7 +58,7 @@ class listings {
     async listPosts(req, res) {
         let owner = req.params.username;
         let listingType = req.query.type;
-        let startPosition =0;  //req.body.startPosition;  // return only 15 post this phase
+        let startPosition =req.body.startPosition;  // return only 15 post this phase
         let newPosts = null;
         // validation for the type error
         if (listingType == undefined

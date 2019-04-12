@@ -303,7 +303,7 @@ app.get("/me/blockedusers",passport.authenticate('jwt',{session:false}),userHand
 
 
 /** 
-* @api {get} /:username/listing?type=value List Posts 
+* @api {post} /:username/listing?type=value List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -340,7 +340,7 @@ app.get("/me/blockedusers",passport.authenticate('jwt',{session:false}),userHand
 */
 
 const listings = require('./src/listings');
-app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
+app.post('/:username/listing', (req, res) => listings.listPosts(req, res));
 
 
 // API for information about user
@@ -1133,7 +1133,6 @@ app.delete("/flair", (req, res) => {});
   * @apiName GetComment
   * @apiGroup Comment
   * 
-  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
   * @apiParam {String} c_id Comment Unique ID.
   * 
   * @apiSuccess {String} content Text of the Comment.
@@ -1152,7 +1151,6 @@ app.delete("/flair", (req, res) => {});
   * @apiName GetAllComments
   * @apiGroup Comment
   * 
-  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
   * @apiParam {String} c_id Comment Unique ID.
   * @apiParam {Boolean} [comment=false] True if the ID sent is a Comment ID not a Thread ID.
   * 
@@ -1228,58 +1226,6 @@ app.delete("/flair", (req, res) => {});
      * @apiError CommentAlreadySaved You can't unsave an unsaved comment.
      * @apiError AccessDenied If the user isn't logged in.
      */
-
-      /**
-       * @api {put} /comment/spoil/:c_id Mark Comment as a Spoiler
-       * @apiName SpoilerComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already marked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-       /**
-       * @api {put} /comment/unspoil/:c_id UnMark Comment as a Spoiler
-       * @apiName UnSpoilerComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentNotSpoiler The Comment is already unmarked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-       /**
-       * @api {put} /comment/lock/:c_id Lock a Comment to Disallow Replies on it
-       * @apiName LockComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadyLocked The Comment is already locked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-       /**
-       * @api {put} /comment/unlock/:c_id UnLock a Comment to Allow Replies on it
-       * @apiName UnLockComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentNotLocked The Comment is already unlocked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
 
         /**
          * @api {get} /comment/expand/:c_id Retrieve additional comments omitted from a base comment tree
@@ -1551,7 +1497,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 */
 
 /**
-* @api {get} /:username/pm/   Retrieve
+* @api {post} /:username/pm/   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -1611,7 +1557,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 
 
 const privateMessage = require('./src/PM/Pm');
-app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
+app.post('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
 app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
 app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
 app.post('/:username/pm/block', (req, res) => privateMessage.block(req, res));
@@ -1656,5 +1602,5 @@ app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res))
 app.get("/notif", (req, res) => {});
 
 
-var server=app.listen(4000,function(){console.log('listening')});
+var server=app.listen(80,function(){console.log('listening')});
 module.exports=server;
