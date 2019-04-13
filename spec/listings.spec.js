@@ -91,14 +91,11 @@ describe('Server', function () {
 
     let subbredditarr = [{
         name: 'love', rules: ["no males are allowed", "no females are allowed"],
-        date: Date(),
-        posts: [postsarr[0], postsarr[1]]
+        date: Date()
     },
     {
         name: 'travel', rules: ["no males are allowed", "no females are allowed"],
-        date: Date(),
-        posts: [postsarr[4], postsarr[5], postsarr[6]]
-    }
+        date: Date()    }
         ,
     {
         name: 'nature', rules: ["no males are allowed", "no females are allowed"],
@@ -107,9 +104,7 @@ describe('Server', function () {
     },
     {
         name: 'food', rules: ["no males are allowed", "no females are allowed"],
-        date: Date(),
-        posts: [postsarr[7], postsarr[8], postsarr[9]]
-    }
+        date: Date()    }
     ];
     beforeAll(function (done) {
         server4 = require('../index.js');
