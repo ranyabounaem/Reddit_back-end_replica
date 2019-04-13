@@ -4,9 +4,10 @@ const JWTconfig = require("../../JWT/giveToken");
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-function checkIfBlockedByMe (user,username)
+async function checkIfBlockedByMe (user,username)
 {
-  const blockedUser = user.blockedUsers.find(function(userInBlockedArray) {
+  
+  const blockedUser =await user.blockedUsers.find(function(userInBlockedArray) {
     return userInBlockedArray === username;
   });
 
@@ -14,9 +15,9 @@ function checkIfBlockedByMe (user,username)
   else return false;
 }
 
-function checkIfBlockedByHim (user,username){
+async function checkIfBlockedByHim (user,username){
   
-  const blockedUser = user.blockedUsers.find(function(userInBlockedArray)
+  const blockedUser =await user.blockedUsers.find(function(userInBlockedArray)
   {
    return userInBlockedArray === username;
  })
@@ -24,7 +25,73 @@ function checkIfBlockedByHim (user,username){
  if(blockedUser){return true}
  else return false;
  
- ;}
+}
+
+async function checkFriend(user, fUsername)
+{
+  const Friend =await user.Friends.find(function(UserInFriendsarray) {
+    return UserInFriendsarray === fUsername;
+  });
+
+  if(Friend){return true;}
+  else return false;
+}
+
+async function checkSentReq(user, fUsername)
+{
+  const sentReq =await user.SentReq.find(function(UserInSentReqsarray) {
+    return UserInSentReqsarray === fUsername;
+  });
+
+  if(sentReq){return true;}
+  else return false;
+}
+async function checkRecReq(user, fUsername)
+{
+  const recReq =await user.RecReq.find(function(UserInRecReqarray) {
+    return UserInRecReqarray === fUsername;
+  });
+
+  if(recReq){return true;}
+  else return false;
+}
+
+function AddReq(user, fUser)
+{
+  user.SentReq.push(fUser.Username);
+  user.save();
+
+  fUser.RecReq.push(user.Username);
+  fUser.save();
+}
+
+function popSentRequest(user, fUser)
+{
+  user.SentReq.pop(fUser.Username);
+  user.save();
+
+  fUser.RecReq.pop(user.Username);
+  fUser.save();
+}
+
+function removeFriend(user, fUser)
+{
+  user.Friends.pop(fUser.Username);
+  user.save();
+
+  fUser.Friends.pop(user.Username);
+  fUser.save();
+}
+
+acceptRequest
+function acceptRequest(user, fUser)
+{
+  user.Friends.push(fUser.Username);
+  user.save();
+
+  fUser.Friends.push(user.Username);
+  fUser.save();
+}
 
 
 class UserHandler {
@@ -328,7 +395,7 @@ class UserHandler {
        *    This finds if the user you want to block already is blocked
        * if he is the the response will be "this user is already blocked"
        */
-        const previouslyBlockedUser =checkIfBlockedByMe(user,req.body.blockedUser);
+        const previouslyBlockedUser =await checkIfBlockedByMe(user,req.body.blockedUser);
        
         if (previouslyBlockedUser) {
           res
@@ -339,7 +406,7 @@ class UserHandler {
   adds blocked user to blocked array 
   */
           user.blockedUsers.push(req.body.blockedUser);
-          user.save();
+          user.save();     
           res.status(200).send({ message: "User Blocked" });
         }
       }
@@ -364,7 +431,7 @@ class UserHandler {
      * returns "the user you want to unblock isnt blocked" if he isnt blocked with status 200
      */
 
-    const blocked=checkIfBlockedByMe(user,req.body.unblockedUser);
+    const blocked=await checkIfBlockedByMe(user,req.body.unblockedUser);
 
     if (!blocked) {
       res
@@ -419,7 +486,7 @@ class UserHandler {
     /**
        *Check if viewed blocked the viewing user
        */
-    const blockedUser = checkIfBlockedByHim(userViewed,username);
+    const blockedUser = await checkIfBlockedByHim(userViewed,username);
 
     if(blockedUser){res.status(404).send({message:"User doesnt exist"})}
 
