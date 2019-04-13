@@ -21,12 +21,13 @@ const SubredditSchema = new Schema({
     },
     adminUsername: String,
     rules: [String],
-    posts: [SubredditPostSchema],
+    posts: [String],
     subscribed_users: [String],
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    bio: [String]
 });
 
 

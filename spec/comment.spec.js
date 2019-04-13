@@ -25,19 +25,21 @@ let user2 = {
 };
 let post1 = {
     title: 'Football',
+    creatorUsername: 'Mostafa0Sherif',
     body: 'Who is the best player in the world?',
     postDate: Date(),
     subredditName: 'Sports'
 };
 let post2 = {
     title: 'Tennis',
+    creatorUsername: 'Mostafa1Sherif',
     body: 'Nadal injured again',
     postDate: Date(),
     subredditName: 'Sports'
 };
 let sr = {
+    adminUsername: 'Mostafa0Sherif',
     name: 'Sports',
-    posts: [post1, post2],
     date: Date()
 };
 
@@ -55,8 +57,17 @@ describe("comment tests", () => {
         }));
 
     });
-    afterAll(() => {
+    afterAll((done) => {
         server.close();
+        Post.deleteMany({$or:[{creatorUsername:'Mostafa0Sherif'},{creatorUsername:'Mostafa1Sherif'}]},function(){
+            Subreddit.deleteMany({adminUsername:'Mostafa0Sherif'},function(){
+                Comment.deleteMany({$or:[{username:'Mostafa0Sherif'},{username:'Mostafa1Sherif'}]},function(){
+                    user.deleteMany({$or:[{Username:'Mostafa0Sherif'},{Username:'Mostafa1Sherif'}]},function(){
+                        done();
+                    })
+                })
+            })
+        });
     });
     describe("Initialising a comment to use it in the get methods", () => {
         let data = {};
