@@ -623,93 +623,9 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }),(req, r
 *     }
 */
 
-/**
-* @api {Post} /me/:Username/Friend/:FriendUsername  Add new friend
-* @apiName FriendAdd
-* @apiGroup me
-*
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of user . 
-* @apiParam  {String} FriendUsername unique Username  of user to add. 
-* @apiParamExample {json} Input
-*    {
-*      "Username": "user1", 
-     
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK
-*    
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 User not found
-*      {
-*       "error": "User Not found"
-*     }
-*/
 
-/**
-* @api {delete} /me/:Username/Friend/:FUsername   unfriend
-* @apiName Frienddelete
-* @apiGroup me
-*
-* @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} Username unique Username  of user . 
-* @apiParam  {String} FUsername unique Username  of user to delete. 
-* @apiParamExample {json} Input
-*    {
-*      "Username": "user1", 
-     
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK
-*    
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 User not found
-*      {
-*       "error": "User Not found"
-*     }
-*/
 
-/**
-* @api {Get} /me/:Username/Friend/   get friends
-* @apiName FriendList
-* @apiGroup me
-*
-* @apiParam  {String} Username unique Username  of the User.
-* @apiSuccess  {String} FUsername unique Username  of the User.
-*  @apiSuccessExample {json} Success
-*  
-*   HTTP/1.1 200 OK
-* 
-*    [{
-*      "FUsername": "User1",    
-*    }]
-*    
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 500 server error
-*/
 
-/**
-* @api {delete} /me/:Username /Friend/:FUsername   delete friend request
-* @apiName FriendReqdelete
-* @apiGroup me
-*
-*
-* @apiParam  {String} Username unique Username  of user .
-*  @apiParam  {String} FUsername unique Username  of user to unadd.  
-* @apiParamExample {json} Input
-*    {
-*      "Username": "user1", 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK
-*    
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 500 server error
-*/
 
 /**
 * @api {get} /Moderator/Reports/   Get all reports
