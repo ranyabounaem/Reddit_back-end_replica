@@ -50,7 +50,7 @@ class PM {
 
          }
          else if (result == null) {
-            res.status(500);
+            res.status(404);
             res.json({ "error": "messageNotFound" });
             return;
          }
@@ -93,13 +93,9 @@ class PM {
       }
 
       // finding the message by its id to be exceuted quickly
-      privateMessage.findById(messageId, function (err, result) {
-         if (err) {
-            res.status(500);
-            res.json({ "error": "internalServerError" });
-         }
-         else if (result == null) {
-            res.status(500);
+      privateMessage.findById(messageId, function (err,result) {
+        if (result == null) {
+            res.status(404);
             res.json({ "error": "messageNotFound" });
          }
          else {
@@ -214,18 +210,40 @@ class PM {
 
       }
       // finding the messaage and checking if it has been from the receiver side to mark as read elsewise send error
-      privateMessage.findOneAndUpdate({ _id: messageId, receiverUsername: owner }, { isRead: isReadRequest }, function (err, result) {
+      privateMessage.findById(messageId, function (err, result) {
          if (err) {
             res.status(500);
             res.json({ "error": "internalServerError" });
 
          }
          else if (result == null) {
-            res.status(500);
+            res.status(404);
             res.json({ "error": "messageNotFound" });
          }
          else {
-            res.send(200);
+            //if it is the same who send the messag it is okay
+            if (result.receiverUsername == owner) {
+               privateMessage.findByIdAndUpdate(messageId, { isRead: isReadRequest }, function (err) {
+                  if (err) {
+                     res.status(500);
+                     res.json({ "error": "internalServerError" });
+
+
+                  }
+                  else {
+                     res.send(200);
+
+
+                  }
+
+
+               });
+
+            }
+            else { // forbidden for anyone else except the recevier
+               res.send(403);
+
+            }
          }
 
       });
@@ -309,7 +327,7 @@ class PM {
 
          User.findOne({ Username: receiverUsername }, function (err, result) {
             if (result == null) {
-               res.status(403);
+               res.status(404);
                res.json({ error: 'receiverNotFound' });
 
             }
@@ -423,7 +441,7 @@ class PM {
          // retriving all the messages sent to me (inbox)
          if (mine === true) {
             privateMessage.find(
-               { receiverUsername: owner,receiverDelete:false },
+               { receiverUsername: owner, receiverDelete: false },
                {
                   'sender': 1,
                   _id: 1,
@@ -450,7 +468,7 @@ class PM {
          else if (mine === false) {
 
             privateMessage.find(
-               { sender: owner ,senderDelete:false},
+               { sender: owner, senderDelete: false },
                {
                   'receiverUsername': 1,
                   'subject': 1,
@@ -536,7 +554,7 @@ class PM {
 
             if (err || result == null) {
 
-               res.status(403);
+               res.status(404);
                res.json({ error: 'toBeBlockedNotFound' });
 
             }
