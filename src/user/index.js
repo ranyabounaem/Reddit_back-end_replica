@@ -559,8 +559,9 @@ class UserHandler {
       if(userToAdd == null) res.status(404).send({error : "User to be added not found"});
       else
       {
-        if(username === req.body.fUsername) res.status(402).send({error: "User cannot add himself"});
 
+        if(username === req.body.fUsername) res.status(402).send({error: "User cannot add himself"});
+        else{
         const blockedByHim=await checkIfBlockedByHim(userToAdd, username);
         const blockedByMe=await checkIfBlockedByMe(user, req.body.fUsername);
         const Friend = await checkFriend(user, req.body.fUsername);
@@ -577,6 +578,7 @@ class UserHandler {
         AddReq(user,userToAdd);
         res.status(200).send({ message: "Friend request Sent" });
         }
+      }
       }
     }
   }
