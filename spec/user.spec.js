@@ -7,6 +7,13 @@ describe("user tests", () => {
   beforeAll(() => {
     server = require("../index");
   });
+
+  
+  afterAll(function (done) {
+    User.deleteMany({},function(){done()})
+
+
+ });
   
 //
   describe("tests registering new users", () => {
@@ -796,6 +803,7 @@ describe("gets info of user ", () => {
     it("checks if user retuned ", () => {
       expect(data.status).toBe(200);
     });
+
   
 
 });
