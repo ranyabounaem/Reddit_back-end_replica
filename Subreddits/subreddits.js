@@ -287,12 +287,7 @@ class SR {
             pt.findOneAndDelete({_id: postId}).then(function(){
                 sr.findOne({name: subrName}).then(function(record){
                     record.posts.pop(postId);
-                    record.save().then(function(err){
-                        if(err){
-                            res.json({error: 'internal server error',
-                            status:500});
-                            res.end(); 
-                        }
+                    record.save().then(function(){
                         res.status(200);
                         res.end();
                     });
@@ -370,6 +365,8 @@ class SR {
                         status:500});
                         res.end();   
                     };
+                    res.sendStatus(200);
+                    res.end();
                 });
             });
         });
