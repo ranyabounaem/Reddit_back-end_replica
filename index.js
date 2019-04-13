@@ -1261,7 +1261,7 @@ app.post("/sr/create", passport.authenticate('jwt',{session:false}), (req, res) 
 * @apiParam {string[]} srRules list of subbreddit rules.
 * @apiParam {string}  SyncToken  (NOT YET) Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {string[]}  ModUsername (NOT YET)  Subreddit moderators' usernames.
-*
+* @apiSuccess {object} newSubreddit Returns the created subreddit (if any).
 */
 
 app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
@@ -1292,6 +1292,7 @@ app.delete("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, re
 * @apiGroup SrService
 *
 * @apiParam {string} Token Send token.
+* @apiSuccess {object} deletedSubreddit Returns the deleted subreddit (if any).
 */
 
 app.put("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.edit(req,res));
@@ -1305,6 +1306,7 @@ app.put("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) 
 * @apiParam {string[]} newRules Updated rules.
 * @apiParam {string} newName  New name
 * @apiParam {string}  About (NOT YET) Updated about
+* @apiSuccess {object} editedSubreddit Returns the edited subreddit (if any).
 */
 
 
@@ -1332,6 +1334,7 @@ app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:false
 * @apiParam {string} Token Send token.
 * @apiParam {string} title New title of thread
 * @apiParam {string} threadBody New body of the thread.
+* @apiSuccess {object} editedPost Returns the edited post inside subreddit.
 */
 
 app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.deletePost(req, res));
@@ -1342,6 +1345,7 @@ app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:fa
 * @apiGroup SrService
 *
 * @apiParam {string} Token Send token.
+* @apiSuccess {object} deletedPost Returns the deleted post inside subreddit.
 */
 
 app.post("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.subscribe(req, res));
@@ -1352,6 +1356,7 @@ app.post("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (req,
 * @apiGroup SrService
 *
 * @apiParam {string} Token Send token.
+* @apiSuccess {string[]} subscribersList Returns the new subscribers list.
 */
 
 app.delete("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.unSubscribe(req, res));
@@ -1362,6 +1367,7 @@ app.delete("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (re
 * @apiGroup SrService
 *
 * @apiParam {string} Token Send token.
+* @apiSuccess {string[]} subscribersList Returns the new subscribers list.
 */
 
 
