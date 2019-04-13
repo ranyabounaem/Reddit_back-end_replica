@@ -4,7 +4,8 @@
     "./user.spec.js",
     "./comment.spec.js",
     "./pmTest.spec.js",
-    "./listings.spec.js"
+    "./listings.spec.js",
+    "./dblistingautomation.spec.js"
 
 
    

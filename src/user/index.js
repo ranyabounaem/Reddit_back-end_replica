@@ -395,7 +395,7 @@ class UserHandler {
        *    This finds if the user you want to block already is blocked
        * if he is the the response will be "this user is already blocked"
        */
-        const previouslyBlockedUser =checkIfBlockedByMe(user,req.body.blockedUser);
+        const previouslyBlockedUser =await checkIfBlockedByMe(user,req.body.blockedUser);
        
         if (previouslyBlockedUser) {
           res
@@ -406,10 +406,7 @@ class UserHandler {
   adds blocked user to blocked array 
   */
           user.blockedUsers.push(req.body.blockedUser);
-          user.save();
-          removeFriend(user,userToBlock);
-          popSentRequest(user, userToBlock);
-          popSentRequest(userToBlock, user);
+          user.save();     
           res.status(200).send({ message: "User Blocked" });
         }
       }
@@ -434,7 +431,7 @@ class UserHandler {
      * returns "the user you want to unblock isnt blocked" if he isnt blocked with status 200
      */
 
-    const blocked=checkIfBlockedByMe(user,req.body.unblockedUser);
+    const blocked=await checkIfBlockedByMe(user,req.body.unblockedUser);
 
     if (!blocked) {
       res
@@ -489,7 +486,7 @@ class UserHandler {
     /**
        *Check if viewed blocked the viewing user
        */
-    const blockedUser = checkIfBlockedByHim(userViewed,username);
+    const blockedUser = await checkIfBlockedByHim(userViewed,username);
 
     if(blockedUser){res.status(404).send({message:"User doesnt exist"})}
 
