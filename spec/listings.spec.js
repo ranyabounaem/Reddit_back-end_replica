@@ -99,8 +99,8 @@ describe('Server', function () {
         ,
     {
         name: 'nature', rules: ["no males are allowed", "no females are allowed"],
-        date: Date(),
-        posts: [postsarr[2], postsarr[3]]
+        date: Date()
+        
     },
     {
         name: 'food', rules: ["no males are allowed", "no females are allowed"],
