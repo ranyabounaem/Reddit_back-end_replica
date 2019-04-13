@@ -681,12 +681,12 @@ describe("blocks user thats already blocked", () => {
 describe("gets info of user that blocked you", () => {
   let data = {};
   let testBody = {
-    userToView:'Uzumaki'
+    
   };
 
   beforeAll(done => {
     request.get(
-      "http://localhost:4000/me/user/info",
+      "http://localhost:4000/me/user/info/Uzumaki",
       { json: true, body: testBody ,headers:head2 },
       (err, res, body) => {
         data.body = body;
@@ -762,12 +762,12 @@ describe("unblocks user that isnt blocked", () => {
 describe("gets info of user ", () => {
   let data = {};
   let testBody = {
-    userToView:'Uzumaki'
+    
   };
 
   beforeAll(done => {
     request.get(
-      "http://localhost:4000/me/user/info",
+      "http://localhost:4000/me/user/info/Uzumaki",
       { json: true, body: testBody ,headers:head2 },
       (err, res, body) => {
         data.body = body;
@@ -786,12 +786,12 @@ describe("gets info of user ", () => {
   describe("gets info of user ", () => {
     let data = {};
     let testBody = {
-      userToView:'Uzumaki'
+      
     };
   
     beforeAll(done => {
       request.get(
-        "http://localhost:4000/user/info",
+        "http://localhost:4000/user/info/Uzumaki",
         { json: true, body: testBody},
         (err, res, body) => {
           data.body = body;
