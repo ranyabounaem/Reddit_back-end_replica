@@ -14088,82 +14088,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": "<p>[type == hot] Type of the listing that the user wants for the posts.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "startPosition",
-            "description": "<p>Sending 15 posts per after the startposition</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "Posts",
-            "description": "<p>Array of the listed Posts depending on the type  .</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n {\n [    \n {\n\"subredditName\": \"funny\"\n,\"_id\":\"sd232s2231\"\n,\"title\":\"love\"\n,\"postDate\":\"1998-04-23\"\n,\"body\": \"love is known for something\"\n },\n{\n\"subredditName\": \"nature\"\n,\"_id\":\"2dsds23123d\"\n,\"title\":\"vietnam nature\"\n,\"postDate\":\"1998-04-23\"\n,\"body\": \"vietnam nature is known for something\"\n } \n]\n    }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "postsnotFound",
-            "description": "<p>no posts found for the user</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"postsNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "UserService"
-  },
-  {
-    "type": "get",
-    "url": "/user/:Username/listing?type=value",
-    "title": "List Posts",
-    "name": "ListPosts",
-    "group": "UserService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "Username",
             "description": "<p>Username of visited User.</p>"
           },
@@ -14199,7 +14123,7 @@ define({ "api": [
             "type": "Object[]",
             "optional": false,
             "field": "Posts",
-            "description": "<p>Array of the listed Posts  .</p>"
+            "description": "<p>Array of the listed Posts depending on the type  .</p>"
           }
         ]
       },
@@ -14217,8 +14141,8 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "Server",
-            "description": "<p>error no subreddits found to be listed</p>"
+            "field": "postsnotFound",
+            "description": "<p>no posts found for the user</p>"
           }
         ]
       },
@@ -14226,6 +14150,82 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 500 Server error\n{\n  \"error\": \"Server error\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "UserService"
+  },
+  {
+    "type": "post",
+    "url": "/:username/listing?type=value",
+    "title": "List Posts",
+    "name": "ListPosts",
+    "group": "UserService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>[type == hot] Type of the listing that the user wants for the posts.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "startPosition",
+            "description": "<p>Sending 15 posts per after the startposition</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Posts",
+            "description": "<p>Array of the listed Posts  .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n {\n [    \n {\n\"subredditName\": \"funny\"\n,\"_id\":\"sd232s2231\"\n,\"title\":\"love\"\n,\"postDate\":\"1998-04-23\"\n,\"body\": \"love is known for something\"\n },\n{\n\"subredditName\": \"nature\"\n,\"_id\":\"2dsds23123d\"\n,\"title\":\"vietnam nature\"\n,\"postDate\":\"1998-04-23\"\n,\"body\": \"vietnam nature is known for something\"\n } \n]\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "PostsnotFound",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"postsNotFound\"\n}",
           "type": "json"
         }
       ]
@@ -14295,6 +14295,82 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "UserService"
+  },
+  {
+    "type": "put",
+    "url": "/me/user/accept",
+    "title": "Accept Request",
+    "name": "AcceptRequest",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fUsername",
+            "description": "<p>unique Username  of user to Accept request from.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Username\": \"user1\", \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend request accepted\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to accept not found\n {\n  \"error\": \"User to accept not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 This user is already a friend\n {\n  \"error\": \"This user is already a friend\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 There isn't a request to be accepted\n {\n  \"error\": \"There isn't a request to be accepted\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
   },
   {
     "type": "put",
@@ -14624,28 +14700,27 @@ define({ "api": [
     "groupTitle": "me"
   },
   {
-    "type": "Post",
-    "url": "/me/:Username/Friend/:FriendUsername",
+    "type": "put",
+    "url": "/me/user/Add",
     "title": "Add new friend",
     "name": "FriendAdd",
     "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of user .</p>"
-          },
           {
             "group": "Parameter",
             "type": "String",
@@ -14667,7 +14742,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend request Sent\" \n}",
           "type": "json"
         }
       ]
@@ -14676,7 +14751,42 @@ define({ "api": [
       "examples": [
         {
           "title": "List error",
-          "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"User Not found\"\n}",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to be added not found\n {\n  \"error\": \"User to be added not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 402 User cannot add himself\n {\n  \"error\": \"User cannot add himself\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 The sending User is blocked\n {\n  \"error\": \"The sending User is blocked\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 The user to be added is blocked\n {\n  \"error\": \"The user to be added is blocked\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 User not found\n {\n  \"error\": \"The User to be added is already a friend\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 User has already received a request from the other user\n {\n  \"error\": \"User has already received a request from the other user\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 User has already sent a request to the other user\n {\n  \"error\": \"User has already sent a request to the other user\"\n}",
           "type": "json"
         }
       ]
@@ -14687,19 +14797,19 @@ define({ "api": [
   },
   {
     "type": "Get",
-    "url": "/me/:Username/Friend/",
+    "url": "/me/friends",
     "title": "get friends",
     "name": "FriendList",
     "group": "me",
-    "parameter": {
+    "header": {
       "fields": {
-        "Parameter": [
+        "Header": [
           {
-            "group": "Parameter",
+            "group": "Header",
             "type": "String",
             "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of the User.</p>"
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
           }
         ]
       }
@@ -14709,7 +14819,7 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "[String]",
             "optional": false,
             "field": "FUsername",
             "description": "<p>unique Username  of the User.</p>"
@@ -14719,7 +14829,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "\nHTTP/1.1 200 OK\n\n [{\n   \"FUsername\": \"User1\",    \n }]",
+          "content": "\nHTTP/1.1 200 OK\n\n {\"Friends\" :[\"User1\" , \"User2\"]}",
           "type": "json"
         }
       ]
@@ -14729,123 +14839,6 @@ define({ "api": [
         {
           "title": "List error",
           "content": "HTTP/1.1 500 server error",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "me"
-  },
-  {
-    "type": "delete",
-    "url": "/me/:Username",
-    "title": "/Friend/:FUsername   delete friend request",
-    "name": "FriendReqdelete",
-    "group": "me",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of user .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "FUsername",
-            "description": "<p>unique Username  of user to unadd.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"Username\": \"user1\", \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "HTTP/1.1 500 server error",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "me"
-  },
-  {
-    "type": "delete",
-    "url": "/me/:Username/Friend/:FUsername",
-    "title": "unfriend",
-    "name": "Frienddelete",
-    "group": "me",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of user .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "FUsername",
-            "description": "<p>unique Username  of user to delete.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"Username\": \"user1\", \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"User Not found\"\n}",
           "type": "json"
         }
       ]
@@ -15143,6 +15136,153 @@ define({ "api": [
     "groupTitle": "me"
   },
   {
+    "type": "put",
+    "url": "/me/user/reject",
+    "title": "Reject Request",
+    "name": "RejectRequest",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fUsername",
+            "description": "<p>unique Username  of user to reject.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Username\": \"user1\", \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend request rejected\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to reject not found\n {\n  \"error\": \"User to reject not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 This user is already a friend\n {\n  \"error\": \"This user is already a friend\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 There isn't a request to be rejected\n {\n  \"error\": \"There isn't a request to be rejected\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "put",
+    "url": "/me/user/removeReq",
+    "title": "delete friend request",
+    "name": "RemoveFriendRequest",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fUsername",
+            "description": "<p>unique Username  of user to unadd.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Username\": \"user1\", \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend request Removed\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to be removed not found\n {\n  \"error\": \"User to be removed not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 Request doesn't exist\n {\n  \"error\": \"Request doesn't exist\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
     "type": "Post",
     "url": "/me/:username/Report/:id",
     "title": "report user comment or post",
@@ -15212,6 +15352,58 @@ define({ "api": [
     "groupTitle": "me"
   },
   {
+    "type": "Get",
+    "url": "/me/sentRequests",
+    "title": "get sent requests",
+    "name": "SentRequestsList",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "FUsername",
+            "description": "<p>unique Username  of the User.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "\nHTTP/1.1 200 OK\n\n {\n    \"sentRequests\" :[\"User1\" , \"User2\"]\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 500 server error",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
     "type": "put",
     "url": "/me/user/unblock",
     "title": "unblock user",
@@ -15264,6 +15456,129 @@ define({ "api": [
         {
           "title": "List error",
           "content": "HTTP/1.1 404 user isnt blocked\n {\n error:\"the user you want to unblock isnt blocked\"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "put",
+    "url": "/me/user/Unfriend",
+    "title": "unfriend",
+    "name": "Unfriend",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fUsername",
+            "description": "<p>unique Username  of user to delete.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Username\": \"user1\", \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend is removed from friends list\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to unFriend not found\n {\n  \"error\": \"User to unFriend not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 This user is not a friend\n {\n  \"error\": \"This user is not a friend\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "Get",
+    "url": "/me/receivedRequests",
+    "title": "get received requests",
+    "name": "receivedRequestsList",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "FUsername",
+            "description": "<p>unique Username  of the User.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "\nHTTP/1.1 200 OK\n\n {\n    \"receivedRequests\" :[\"User1\" , \"User2\"]\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 500 server error",
           "type": "json"
         }
       ]
