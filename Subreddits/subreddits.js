@@ -60,34 +60,36 @@ class SR {
         var subredditName = req.params.srName;
         var updatedRules = req.body.newRules;
         var updatedName = req.body.newName;
-
-       sr.findOne({name : subredditName}).then(function(record){
-           if(record.adminUsername!=getUser(req)){
-                res.json({error: 'invalid user',
-                status:400});
-                res.end();
-
-            };
-        });
-        
         if(subredditName && updatedRules && updatedName){
-            sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err){
-                if (err){
-                    res.json({error: 'internal server err',
-                    status:500});
+
+            sr.findOne({name : subredditName}).then(function(record){
+           
+               if(record.adminUsername!=getUser(req)){
+                   res.json({error: 'invalid user',
+                    status:400});
                     res.end();
                 }
-                else {
-                    res.status(200);
-                    res.end();
+                else{
+
+                    sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err){
+                        if (err){
+                            res.json({error: 'internal server err',
+                            status:500});
+                            res.end();
+                        }
+                        else {
+                            res.status(200);
+                            res.end();
+                        };
+                    });
                 };
             });
         }
         else {
-            res.json({error: 'err',
+            res.json({error: 'incorrect or empty fields',
             status:400});
-            res.end();
-        };         
+            res.end();  
+        };
     };
 
 /**
@@ -284,16 +286,17 @@ class SR {
                 status:400});
                 res.end();
             }
-            pt.findOneAndDelete({_id: postId}).then(function(){
-                sr.findOne({name: subrName}).then(function(record){
-                    record.posts.pop(postId);
-                    record.save().then(function(){
-                        res.status(200);
-                        res.end();
+            else{
+                pt.findOneAndDelete({_id: postId}).then(function(){
+                    sr.findOne({name: subrName}).then(function(record){
+                        record.posts.pop(postId);
+                        record.save().then(function(){
+                            res.status(200);
+                            res.end();
+                        });
                     });
                 });
-            });
-
+            };
         });
     };
 
@@ -313,20 +316,22 @@ class SR {
         var editor = getUser(req);
         pt.findOne({_id: postId}).then(function(record){
             if(record.creatorUsername != editor){
-                res.json({error: 'user mismatch',
-                status:400});
-                res.end(); 
+                res.status(404).send({ 'error': 'user mismatch' })
             }
-            pt.findOneAndUpdate({_id: postId}, {title: title, threadBody: threadBody}, function(err)
-            {
-                if(err){
-                    res.json({error: 'internal server error',
-                    status:500});
-                    res.end();  
-                }
-                res.status(200);
-                res.end();
-            });
+            else{
+                pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody}, function(err)
+                {
+                    if(err){
+                        res.json({error: 'internal server error',
+                        status:500});
+                        res.end();  
+                    }
+                    else{
+                        res.status(200);
+                        res.end();
+                    };
+                });
+            };
         });
     };
 
