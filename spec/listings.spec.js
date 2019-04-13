@@ -1,3 +1,36 @@
+/* 
+const request = require('request');
+const mongoose = require('mongoose');
+const subbredditsSchema = require('../models/subredditsSchema');
+const subbreddit = subbredditsSchema.Subreddit;
+const posts = subbredditsSchema.SubredditPostSchema;
+const users = require('../models/UserSchema');
+const jasmine = require('jasmine');
+// testing compose/block/unblock/retrieveblock
+describe('Server', function () {
+    let server;
+    let usersarr = [{ Username: "ahmed", Password: "12345678", Email: "mostasdasdasdasdfa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "ahmedmohamed", Password: "12345678", Email: "moasdqweqwsadsadsadasdstafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "marawan", Password: "12345678", Email: "mostasdasdqwweqweqweafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "hamada", Password: "12345678", Email: "mosqweqweqwdadstafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "lolo", Password: "12345678", Email: "mossdasdacxctafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "koko", Password: "12345678", Email: "asdqwe@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "mohamed", Password: "12345678", Email: "dghgjjj@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "saidahmed", Password: "12345678", Email: "sdasghjjk@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "soso", Password: "12345678", Email: "bcasfetq@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "marwan", Password: "12345678", Email: "asdhtweeqwe@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+    ];
+    let postsarr = [{
+        title: 'what is love',
+        body: 'love is more than anything in the world love is love ',
+        postDate: Date()
+        , subredditName: 'love'
+    }
+        , {
+        title: 'If you have a love in your life, who turns any moment',
+        body: 'Share this love quote with your lover and see the smile on their face. It will be priceless.',
+        postDate: Date()
+        , subredditName: 'love'
 
 // const request = require('request');
 // const mongoose = require('mongoose');
@@ -273,3 +306,4 @@
 
 // });
 
+    });

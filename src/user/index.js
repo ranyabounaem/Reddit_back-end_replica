@@ -210,9 +210,9 @@ class UserHandler {
    *     @returns {JSON} the response for the request
    */
   EditUserEmail(req, res) {
-    if (JWTconfig.authenticate(req, req.params.Username) == false) {
-      res.status(403).send({ error: "Not Authorized" });
-    }
+    // if (JWTconfig.authenticate(req, req.params.Username) == false) {
+    //   res.status(403).send({ error: "Not Authorized" });
+    // }
     /**
      *    This checks if the Username received is a valid username in the database
      *    if the username doesn't exist in the database
