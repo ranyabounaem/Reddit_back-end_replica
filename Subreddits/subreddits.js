@@ -160,14 +160,20 @@ class SR {
 
                             // internal Server error 
                             res.status(500)
-                            res.json({ error: 'internalServerError or name may already exist' });
+                            res.json({ error: 'internalServerError ' });
                             res.end();
 
                         }
                         else{
                             record.posts.push(newPost._id);
-                            record.save().then(function(){
+                            record.save(function(err){
+                                if(err)
+                                {
+                                    res.json({ error: 'internalServerError' });
+                                }
+                                else{
                                 res.status(200).send(newPost);
+                                };
                             });
                         }
                     });
@@ -201,14 +207,15 @@ class SR {
                 res.status(400).send({ 'error': 'invalid subreddit name' });
             }
             else{
-                if(!record.subscribed_users.find(subscribed_user)){
+                if(record.subscribed_users.indexOf(subscribed_user)==-1){
                     record.subscribed_users.push(subscribed_user);
                     record.save(function(err){
                         if(err){
                             res.status(500).send({ 'error': 'internal server error' });
                         }
-                    }).then(function(saved){
-                        res.status(200).send(saved.subscribed_users);
+                        else{
+                            res.status(200).send(record.subscribed_users);
+                        };
                     });
                 }
                 else{
@@ -241,15 +248,16 @@ class SR {
                 res.status(400).send({ 'error': 'invalid subreddit name' });
             }
             else{
-                if(record.subscribed_users.find(unsubscried_user))
+                if(record.subscribed_users.indexOf(unsubscribed_user) > -1)
                 {
-                    record.subscribed_users.splice(subscribed_users.indexOf(unsubscribed_user), 1);
+                    record.subscribed_users.splice(record.subscribed_users.indexOf(unsubscribed_user), 1);
                     record.save(function(err){
                         if(err){
                             res.status(500).send({ 'error': 'internal server error' });
-                        };
-                    }).then(function(record){
+                        }
+                        else{
                         res.status(200).send(record.subscribed_users);
+                        }
                     });
                 }
                 else{
@@ -279,29 +287,34 @@ class SR {
             if (!checked) {
                 res.status(404).send({ 'error': 'invalid postId' });
             }
-            else if(check.creatorUsername != eraser)
+            else if(checked.creatorUsername != eraser)
             {
                 res.status(403).send({ 'error': 'access forbidden' });
             }
             else{
-                pt.findOneAndDelete({_id: postId}, function(err){
+                pt.findOneAndDelete({_id: postId}, function(err, deleted){
                     if(err)
                     {
                         res.status(500).send({ 'error': 'internal server error' });
                     };
-                }).then(function(deleted){
                     if(!deleted)
                     {
                         res.status(400).send({ 'error': 'invalid postId' });
                     }
                     else{
                         sr.findOne({name: subrName}).then(function(record){
-                            record.posts.pop(postId);
-                            record.save().then(function(){
-                                res.status(200).send({record});
+                            record.posts.splice(record.posts.indexOf(postId), 1);
+                            record.save(function(err){
+                                if(err)
+                                {
+                                    res.status(500).send({ 'error': 'invalid postId' });
+                                }
+                                else{
+                                    res.status(200).send(record.posts);
+                                }
                             });
                         });
-                    };
+                    };    
                 });
             };
         });
@@ -326,23 +339,25 @@ class SR {
                 res.status(500).send({ 'error': 'internal server error' });
             }
         }).then(function(record){
+            if(!record){
+                res.status(400).send({ 'error': 'invalid postId' });
+            }
             if(record.creatorUsername != editor){
                 res.status(403).send({ 'error': 'access forbidden' })
             }
             else{
-                pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody}, function(err)
+                pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody}, function(err, updated)
                 {
                     if(err){
-                        res.status(404).send({ 'error': 'internal server error' }) 
-                    }
-                }).then(function(updated){
-                    if(!updated)
+                        res.status(500).send({ 'error': 'internal server error' }) 
+                    };
+                    if (!updated)
                     {
                         res.status(400).send({ 'error': 'invalid postId' });
                     }
                     else{
                         res.status(200).send(updated);
-                    };
+                    };  
                 });
             };
         });
