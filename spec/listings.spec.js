@@ -1,36 +1,3 @@
-/* 
-const request = require('request');
-const mongoose = require('mongoose');
-const subbredditsSchema = require('../models/subredditsSchema');
-const subbreddit = subbredditsSchema.Subreddit;
-const posts = subbredditsSchema.SubredditPostSchema;
-const users = require('../models/UserSchema');
-const jasmine = require('jasmine');
-// testing compose/block/unblock/retrieveblock
-describe('Server', function () {
-    let server;
-    let usersarr = [{ Username: "ahmed", Password: "12345678", Email: "mostasdasdasdasdfa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "ahmedmohamed", Password: "12345678", Email: "moasdqweqwsadsadsadasdstafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "marawan", Password: "12345678", Email: "mostasdasdqwweqweqweafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "hamada", Password: "12345678", Email: "mosqweqweqwdadstafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "lolo", Password: "12345678", Email: "mossdasdacxctafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "koko", Password: "12345678", Email: "asdqwe@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "mohamed", Password: "12345678", Email: "dghgjjj@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "saidahmed", Password: "12345678", Email: "sdasghjjk@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "soso", Password: "12345678", Email: "bcasfetq@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "marwan", Password: "12345678", Email: "asdhtweeqwe@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-    ];
-    let postsarr = [{
-        title: 'what is love',
-        body: 'love is more than anything in the world love is love ',
-        postDate: Date()
-        , subredditName: 'love'
-    }
-        , {
-        title: 'If you have a love in your life, who turns any moment',
-        body: 'Share this love quote with your lover and see the smile on their face. It will be priceless.',
-        postDate: Date()
-        , subredditName: 'love'
 
 const request = require('request');
 const mongoose = require('mongoose');
@@ -42,16 +9,16 @@ const jasmine = require('jasmine');
 // testing compose/block/unblock/retrieveblock
 describe('Server', function () {
     let server4;
-    let usersarr = [{ Username: "ahmed2", Password: "12345678", Email: "mostafaa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+    let url = 'http://localhost:4000/';
+    // someone with no subscribers
+    const head2 = { 'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJhaG1lZDIiLCJpYXQiOjE1NTUxMDcwMDJ9.yPRHl1mwX5-sF8WtiM8iewHnhpGnXfb2lIDHG5vu2t4' };
+
+    // someone with  subscribers 
+    const head = { 'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJhaG1lZG1vaGFtZWQyIiwiaWF0IjoxNTU1MTA3MDU0fQ.JD5dOWPC68QCzP-ivSWHwrgtxy-37f7qhsksvAelPjE' };
+
+    let usersarr = [{ Username: "ahmed2", Password: "12345678", Email: "mostafaa@m.com", Subscriptions: [] }
         , { Username: "ahmedmohamed2", Password: "12345678", Email: "mostafas@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "marawan2", Password: "12345678", Email: "mostafsas@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "hamada2", Password: "12345678", Email: "mostadfa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "lolo2", Password: "12345678", Email: "mostaffa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "koko2", Password: "12345678", Email: "mostafga@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "mohamed2", Password: "12345678", Email: "mostvafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "saidahmed2", Password: "12345678", Email: "moxcstafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "soso2", Password: "12345678", Email: "mostazsfa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
-        , { Username: "marwan22", Password: "12345678", Email: "mostfrafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+
     ];
     let postsarr = [{
         title: 'what is love',
@@ -157,7 +124,7 @@ describe('Server', function () {
         // for generation in db just
 
     });
-   
+
     describe('Listing New no error', function () {
         // receiver username is undefined
         let messageTest1 = {
@@ -165,8 +132,8 @@ describe('Server', function () {
         };
         let data = {};
         beforeAll(function (done) {  // mocking the post request with message test
-            request.get('http://localhost:4000/ahmed2/listing?type=new'
-                , { json: true, body: messageTest1 }, function (error, response, body) {
+            request.post(url + 'me/listing?type=new'
+                , { json: true, headers: head, body: messageTest1 }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
                     done();
@@ -177,6 +144,7 @@ describe('Server', function () {
         it('Status 200', function () {
             // there are some posts inserted beforeall
             expect(data.status).toBe(200);
+
         });
 
         it('Limit posts Test more than 15', function () {
@@ -210,14 +178,13 @@ describe('Server', function () {
 
     });
     describe('Listing error undefined query', function () {
-        // receiver username is undefined
         let messageTest1 = {
             startPosition: 0
         };
         let data = {};
         beforeAll(function (done) {  // mocking the post request with message test
-            request.get('http://localhost:4000/marwan22/listing?type=bypdsdsd'
-                , { json: true, body: messageTest1 }, function (error, response, body) {
+            request.post(url + 'me/listing?type=bypdsdsd'
+                , { json: true, headers: head2, body: messageTest1 }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
                     done();
@@ -235,33 +202,6 @@ describe('Server', function () {
         });
 
     });
-    describe('Listing error  usernotfound', function () {
-        // receiver username is undefined
-        let messageTest1 = {
-            startPosition: 0
-        };
-        let data = {};
-        beforeAll(function (done) {  // mocking the post request with message test
-            request.get('http://localhost:4000/ejjkndfjnkdfnjk/listing?type=new'
-                , { json: true, body: messageTest1 }, function (error, response, body) {
-                    data.status = response.statusCode;
-                    data.body = body;
-                    done();
-
-                });
-        });
-
-        //  status 404 for not found
-        it('Status 404', function () {
-            expect(data.status).toBe(404);
-        });
-
-        it('user not found  error', function () {
-            expect(data.body.error).toBe('userNotFound');
-        });
-
-
-    });
 
     describe('Listing error  postsnotfound', function () {
         // receiver username is undefined
@@ -270,17 +210,16 @@ describe('Server', function () {
         };
         let data = {};
         beforeAll(function (done) {  // mocking the post request with message test
-            posts.remove({}, function () {
 
-                request.get('http://localhost:4000/marwan22/listing?type=new'
-                    , { json: true, body: messageTest1 }, function (error, response, body) {
-                        data.status = response.statusCode;
-                        data.body = body;
+            request.post(url + 'me/listing?type=new'
+                , { json: true, headers: head2, body: messageTest1 }, function (error, response, body) {
+                    data.status = response.statusCode;
+                    data.body = body;
 
-                        done();
+                    done();
 
-                    });
-            });
+                });
+
 
         });
 
@@ -295,7 +234,21 @@ describe('Server', function () {
 
 
     });
+    afterAll(function (done) {
 
-});
+        users.deleteMany({ Username: { $in: ['ahmed2', 'ahmedmohamed2'] } }, function (err) {
+
+        }).then(posts.deleteMany({ subredditName: { $in: ['love', 'nature', 'food', 'travel'] } }, function () {
+
+            subbreddit.deleteMany({
+                name: { $in: ['love', 'nature', 'food', 'travel'] }
+            }, function () {
+
+                done();
+
+            });
+        }));
 
     });
+});
+
