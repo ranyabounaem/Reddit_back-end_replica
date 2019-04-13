@@ -10,7 +10,9 @@ describe("user tests", () => {
 
   
   afterAll(function (done) {
-    User.deleteMany({},function(){done()})
+    User.deleteOne({Username:'Uzumaki'},function(){done()})
+    User.deleteOne({Username:'sami'},function(){done()})
+    User.deleteOne({Username:'mostafa'},function(){done()})
 
 
  });
