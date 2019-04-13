@@ -549,8 +549,10 @@ class UserHandler {
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
-    if(req.body.fUsername == null) res.status(404).send({error :"fUsername not found"});
-
+    if(req.body.fUsername == null) 
+    {
+      res.status(404).send({error :"fUsername not found"});
+    }
     else
     {
       const userToAdd = await User.findOne({ Username: req.body.fUsername });

@@ -808,6 +808,61 @@ describe("gets info of user ", () => {
 
   
 
+  });
+
+  
+// describe("Adds user", () => {
+//   let data = {};
+//   let testBody = {
+//     fUsername:'mostafa'
+//   };
+
+//   beforeAll(done => {
+//     request.put(
+//       "http://localhost:4000/me/user/Add",
+//       { json: true, body: testBody ,headers:head },
+//       (err, res, body) => {
+//         data.body = body;
+//         data.status = res.statusCode;
+//         done();
+      
+        
+//       }
+//     );
+//   });
+//   it("checks if Add successful", () => {
+//     expect(data.status).toBe(200);
+//     expect(data.body).toEqual({message : "Friend request Sent"});
+//   });
+
+  
+// });
+
+describe("Adds user", () => {
+  let data = {};
+  let testBody = {
+    fUsername:"Uzumaki"
+  };
+
+  beforeAll(done => {
+    request.put(
+      "http://localhost:4000/me/user/Add",
+      { json: true, body: testBody ,headers:head },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+    );
+  });
+  it("checks if Add unsuccessful", () => {
+    expect(data.status).toBe(402);
+    expect(data.body).toEqual({error : "User cannot add himself"});
+  });
+
+  
 });
 
 });
