@@ -8,10 +8,10 @@ const mongoose = require("mongoose");
 const ObjectId = require('mongodb').ObjectID
 
 //let sSubreddit name or ID whatever the thread needs
-let th_id, c_id,c_id2,c_id3;
+let th_id, c_id, c_id2, c_id3;
 let isodate = new Date().toISOString();
-const head={'auth':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJNb3N0YWZhMFNoZXJpZiIsImlhdCI6MTU1NTA5Njg3MX0.9eXtK141KOGTKTghedqMJmtN6XwDs4g9FVzvpTEePMo'};
-const head2={'auth':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJNb3N0YWZhMVNoZXJpZiIsImlhdCI6MTU1NTEwMTU4OX0.qTTyz_xxtZdTK8IouDGfxBLl8oqDK5cm1sAP_snYhDs'};
+const head = { 'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJNb3N0YWZhMFNoZXJpZiIsImlhdCI6MTU1NTA5Njg3MX0.9eXtK141KOGTKTghedqMJmtN6XwDs4g9FVzvpTEePMo' };
+const head2 = { 'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJNb3N0YWZhMVNoZXJpZiIsImlhdCI6MTU1NTEwMTU4OX0.qTTyz_xxtZdTK8IouDGfxBLl8oqDK5cm1sAP_snYhDs' };
 
 let user1 = {
     Username: 'Mostafa0Sherif',
@@ -48,21 +48,21 @@ describe("comment tests", () => {
     beforeAll((done) => {
         server = require("../index");
         user.create(user1).then(user.create(user2)).then(
-        Post.create(post1).then(function (RetPost) {
-            th_id = RetPost._id;
-        }).then(Post.create(post2).then(function (RetPost2) {
-            th_id2 = RetPost2._id;
-        })).then(Subreddit.create(sr)).then(function () {
-            done();
-        }));
+            Post.create(post1).then(function (RetPost) {
+                th_id = RetPost._id;
+            }).then(Post.create(post2).then(function (RetPost2) {
+                th_id2 = RetPost2._id;
+            })).then(Subreddit.create(sr)).then(function () {
+                done();
+            }));
 
     });
     afterAll((done) => {
-        
-        Post.deleteMany({$or:[{creatorUsername:'Mostafa0Sherif'},{creatorUsername:'Mostafa1Sherif'}]},function(){
-            Subreddit.deleteMany({adminUsername:'Mostafa0Sherif'},function(){
-                Comment.deleteMany({$or:[{username:'Mostafa0Sherif'},{username:'Mostafa1Sherif'}]},function(){
-                    user.deleteMany({$or:[{Username:'Mostafa0Sherif'},{Username:'Mostafa1Sherif'}]},function(){
+
+        Post.deleteMany({ $or: [{ creatorUsername: 'Mostafa0Sherif' }, { creatorUsername: 'Mostafa1Sherif' }] }, function () {
+            Subreddit.deleteMany({ adminUsername: 'Mostafa0Sherif' }, function () {
+                Comment.deleteMany({ $or: [{ username: 'Mostafa0Sherif' }, { username: 'Mostafa1Sherif' }] }, function () {
+                    user.deleteMany({ $or: [{ Username: 'Mostafa0Sherif' }, { Username: 'Mostafa1Sherif' }] }, function () {
                         done();
                     })
                 })
@@ -97,23 +97,21 @@ describe("comment tests", () => {
                     data.body = body;
                     data.status = res.statusCode;
                     c_id = data.body.c_id;
-                    done();
-                });
-            Request.post("http://localhost:4000/comment/" + th_id,
-            { json: true, body: testBody2, headers: head },
-                (err, res, body) => {
-                    data.body = body;
-                    data.status = res.statusCode;
-                    c_id2 = data.body.c_id;
-                    done();
-                });
-            Request.post("http://localhost:4000/comment/" + th_id,
-            { json: true, body: testBody3, headers: head },
-                (err, res, body) => {
-                    data.body = body;
-                    data.status = res.statusCode;
-                    c_id3 = data.body.c_id;
-                    done();
+                    Request.post("http://localhost:4000/comment/" + th_id,
+                        { json: true, body: testBody2, headers: head },
+                        (err, res, body) => {
+                            data.body = body;
+                            data.status = res.statusCode;
+                            c_id2 = data.body.c_id;
+                            Request.post("http://localhost:4000/comment/" + th_id,
+                                { json: true, body: testBody3, headers: head },
+                                (err, res, body) => {
+                                    data.body = body;
+                                    data.status = res.statusCode;
+                                    c_id3 = data.body.c_id;
+                                    done();
+                                });
+                        });
                 });
         });
 
@@ -154,7 +152,7 @@ describe("comment tests", () => {
             };
             beforeAll((done) => {
                 Request.post("http://localhost:4000/comment/012345678901234567891234",    //any false thread ID
-                    { json: true, body: testBody, headers: head},
+                    { json: true, body: testBody, headers: head },
                     (err, res, body) => {
                         data.body = body;
                         data.status = res.statusCode;
