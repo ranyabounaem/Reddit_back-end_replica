@@ -59,7 +59,7 @@ app.use(passport.initialize());
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", " POST,PUT,GET,DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, auth");
     next();
 });
 
@@ -285,6 +285,296 @@ app.put("/me/user/block", passport.authenticate('jwt', { session: false }), user
 * 
 * 
 */
+
+app.put("/me/user/Add",passport.authenticate('jwt',{session:false}),userHandler.addFriend);
+ /**
+ * @api {put} /me/user/Add  Add new friend
+ * @apiName FriendAdd
+ * @apiGroup me
+ *
+ * @apiHeader {String} auth Users unique token. 
+ * @apiParam  {String} FriendUsername unique Username  of user to add. 
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "user1", 
+      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {    
+ *      "message": "Friend request Sent" 
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 fUsername not found
+ *      {
+ *       "error": "fUsername not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User to be added not found
+ *      {
+ *       "error": "User to be added not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 402 User cannot add himself
+ *      {
+ *       "error": "User cannot add himself"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 The sending User is blocked
+ *      {
+ *       "error": "The sending User is blocked"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 The user to be added is blocked
+ *      {
+ *       "error": "The user to be added is blocked"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 User not found
+ *      {
+ *       "error": "The User to be added is already a friend"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 User has already received a request from the other user
+ *      {
+ *       "error": "User has already received a request from the other user"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 User has already sent a request to the other user
+ *      {
+ *       "error": "User has already sent a request to the other user"
+ *     }
+ */
+
+
+app.put("/me/user/Unfriend",passport.authenticate('jwt',{session:false}),userHandler.unFriend);
+
+ /**
+ * @api {put} /me/user/Unfriend   unfriend
+ * @apiName Unfriend
+ * @apiGroup me
+ *
+ * @apiHeader {String} auth Users unique token.
+ * @apiParam  {String} fUsername unique Username  of user to delete. 
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "user1", 
+      
+ *    }
+*  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {    
+ *      "message": "Friend is removed from friends list" 
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 fUsername not found
+ *      {
+ *       "error": "fUsername not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User to unFriend not found
+ *      {
+ *       "error": "User to unFriend not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 This user is not a friend
+ *      {
+ *       "error": "This user is not a friend"
+ *     }
+ */
+
+app.put("/me/user/accept",passport.authenticate('jwt',{session:false}),userHandler.acceptRequest);
+
+ /**
+ * @api {put} /me/user/accept   Accept Request
+ * @apiName AcceptRequest
+ * @apiGroup me
+ *
+ * @apiHeader {String} auth Users unique token.
+ * @apiParam  {String} fUsername unique Username  of user to Accept request from. 
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "user1", 
+      
+ *    }
+*  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {    
+ *      "message": "Friend request accepted" 
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 fUsername not found
+ *      {
+ *       "error": "fUsername not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User to accept not found
+ *      {
+ *       "error": "User to accept not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 This user is already a friend
+ *      {
+ *       "error": "This user is already a friend"
+ *     }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 401 There isn't a request to be accepted
+ *      {
+ *       "error": "There isn't a request to be accepted"
+ *     }
+ */
+
+app.put("/me/user/reject",passport.authenticate('jwt',{session:false}),userHandler.rejectRequest);
+
+ /**
+ * @api {put} /me/user/reject   Reject Request
+ * @apiName RejectRequest
+ * @apiGroup me
+ *
+ * @apiHeader {String} auth Users unique token.
+ * @apiParam  {String} fUsername unique Username  of user to reject. 
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "user1", 
+      
+ *    }
+*  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {    
+ *      "message": "Friend request rejected" 
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 fUsername not found
+ *      {
+ *       "error": "fUsername not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User to reject not found
+ *      {
+ *       "error": "User to reject not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 401 This user is already a friend
+ *      {
+ *       "error": "This user is already a friend"
+ *     }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 401 There isn't a request to be rejected
+ *      {
+ *       "error": "There isn't a request to be rejected"
+ *     }
+ */
+
+app.get("/me/friends",passport.authenticate('jwt',{session:false}),userHandler.getFriends);
+
+ /**
+ * @api {Get} /me/friends   get friends
+ * @apiName FriendList
+ * @apiGroup me
+ *
+ * @apiHeader {String} auth Users unique token.
+ * @apiSuccess  {[String]} FUsername unique Username  of the User.
+ * @apiSuccessExample {json} Success
+ *  
+ *   HTTP/1.1 200 OK
+ * 
+ *    {"Friends" :["User1" , "User2"]}
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 500 server error
+ */
+
+app.get("/me/sentRequests",passport.authenticate('jwt',{session:false}),userHandler.getSentRequests);
+
+/**
+* @api {Get} /me/sentRequests  get sent requests
+* @apiName SentRequestsList
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiSuccess  {String} FUsername unique Username  of the User.
+*  @apiSuccessExample {json} Success
+*  
+*   HTTP/1.1 200 OK
+* 
+*    {
+*       "sentRequests" :["User1" , "User2"]
+*    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 500 server error
+*/
+
+app.get("/me/receivedRequests",passport.authenticate('jwt',{session:false}),userHandler.getReceivedRequests);
+
+/**
+* @api {Get} /me/receivedRequests  get received requests
+* @apiName receivedRequestsList
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiSuccess  {String} FUsername unique Username  of the User.
+*  @apiSuccessExample {json} Success
+*  
+*   HTTP/1.1 200 OK
+* 
+*    {
+*       "receivedRequests" :["User1" , "User2"]
+*    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 500 server error
+*/
+
+app.put("/me/user/removeReq",passport.authenticate('jwt',{session:false}),userHandler.RemoveReq);
+
+ /**
+ * @api {put} /me/user/removeReq   delete friend request
+ * @apiName RemoveFriendRequest
+ * @apiGroup me
+ *
+ *
+ * @apiHeader {String} auth Users unique token.
+ * @apiParam  {String} fUsername unique Username  of user to unadd.  
+ * @apiParamExample {json} Input
+ *    {
+ *      "Username": "user1", 
+ *    }
+*  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {    
+ *      "message": "Friend request Removed" 
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 fUsername not found
+ *      {
+ *       "error": "fUsername not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 User to be removed not found
+ *      {
+ *       "error": "User to be removed not found"
+ *     }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Request doesn't exist
+ *      {
+ *       "error": "Request doesn't exist"
+ *     }
+ */
+
 
 /**
  * @name UserService

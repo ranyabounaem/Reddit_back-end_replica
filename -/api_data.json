@@ -11800,15 +11800,6 @@
         ]
       }
     },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "EmojiService"
@@ -11858,6 +11849,15 @@
           }
         ]
       }
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"request not found\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -11990,15 +11990,6 @@
         ]
       }
     },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found {\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "EmojiService"
@@ -12048,6 +12039,15 @@
           }
         ]
       }
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Report not found {\n         \"error\":\"request not found\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
