@@ -1256,13 +1256,101 @@ app.delete("/comment", (req, res) => {});
 * @apiName CreateSubreddit
 * @apiGroup SrService
 *
-* @apiParam {string} username Id of user that created SR.
+* @apiParam {string} Token Send token.
 * @apiParam {string} srName  unique Name of the subreddit (no longer than 100 character).
 * @apiParam {string[]} srRules list of subbreddit rules.
 * @apiParam {string}  SyncToken  (NOT YET) Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {string[]}  ModUsername (NOT YET)  Subreddit moderators' usernames.
 *
 */
+
+
+/**
+* @api {get} /sr/:srName/meta   Views subreddit meta
+* @apiName ViewSrMeta
+* @apiGroup SrService
+*
+* @apiParam {string} srName Subreddit name.
+* @apiSuccess {string} username Username of Creator.
+* @apiSuccess {string} date  date of creation.
+* @apiSuccess {object[]} posts All posts. 
+* @apiSuccess {string[]} rules   Rules of sr.
+* @apiSuccess {string} Bio   Subreddit's bio.
+* @apiSuccess {string[]} BannedUsers (NOT YET)   ID of banned users.
+* @apiSuccess {string[]} ModIds (NOT YET)  ID of Modertors.
+* @apiSuccess {string[]} UserIds (NOT YET  Ids of subscribed users .
+* @apiSuccess {Number[]} SubCount (NOT YET)  Number of subscribers.
+
+*/
+
+
+/**
+* @api {delete} /sr/:srName   Delete a subreddit
+* @apiName DeleteSubreddit
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+*/
+
+/**
+* @api {put} /sr/:srName/    Edit a subreddit
+* @apiName EditSubreddit
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string[]} newRules Updated rules.
+* @apiParam {string} newName  New name
+* @apiParam {string}  About (NOT YET) Updated about
+*/
+
+/**
+* @api {post} /sr/:srName/thread    Create a thread inside subreddit
+* @apiName CreateSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} title Title of thread
+* @apiParam {string} threadBody Body of the thread.
+* @apiParam {boolean}  Spoiler (NOT YET) [Spoiler==false] Mark if post is spoiler
+*/
+
+
+/**
+* @api {put} /sr/:srName/thread/:postId    Edit a thread inside subreddit
+* @apiName EditSrThread
+* @apiGroup SrService
+*
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} title New title of thread
+* @apiParam {string} threadBody New body of the thread.
+*/
+
+/**
+* @api {delete} /sr/:srName/thread/:postId    Delete a thread inside subreddit
+* @apiName DeleteSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+*/
+
+
+/**
+* @api {post} /sr/:srName/subs  Subscribe to a Sr
+* @apiName SubredditSubscribtion
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+*/
+
+/**
+* @api {delete} /sr/:srName/subs   Unsubscribe to a Sr
+* @apiName SubredditUnsubscribtion
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+*/
+
 
 /**
 * @api {get} /sr/:SubredditName/listing/:type   ListSubreddits   Generate a list of subreddits 
@@ -1275,85 +1363,11 @@ app.delete("/comment", (req, res) => {});
 * @apiSuccess {string[]} SubredditIDs Returns list of sorted subreddits
 */
 
-/**
-* @api {get} /sr/:srName/meta   Views subreddit meta
-* @apiName ViewSrMeta
-* @apiGroup SrService
-*
-* @apiParam {string} srName Subreddit name.
-* @apiSuccess {string} username Username of Creator.
-* @apiSuccess {string} date  date of creation.
-* @apiSuccess {object[]} posts All posts. 
-* @apiSuccess {string[]} rules   Rules of sr.
-* @apiSuccess {string[]} BannedUsers (NOT YET)   ID of banned users.
-* @apiSuccess {string[]} ModIds (NOT YET)  ID of Modertors.
-* @apiSuccess {string[]} UserIds (NOT YET  Ids of subscribed users .
-* @apiSuccess {Number[]} SubCount (NOT YET)  Number of subscribers.
-
-*/
-
-/**
-* @api {put} /sr/:srName/    Edit a subreddit
-* @apiName EditSubreddit
-* @apiGroup SrService
-*
-* @apiParam {string[]} newRules Updated rules.
-* @apiParam {string} newName  New name
-* @apiParam {string}  About (NOT YET) Updated about
-*/
-
-/**
-* @api {post} /sr/:srName/thread    Create a thread inside subreddit
-* @apiName CreateSrThread
-* @apiGroup SrService
-*
-* @apiParam {string} username Username of creator.
-* @apiParam {string} title Title of thread
-* @apiParam {string} threadBody Body of the thread.
-* @apiParam {boolean}  Spoiler (NOT YET) [Spoiler==false] Mark if post is spoiler
-*/
-
-/**
-* @api {post} /sr/:srName/subs  Subscribe to a Sr
-* @apiName SubredditSubscribtion
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-*/
-
-/**
-* @api {delete} /sr/:srName/subs   Unsubscribe to a Sr
-* @apiName SubredditUnsubscribtion
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-*/
-
-/**
-* @api {delete} /sr/:id/thread    Delete a thread inside subreddit
-* @apiName DeleteSrThread
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-* @apiParam {string} PostID
-*/
-
-/**
-* @api {delete} /sr/:Id   Delete a subreddit
-* @apiName DeleteSubreddit
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-*/
 
 const subreddit = require('./Subreddits/subreddits')
 app.post("/sr/create", (req, res) => subreddit.createSr(req, res));
 app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
-app.put("/sr/:srName", (req, res) => subreddit.edit(req,res));
+app.put("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.edit(req,res));
 app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 
 /**
