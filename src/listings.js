@@ -5,7 +5,7 @@ const userhandler = require('./user/index');
 const subbredditsSchema = require('../models/subredditsSchema');
 const subbreddits = subbredditsSchema.Subreddit;
 const posts = subbredditsSchema.SubredditPostSchema;
-
+const ath=require('../JWt/giveToken');
 /** 
  * @class listings
  */
@@ -16,6 +16,7 @@ class listings {
     /**
        * Listing sorting the posts  by  new feature
        * @param {string} owner   the username of the user to retrieve list for
+       * @param {String} syncToken  the token extracted from the request header to get the username of the sender
        * @param {string} startPosition the number of scrolls a user does to retirieve posts
        * @example
        * // returns   array of 15 posts maximum depending on the start position
@@ -33,13 +34,51 @@ class listings {
             .skip(startPosition * 15).limit(15);
         return newPosts;
     }
-
-
+    /**
+       * Listing sorting the posts  by  hot feature
+       * @param {string} owner   the username of the user to retrieve list for
+       * @param {String} syncToken  the token extracted from the request header to get the username of the sender
+       * @param {string} startPosition the number of scrolls a user does to retirieve posts
+       * @example
+       * // returns   array of 15 posts maximum depending on the start position
+       * listings.listingPostsbyHot('kefah', 0);
+       * @returns {Object[]}    returns array of 15 posts maximum depending on the start position
+       * @example
+       *  listings.listingPostsbyHot('kefah', 1);
+       * @returns {Object[]}  
+       */
+    async listingPostsbyHot(owner, startPosition) {
+        // getting the names of the subbreddit a user is subscribed to 
+        let subscribedSubbreddit = await User.findOne({ Username: owner }, { Subscriptions: 1, _id: 0 });
+        // finding the posts that the subbreddit posted to retrieve for the user 
+        let hotPosts = null;
+        return hotposts;
+    }
+    /**
+       * Listing sorting the posts  by  popular feature
+       * @param {string} owner   the username of the user to retrieve list for
+       * @param {String} syncToken  the token extracted from the request header to get the username of the sender
+       * @param {string} startPosition the number of scrolls a user does to retirieve posts
+       * @example
+       * // returns   array of 15 posts maximum depending on the start position
+       * listings.listingPostsbyTop('kefah', 0);
+       * @returns {Object[]}    returns array of 15 posts maximum depending on the start position
+       * @example
+       *  listings.listingPostsbyTop('kefah', 1);
+       * @returns {Object[]}  
+       */
+    async listingPostsbyTop(owner, startPosition) {
+        // getting the names of the subbreddit a user is subscribed to 
+        let subscribedSubbreddit = await User.findOne({ Username: owner }, { Subscriptions: 1, _id: 0 });
+        // finding the posts that the subbreddit posted to retrieve for the user 
+        let topPosts = null;
+        return topPosts;
+    }
     /**
      * Handles request List Posts
      * @param {Object} req  The request.
      * @param {Object} res  The response.
-     * @param {String} req.params.username  the username of the user that wants to list his subreddit
+     * @param {String} syncToken the synctokes of the user that we are going to extract from the username
      * @param {String} req.query.type  the type of listings he wants to hot,new,popular
      * @param {Number} req.body.startPosition  the number of scrolls the user did 
      * @example
@@ -55,10 +94,10 @@ class listings {
      * @returns {JSON} {error: 'internalServerError'} 
      */
 
-    async listPosts(req, res) {
-        let owner = req.params.username;
+   async  listPosts(req, res) {
+        let owner = ath.getUsernameFromToken(req);
         let listingType = req.query.type;
-        let startPosition =req.body.startPosition;  // return only 15 post this phase
+        let startPosition = req.body.startPosition;  // return only 15 post this phase
         let newPosts = null;
         // validation for the type error
         if (listingType == undefined
@@ -71,12 +110,7 @@ class listings {
             res.json({ error: 'undefinedQuery' });
             return;
         }
-        // middleware shall be used to check for this 
-        if (!(await userhandler.isUserFound(owner))) {
-            res.status(404);
-            res.send({ "error": "userNotFound" });
-            return;
-        }
+
         // for this phase we will be sending listing by new
         if (listingType == 'new') {
             // awaiting for the retriving the new posts and checking  the result
@@ -91,23 +125,39 @@ class listings {
                 res.status(404);
                 res.send({ "error": "postsNotFound" });
                 return;
-
             }
 
         }
         else if (listingType == 'top') {
-
-            res.status(404);
-            res.send({ "error": "postsNotFound" });
-            return;
-            return;
+            // awaiting for the retriving the new posts and checking  the result
+            topPosts = await this.listingPostsbyTop(owner, startPosition);
+            // if there is no error and it is not null send it 
+            if (topPosts != null && topPosts.length != 0) {
+                res.status(200);
+                res.json(topPosts);
+                return;
+            }
+            else {
+                res.status(404);
+                res.send({ "error": "postsNotFound" });
+                return;
+            }
         }
         else if (listingType == 'hot') {
 
-            res.status(404);
-            res.send({ "error": "postsNotFound" });
-            return;
-            return;
+            // awaiting for the retriving the new posts and checking  the result
+            hotPosts = await this.listingPostsbyhot(owner, startPosition);
+            // if there is no error and it is not null send it 
+            if (hotPosts != null && hotPosts.length != 0) {
+                res.status(200);
+                res.json(hotPosts);
+                return;
+            }
+            else {
+                res.status(404);
+                res.send({ "error": "postsNotFound" });
+                return;
+            }
         }
         else {
             res.status(500);
@@ -122,4 +172,4 @@ class listings {
 
 
 }
-module.exports =  new listings();
+module.exports = new listings();

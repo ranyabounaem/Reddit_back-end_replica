@@ -26,7 +26,21 @@ const pmSchema = new schema({
         required: true,
         
     },  // true when the message is read by the other end(receiver)
-    messageDate: Date, // the exact date of data entry utc default
+    messageDate:  {
+        type: Date,
+        required: true,
+        
+    }, // the exact date of data entry utc default
+    receiverDelete:  {
+        type: Boolean,
+        required: true,
+        
+    }, // when the receiver delete the message
+    senderDelete: {
+        type: Boolean,
+        required: true,
+        
+    }     // when the sender delete the message
 });
 const pm = mongoose.model('PrivateMessaging', pmSchema); // creating a model for the pm schema for implmentation 
 module.exports.pm = pm;

@@ -32,6 +32,39 @@ describe('Server', function () {
         postDate: Date()
         , subredditName: 'love'
 
+const request = require('request');
+const mongoose = require('mongoose');
+const subbredditsSchema = require('../models/subredditsSchema');
+const subbreddit = subbredditsSchema.Subreddit;
+const posts = subbredditsSchema.SubredditPostSchema;
+const users = require('../models/UserSchema');
+const jasmine = require('jasmine');
+// testing compose/block/unblock/retrieveblock
+describe('Server', function () {
+    let server4;
+    let usersarr = [{ Username: "ahmed2", Password: "12345678", Email: "mostafaa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "ahmedmohamed2", Password: "12345678", Email: "mostafas@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "marawan2", Password: "12345678", Email: "mostafsas@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "hamada2", Password: "12345678", Email: "mostadfa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "lolo2", Password: "12345678", Email: "mostaffa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "koko2", Password: "12345678", Email: "mostafga@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "mohamed2", Password: "12345678", Email: "mostvafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "saidahmed2", Password: "12345678", Email: "moxcstafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "soso2", Password: "12345678", Email: "mostazsfa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+        , { Username: "marwan22", Password: "12345678", Email: "mostfrafa@m.com", Subscriptions: ["love", "food", "travel", "nature"] }
+    ];
+    let postsarr = [{
+        title: 'what is love',
+        body: 'love is more than anything in the world love is love ',
+        postDate: Date()
+        , subredditName: 'love'
+    }
+        , {
+        title: 'If you have a love in your life, who turns any moment',
+        body: 'Share this love quote with your lover and see the smile on their face. It will be priceless.',
+        postDate: Date()
+        , subredditName: 'love'
+
     }
         , {
         tite: 'Whether you’re heading out into nature'
@@ -112,7 +145,7 @@ describe('Server', function () {
     }
     ];
     beforeAll(function (done) {
-        server = require('../index.js');
+        server4 = require('../index.js');
         // cause there is no middleware yet i need to add users to check for messages
         posts.create(postsarr).then(
             // twice to generate 20 arr more than the limit for the tests
@@ -124,15 +157,7 @@ describe('Server', function () {
         // for generation in db just
 
     });
-    afterAll(function () {
-        // cleaning the database
-
-        // closing the server
-        server.close(function () {
-
-        });
-    });
-
+   
     describe('Listing New no error', function () {
         // receiver username is undefined
         let messageTest1 = {
@@ -140,7 +165,7 @@ describe('Server', function () {
         };
         let data = {};
         beforeAll(function (done) {  // mocking the post request with message test
-            request.post('http://localhost:4000/ahmed/listing?type=new'
+            request.get('http://localhost:4000/ahmed2/listing?type=new'
                 , { json: true, body: messageTest1 }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
@@ -191,7 +216,7 @@ describe('Server', function () {
         };
         let data = {};
         beforeAll(function (done) {  // mocking the post request with message test
-            request.post('http://localhost:4000/marwan/listing?type=bypdsdsd'
+            request.get('http://localhost:4000/marwan22/listing?type=bypdsdsd'
                 , { json: true, body: messageTest1 }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
@@ -217,7 +242,7 @@ describe('Server', function () {
         };
         let data = {};
         beforeAll(function (done) {  // mocking the post request with message test
-            request.post('http://localhost:4000/ejjkndfjnkdfnjk/listing?type=new'
+            request.get('http://localhost:4000/ejjkndfjnkdfnjk/listing?type=new'
                 , { json: true, body: messageTest1 }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
@@ -247,7 +272,7 @@ describe('Server', function () {
         beforeAll(function (done) {  // mocking the post request with message test
             posts.remove({}, function () {
 
-                request.post('http://localhost:4000/marwan/listing?type=new'
+                request.get('http://localhost:4000/marwan22/listing?type=new'
                     , { json: true, body: messageTest1 }, function (error, response, body) {
                         data.status = response.statusCode;
                         data.body = body;
@@ -273,4 +298,4 @@ describe('Server', function () {
 
 });
 
- */
+    });
