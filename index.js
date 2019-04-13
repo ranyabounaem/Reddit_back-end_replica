@@ -662,7 +662,7 @@ app.put("/me/user/Add",passport.authenticate('jwt',{session:false}),userHandler.
 app.put("/me/user/Unfriend",passport.authenticate('jwt',{session:false}),userHandler.unFriend);
 
  /**
- * @api {put} /me/user/Unfriend   unfriend
+ * @api {put} /me/user/Unfriend   Unfriend
  * @apiName Unfriend
  * @apiGroup me
  *
@@ -786,7 +786,7 @@ app.put("/me/user/reject",passport.authenticate('jwt',{session:false}),userHandl
 app.get("/me/friends",passport.authenticate('jwt',{session:false}),userHandler.getFriends);
 
  /**
- * @api {Get} /me/friends   get friends
+ * @api {Get} /me/friends   Get friends
  * @apiName FriendList
  * @apiGroup me
  *
@@ -828,7 +828,7 @@ app.get("/me/sentRequests",passport.authenticate('jwt',{session:false}),userHand
 app.get("/me/receivedRequests",passport.authenticate('jwt',{session:false}),userHandler.getReceivedRequests);
 
 /**
-* @api {Get} /me/receivedRequests  get received requests
+* @api {Get} /me/receivedRequests  Get received requests
 * @apiName receivedRequestsList
 * @apiGroup me
 *
@@ -850,7 +850,7 @@ app.get("/me/receivedRequests",passport.authenticate('jwt',{session:false}),user
 app.put("/me/user/removeReq",passport.authenticate('jwt',{session:false}),userHandler.RemoveReq);
 
  /**
- * @api {put} /me/user/removeReq   delete friend request
+ * @api {put} /me/user/removeReq   Delete friend request
  * @apiName RemoveFriendRequest
  * @apiGroup me
  *

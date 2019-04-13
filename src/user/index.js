@@ -407,6 +407,9 @@ class UserHandler {
   */
           user.blockedUsers.push(req.body.blockedUser);
           user.save();
+          removeFriend(user,userToBlock);
+          popSentRequest(user, userToBlock);
+          popSentRequest(userToBlock, user);
           res.status(200).send({ message: "User Blocked" });
         }
       }
