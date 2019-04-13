@@ -58,7 +58,7 @@ describe("comment tests", () => {
 
     });
     afterAll((done) => {
-        server.close();
+        
         Post.deleteMany({$or:[{creatorUsername:'Mostafa0Sherif'},{creatorUsername:'Mostafa1Sherif'}]},function(){
             Subreddit.deleteMany({adminUsername:'Mostafa0Sherif'},function(){
                 Comment.deleteMany({$or:[{username:'Mostafa0Sherif'},{username:'Mostafa1Sherif'}]},function(){
