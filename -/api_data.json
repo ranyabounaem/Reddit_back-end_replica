@@ -179,6 +179,13 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "c_id",
             "description": "<p>Comment Unique ID.</p>"
           },
@@ -247,6 +254,13 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "c_id",
             "description": "<p>Comment Unique ID.</p>"
           }
@@ -308,6 +322,60 @@
             "optional": false,
             "field": "AccessDenied",
             "description": "<p>If this user can't get info of this comment.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/lock/:c_id",
+    "title": "Lock a Comment to Disallow Replies on it",
+    "name": "LockComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentAlreadyLocked",
+            "description": "<p>The Comment is already locked.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
           }
         ]
       }
@@ -469,6 +537,114 @@
     "groupTitle": "Comment"
   },
   {
+    "type": "put",
+    "url": "/comment/spoil/:c_id",
+    "title": "Mark Comment as a Spoiler",
+    "name": "SpoilerComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentAlreadySpoiler",
+            "description": "<p>The Comment is already marked.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/unlock/:c_id",
+    "title": "UnLock a Comment to Allow Replies on it",
+    "name": "UnLockComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotLocked",
+            "description": "<p>The Comment is already unlocked.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
     "type": "delete",
     "url": "/comment/unsave/:c_id",
     "title": "UnSave a Comment",
@@ -508,6 +684,60 @@
             "optional": false,
             "field": "CommentAlreadySaved",
             "description": "<p>You can't unsave an unsaved comment.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "put",
+    "url": "/comment/unspoil/:c_id",
+    "title": "UnMark Comment as a Spoiler",
+    "name": "UnSpoilerComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "c_id",
+            "description": "<p>Comment Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotSpoiler",
+            "description": "<p>The Comment is already unmarked.</p>"
           },
           {
             "group": "Error 4xx",
@@ -13221,7 +13451,7 @@
     "groupTitle": "PMService"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/:username/pm/",
     "title": "Retrieve",
     "name": "RetrieveMessages",
@@ -14009,7 +14239,7 @@
     "groupTitle": "UserService"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/:username/listing?type=value",
     "title": "List Posts",
     "name": "ListPosts",
