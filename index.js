@@ -1237,11 +1237,11 @@ app.delete("/flair", (req, res) => { });
  * @apiError CommentNotFound The id of the comment wasn't found.
  */
 const commentHandler = require('./src/Comments/Comment');
-app.get("/comment/:c_id", commentHandler.handleGetComment);
-app.get("/comment/all/:id", commentHandler.handleGetAllComments);
-app.post("/comment/:id", commentHandler.handlePostComment);
-app.put("/comment", (req, res) => { });
-app.delete("/comment", (req, res) => { });
+app.get("/comment/:c_id",commentHandler.handleGetComment) ;
+app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
+app.post("/comment/:id",passport.authenticate('jwt',{session:false}),commentHandler.handlePostComment );
+app.put("/comment/:c_id",passport.authenticate('jwt',{session:false}), commentHandler.handleEditComment);
+app.delete("/comment/:c_id",passport.authenticate('jwt',{session:false}), commentHandler.handleDeleteComent);
 
 
 /**
