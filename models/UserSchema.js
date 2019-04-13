@@ -21,7 +21,14 @@ const UserSchema = new Schema({
     },
  Subscriptions :[String],
 
- blockedUsers:[String]
+ blockedUsers:[String],
+
+ Friends:[String],
+
+ SentReq:[String],
+
+ RecReq:[String]
+ 
 });
 
 const User = mongoose.model("User", UserSchema);
