@@ -27,25 +27,20 @@ class SR {
                 adminUsername: admin,
                 rules: subredditRules,
             });
-            subreddit.save(function (err) {
+            subreddit.save(function (err, record) {
                 if (err) {
                 // internal Server error 
-                res.status(500)
-                res.json({ error: 'internalServerError or name may already exist' });
-                res.end();
+                res.status(500).send({ 'error': 'internal server error' });
 
                 }
                 else {
-                res.send(200);   // if everything worked as mentioned 
-                res.end();
+                    res.status(200).send(record);
                 }
             });
         }
         else
         {
-            res.json({error: 'err',
-            status:400});
-            res.end();
+            res.status(400).send({ 'error': 'invalid paramaters' });
         }
     };
 
@@ -64,31 +59,28 @@ class SR {
 
             sr.findOne({name : subredditName}).then(function(record){
            
-               if(record.adminUsername!=getUser(req)){
-                   res.json({error: 'invalid user',
-                    status:400});
-                    res.end();
+               
+                if(!record){
+                    res.status(400).send({ 'error': 'invalid subreddit name' });
                 }
-                else{
+                else if(record.adminUsername!=getUser(req)){
+                    res.status(403).send({ 'error': 'access forbidden' }) 
+                }
+                else {
 
-                    sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err){
+                    sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err, record){
                         if (err){
-                            res.json({error: 'internal server err',
-                            status:500});
-                            res.end();
+                            res.status(500).send({ 'error': 'internal server error' }) 
                         }
                         else {
-                            res.status(200);
-                            res.end();
+                            res.status(200).send(record);
                         };
                     });
                 };
             });
         }
         else {
-            res.json({error: 'incorrect or empty fields',
-            status:400});
-            res.end();  
+            res.status(400).send({ 'error': 'invalid paramaters' })  
         };
     };
 
@@ -107,24 +99,25 @@ class SR {
             sr.findOne({name: subredditName}, function(err){
                 if(err)
                 {
-                    res.json({error: 'err',
-                    status:500});
-                    res.end();
+                    res.status(500).send({ 'error': 'internal server error' });
                 }
                 else
                 {
                     res.status(200);
                 }
             }).then(function(record){
-                res.json({username: record.admin_username, date: record.date, posts: record.posts, rules: record.rules, bio: record.bio})
-                res.end();
+                if(!record)
+                {
+                    res.status(400).send({ 'error': 'invalid subreddit name' });
+                }
+                else {
+                res.status(200).send(record);
+                };
             });
         }
 
         else {
-            res.json({error: 'err',
-            status:400});
-            res.end();
+            res.status(400).send({'error': 'invalid parameter'});
         };
 
     };
@@ -148,21 +141,12 @@ class SR {
             sr.findOne({name: subrName}, function(err){
 
                 if(err){
-
-                    res.json({error: 'err',
-                    status:500});
-                    res.end();
-
+                    res.status(500).send({ 'error': 'internal server error' });
                 }
-            }).then(function(record, err){
-                if(err){
-
-                    res.json({error: 'err',
-                    status:500});
-                    res.end();
-
+            }).then(function(record){
+                if(!record){
+                    res.status(400).send({ 'error': 'invalid subreddit name' });
                 }
-
                 else {
                     let newPost = new pt({
                         title: postTitle,
@@ -180,19 +164,18 @@ class SR {
                             res.end();
 
                         }
+                        else{
                             record.posts.push(newPost._id);
                             record.save().then(function(){
-                            res.status(200);
-                            res.end();
-                        });
+                                res.status(200).send(newPost);
+                            });
+                        }
                     });
                 };
             });
         }
         else {
-            res.json({error: 'err',
-            status:400});
-            res.end();
+            res.status(400).send({ 'error': 'invalid paramaters' });
         };
     };
 
@@ -210,21 +193,29 @@ class SR {
 
         sr.findOne({name: subrName}, function(err){
             if(err){
-                res.json({error: 'internal server error or subreddit does not exist',
-                status:500});
-                res.end();
+                res.status(500).send({ 'error': 'internal server error' });
             };
         }).then(function(record){
-            record.subscribed_users.push(subscribed_user);
-            record.save().then(function(err){
-                if(err){
-                    res.json({error: 'internal server error',
-                    status:500});
-                    res.end();
-                };
-                res.status(200);
-                res.end();
-            });
+            if(!record)
+            {
+                res.status(400).send({ 'error': 'invalid subreddit name' });
+            }
+            else{
+                if(!record.subscribed_users.find(subscribed_user)){
+                    record.subscribed_users.push(subscribed_user);
+                    record.save(function(err){
+                        if(err){
+                            res.status(500).send({ 'error': 'internal server error' });
+                        }
+                    }).then(function(saved){
+                        res.status(200).send(saved.subscribed_users);
+                    });
+                }
+                else{
+                    res.status(400).send({"error": "user already subscribed"});
+                }
+                
+            };
         });
     };
 
@@ -243,21 +234,28 @@ class SR {
 
         sr.findOne({name: subrName}, function(err){
             if(err){
-                res.json({error: 'internal server error or subreddit does not exist',
-                status:500});
-                res.end();
+                res.status(500).send({ 'error': 'internal server error' });
             };
         }).then(function(record){
-            record.subscribed_users.pop(unsubscribed_user);
-            record.save().then(function(err){
-                if(err){
-                    res.json({error: 'internal server error',
-                    status:500});
-                    res.end();
+            if(!record){
+                res.status(400).send({ 'error': 'invalid subreddit name' });
+            }
+            else{
+                if(record.subscribed_users.find(unsubscried_user))
+                {
+                    record.subscribed_users.splice(subscribed_users.indexOf(unsubscribed_user), 1);
+                    record.save(function(err){
+                        if(err){
+                            res.status(500).send({ 'error': 'internal server error' });
+                        };
+                    }).then(function(record){
+                        res.status(200).send(record.subscribed_users);
+                    });
+                }
+                else{
+                    res.status(400).send({ 'error': 'user not subscribed' });
                 };
-                res.status(200);
-                res.end();
-            });
+            }
         });
     };
 
@@ -275,26 +273,35 @@ class SR {
         var postId = req.params.postId;
         pt.findOne({_id: postId},function(err){
             if(err){
-                res.json({error: 'internal server error or post does not exist',
-                status:500});
-                res.end();
+                res.status(500).send({ 'error': 'internal server error' });
             };
-        }).then(function(record){
-            if(record.creatorUsername != eraser)
+        }).then(function(checked){
+            if (!checked) {
+                res.status(404).send({ 'error': 'invalid postId' });
+            }
+            else if(check.creatorUsername != eraser)
             {
-                res.json({error: 'user mismatch',
-                status:400});
-                res.end();
+                res.status(403).send({ 'error': 'access forbidden' });
             }
             else{
-                pt.findOneAndDelete({_id: postId}).then(function(){
-                    sr.findOne({name: subrName}).then(function(record){
-                        record.posts.pop(postId);
-                        record.save().then(function(){
-                            res.status(200);
-                            res.end();
+                pt.findOneAndDelete({_id: postId}, function(err){
+                    if(err)
+                    {
+                        res.status(500).send({ 'error': 'internal server error' });
+                    };
+                }).then(function(deleted){
+                    if(!deleted)
+                    {
+                        res.status(400).send({ 'error': 'invalid postId' });
+                    }
+                    else{
+                        sr.findOne({name: subrName}).then(function(record){
+                            record.posts.pop(postId);
+                            record.save().then(function(){
+                                res.status(200).send({record});
+                            });
                         });
-                    });
+                    };
                 });
             };
         });
@@ -310,25 +317,31 @@ class SR {
 
     editPost(req, res){
         var postId = req.params.postId;
-        var subrName = req.params.srName;
+        var subrName = req.params.srName; //No use
         var title = req.body.title;
         var threadBody = req.body.threadBody;
         var editor = getUser(req);
-        pt.findOne({_id: postId}).then(function(record){
+        pt.findOne({_id: postId}, function(err){
+            if(err){
+                res.status(500).send({ 'error': 'internal server error' });
+            }
+        }).then(function(record){
             if(record.creatorUsername != editor){
-                res.status(404).send({ 'error': 'user mismatch' })
+                res.status(403).send({ 'error': 'access forbidden' })
             }
             else{
                 pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody}, function(err)
                 {
                     if(err){
-                        res.json({error: 'internal server error',
-                        status:500});
-                        res.end();  
+                        res.status(404).send({ 'error': 'internal server error' }) 
+                    }
+                }).then(function(updated){
+                    if(!updated)
+                    {
+                        res.status(400).send({ 'error': 'invalid postId' });
                     }
                     else{
-                        res.status(200);
-                        res.end();
+                        res.status(200).send(updated);
                     };
                 });
             };
@@ -348,32 +361,30 @@ class SR {
         var eraser = getUser(req);
         sr.findOne({name: subrName}, function(err){
             if(err){
-                res.json({error: 'internal server error',
-                status:500});
-                res.end(); 
+                res.status(500).send({ 'error': 'internal server error' });
             }
         }).then(function(record){
-            if (record.adminUsername!=eraser){
-                res.json({error: 'user mismatch',
-                status:400});
-                res.end();
-            };
-            pt.deleteMany({subredditName: subrName}, function(err){
-                if(err){
-                    res.json({error: 'internal server error',
-                    status:500});
-                    res.end(); 
-                };
-                sr.findOneAndDelete({name: subrName}, function(err){
+            if(!record){
+                res.status(400).send({ 'error': 'invalid subreddit name' });
+            }
+            else if (record.adminUsername!=eraser){
+                res.status(403).send({ 'error': 'access forbidden' });
+            }
+            else {
+                pt.deleteMany({subredditName: subrName}, function(err){
+                    if(err){
+                        res.status(500).send({ 'error': 'internal server error' });
+                    };
+                }).then(sr.findOneAndDelete({name: subrName}, function(err){
                     if(err){
                         res.json({error: 'internal server error',
                         status:500});
-                        res.end();   
-                    };
-                    res.sendStatus(200);
-                    res.end();
-                });
-            });
+                        res.end();  
+                    }; 
+                }).then(function(deleted){
+                    res.status(200).send(deleted);
+                }));
+            };
         });
     }
 };
