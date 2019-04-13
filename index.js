@@ -1250,6 +1250,7 @@ app.delete("/comment", (req, res) => { });
  */
 
 app.post("/sr/create", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.createSr(req, res));
+
 /**
 * @api {post} /sr/create   Create a new subreddit
 * @apiName CreateSubreddit
@@ -1264,6 +1265,7 @@ app.post("/sr/create", passport.authenticate('jwt',{session:false}), (req, res) 
 */
 
 app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
+
 /**
 * @api {get} /sr/:srName/meta   Views subreddit meta
 * @apiName ViewSrMeta
@@ -1279,10 +1281,11 @@ app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
 * @apiSuccess {string[]} ModIds (NOT YET)  ID of Modertors.
 * @apiSuccess {string[]} UserIds (NOT YET  Ids of subscribed users .
 * @apiSuccess {Number[]} SubCount (NOT YET)  Number of subscribers.
-
+*
 */
 
 app.delete("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.deleteSubreddit(req, res));
+
 /**
 * @api {delete} /sr/:srName   Delete a subreddit
 * @apiName DeleteSubreddit
@@ -1292,6 +1295,7 @@ app.delete("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, re
 */
 
 app.put("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.edit(req,res));
+
 /**
 * @api {put} /sr/:srName/    Edit a subreddit
 * @apiName EditSubreddit
@@ -1305,6 +1309,7 @@ app.put("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) 
 
 
 app.post("/sr/:srName/thread", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.createPost(req, res));
+
 /**
 * @api {post} /sr/:srName/thread    Create a thread inside subreddit
 * @apiName CreateSrThread
@@ -1317,6 +1322,7 @@ app.post("/sr/:srName/thread", passport.authenticate('jwt',{session:false}), (re
 */
 
 app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.editPost(req, res));
+
 /**
 * @api {put} /sr/:srName/thread/:postId    Edit a thread inside subreddit
 * @apiName EditSrThread
@@ -1327,7 +1333,9 @@ app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:false
 * @apiParam {string} title New title of thread
 * @apiParam {string} threadBody New body of the thread.
 */
+
 app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.deletePost(req, res));
+
 /**
 * @api {delete} /sr/:srName/thread/:postId    Delete a thread inside subreddit
 * @apiName DeleteSrThread
@@ -1337,6 +1345,7 @@ app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:fa
 */
 
 app.post("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.subscribe(req, res));
+
 /**
 * @api {post} /sr/:srName/subs  Subscribe to a Sr
 * @apiName SubredditSubscribtion
@@ -1346,6 +1355,7 @@ app.post("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (req,
 */
 
 app.delete("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.unSubscribe(req, res));
+
 /**
 * @api {delete} /sr/:srName/subs   Unsubscribe to a Sr
 * @apiName SubredditUnsubscribtion
