@@ -14849,7 +14849,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/user/info",
+    "url": "/user/info:userToView",
     "title": "get user info if NOT logged in",
     "name": "GetUserInfo",
     "group": "me",
@@ -14890,7 +14890,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/me/user/info",
+    "url": "/me/user/info/:userToView",
     "title": "get user info if logged in",
     "name": "GetUserInfoLogged",
     "group": "me",

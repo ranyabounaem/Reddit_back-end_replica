@@ -155,7 +155,7 @@ app.post("/user/login", userHandler.handleLogin);
 
 app.get("/user/info/:userToView", userHandler.getUserInfo);
 /**
-* @api {get} /user/info get user info if NOT logged in
+* @api {get} /user/info:userToView get user info if NOT logged in
 * @apiName GetUserInfo
 * @apiGroup me
 *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
@@ -176,7 +176,7 @@ app.get("/user/info/:userToView", userHandler.getUserInfo);
 
 app.get("/me/user/info/:userToView", passport.authenticate('jwt', { session: false }), userHandler.getUserInfoLogged)
 /**
- * @api {get} /me/user/info get user info if logged in
+ * @api {get} /me/user/info/:userToView get user info if logged in
  * @apiName GetUserInfoLogged
  * @apiGroup me
 * @apiHeader {String} auth Users unique token .
