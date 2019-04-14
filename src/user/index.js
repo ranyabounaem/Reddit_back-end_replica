@@ -56,6 +56,18 @@ async function checkRecReq(user, fUsername)
   else return false;
 }
 
+function blockAndRemove(user, fUser)
+{
+  user.Friends.pop(fUser.Username);
+  fUser.Friends.pop(user.Username);
+  user.SentReq.pop(fUser.Username);
+  fUser.RecReq.pop(user.Username);
+  fUser.SentReq.pop(user.Username);
+  user.RecReq.pop(fUser.Username);
+  user.blockedUsers.push(fUser.Username);
+  user.save();
+  fUser.save();
+}
 function AddReq(user, fUser)
 {
   user.SentReq.push(fUser.Username);
@@ -86,10 +98,12 @@ function removeFriend(user, fUser)
 acceptRequest
 function acceptRequest(user, fUser)
 {
-  user.Friends.push(fUser.Username);
-  user.save();
 
+  user.RecReq.pop(fUser.Username);
+  fUser.SentReq.pop(user.Username);
+  user.Friends.push(fUser.Username);
   fUser.Friends.push(user.Username);
+  user.save();
   fUser.save();
 }
 
@@ -405,8 +419,8 @@ class UserHandler {
         /**  
   adds blocked user to blocked array 
   */
-          user.blockedUsers.push(req.body.blockedUser);
-          user.save();     
+          blockAndRemove(user, userToBlock);
+               
           res.status(200).send({ message: "User Blocked" });
         }
       }
@@ -608,7 +622,7 @@ class UserHandler {
         if(!sentReq) res.status(404).send({error: "Request doesn't exist"});
         else
         {
-          popRequest(user, userToRemove);
+          popSentRequest(user, userToRemove);
           res.status(200).send({ message: "Friend request Removed" });
         }
       }
@@ -662,7 +676,6 @@ class UserHandler {
         else
         {
           acceptRequest(user,friendToAccept);
-          popSentRequest(friendToAccept, user);
           res.status(200).send({ message: "Friend request accepted" });
         }
       }
