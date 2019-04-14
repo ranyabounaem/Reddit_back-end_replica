@@ -153,16 +153,12 @@ app.post("/user/login", userHandler.handleLogin);
  app.get("/me/About/:Username",passport.authenticate('jwt',{session:false}), userHandler.Getmyinfo);
 
 
-app.get("/user/info", userHandler.getUserInfo);
+app.get("/user/info/:userToView", userHandler.getUserInfo);
 /**
-* @api {get} /user/info get user info if NOT logged in
+* @api {get} /user/info:userToView get user info if NOT logged in
 * @apiName GetUserInfo
 * @apiGroup me
 *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
-* @apiParamExample {json} Input
-*    {
-*      "userToView": "User1"    
-*    }
 *  @apiSuccessExample {json} Success
 *    HTTP/1.1 200 
 * {
@@ -178,17 +174,13 @@ app.get("/user/info", userHandler.getUserInfo);
 *     }
 */
 
-app.get("/me/user/info", passport.authenticate('jwt', { session: false }), userHandler.getUserInfoLogged)
+app.get("/me/user/info/:userToView", passport.authenticate('jwt', { session: false }), userHandler.getUserInfoLogged)
 /**
- * @api {get} /me/user/info get user info if logged in
+ * @api {get} /me/user/info/:userToView get user info if logged in
  * @apiName GetUserInfoLogged
  * @apiGroup me
 * @apiHeader {String} auth Users unique token .
  *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
- * @apiParamExample {json} Input
- *    {
- *      "userToView": "User1"    
- *    }
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 
  * {

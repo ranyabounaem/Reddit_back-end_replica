@@ -495,7 +495,7 @@ class UserHandler {
     /**
        *Check if viewed user exists
        */
-    const userViewed = await User.findOne({ Username: req.body.userToView})
+    const userViewed = await User.findOne({ Username: req.params.userToView})
     if(!userViewed){res.status(404).send({message:"User doesnt exist"})}
     /**
        *Check if viewed blocked the viewing user
@@ -510,7 +510,7 @@ class UserHandler {
        */
     const userinfo=
     {
-      Username:req.body.userToView,
+      Username:req.params.userToView,
       Subscriptions: userViewed.Subscriptions
     }
 
@@ -529,7 +529,7 @@ class UserHandler {
     /**
        *Check if viewed user exists
        */
-    const userViewed = await User.findOne({ Username: req.body.userToView})
+    const userViewed = await User.findOne({ Username: req.params.userToView})
     if(!userViewed){res.status(404).send({message:"User doesnt exist"})}
     
     /**
@@ -537,7 +537,7 @@ class UserHandler {
        */
     const userinfo=
     {
-      Username:req.body.userToView,
+      Username:req.params.userToView,
       Subscriptions: userViewed.Subscriptions
     }
 

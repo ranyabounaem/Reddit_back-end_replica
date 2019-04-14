@@ -11800,15 +11800,6 @@ define({ "api": [
         ]
       }
     },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "EmojiService"
@@ -11858,6 +11849,15 @@ define({ "api": [
           }
         ]
       }
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"request not found\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -11990,15 +11990,6 @@ define({ "api": [
         ]
       }
     },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found {\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "EmojiService"
@@ -12048,6 +12039,15 @@ define({ "api": [
           }
         ]
       }
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Report not found {\n         \"error\":\"request not found\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -14076,8 +14076,8 @@ define({ "api": [
     "groupTitle": "UserService"
   },
   {
-    "type": "post",
-    "url": "/me/listing?type=value",
+    "type": "get",
+    "url": "/user/:Username/listing?type=value",
     "title": "List Posts",
     "name": "ListPosts",
     "group": "UserService",
@@ -14123,7 +14123,7 @@ define({ "api": [
             "type": "Object[]",
             "optional": false,
             "field": "Posts",
-            "description": "<p>Array of the listed Posts depending on the type  .</p>"
+            "description": "<p>Array of the listed Posts  .</p>"
           }
         ]
       },
@@ -14141,8 +14141,8 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "postsnotFound",
-            "description": "<p>no posts found for the user</p>"
+            "field": "Server",
+            "description": "<p>error no subreddits found to be listed</p>"
           }
         ]
       },
@@ -14160,7 +14160,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/:username/listing?type=value",
+    "url": "/me/listing?type=value",
     "title": "List Posts",
     "name": "ListPosts",
     "group": "UserService",
@@ -14199,7 +14199,7 @@ define({ "api": [
             "type": "Object[]",
             "optional": false,
             "field": "Posts",
-            "description": "<p>Array of the listed Posts  .</p>"
+            "description": "<p>Array of the listed Posts depending on the type  .</p>"
           }
         ]
       },
@@ -14217,8 +14217,8 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "PostsnotFound",
-            "description": ""
+            "field": "postsnotFound",
+            "description": "<p>no posts found for the user</p>"
           }
         ]
       },
@@ -14849,7 +14849,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/user/info",
+    "url": "/user/info:userToView",
     "title": "get user info if NOT logged in",
     "name": "GetUserInfo",
     "group": "me",
@@ -14864,14 +14864,7 @@ define({ "api": [
             "description": "<p>unique Username  of the User to be viewed.</p>"
           }
         ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"userToView\": \"User1\"    \n}",
-          "type": "json"
-        }
-      ]
+      }
     },
     "success": {
       "examples": [
@@ -14897,7 +14890,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/me/user/info",
+    "url": "/me/user/info/:userToView",
     "title": "get user info if logged in",
     "name": "GetUserInfoLogged",
     "group": "me",
@@ -14925,14 +14918,7 @@ define({ "api": [
             "description": "<p>unique Username  of the User to be viewed.</p>"
           }
         ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"userToView\": \"User1\"    \n}",
-          "type": "json"
-        }
-      ]
+      }
     },
     "success": {
       "examples": [
@@ -15274,75 +15260,6 @@ define({ "api": [
         {
           "title": "List error",
           "content": "HTTP/1.1 404 Request doesn't exist\n {\n  \"error\": \"Request doesn't exist\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "me"
-  },
-  {
-    "type": "Post",
-    "url": "/me/:username/Report/:id",
-    "title": "report user comment or post",
-    "name": "Report",
-    "group": "me",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of the User.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Id",
-            "description": "<p>unique Id  of the post or comment.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Type",
-            "description": "<p>type is post or comment.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"Id\": \"1\", \n  \"Type\":\"Post\"     \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"Post Not found\"\n}",
           "type": "json"
         }
       ]
