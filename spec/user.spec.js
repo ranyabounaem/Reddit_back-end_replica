@@ -594,17 +594,17 @@ describe("tests getting user's info", () => {
 });
 
 
-//mostafa tests 2
+//Hussein & Mostafa tests 2
 
-describe("blocks user", () => {
+describe("Adds user", () => {
   let data = {};
   let testBody = {
-    blockedUser:'mostafa'
+    fUsername:'mostafa'
   };
 
   beforeAll(done => {
     request.put(
-      "http://localhost:4000/me/user/block",
+      "http://localhost:4000/me/user/Add",
       { json: true, body: testBody ,headers:head },
       (err, res, body) => {
         data.body = body;
@@ -615,24 +615,24 @@ describe("blocks user", () => {
       }
     );
   });
-  it("checks if blocked successful", () => {
+  it("checks if Add successful", () => {
     expect(data.status).toBe(200);
-    expect(data.body).toEqual({message : "User Blocked"});
+    expect(data.body).toEqual({message : "Friend request Sent"});
   });
 
   
 });
 
-describe("blocks user", () => {
+describe("accept request", () => {
   let data = {};
   let testBody = {
-    blockedUser:'Uzumaki'
+    fUsername:'Uzumaki'
   };
 
   beforeAll(done => {
     request.put(
-      "http://localhost:4000/me/user/block",
-      { json: true, body: testBody ,headers:head },
+      "http://localhost:4000/me/user/accept",
+      { json: true, body: testBody ,headers:head2 },
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -642,13 +642,149 @@ describe("blocks user", () => {
       }
     );
   });
-  it("checks if blocked successful", () => {
-    expect(data.status).toBe(404);
-    expect(data.body).toEqual({error:"you cant block yourself"});
+  it("checks if accepting request is successful", () => {
+    expect(data.status).toBe(200);
+    expect(data.body).toEqual({message : "Friend request accepted"});
   });
 
   
 });
+
+describe("blocks user", () => {
+    let data = {};
+    let testBody = {
+      blockedUser:'mostafa'
+    };
+
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/block",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if blocked successful", () => {
+      expect(data.status).toBe(200);
+      expect(data.body).toEqual({message : "User Blocked"});
+    });
+
+  });
+
+  describe("unfriend user", () => {
+    let data = {};
+    let testBody = {
+      fUsername:'mostafa'
+    };
+  
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/Unfriend",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if Unfriend is  unsuccessful", () => {
+      expect(data.status).toBe(401);
+      expect(data.body).toEqual({error : "This user is not a friend"});
+    });
+  
+  });
+  describe("Adds user", () => {
+    let data = {};
+    let testBody = {
+      fUsername:'mostafa'
+    };
+  
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/Add",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if Add unsuccessful", () => {
+      expect(data.status).toBe(401);
+      expect(data.body).toEqual({error : "The user to be added is blocked"});
+    });
+  
+    
+  });
+
+  describe("Adds user", () => {
+    let data = {};
+    let testBody = {
+      fUsername:'Uzumaki'
+    };
+  
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/Add",
+        { json: true, body: testBody ,headers:head2 },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if Add unsuccessful", () => {
+      expect(data.status).toBe(401);
+      expect(data.body).toEqual({error : "The sending User is blocked"});
+    });
+  
+    
+  });
+
+  
+  
+
+  describe("blocks user", () => {
+    let data = {};
+    let testBody = {
+      blockedUser:'Uzumaki'
+    };
+
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/block",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if blocked successful", () => {
+      expect(data.status).toBe(404);
+      expect(data.body).toEqual({error:"you cant block yourself"});
+    });
+
+    
+  });
+
 
 
 describe("blocks user thats already blocked", () => {
@@ -681,12 +817,12 @@ describe("blocks user thats already blocked", () => {
 describe("gets info of user that blocked you", () => {
   let data = {};
   let testBody = {
-    userToView:'Uzumaki'
+    
   };
 
   beforeAll(done => {
     request.get(
-      "http://localhost:4000/me/user/info",
+      "http://localhost:4000/me/user/info/Uzumaki",
       { json: true, body: testBody ,headers:head2 },
       (err, res, body) => {
         data.body = body;
@@ -731,6 +867,8 @@ describe("unblocks user", () => {
   
 });
 
+
+
 describe("unblocks user that isnt blocked", () => {
   let data = {};
   let testBody = {
@@ -762,12 +900,12 @@ describe("unblocks user that isnt blocked", () => {
 describe("gets info of user ", () => {
   let data = {};
   let testBody = {
-    userToView:'Uzumaki'
+    
   };
 
   beforeAll(done => {
     request.get(
-      "http://localhost:4000/me/user/info",
+      "http://localhost:4000/me/user/info/Uzumaki",
       { json: true, body: testBody ,headers:head2 },
       (err, res, body) => {
         data.body = body;
@@ -786,12 +924,12 @@ describe("gets info of user ", () => {
   describe("gets info of user ", () => {
     let data = {};
     let testBody = {
-      userToView:'Uzumaki'
+      
     };
   
     beforeAll(done => {
       request.get(
-        "http://localhost:4000/user/info",
+        "http://localhost:4000/user/info/Uzumaki",
         { json: true, body: testBody},
         (err, res, body) => {
           data.body = body;
@@ -808,6 +946,307 @@ describe("gets info of user ", () => {
 
   
 
+  });
+
+  
+describe("Adds user", () => {
+  let data = {};
+  let testBody = {
+    fUsername:'mostafa'
+  };
+
+  beforeAll(done => {
+    request.put(
+      "http://localhost:4000/me/user/Add",
+      { json: true, body: testBody ,headers:head },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+    );
+  });
+  it("checks if Add successful", () => {
+    expect(data.status).toBe(200);
+    expect(data.body).toEqual({message : "Friend request Sent"});
+  });
+
+  
 });
 
+describe("Adds user", () => {
+  let data = {};
+  let testBody = {
+    fUsername:"Uzumaki"
+  };
+
+  beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/Add",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if Add unsuccessful", () => {
+      expect(data.status).toBe(402);
+      expect(data.body).toEqual({error : "User cannot add himself"});
+    });
+
+    
+  });
+
+  describe("Adds user", () => {
+    let data = {};
+    let testBody = {
+      fUsername:"mostafa"
+    };
+  
+    beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/Add",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Add unsuccessful", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "User has already sent a request to the other user"});
+      });
+  
+      
+    });
+
+  
+
+
+  describe("remove request", () => {
+    let data = {};
+    let testBody = {
+      fUsername:"mostafa"
+    };
+  
+    beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/removeReq",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if unfriend successful", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({message : "Friend request Removed"});
+      });
+  
+      
+    });
+
+    describe("Adds user", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'mostafa'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/Add",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Add successful", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({message : "Friend request Sent"});
+      });
+    
+      
+    });
+
+    describe("reject request", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'mostafa'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/reject",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if rejecting request is unsuccessful", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "There isn't a request to be rejected"});
+      });
+    
+      
+    });
+    
+
+    describe("accept request", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'Uzumaki'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/accept",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if accepting request is successful", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({message : "Friend request accepted"});
+      });
+    
+      
+    });
+
+    describe("accept request", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'Uzumaki'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/accept",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Accepting request is unsuccessfull", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "This user is already a friend"});
+      });
+    
+      
+    });
+
+    describe("unfriend user", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'mostafa'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/Unfriend",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Unfriend successful", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({message : "Friend is removed from friends list"});
+      });
+    
+    });
+
+    describe("unfriend user", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'mostafa'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/Unfriend",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Unfriend is  unsuccessful", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "This user is not a friend"});
+      });
+    
+    });
+
+    describe("accept request", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'Uzumaki'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/accept",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Accepting request is unsuccessfull", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "There isn't a request to be accepted"});
+      });
+    
+      
+    });
+    
+    
 });

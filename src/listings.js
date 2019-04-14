@@ -5,7 +5,7 @@ const userhandler = require('./user/index');
 const subbredditsSchema = require('../models/subredditsSchema');
 const subbreddits = subbredditsSchema.Subreddit;
 const posts = subbredditsSchema.SubredditPostSchema;
-const ath=require('../JWt/giveToken');
+const ath=require('../JWT/giveToken');
 /** 
  * @class listings
  */
