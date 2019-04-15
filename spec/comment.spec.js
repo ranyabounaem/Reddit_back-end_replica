@@ -44,9 +44,9 @@ let sr = {
 };
 
 describe("comment tests", () => {
-    let server;
+    let server2;
     beforeAll((done) => {
-        server = require("../index");
+        server2 = require("../index");
         user.create(user1).then(user.create(user2)).then(
             Post.create(post1).then(function (RetPost) {
                 th_id = RetPost._id;

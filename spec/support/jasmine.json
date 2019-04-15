@@ -1,10 +1,8 @@
 {
 "spec_dir":"spec",
 "spec_files":[
-    "./user.spec.js",
-    "./comment.spec.js",
-    "./pmTest.spec.js",
-    "./listings.spec.js"
+
+    "./srTest.spec.js"
 
 
    
