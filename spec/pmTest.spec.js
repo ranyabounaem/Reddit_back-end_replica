@@ -1179,7 +1179,7 @@ describe('Server', function () {
                             messageId: result._id, isReadRequest: true
 
                         };
-                        request.delete(url + 'me/pm/delete',
+                        request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
                             { json: true, headers: head2, body: messageTest1 }, function (error, response, body) {
                                 data.status = response.statusCode;
                                 data.body = body;
@@ -1231,7 +1231,7 @@ describe('Server', function () {
                             messageId: result._id, isReadRequest: true
 
                         };
-                        request.delete(url + 'me/pm/delete',
+                        request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
                             { json: true, headers: head1, body: messageTest1 }, function (error, response, body) {
                                 data.status = response.statusCode;
                                 data.body = body;
@@ -1283,9 +1283,9 @@ describe('Server', function () {
                             messageId: result._id, isReadRequest: true
 
                         };
-                        request.delete(url + 'me/pm/delete',
+                        request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
                             { json: true, headers: head1, body: messageTest1 }, function (error, response, body) {
-                                request.delete(url + 'me/pm/delete',
+                                request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
                                     { json: true, headers: head2, body: messageTest1 }, function (error, response, body) {
 
 
@@ -1325,7 +1325,7 @@ describe('Server', function () {
                             messageId: "1nejjne2e", isReadRequest: true
 
                     };
-                        request.delete(url + 'me/pm/delete',
+                        request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
                             { json: true, headers: head1, body: messageTest1 }, function (error, response, body) {
                                 data.status = response.statusCode;
                                 data.body = body;
