@@ -252,9 +252,259 @@ describe('Server', function () {
         it("checks creation of new User in database", () => {
             expect(1).toBe(1);})
       });
-    
-    
 
+
+      //// SUBREDDITS CREATION ////
+
+
+      describe("Creating 1st subreddit", function () {
+        let sr = {
+            "srName": "Technology",
+            "srRules": ["No trade allowed."]
+        };
+        let data = {};
+        beforeAll(function(done){  // mocking the post request with message test
+            request.post("http://127.0.0.1:4000/sr/create",
+                {json: true, body: sr, headers: husseinToken}, function (error, response, body) {
+                    data.status = response.statusCode;
+                    data.body = body;
+                    done();
+                });
+        });
+
+        it("Useless", () => {
+          expect(1).toBe(1);})
+
+        });
+
+        describe("Creating 2nd subreddit", function () {
+          let sr = {
+              "srName": "Parenting",
+              "srRules": ["No kids allowed."]
+          };
+          let data = {};
+          beforeAll(function(done){  // mocking the post request with message test
+              request.post("http://127.0.0.1:4000/sr/create",
+                  {json: true, body: sr, headers: mostafaToken}, function (error, response, body) {
+                      data.status = response.statusCode;
+                      data.body = body;
+                      done();
+                  });
+          });
+  
+          it("Useless", () => {
+            expect(1).toBe(1);})
+  
+          });
+
+          describe("Creating 3rd subreddit", function () {
+            let sr = {
+                "srName": "Education",
+                "srRules": ["Nerds only."]
+            };
+            let data = {};
+            beforeAll(function(done){  // mocking the post request with message test
+                request.post("http://127.0.0.1:4000/sr/create",
+                    {json: true, body: sr, headers: aliToken}, function (error, response, body) {
+                        data.status = response.statusCode;
+                        data.body = body;
+                        done();
+                    });
+            });
+    
+            it("Useless", () => {
+              expect(1).toBe(1);})
+    
+            });
+
+            describe("Creating 4th subreddit", function () {
+              let sr = {
+                  "srName": "Movies",
+                  "srRules": ["Movie geeks only."]
+              };
+              let data = {};
+              beforeAll(function(done){  // mocking the post request with message test
+                  request.post("http://127.0.0.1:4000/sr/create",
+                      {json: true, body: sr, headers: atwaToken}, function (error, response, body) {
+                          data.status = response.statusCode;
+                          data.body = body;
+                          done();
+                      });
+              });
+      
+              it("Useless", () => {
+                expect(1).toBe(1);})
+      
+              });
+
+
+              //// POSTS CREATION ////
+
+
+              describe("Creating 1st post inside 1st subreddit", function() {
+                let data = {};
+                let pt = {
+                    "title": "Laptops",
+                    "threadBody": "Asus just released their new laptop for the most reasonable price!"
+                };
+                beforeAll(function(done){
+        
+                    request.post("http://127.0.0.1:4000/sr/Technology/thread",
+                    {json:true, body: pt, headers: head},
+                    function(error, request, body){
+                        data.status = request.statusCode;
+                        data.body = body;
+                        postid = data.body._id;
+                        done();
+                    });
+                });
+        
+                it("Useless", () => {
+                  expect(1).toBe(1);})
+        
+                });
+
+
+                describe("Creating 2nd post inside 1st subreddit", function() {
+                  let data = {};
+                  let pt = {
+                      "title": "Mobiles",
+                      "threadBody": "Apple just released iPhone IXX with similar features to the iPhone 8 but 100 times expensive!"
+                  };
+                  beforeAll(function(done){
+          
+                      request.post("http://127.0.0.1:4000/sr/Technology/thread",
+                      {json:true, body: pt, headers: head},
+                      function(error, request, body){
+                          data.status = request.statusCode;
+                          data.body = body;
+                          postid = data.body._id;
+                          done();
+                      });
+                  });
+          
+                  it("Useless", () => {
+                    expect(1).toBe(1);})
+          
+                  });
+
+
+                  describe("Creating 1st post inside 2nd subreddit", function() {
+                    let data = {};
+                    let pt = {
+                        "title": "Getting rid of your kid",
+                        "threadBody": "If you can't take it anymore, here are 5 steps to get rid of your child!"
+                    };
+                    beforeAll(function(done){
+            
+                        request.post("http://127.0.0.1:4000/sr/Parenting/thread",
+                        {json:true, body: pt, headers: head},
+                        function(error, request, body){
+                            data.status = request.statusCode;
+                            data.body = body;
+                            postid = data.body._id;
+                            done();
+                        });
+                    });
+            
+                    it("Useless", () => {
+                      expect(1).toBe(1);})
+            
+                    });
+
+                    describe("Creating 2nd post inside 2nd subreddit", function() {
+                      let data = {};
+                      let pt = {
+                          "title": "Treating your child",
+                          "threadBody": "If you need to learn how to treat your child, just get rid of it!"
+                      };
+                      beforeAll(function(done){
+              
+                          request.post("http://127.0.0.1:4000/sr/Parenting/thread",
+                          {json:true, body: pt, headers: head},
+                          function(error, request, body){
+                              data.status = request.statusCode;
+                              data.body = body;
+                              postid = data.body._id;
+                              done();
+                          });
+                      });
+              
+                      it("Useless", () => {
+                        expect(1).toBe(1);})
+              
+                      });
+
+                      describe("Creating 1st post inside 3rd subreddit", function() {
+                        let data = {};
+                        let pt = {
+                            "title": "First time seeing a female",
+                            "threadBody": "I decided to get out of my studying room today, and I saw a woman. I thought it was a pokemon but turned out to be my mother."
+                        };
+                        beforeAll(function(done){
+                
+                            request.post("http://127.0.0.1:4000/sr/Education/thread",
+                            {json:true, body: pt, headers: head},
+                            function(error, request, body){
+                                data.status = request.statusCode;
+                                data.body = body;
+                                postid = data.body._id;
+                                done();
+                            });
+                        });
+                
+                        it("Useless", () => {
+                          expect(1).toBe(1);})
+                
+                        });
+
+
+                        describe("Creating 2nd post inside 3rd subreddit", function() {
+                          let data = {};
+                          let pt = {
+                              "title": "Is studying for 16 hours a day enough?",
+                              "threadBody": "I was thinking if 16 hours are enough. I can't figure a way to fit more studying hours into my day. I don't even eat anymore."
+                          };
+                          beforeAll(function(done){
+                  
+                              request.post("http://127.0.0.1:4000/sr/Education/thread",
+                              {json:true, body: pt, headers: head},
+                              function(error, request, body){
+                                  data.status = request.statusCode;
+                                  data.body = body;
+                                  postid = data.body._id;
+                                  done();
+                              });
+                          });
+                  
+                          it("Useless", () => {
+                            expect(1).toBe(1);})
+                  
+                          });
+
+
+                          describe("Creating 1st post inside 4th subreddit", function() {
+                            let data = {};
+                            let pt = {
+                                "title": "Is studying for 16 hours a day enough?",
+                                "threadBody": "I was thinking if 16 hours are enough. I can't figure a way to fit more studying hours into my day. I don't even eat anymore."
+                            };
+                            beforeAll(function(done){
+                    
+                                request.post("http://127.0.0.1:4000/sr/Education/thread",
+                                {json:true, body: pt, headers: head},
+                                function(error, request, body){
+                                    data.status = request.statusCode;
+                                    data.body = body;
+                                    postid = data.body._id;
+                                    done();
+                                });
+                            });
+                    
+                            it("Useless", () => {
+                              expect(1).toBe(1);})
+                    
+                            });
     
     // let postsarr = [{
     //     title: 'what is love',
