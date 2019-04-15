@@ -385,7 +385,7 @@ class UserHandler {
 
     /**
      *    This finds the user that is going to BE blocked using the username request
-     * if he doesnt exist the reponse will be "the user you want to block doesnt exist" with status 200
+     * if he doesnt exist the reponse will be "the user you want to block doesnt exist" with status 404
      */
 
     const userToBlock = await User.findOne({ Username: req.body.blockedUser });
@@ -417,7 +417,8 @@ class UserHandler {
             .send({ error: "the user you want to block is already blocked" });
         } else {
         /**  
-  adds blocked user to blocked array 
+  *adds blocked user to blocked array
+  *it also removed any friend requests between the 2 users and removed them fro friends list  
   */
           blockAndRemove(user, userToBlock);
                
@@ -496,9 +497,12 @@ class UserHandler {
        *Check if viewed user exists
        */
     const userViewed = await User.findOne({ Username: req.params.userToView})
+
     if(!userViewed){res.status(404).send({message:"User doesnt exist"})}
+    else {
     /**
        *Check if viewed blocked the viewing user
+       *if he is blocked , it says that the user doesnt exist
        */
     const blockedUser = await checkIfBlockedByHim(userViewed,username);
 
@@ -515,7 +519,9 @@ class UserHandler {
     }
 
     res.status(200).send(userinfo);
-  }}
+    }
+  }
+}
 
   
 /**
@@ -532,6 +538,7 @@ class UserHandler {
     const userViewed = await User.findOne({ Username: req.params.userToView})
     if(!userViewed){res.status(404).send({message:"User doesnt exist"})}
     
+    else{
     /**
        *return info 
        */
@@ -542,13 +549,7 @@ class UserHandler {
     }
 
     res.status(200).send(userinfo);
-
-
-
-    
-    
-
-
+  }
   }
 
    /**
