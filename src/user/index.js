@@ -4,9 +4,10 @@ const JWTconfig = require("../../JWT/giveToken");
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-function checkIfBlockedByMe (user,username)
+async function checkIfBlockedByMe (user,username)
 {
-  const blockedUser = user.blockedUsers.find(function(userInBlockedArray) {
+  
+  const blockedUser =await user.blockedUsers.find(function(userInBlockedArray) {
     return userInBlockedArray === username;
   });
 
@@ -14,9 +15,9 @@ function checkIfBlockedByMe (user,username)
   else return false;
 }
 
-function checkIfBlockedByHim (user,username){
+async function checkIfBlockedByHim (user,username){
   
-  const blockedUser = user.blockedUsers.find(function(userInBlockedArray)
+  const blockedUser =await user.blockedUsers.find(function(userInBlockedArray)
   {
    return userInBlockedArray === username;
  })
@@ -24,7 +25,87 @@ function checkIfBlockedByHim (user,username){
  if(blockedUser){return true}
  else return false;
  
- ;}
+}
+
+async function checkFriend(user, fUsername)
+{
+  const Friend =await user.Friends.find(function(UserInFriendsarray) {
+    return UserInFriendsarray === fUsername;
+  });
+
+  if(Friend){return true;}
+  else return false;
+}
+
+async function checkSentReq(user, fUsername)
+{
+  const sentReq =await user.SentReq.find(function(UserInSentReqsarray) {
+    return UserInSentReqsarray === fUsername;
+  });
+
+  if(sentReq){return true;}
+  else return false;
+}
+async function checkRecReq(user, fUsername)
+{
+  const recReq =await user.RecReq.find(function(UserInRecReqarray) {
+    return UserInRecReqarray === fUsername;
+  });
+
+  if(recReq){return true;}
+  else return false;
+}
+
+function blockAndRemove(user, fUser)
+{
+  user.Friends.pop(fUser.Username);
+  fUser.Friends.pop(user.Username);
+  user.SentReq.pop(fUser.Username);
+  fUser.RecReq.pop(user.Username);
+  fUser.SentReq.pop(user.Username);
+  user.RecReq.pop(fUser.Username);
+  user.blockedUsers.push(fUser.Username);
+  user.save();
+  fUser.save();
+}
+function AddReq(user, fUser)
+{
+  user.SentReq.push(fUser.Username);
+  user.save();
+
+  fUser.RecReq.push(user.Username);
+  fUser.save();
+}
+
+function popSentRequest(user, fUser)
+{
+  user.SentReq.pop(fUser.Username);
+  user.save();
+
+  fUser.RecReq.pop(user.Username);
+  fUser.save();
+}
+
+function removeFriend(user, fUser)
+{
+  user.Friends.pop(fUser.Username);
+  user.save();
+
+  fUser.Friends.pop(user.Username);
+  fUser.save();
+}
+
+acceptRequest
+function acceptRequest(user, fUser)
+{
+
+  user.RecReq.pop(fUser.Username);
+  fUser.SentReq.pop(user.Username);
+  user.Friends.push(fUser.Username);
+  fUser.Friends.push(user.Username);
+  user.save();
+  fUser.save();
+}
 
 
 class UserHandler {
@@ -328,7 +409,7 @@ class UserHandler {
        *    This finds if the user you want to block already is blocked
        * if he is the the response will be "this user is already blocked"
        */
-        const previouslyBlockedUser =checkIfBlockedByMe(user,req.body.blockedUser);
+        const previouslyBlockedUser =await checkIfBlockedByMe(user,req.body.blockedUser);
        
         if (previouslyBlockedUser) {
           res
@@ -338,8 +419,8 @@ class UserHandler {
         /**  
   adds blocked user to blocked array 
   */
-          user.blockedUsers.push(req.body.blockedUser);
-          user.save();
+          blockAndRemove(user, userToBlock);
+               
           res.status(200).send({ message: "User Blocked" });
         }
       }
@@ -364,7 +445,7 @@ class UserHandler {
      * returns "the user you want to unblock isnt blocked" if he isnt blocked with status 200
      */
 
-    const blocked=checkIfBlockedByMe(user,req.body.unblockedUser);
+    const blocked=await checkIfBlockedByMe(user,req.body.unblockedUser);
 
     if (!blocked) {
       res
@@ -414,12 +495,12 @@ class UserHandler {
     /**
        *Check if viewed user exists
        */
-    const userViewed = await User.findOne({ Username: req.body.userToView})
+    const userViewed = await User.findOne({ Username: req.params.userToView})
     if(!userViewed){res.status(404).send({message:"User doesnt exist"})}
     /**
        *Check if viewed blocked the viewing user
        */
-    const blockedUser = checkIfBlockedByHim(userViewed,username);
+    const blockedUser = await checkIfBlockedByHim(userViewed,username);
 
     if(blockedUser){res.status(404).send({message:"User doesnt exist"})}
 
@@ -429,7 +510,7 @@ class UserHandler {
        */
     const userinfo=
     {
-      Username:req.body.userToView,
+      Username:req.params.userToView,
       Subscriptions: userViewed.Subscriptions
     }
 
@@ -448,7 +529,7 @@ class UserHandler {
     /**
        *Check if viewed user exists
        */
-    const userViewed = await User.findOne({ Username: req.body.userToView})
+    const userViewed = await User.findOne({ Username: req.params.userToView})
     if(!userViewed){res.status(404).send({message:"User doesnt exist"})}
     
     /**
@@ -456,7 +537,7 @@ class UserHandler {
        */
     const userinfo=
     {
-      Username:req.body.userToView,
+      Username:req.params.userToView,
       Subscriptions: userViewed.Subscriptions
     }
 
@@ -482,16 +563,19 @@ class UserHandler {
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
-    if(req.body.fUsername == null) res.status(404).send({error :"fUsername not found"});
-
+    if(req.body.fUsername == null) 
+    {
+      res.status(404).send({error :"fUsername not found"});
+    }
     else
     {
       const userToAdd = await User.findOne({ Username: req.body.fUsername });
       if(userToAdd == null) res.status(404).send({error : "User to be added not found"});
       else
       {
-        if(username === req.body.fUsername) res.status(402).send({error: "User cannot add himself"});
 
+        if(username === req.body.fUsername) res.status(402).send({error: "User cannot add himself"});
+        else{
         const blockedByHim=await checkIfBlockedByHim(userToAdd, username);
         const blockedByMe=await checkIfBlockedByMe(user, req.body.fUsername);
         const Friend = await checkFriend(user, req.body.fUsername);
@@ -508,6 +592,7 @@ class UserHandler {
         AddReq(user,userToAdd);
         res.status(200).send({ message: "Friend request Sent" });
         }
+      }
       }
     }
   }
@@ -537,7 +622,7 @@ class UserHandler {
         if(!sentReq) res.status(404).send({error: "Request doesn't exist"});
         else
         {
-          popRequest(user, userToRemove);
+          popSentRequest(user, userToRemove);
           res.status(200).send({ message: "Friend request Removed" });
         }
       }
@@ -591,7 +676,6 @@ class UserHandler {
         else
         {
           acceptRequest(user,friendToAccept);
-          popSentRequest(friendToAccept, user);
           res.status(200).send({ message: "Friend request accepted" });
         }
       }
@@ -655,8 +739,6 @@ class UserHandler {
     const user = await User.findOne({ Username: username });
     res.status(200).send({receivedRequests: user.RecReq});
   }
-
-
 
 
 }

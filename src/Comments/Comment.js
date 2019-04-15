@@ -12,12 +12,12 @@ class CommentHandler {
 
     }
     /**
-     * A function that posts a new comment or a reply
      * @function handlePostComment
+     * @summary A function that posts a new comment or a reply.
      * @summary Takes the details of the comment from the request and checks if this post is valid or not before adding it to the database.
      * @param {Object} req The request.
      * @param {Object} res The response.
-     * @returns {JSON}
+     * @returns {JSON} a json response contains the comment id
      */
     handlePostComment(req, res) {
         //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
@@ -116,12 +116,12 @@ class CommentHandler {
         }
     }
     /**
-     * A function that gets the details of a comment or a reply
      * @function handleGetComment
+     * @summary A function that gets the details of a comment or a reply.
      * @summary Takes the id of a comment and returns its details if found.
      * @param {Object} req The request.
      * @param {Object} res The response.
-     * @returns {JSON}
+     * @returns {JSON} a comment object that contains all the details of the comment.
      */
 
     handleGetComment(req, res) {
@@ -150,12 +150,12 @@ class CommentHandler {
         }
     }
     /**
-     * A function that posts a new comment or a reply
      * @function handleGetAllComments
+     * @summary A function that posts a new comment or a reply.
      * @summary Takes the ID of a post(comment) and returns all its comments(replies) if there are any.
      * @param {Object} req The request.
      * @param {Object} res The response.
-     * @returns {JSON}
+     * @returns {JSON}  objects that contains all the details of the comment.
      */
     handleGetAllComments(req, res) {
         //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
@@ -201,6 +201,14 @@ class CommentHandler {
         }
     }
 
+    /**
+     * @function handleEditComment
+     * @summary A function that edits your own comment or reply.
+     * @summary Takes the details of the comment from the request and checks if this request is valid or not before editing it to the database.
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON} a string indicating if there is an error or update successful
+     */
     handleEditComment(req, res) {
         //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
         if (!ObjectId.isValid(req.params.c_id)) {
@@ -208,7 +216,7 @@ class CommentHandler {
         } else {
             let ID = new ObjectId(req.params.c_id);
             let s, l;
-            //cehcking that the ID is in the database
+            //checking that the ID is in the database
             Comment.findOne({ _id: ID }).then(function (RetCommment) {
                 if (RetCommment == null) {
                     res.status(404).send({ 'error': 'There is no Comment with this ID' });
@@ -245,6 +253,14 @@ class CommentHandler {
         }
     }
 
+    /**
+     * @function handleDeleteComment
+     * @summary A function that deletes your own comment or reply.
+     * @summary Takes the details of the comment from the request and checks if this request is valid or not before deleting from to the database.
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON} a string that indicates if there is an error or deletion successful
+     */
     handleDeleteComent(req, res) {
         //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
         if (!ObjectId.isValid(req.params.c_id)) {    //If it isn't a valid ID

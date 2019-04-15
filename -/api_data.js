@@ -1,4 +1,4 @@
-[
+define({ "api": [
   {
     "type": "delete",
     "url": "/comment/:c_id",
@@ -15554,4 +15554,4 @@
     "filename": "./index.js",
     "groupTitle": "test"
   }
-]
+] });
