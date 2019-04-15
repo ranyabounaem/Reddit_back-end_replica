@@ -254,7 +254,7 @@ describe('Server', function () {
       });
 
 
-      //// SUBREDDITS CREATION ////
+      //// SUBREDDITS AUTOMATION ////
 
 
       describe("Creating 1st subreddit", function () {
@@ -338,7 +338,7 @@ describe('Server', function () {
               });
 
 
-              //// POSTS CREATION ////
+              //// POSTS AUTOMATION ////
 
 
               describe("Creating 1st post inside 1st subreddit", function() {
@@ -528,6 +528,162 @@ describe('Server', function () {
                                 expect(1).toBe(1);})
                       
                               });
+
+                              //// SUBSCRIPTIONS AUTOMATION CLOWNS ////
+
+                              describe("Subscribe to 1st subreddit", function() {
+                                let data = {};
+                                beforeAll(function(done){
+                        
+                                    request.post("http://127.0.0.1:4000/sr/Technology/subs",
+                                    {json:true,headers: husseinToken},
+                                    function(error, request, body){
+                                        data.status = request.statusCode;
+                                        data.body = body;
+                                        postid = data.body._id;
+                                        done();
+                                    });
+                                });
+
+                                it("Useless", () => {
+                                  expect(1).toBe(1);})
+                        
+                                });
+
+                                describe("Subscribe to 1st subreddit", function() {
+                                  let data = {};
+                                  beforeAll(function(done){
+                          
+                                      request.post("http://127.0.0.1:4000/sr/Technology/subs",
+                                      {json:true,headers: mostafaToken},
+                                      function(error, request, body){
+                                          data.status = request.statusCode;
+                                          data.body = body;
+                                          postid = data.body._id;
+                                          done();
+                                      });
+                                  });
+
+                                  it("Useless", () => {
+                                    expect(1).toBe(1);})
+                          
+                                  });
+
+                                  describe("Subscribe to 2nd subreddit", function() {
+                                    let data = {};
+                                    beforeAll(function(done){
+                            
+                                        request.post("http://127.0.0.1:4000/sr/Parenting/subs",
+                                        {json:true,headers: zaghwToken},
+                                        function(error, request, body){
+                                            data.status = request.statusCode;
+                                            data.body = body;
+                                            postid = data.body._id;
+                                            done();
+                                        });
+                                    });
+
+                                    it("Useless", () => {
+                                      expect(1).toBe(1);})
+                            
+                                    });
+
+                                    describe("Subscribe to 2nd subreddit", function() {
+                                      let data = {};
+                                      beforeAll(function(done){
+                              
+                                          request.post("http://127.0.0.1:4000/sr/Parenting/subs",
+                                          {json:true,headers: aliToken},
+                                          function(error, request, body){
+                                              data.status = request.statusCode;
+                                              data.body = body;
+                                              postid = data.body._id;
+                                              done();
+                                          });
+                                      });
+
+                                      it("Useless", () => {
+                                        expect(1).toBe(1);})
+                              
+                                      });
+
+                                      describe("Subscribe to 3rd subreddit", function() {
+                                        let data = {};
+                                        beforeAll(function(done){
+                                
+                                            request.post("http://127.0.0.1:4000/sr/Education/subs",
+                                            {json:true,headers: amirToken},
+                                            function(error, request, body){
+                                                data.status = request.statusCode;
+                                                data.body = body;
+                                                postid = data.body._id;
+                                                done();
+                                            });
+                                        });
+
+                                        it("Useless", () => {
+                                          expect(1).toBe(1);})
+                                
+                                        });
+
+                                        describe("Subscribe to 3rd subreddit", function() {
+                                          let data = {};
+                                          beforeAll(function(done){
+                                  
+                                              request.post("http://127.0.0.1:4000/sr/Education/subs",
+                                              {json:true,headers: atwaToken},
+                                              function(error, request, body){
+                                                  data.status = request.statusCode;
+                                                  data.body = body;
+                                                  postid = data.body._id;
+                                                  done();
+                                              });
+                                          });
+
+                                          it("Useless", () => {
+                                            expect(1).toBe(1);})
+                                  
+                                          });
+
+                                          describe("Subscribe to 4th subreddit", function() {
+                                            let data = {};
+                                            beforeAll(function(done){
+                                    
+                                                request.post("http://127.0.0.1:4000/sr/Movies/subs",
+                                                {json:true,headers: captainmagedToken},
+                                                function(error, request, body){
+                                                    data.status = request.statusCode;
+                                                    data.body = body;
+                                                    postid = data.body._id;
+                                                    done();
+                                                });
+                                            });
+
+                                            it("Useless", () => {
+                                              expect(1).toBe(1);})
+                                    
+                                            });
+
+                                            describe("Subscribe to 4th subreddit", function() {
+                                              let data = {};
+                                              beforeAll(function(done){
+                                      
+                                                  request.post("http://127.0.0.1:4000/sr/Movies/subs",
+                                                  {json:true,headers: sabekToken},
+                                                  function(error, request, body){
+                                                      data.status = request.statusCode;
+                                                      data.body = body;
+                                                      postid = data.body._id;
+                                                      done();
+                                                  });
+                                              });
+  
+                                              it("Useless", () => {
+                                                expect(1).toBe(1);})
+                                      
+                                              });
+
+
     
     // let postsarr = [{
     //     title: 'what is love',
