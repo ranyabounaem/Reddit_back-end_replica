@@ -100,11 +100,7 @@ class SR {
                 if(err)
                 {
                     res.status(500).send({ 'error': 'internal server error' });
-                }
-                else
-                {
-                    res.status(200);
-                }
+                };
             }).then(function(record){
                 if(!record)
                 {
@@ -285,11 +281,14 @@ class SR {
             };
         }).then(function(checked){
             if (!checked) {
-                res.status(404).send({ 'error': 'invalid postId' });
-            }
-            else if(checked.creatorUsername != eraser)
+                res.status(400).send({ 'error': 'invalid postId' });
+            };
+            if(checked.creatorUsername != eraser)
             {
                 res.status(403).send({ 'error': 'access forbidden' });
+            };
+            if(checked.subredditName != subrName){
+                res.status(400).send({ 'error': 'url subreddit is of different name than that of post' });
             }
             else{
                 pt.findOneAndDelete({_id: postId}, function(err, deleted){
@@ -307,7 +306,7 @@ class SR {
                             record.save(function(err){
                                 if(err)
                                 {
-                                    res.status(500).send({ 'error': 'invalid postId' });
+                                    res.status(500).send({ 'error': 'internal server error' });
                                 }
                                 else{
                                     res.status(200).send(record.posts);
@@ -344,6 +343,9 @@ class SR {
             }
             if(record.creatorUsername != editor){
                 res.status(403).send({ 'error': 'access forbidden' })
+            }
+            if(record.subredditName!=subrName){
+                res.status(400).send({'error': 'url subreddit is of different name than that of post'})
             }
             else{
                 pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody}, function(err, updated)
@@ -392,9 +394,7 @@ class SR {
                     };
                 }).then(sr.findOneAndDelete({name: subrName}, function(err){
                     if(err){
-                        res.json({error: 'internal server error',
-                        status:500});
-                        res.end();  
+                        res.status(500).send({ 'error': 'internal server error' }); 
                     }; 
                 }).then(function(deleted){
                     res.status(200).send(deleted);

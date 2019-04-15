@@ -5,7 +5,9 @@
     "./comment.spec.js",
     "./pmTest.spec.js",
     "./listings.spec.js",
+    "./srTest.spec.js",
     "./dblistingautomation.spec.js"
+
 
 
    
