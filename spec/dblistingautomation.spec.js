@@ -350,7 +350,7 @@ describe('Server', function () {
                 beforeAll(function(done){
         
                     request.post("http://127.0.0.1:4000/sr/Technology/thread",
-                    {json:true, body: pt, headers: head},
+                    {json:true, body: pt, headers: husseinToken},
                     function(error, request, body){
                         data.status = request.statusCode;
                         data.body = body;
@@ -374,7 +374,7 @@ describe('Server', function () {
                   beforeAll(function(done){
           
                       request.post("http://127.0.0.1:4000/sr/Technology/thread",
-                      {json:true, body: pt, headers: head},
+                      {json:true, body: pt, headers: mostafaToken},
                       function(error, request, body){
                           data.status = request.statusCode;
                           data.body = body;
@@ -398,7 +398,7 @@ describe('Server', function () {
                     beforeAll(function(done){
             
                         request.post("http://127.0.0.1:4000/sr/Parenting/thread",
-                        {json:true, body: pt, headers: head},
+                        {json:true, body: pt, headers: amirToken},
                         function(error, request, body){
                             data.status = request.statusCode;
                             data.body = body;
@@ -421,7 +421,7 @@ describe('Server', function () {
                       beforeAll(function(done){
               
                           request.post("http://127.0.0.1:4000/sr/Parenting/thread",
-                          {json:true, body: pt, headers: head},
+                          {json:true, body: pt, headers: zaghwToken},
                           function(error, request, body){
                               data.status = request.statusCode;
                               data.body = body;
@@ -444,7 +444,7 @@ describe('Server', function () {
                         beforeAll(function(done){
                 
                             request.post("http://127.0.0.1:4000/sr/Education/thread",
-                            {json:true, body: pt, headers: head},
+                            {json:true, body: pt, headers: atwaToken},
                             function(error, request, body){
                                 data.status = request.statusCode;
                                 data.body = body;
@@ -468,7 +468,7 @@ describe('Server', function () {
                           beforeAll(function(done){
                   
                               request.post("http://127.0.0.1:4000/sr/Education/thread",
-                              {json:true, body: pt, headers: head},
+                              {json:true, body: pt, headers: aliToken},
                               function(error, request, body){
                                   data.status = request.statusCode;
                                   data.body = body;
@@ -486,13 +486,13 @@ describe('Server', function () {
                           describe("Creating 1st post inside 4th subreddit", function() {
                             let data = {};
                             let pt = {
-                                "title": "Is studying for 16 hours a day enough?",
-                                "threadBody": "I was thinking if 16 hours are enough. I can't figure a way to fit more studying hours into my day. I don't even eat anymore."
+                                "title": "Avengers: Endgame",
+                                "threadBody": "Unpopular opinion: Endgame is super overrated."
                             };
                             beforeAll(function(done){
                     
-                                request.post("http://127.0.0.1:4000/sr/Education/thread",
-                                {json:true, body: pt, headers: head},
+                                request.post("http://127.0.0.1:4000/sr/Movies/thread",
+                                {json:true, body: pt, headers: captainmagedToken},
                                 function(error, request, body){
                                     data.status = request.statusCode;
                                     data.body = body;
@@ -505,6 +505,29 @@ describe('Server', function () {
                               expect(1).toBe(1);})
                     
                             });
+
+                            describe("Creating 2nd post inside 4th subreddit", function() {
+                              let data = {};
+                              let pt = {
+                                  "title": "Rush Hour 4",
+                                  "threadBody": "There are rumors that Rush Hour 4 might be in the making."
+                              };
+                              beforeAll(function(done){
+                      
+                                  request.post("http://127.0.0.1:4000/sr/Movies/thread",
+                                  {json:true, body: pt, headers: sabekToken},
+                                  function(error, request, body){
+                                      data.status = request.statusCode;
+                                      data.body = body;
+                                      postid = data.body._id;
+                                      done();
+                                  });
+                              });
+                      
+                              it("Useless", () => {
+                                expect(1).toBe(1);})
+                      
+                              });
     
     // let postsarr = [{
     //     title: 'what is love',
