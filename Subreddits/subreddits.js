@@ -281,14 +281,14 @@ class SR {
             };
         }).then(function(checked){
             if (!checked) {
-                res.status(404).send({ 'error': 'invalid postId' });
+                res.status(400).send({ 'error': 'invalid postId' });
             };
             if(checked.creatorUsername != eraser)
             {
                 res.status(403).send({ 'error': 'access forbidden' });
             };
             if(checked.subredditName != subrName){
-                res.status(404).send({ 'error': 'url subreddit is of different name than that of post' });
+                res.status(400).send({ 'error': 'url subreddit is of different name than that of post' });
             }
             else{
                 pt.findOneAndDelete({_id: postId}, function(err, deleted){
