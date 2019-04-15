@@ -1650,7 +1650,7 @@ app.post('/me/pm/block', passport.authenticate('jwt', { session: false }), (req,
 
 app.delete('/me/pm/delete', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.delete(req, res));
 /**
-* @api {delete} /me/pm/delete   Delete
+* @api {delete} /me/pm/delete?messageID=value   Delete
 * @apiName Delete
 * @apiGroup PMService
 *
