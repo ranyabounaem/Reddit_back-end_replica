@@ -79,7 +79,7 @@ class PM {
  */
    delete(req, res) {
 
-      let messageId = req.body.messageId;
+      let messageId = req.query.messageId;
       let owner = ath.getUsernameFromToken(req);      // shall be demolished by a middleware
 
       // request is true when he needs to mark read and false when he needs to unread this message
