@@ -1453,6 +1453,19 @@ app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
 *
 */
 
+app.get("/sr/:srName/thread/:postId", (req, res) => subreddit.postInfo(req,res));
+
+/**
+* @api {get} /sr/:srName/thread/:postId   Views subreddit meta
+* @apiName ViewPostInfo
+* @apiGroup SrService
+*
+* @apiParam {string} srName Subreddit name.
+* @apiParam {string} postId ID of post.
+* @apiSuccess {object} post Returns post.
+*
+*/
+
 app.delete("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.deleteSubreddit(req, res));
 
 /**

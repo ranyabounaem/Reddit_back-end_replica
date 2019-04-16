@@ -401,6 +401,36 @@ class SR {
                 }));
             };
         });
-    }
+    };
+
+    postInfo(req, res){
+        var subrName = req.params.srName;
+        var postId = req.params.postId;
+        sr.findOne({name: subrName}, function(err){
+            if(err)
+            {
+                res.status(500).send({ 'error': 'internal server error' });  
+            }
+        }).then(function(record){
+            if(!record){
+                res.status(400).send({ 'error': 'invalid subreddit name' }); 
+            }; 
+            if(record.posts.indexOf(postId)>-1)
+            {
+                pt.findOne({_id: postId}, function(err){
+                    if(err){
+                        res.status(500).send({ 'error': 'internal server error' }); 
+                    }; 
+                }).then(function(post){
+                    if(!post){
+                        res.status(500).send({ 'error': 'invalid postId' }); 
+                    }
+                    else{
+                        res.status(200).send(post);
+                    };
+                });
+            };
+        });
+    };
 };
 module.exports = new SR();
