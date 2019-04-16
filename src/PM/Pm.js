@@ -319,6 +319,13 @@ class PM {
          res.json({ error: 'parameterEmptyError' });
 
       }
+            // to check self message alerts
+      else if (receiverUsername==owner) {
+         res.status(403);
+         res.json({ error: 'selfMessage' });
+
+
+      }
       else if (Object(subject).length > 50) {
          res.status(403);
          res.json({ error: 'overLengthedSubject' });
