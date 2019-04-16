@@ -15,7 +15,7 @@ class SR {
  * @summary Create a subreddit.
  * @param {object} Request - Request body: username, srName, srRules.
  * @param {object} Response - 200 (Success).
- * @returns {JSON}
+ * @returns {JSON} Returns the created subreddit.
  */
     createSr (req, res) {
         var admin = getUser(req);
@@ -49,6 +49,7 @@ class SR {
  * @summary Edit a subreddit's details.
  * @param {object} Request - The request
  * @param {object} Response - The response.
+ * @returns {JSON} Returns the edited subreddit (old version).
  */
     edit (req, res){
 
@@ -89,7 +90,7 @@ class SR {
  * @summary Get a subreddit's info. 
  * @param {object} Req -  Request paramaters: srName.
  * @param {object} Res - Return subreddit's username, date, posts and rules - 200 (Success).
- * @returns {JSON}
+ * @returns {JSON} Returns all info of a subreddit.
  */
     info (req, res){
 
@@ -122,7 +123,7 @@ class SR {
  * @summary Create a post inside subreddit.
  * @param {object} Request - Request paramaters: srName - Request body: username, title, threadBody.
  * @param {object} Response - 200 (Success).
- * @returns {null}
+ * @returns {JSON} Returns the created post.
  */
     createPost(req, res){
 
@@ -186,7 +187,7 @@ class SR {
  * @summary Subscribe to a subreddit. 
  * @param {object} Req -  Request
  * @param {object} Res - Response
- * @returns {JSON}- 
+ * @returns {JSON} Returns list of subscribers in subreddit.
  */
     subscribe(req, res){
 
@@ -227,7 +228,7 @@ class SR {
  * @summary Unsubscribe from a subreddit. 
  * @param {object} Req -  Request
  * @param {object} Res - Response
- * @returns {JSON}
+ * @returns {JSON} Returns list of subscribers of subreddit.
  */
 
     unSubscribe(req, res){
@@ -268,7 +269,7 @@ class SR {
  * @summary Delete a post from a subreddit. 
  * @param {object} Req -  Request
  * @param {object} Res - Response
- * @returns {JSON}
+ * @returns {JSON} Returns the post that was deleted. (Old version)
  */
 
     deletePost(req, res){
@@ -324,7 +325,7 @@ class SR {
  * @summary Edit a post in a subreddit. 
  * @param {object} Req -  Request
  * @param {object} Res - Response
- * @returns {JSON}
+ * @returns {JSON} Returns the post that was edited (old version).
  */
 
     editPost(req, res){
@@ -370,7 +371,7 @@ class SR {
  * @summary Delete subreddit. 
  * @param {object} Req -  Request
  * @param {object} Res - Response
- * @returns {JSON}
+ * @returns {JSON} Returns the subreddit that was deleted.
  */
 
     deleteSubreddit(req, res){
@@ -403,9 +404,19 @@ class SR {
         });
     };
 
+ /**
+ * @function postInfo
+ * @summary Get post's information. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns the post's information as an object.
+ */   
+
     postInfo(req, res){
+
         var subrName = req.params.srName;
         var postId = req.params.postId;
+        
         sr.findOne({name: subrName}, function(err){
             if(err)
             {
