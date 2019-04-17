@@ -564,41 +564,67 @@ class UserHandler {
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
+    /**
+    *    This checks if the fUsername isn't in the request
+    *     if not found it sends error 404 with message "fUsername not found"
+    */
     if(req.body.fUsername == null) 
     {
       res.status(404).send({error :"fUsername not found"});
     }
     else
     {
+      /**
+      *    This finds the user that is going to be added
+      */
       const userToAdd = await User.findOne({ Username: req.body.fUsername });
+      /**
+      *    This checks if the user that that is going to be added exists in the database
+      *    if not found it sends error 404 with message "User to be added not found"
+      *    else we need to make certain validations before sending the request
+      */
       if(userToAdd == null) res.status(404).send({error : "User to be added not found"});
       else
-      {
-
-        if(username === req.body.fUsername) res.status(402).send({error: "User cannot add himself"});
-        else{
-        const blockedByHim=await checkIfBlockedByHim(userToAdd, username);
-        const blockedByMe=await checkIfBlockedByMe(user, req.body.fUsername);
-        const Friend = await checkFriend(user, req.body.fUsername);
-        const recReq = await checkRecReq(user, req.body.fUsername);
-        const sentReq =await checkSentReq(user, req.body.fUsername);
-
-        if(blockedByHim) res.status(401).send({error: "The sending User is blocked"});
-        else if(blockedByMe) res.status(401).send({error: "The user to be added is blocked"});
-        else if(Friend) res.status(401).send({error: "The User to be added is already a friend"});
-        else if(recReq) res.status(401).send({error: "User has already received a request from the other user"});
-        else if(sentReq) res.status(401).send({error: "User has already sent a request to the other user"});
-        else
         {
-        AddReq(user,userToAdd);
-        res.status(200).send({ message: "Friend request Sent" });
+          /**
+           *    This checks if the user is trying to add himself
+           *    if so it sends an error 402 with message "User cannot add himself"
+           *    else we'll make some other validations
+          */
+          if(username === req.body.fUsername) res.status(402).send({error: "User cannot add himself"});
+          else{
+            /**
+             *    This checks if the user is blocked by the user to be added
+             *    then if the user to be added is blocked by the sending user
+             *    then if the user to be added is already a friend
+             *    then if the User attempting to send a request has already received a request from the other user
+             *    then if the User attempting to send a request has already Sent a request to the other user
+            */
+            const blockedByHim=await checkIfBlockedByHim(userToAdd, username);
+            const blockedByMe=await checkIfBlockedByMe(user, req.body.fUsername);
+            const Friend = await checkFriend(user, req.body.fUsername);
+            const recReq = await checkRecReq(user, req.body.fUsername);
+            const sentReq =await checkSentReq(user, req.body.fUsername);
+
+            if(blockedByHim) res.status(401).send({error: "The sending User is blocked"});
+            else if(blockedByMe) res.status(401).send({error: "The user to be added is blocked"});
+            else if(Friend) res.status(401).send({error: "The User to be added is already a friend"});
+            else if(recReq) res.status(401).send({error: "User has already received a request from the other user"});
+            else if(sentReq) res.status(401).send({error: "User has already sent a request to the other user"});
+            /**
+            *    else it sends a friend request
+            */
+            else
+            {
+            AddReq(user,userToAdd);
+            res.status(200).send({ message: "Friend request Sent" });
+            }
+          }
         }
       }
-      }
-    }
   }
 
-  // TODO REMOVE REQ
+
     /**
    *     a function that removes a friend request
    *     @function RemoveReq
@@ -607,18 +633,35 @@ class UserHandler {
   async RemoveReq(req, res)
   {
     /**
-    *    This finds the user that is going to Send a friend request using the username in token
+    *    This finds the user that is going to Remove a friend request using the username in token
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
-    if(req.body.fUsername == null) res.status(404).send("fUsername not found");
+    /**
+    *    This checks if the fUsername isn't in the request
+    *     if not found it sends error 404 with message "fUsername not found"
+    */
+    if(req.body.fUsername == null) res.status(404).send({error :"fUsername not found"});
 
     else
     {
+      /**
+      *    This finds the user that the request was sent to
+      */
       const userToRemove = await User.findOne({ Username: req.body.fUsername });
+      /**
+      *    This checks if the user that the request was sent to exists in the database
+      *    if not found it sends error 404 with message "User to be removed not found"
+      *    else we need to make certain validations before removing the request
+      */
       if(userToRemove == null) res.status(404).send({error : "User to be removed not found"});
       else
       {
+        /**
+        *    This checks if there's a request for that user in the database
+        *    if not found it sends error 404 with message "Request doesn't exist"
+        *    else the request is removed with status 200 and response "Friend request Removed"
+        */
         const sentReq =await checkSentReq(user, req.body.fUsername);
         if(!sentReq) res.status(404).send({error: "Request doesn't exist"});
         else
@@ -630,23 +673,44 @@ class UserHandler {
     }
   }
 
+     /**
+   *     a function that removes a friend from the friends list
+   *     @function unFriend
+   *     @returns {JSON} the response for the request
+   */
   async unFriend(req, res)
   {
     /**
-    *    This finds the user that is going to Send a friend request using the username in token
+    *    This finds the user that is going to Unfriend another user using the username in token
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
+    /**
+    *    This checks if the fUsername isn't in the request
+    *     if not found it sends error 404 with message "fUsername not found"
+    */
     if(req.body.fUsername == null) res.status(404).send("fUsername not found");
 
     else
     {
       const friendToRemove = await User.findOne({ Username: req.body.fUsername });
+      /**
+      *    This checks if the user that the request was sent to exists in the database
+      *    if not found it sends error 404 with message "User to unFriend not found"
+      *    else we need to make certain validations before removing the request
+      */
       if(friendToRemove == null) res.status(404).send({error : "User to unFriend not found"});
       else
       {
         const Friend = await checkFriend(user, req.body.fUsername);
+        /**
+         *    this checks if the user to unfriend exists in the friends list
+         *    if not found in the list it sends an error 401 with message "This user is not a friend"
+        */
         if(!Friend) res.status(401).send({error: "This user is not a friend"});
+        /**
+         *    if the user exists in the friends list , the friend gets removed from the list
+        */
         else
         {
           removeFriend(user,friendToRemove);
@@ -655,25 +719,47 @@ class UserHandler {
       }
     }
   }
+
+     /**
+   *     a function that accepts a friend request
+   *     @function addFriend
+   *     @returns {JSON} the response for the request
+   */
   async acceptRequest(req, res)
   {
     /**
-    *    This finds the user that is going to Send a friend request using the username in token
+    *    This finds the user that is going to accept a friend request using the username in token
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
+    /**
+    *    This checks if the fUsername isn't in the request
+    *     if not found it sends error 404 with message "fUsername not found"
+    */
     if(req.body.fUsername == null) res.status(404).send("fUsername not found");
 
     else
     {
       const friendToAccept = await User.findOne({ Username: req.body.fUsername });
+      /**
+      *    This checks if the user that sent the request exists in the database
+      *    if not found it sends error 404 with message User to accept not found"
+      *    else we need to make certain validations before accepting the request
+      */
       if(friendToAccept == null) res.status(404).send({error : "User to accept not found"});
       else
       {
+        /**
+         *    this checks if the user to accept a request from is already a friend
+         *    if not it checks it there's a request from that user in the database
+        */
         const Friend = await checkFriend(user, req.body.fUsername);
         const recReq = await checkRecReq(user, req.body.fUsername);
         if(Friend) res.status(401).send({error: "This user is already a friend"});
         else if(!recReq) res.status(401).send({error: "There isn't a request to be accepted"});
+        /**
+         *    if the request exists in the database the request is accepted
+        */
         else
         {
           acceptRequest(user,friendToAccept);
@@ -682,25 +768,47 @@ class UserHandler {
       }
     }
   }
+
+     /**
+   *     a function that rejects a friend request
+   *     @function addFriend
+   *     @returns {JSON} the response for the request
+   */
   async rejectRequest(req, res)
   {
     /**
-    *    This finds the user that is going to Send a friend request using the username in token
+    *    This finds the user that is going to reject a friend request using the username in token
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
+    /**
+    *    This checks if the fUsername isn't in the request
+    *     if not found it sends error 404 with message "fUsername not found"
+    */
     if(req.body.fUsername == null) res.status(404).send("fUsername not found");
 
     else
     {
       const friendToReject = await User.findOne({ Username: req.body.fUsername });
+      /**
+      *    This checks if the user that sent the request exists in the database
+      *    if not found it sends error 404 with message "User to reject not found"
+      *    else we need to make certain validations before rejecting the request
+      */
       if(friendToReject == null) res.status(404).send({error : "User to reject not found"});
       else
       {
+        /**
+         *    this checks if the user to reject a request from is already a friend
+         *    if not it checks it there's a request from that user in the database
+        */
         const Friend = await checkFriend(user, req.body.fUsername);
         const recReq = await checkRecReq(user, req.body.fUsername);
         if(Friend) res.status(401).send({error: "This user is already a friend"});
         else if(!recReq) res.status(401).send({error: "There isn't a request to be rejected"});
+        /**
+         *    if the request exists in the database the request is rejected
+        */
         else
         {
           
@@ -711,30 +819,44 @@ class UserHandler {
     }
   }
 
+   /**
+   *     a function that returns the list of friends for a certain user
+   *     @function addFriend
+   *     @returns {JSON} the response for the request
+   */
   async getFriends(req, res)
   {
     /**
-    *    This finds the user that is going to Send a friend request using the username in token
+    *    This finds the user that is going to get his list of using the username in token
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
     res.status(200).send({Friends :user.Friends});
   }
 
+  /**
+   *     a function that returns the list of Sent requests for a certain user
+   *     @function addFriend
+   *     @returns {JSON} the response for the request
+   */
   async getSentRequests(req, res)
   {
     /**
-    *    This finds the user that is going to Send a friend request using the username in token
+    *    This finds the user that is going to get the list of sent requests using the username in token
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
     res.status(200).send({sentRequests: user.SentReq});
   }
-
+  /**
+   *     a function that returns the list of Received requests for a certain user
+   *     @function addFriend
+   *     @returns {JSON} the response for the request
+   */
   async getReceivedRequests(req, res)
   {
     /**
-    *    This finds the user that is going to Send a friend request using the username in token
+    *    This finds the user that is going to get a list of received requests using the username in token
     */
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
