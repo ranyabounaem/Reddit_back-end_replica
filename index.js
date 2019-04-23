@@ -1820,7 +1820,8 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
 *  "notifications":[
 *    {"_id": "dsjjda22","username": Marwan, "type": "message", "message": "Mustafa_Ahmed Sent you a message", "sourceID": null},
 *    {"_id": "gsdhsbd826","username": Mostafa,"type": "post", "message": "Marwan commented on your post ", "sourceID": "3546547fg"},
-*    {"_id": "gdyufu787","username": Mostafa, "type": "comment", "me ssage": "Marwan replied on your comment ", "sourceID": "gsdyu3g668"}
+*    {"_id": "kdyufu787","username": Mostafa, "type": "comment", "message": "Marwan replied on your comment ", "sourceID": "gsdyu3g668"},
+*    {"_id": "ldyufuhg7","username": Mostafa, "type": "friendRequest", "message": "Mohamed sent you a freind request ", "sourceID": "gsdyu3g6f6"}
 *    ]
 *     }
 */
