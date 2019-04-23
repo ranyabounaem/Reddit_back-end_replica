@@ -370,6 +370,7 @@ class PM {
                            });
                         //add notification to the receiver user
                         const n = new notification({
+                           type:'message',
                            username: receiverUsername,
                            read: false,
                            sourceID: null,

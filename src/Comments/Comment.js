@@ -66,6 +66,7 @@ class CommentHandler {
                             c.save();
                             if (getUser(req) != retPost.creatorUsername) {
                                 const n = new notification({
+                                    type:'post',
                                     username: retPost.creatorUsername,
                                     read: false,
                                     sourceID: retPost._id,
@@ -120,6 +121,7 @@ class CommentHandler {
                                 c.save();
                                 if (getUser(req) != retComment.username) {
                                     const n = new notification({
+                                        type:'comment',
                                         username: retComment.username,
                                         read: false,
                                         sourceID: retComment._id,
