@@ -1808,22 +1808,48 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
 
 
 /**
-* @api {get} /notif/   Retrieve
+* @api {get} /notif/   Retrieve a maximum of 15 notifications
 * @apiName RetrieveNotifications
 * @apiGroup NotificationsService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Number} Starting ID of Notifications (If Omitted, latest notifications will be sent.).
-* @apiSuccess {Array} Array of Notifications.
+* @apiParam {Number} [startPosition=0] 0 means you want the latest 15 notifications and 1 means you want the next 15...etc.
+* @apiSuccess {Array} Array of Notifications. for example if the type is post then the source ID will be this post ID(your post).
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
 *  "notifications":[
-*    {"type": "message", "content": "Mustafa Ahmed Sent you a message", "ID": 5}
-*    {"type": "ban", "content": "You have been banned from subreddit /r/MemeGeeks", "ID": 3}
+*    {"_id": "dsjjda22","username": Marwan, "type": "message", "message": "Mustafa_Ahmed Sent you a message", "sourceID": null},
+*    {"_id": "gsdhsbd826","username": Mostafa,"type": "post", "message": "Marwan commented on your post ", "sourceID": "3546547fg"},
+*    {"_id": "gdyufu787","username": Mostafa, "type": "comment", "me ssage": "Marwan replied on your comment ", "sourceID": "gsdyu3g668"}
 *    ]
 *     }
-
 */
+
+/**
+ * @api {put} /notif/read/:id  Mark a notification as read
+ * @apiName ReadNotification
+ * @apiGroup NotificationsService
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} id The notification ID sent in the url
+ * @apiError NotificationNotFound
+ */
+
+/**
+ * @api {put} /notif/unread/:id  Mark a notification as unread
+ * @apiName UnreadNotification
+ * @apiGroup NotificationsService
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} id The notification ID sent in the url.
+ * @apiError NotificationNotFound
+ */ 
+
+ /**
+ * @api {put} /notif/readall  Mark all notifications as read
+ * @apiName ReadAllNotifications
+ * @apiGroup NotificationsService
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ */
+
 app.get("/notif", (req, res) => { });
 
 
