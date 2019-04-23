@@ -5,6 +5,7 @@ const privateMessage = PMmongo.pm;
 const blockList = PMmongo.messageBlockList;
 const User = require('../../models/UserSchema');
 const ath = require('../../JWT/giveToken');
+const notification = require('../../models/notificationSchema.js');
 
 /** @class privateMessaging */
 class PM {
@@ -367,6 +368,15 @@ class PM {
                               senderDelete: false
 
                            });
+                        //add notification to the receiver user
+                        const n = new notification({
+                           username: receiverUsername,
+                           read: false,
+                           sourceID: null,
+                           message: owner + ' has sent you a message',
+                           date: Date()
+                        })
+                        n.save();
                         // save   with fire back function  to see the error 
                         message.save(function (err) {
                            if (err) {

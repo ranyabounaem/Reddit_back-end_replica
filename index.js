@@ -1826,7 +1826,9 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
 */
 const notificationHandler = require("./src/notifications");
 app.get("/notif", passport.authenticate('jwt', { session: false }), notificationHandler.handleGetNotification);
-
+app.put("/notif/read/:id",passport.authenticate('jwt', { session: false }), notificationHandler.handleReadNotification);
+app.put("/notif/unread/:id",passport.authenticate('jwt', { session: false }), notificationHandler.handleUnreadNotification);
+app.put("/notif/readall/",passport.authenticate('jwt', { session: false }), notificationHandler.handleReadAllNotifications);
 
 var server = app.listen(4000, function () { console.log('listening') });
 module.exports = server;
