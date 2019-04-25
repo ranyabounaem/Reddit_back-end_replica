@@ -1361,15 +1361,17 @@ app.delete("/flair", (req, res) => { });
  */
 
 /**
- * @api {get} /comment/expand/:c_id Retrieve additional comments omitted from a base comment tree
- * @apiName ExpandComment
+ * @api {post} /comment/report/:id Report a comment
+ * @apiName ReportComment
  * @apiGroup Comment
- * 
- * @apiParam {String} c_id Comment Unique ID.
- * 
- * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
+ *
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} id Comment Unique ID.
+ * @apiParam {String} text A text containg the reason of the report. 
  * 
  * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError EmptyText the text is empty.
+ * @apiError AccessDenied If the user isn't logged in.
  */
 const commentHandler = require('./src/Comments/Comment');
 app.get("/comment/:c_id",commentHandler.handleGetComment) ;
