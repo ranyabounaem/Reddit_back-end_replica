@@ -688,39 +688,6 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 
 // API for listing of Posts by a user
 
-/** 
-* @api {get} /user/:Username/listing?type=value List Posts 
-* @apiName ListPosts
-* @apiGroup UserService
-* @apiparam {String} Username Username of visited User.
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
-* @apiParam {Number} LPostID id of the last post displayed
-* @apiSuccess {Object[]} Posts   Array of the listed Posts  .
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*  "Posts":[
-*  {
-* "SubbredditName": "r/funny"
-* ,"PostID":1
-* ,"Meme": data:image/jpeg;base64,...............
-*  },
-* {
-* "SubbredditName": "r/Damn"
-* ,"PostID":2
-* ,"Meme": data:image/jpeg;base64,...............
-*  } 
-]
-*     }
-*
-* @apiError Server error no subreddits found to be listed
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 500 Server error
-*     {
-*       "error": "Server error"
-*     }
-*/
 
 //TODO VOTED
 
@@ -1127,7 +1094,7 @@ app.delete("/emoji", (req, res) => { });
 * @apiGroup test
 *
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
+* @apiParam {string} TESSST  Image(emoji) of the subreddit.
 * @apiParam {string} SubredditName Name of subreddit to add image to.
 * @apiSuccess {string} EMOJI_ID Unique id of image.
 *
@@ -1394,15 +1361,17 @@ app.delete("/flair", (req, res) => { });
  */
 
 /**
- * @api {get} /comment/expand/:c_id Retrieve additional comments omitted from a base comment tree
- * @apiName ExpandComment
+ * @api {post} /comment/report/:id Report a comment
+ * @apiName ReportComment
  * @apiGroup Comment
- * 
- * @apiParam {String} c_id Comment Unique ID.
- * 
- * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
+ *
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} id Comment Unique ID.
+ * @apiParam {String} text A text containg the reason of the report. 
  * 
  * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError EmptyText the text is empty.
+ * @apiError AccessDenied If the user isn't logged in.
  */
 const commentHandler = require('./src/Comments/Comment');
 app.get("/comment/:c_id", commentHandler.handleGetComment);
@@ -1808,22 +1777,50 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
 
 
 /**
-* @api {get} /notif/   Retrieve
+* @api {get} /notif/   Retrieve a maximum of 15 notifications
 * @apiName RetrieveNotifications
 * @apiGroup NotificationsService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Number} Starting ID of Notifications (If Omitted, latest notifications will be sent.).
-* @apiSuccess {Array} Array of Notifications.
+* @apiParam {Number} [startPosition=0] 0 means you want the latest 15 notifications and 1 means you want the next 15...etc.
+* @apiSuccess {Array} Array of Notifications. for example if the type is post then the source ID will be this post ID(your post).
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
 *  "notifications":[
-*    {"type": "message", "content": "Mustafa Ahmed Sent you a message", "ID": 5}
-*    {"type": "ban", "content": "You have been banned from subreddit /r/MemeGeeks", "ID": 3}
+*    {"_id": "dsjjda22","username": Marwan, "type": "message", "message": "Mustafa_Ahmed Sent you a message", "sourceID": null},
+*    {"_id": "gsdhsbd826","username": Mostafa,"type": "post", "message": "Marwan commented on your post ", "sourceID": "3546547fg"},
+*    {"_id": "kdyufu787","username": Mostafa, "type": "comment", "message": "Marwan replied on your comment ", "sourceID": "gsdyu3g668"},
+*    {"_id": "ldyufuhg7","username": Mostafa, "type": "friendRequest", "message": "Mohamed sent you a freind request ", "sourceID": "gsdyu3g6f6"}
 *    ]
 *     }
-
 */
+
+/**
+ * @api {put} /notif/read/:id  Mark a notification as read
+ * @apiName ReadNotification
+ * @apiGroup NotificationsService
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} id The notification ID sent in the url
+ * @apiError NotificationNotFound
+ */
+
+/**
+ * @api {put} /notif/unread/:id  Mark a notification as unread
+ * @apiName UnreadNotification
+ * @apiGroup NotificationsService
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} id The notification ID sent in the url.
+ * @apiError NotificationNotFound
+ */ 
+
+ /**
+ * @api {put} /notif/readall  Mark all notifications as read
+ * @apiName ReadAllNotifications
+ * @apiGroup NotificationsService
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ */
+
+
 const notificationHandler = require("./src/notifications");
 app.get("/notif", passport.authenticate('jwt', { session: false }), notificationHandler.handleGetNotification);
 app.put("/notif/read/:id",passport.authenticate('jwt', { session: false }), notificationHandler.handleReadNotification);

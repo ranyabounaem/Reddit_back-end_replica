@@ -633,34 +633,6 @@
     "type": "",
     "url": "",
     "version": "0.0.0",
-    "filename": "./apidoc/main.js",
-    "group": "D__memestock_backend_apidoc_main_js",
-    "groupTitle": "D__memestock_backend_apidoc_main_js",
-    "name": ""
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
     "filename": "./doc/main.js",
     "group": "D__memestock_backend_doc_main_js",
     "groupTitle": "D__memestock_backend_doc_main_js",
@@ -1349,6 +1321,426 @@
     "url": "private",
     "title": "",
     "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
     "filename": "./node_modules/component-emitter/index.js",
     "group": "D__memestock_backend_node_modules_component_emitter_index_js",
     "groupTitle": "D__memestock_backend_node_modules_component_emitter_index_js",
@@ -1746,16 +2138,6 @@
   },
   {
     "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./node_modules/detect-file/index.js",
-    "group": "D__memestock_backend_node_modules_detect_file_index_js",
-    "groupTitle": "D__memestock_backend_node_modules_detect_file_index_js",
-    "name": "Public"
-  },
-  {
-    "type": "",
     "url": "private",
     "title": "",
     "version": "0.0.0",
@@ -2119,16 +2501,6 @@
     "url": "public",
     "title": "",
     "version": "0.0.0",
-    "filename": "./node_modules/findup-sync/index.js",
-    "group": "D__memestock_backend_node_modules_findup_sync_index_js",
-    "groupTitle": "D__memestock_backend_node_modules_findup_sync_index_js",
-    "name": "Public"
-  },
-  {
-    "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
     "filename": "./node_modules/fragment-cache/index.js",
     "group": "D__memestock_backend_node_modules_fragment_cache_index_js",
     "groupTitle": "D__memestock_backend_node_modules_fragment_cache_index_js",
@@ -2182,6 +2554,16 @@
     "filename": "./node_modules/growl/lib/growl.js",
     "group": "D__memestock_backend_node_modules_growl_lib_growl_js",
     "groupTitle": "D__memestock_backend_node_modules_growl_lib_growl_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/jasmine-growl-reporter/node_modules/growl/lib/growl.js",
+    "group": "D__memestock_backend_node_modules_jasmine_growl_reporter_node_modules_growl_lib_growl_js",
+    "groupTitle": "D__memestock_backend_node_modules_jasmine_growl_reporter_node_modules_growl_lib_growl_js",
     "name": "Public"
   },
   {
@@ -10456,16 +10838,6 @@
   },
   {
     "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./node_modules/parse-passwd/index.js",
-    "group": "D__memestock_backend_node_modules_parse_passwd_index_js",
-    "groupTitle": "D__memestock_backend_node_modules_parse_passwd_index_js",
-    "name": "Public"
-  },
-  {
-    "type": "",
     "url": "private",
     "title": "",
     "version": "0.0.0",
@@ -11800,6 +12172,15 @@
         ]
       }
     },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"request not found\"\n}",
+          "type": "json"
+        }
+      ]
+    },
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "EmojiService"
@@ -11849,15 +12230,6 @@
           }
         ]
       }
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -11990,6 +12362,15 @@
         ]
       }
     },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Report not found {\n         \"error\":\"request not found\"\n}",
+          "type": "json"
+        }
+      ]
+    },
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "EmojiService"
@@ -12039,15 +12420,6 @@
           }
         ]
       }
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found {\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -12786,9 +13158,74 @@
     "groupTitle": "Moderator"
   },
   {
+    "type": "put",
+    "url": "/notif/readall",
+    "title": "Mark all notifications as read",
+    "name": "ReadAllNotifications",
+    "group": "NotificationsService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "NotificationsService"
+  },
+  {
+    "type": "put",
+    "url": "/notif/read/:id",
+    "title": "Mark a notification as read",
+    "name": "ReadNotification",
+    "group": "NotificationsService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The notification ID sent in the url</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NotificationNotFound",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "NotificationsService"
+  },
+  {
     "type": "get",
     "url": "/notif/",
-    "title": "Retrieve",
+    "title": "Retrieve a maximum of 15 notifications",
     "name": "RetrieveNotifications",
     "group": "NotificationsService",
     "parameter": {
@@ -12804,9 +13241,10 @@
           {
             "group": "Parameter",
             "type": "Number",
-            "optional": false,
-            "field": "Starting",
-            "description": "<p>ID of Notifications (If Omitted, latest notifications will be sent.).</p>"
+            "optional": true,
+            "field": "startPosition",
+            "defaultValue": "0",
+            "description": "<p>0 means you want the latest 15 notifications and 1 means you want the next 15...etc.</p>"
           }
         ]
       }
@@ -12819,17 +13257,59 @@
             "type": "Array",
             "optional": false,
             "field": "Array",
-            "description": "<p>of Notifications.</p>"
+            "description": "<p>of Notifications. for example if the type is post then the source ID will be this post ID(your post).</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n\"notifications\":[\n  {\"type\": \"message\", \"content\": \"Mustafa Ahmed Sent you a message\", \"ID\": 5}\n  {\"type\": \"ban\", \"content\": \"You have been banned from subreddit /r/MemeGeeks\", \"ID\": 3}\n  ]\n   }",
+          "content": "   HTTP/1.1 200 OK\n   {\n\"notifications\":[\n  {\"_id\": \"dsjjda22\",\"username\": Marwan, \"type\": \"message\", \"message\": \"Mustafa_Ahmed Sent you a message\", \"sourceID\": null},\n  {\"_id\": \"gsdhsbd826\",\"username\": Mostafa,\"type\": \"post\", \"message\": \"Marwan commented on your post \", \"sourceID\": \"3546547fg\"},\n  {\"_id\": \"kdyufu787\",\"username\": Mostafa, \"type\": \"comment\", \"message\": \"Marwan replied on your comment \", \"sourceID\": \"gsdyu3g668\"},\n  {\"_id\": \"ldyufuhg7\",\"username\": Mostafa, \"type\": \"friendRequest\", \"message\": \"Mohamed sent you a freind request \", \"sourceID\": \"gsdyu3g6f6\"}\n  ]\n   }",
           "type": "json"
         }
       ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "NotificationsService"
+  },
+  {
+    "type": "put",
+    "url": "/notif/unread/:id",
+    "title": "Mark a notification as unread",
+    "name": "UnreadNotification",
+    "group": "NotificationsService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The notification ID sent in the url.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NotificationNotFound",
+            "description": ""
+          }
+        ]
+      }
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -13047,7 +13527,7 @@
   },
   {
     "type": "delete",
-    "url": "/me/pm/delete",
+    "url": "/me/pm/delete?messageID=value",
     "title": "Delete",
     "name": "Delete",
     "group": "PMService",
@@ -13836,6 +14316,49 @@
   },
   {
     "type": "get",
+    "url": "/sr/:srName/thread/:postId",
+    "title": "Views subreddit meta",
+    "name": "ViewPostInfo",
+    "group": "SrService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "srName",
+            "description": "<p>Subreddit name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "postId",
+            "description": "<p>ID of post.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "post",
+            "description": "<p>Returns post.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "SrService"
+  },
+  {
+    "type": "get",
     "url": "/sr/:srName/meta",
     "title": "Views subreddit meta",
     "name": "ViewSrMeta",
@@ -14067,89 +14590,6 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"CommentsNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "UserService"
-  },
-  {
-    "type": "get",
-    "url": "/user/:Username/listing?type=value",
-    "title": "List Posts",
-    "name": "ListPosts",
-    "group": "UserService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>Username of visited User.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "ListingType",
-            "description": "<p>[ListingType == HOT] Type of the listing that the user wants for the posts.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "LPostID",
-            "description": "<p>id of the last post displayed</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "Posts",
-            "description": "<p>Array of the listed Posts  .</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n \"Posts\":[\n {\n\"SubbredditName\": \"r/funny\"\n,\"PostID\":1\n,\"Meme\": data:image/jpeg;base64,...............\n },\n{\n\"SubbredditName\": \"r/Damn\"\n,\"PostID\":2\n,\"Meme\": data:image/jpeg;base64,...............\n } \n]\n    }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Server",
-            "description": "<p>error no subreddits found to be listed</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 500 Server error\n{\n  \"error\": \"Server error\"\n}",
           "type": "json"
         }
       ]
@@ -15524,7 +15964,7 @@
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "Image",
+            "field": "TESSST",
             "description": "<p>Image(emoji) of the subreddit.</p>"
           },
           {
