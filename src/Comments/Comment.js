@@ -62,6 +62,7 @@ class CommentHandler {
                                 spoiler: s,              //FOR CURRENT PHASE ONLY
                                 locked: l,
                                 reply: false,
+                                subreddit: retPost.subredditName
                             })
                             c.save();
                             if (getUser(req) != retPost.creatorUsername) {
@@ -117,6 +118,7 @@ class CommentHandler {
                                     spoiler: s,              //FOR CURRENT PHASE ONLY
                                     locked: l,
                                     reply: true,
+                                    subreddit: retComment.subreddit
                                 })
                                 c.save();
                                 if (getUser(req) != retComment.username) {
@@ -161,6 +163,7 @@ class CommentHandler {
                     res.status(200).send({
                         _id: retComment._id,
                         username: retComment.username,
+                        subreddit: retComment.subreddit,
                         content: retComment.content,
                         parent_id: retComment.parent_id,
                         dateAdded: retComment.dateAdded,
@@ -326,6 +329,15 @@ class CommentHandler {
             });
         }
     }
+
+    handleVoteComment(req, res){
+
+    }
+
+    handleReportComment(req,res){
+        
+    }
+
 }
 
 module.exports = new CommentHandler();
