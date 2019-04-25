@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Comment = require('../../models/commentSchema.js');
+const notification = require('../../models/notificationSchema.js');
 const subredditsSchema = require('../../models/subredditsSchema.js');
 const Post = subredditsSchema.SubredditPostSchema;
 const ObjectId = require('mongodb').ObjectID;
@@ -63,6 +64,17 @@ class CommentHandler {
                                 reply: false,
                             })
                             c.save();
+                            if (getUser(req) != retPost.creatorUsername) {
+                                const n = new notification({
+                                    type:'post',
+                                    username: retPost.creatorUsername,
+                                    read: false,
+                                    sourceID: retPost._id,
+                                    message: getUser(req) + ' has commented on your post',
+                                    date: Date()
+                                })
+                                n.save();
+                            }
                             res.status(200).send({ c_id: c._id });
                         }
                     }
@@ -107,6 +119,17 @@ class CommentHandler {
                                     reply: true,
                                 })
                                 c.save();
+                                if (getUser(req) != retComment.username) {
+                                    const n = new notification({
+                                        type:'comment',
+                                        username: retComment.username,
+                                        read: false,
+                                        sourceID: retComment._id,
+                                        message: getUser(req) + ' has replies on your comment',
+                                        date: Date()
+                                    })
+                                    n.save();
+                                }
                                 res.status(200).send({ c_id: c._id });
                             }
                         }
@@ -285,7 +308,7 @@ class CommentHandler {
                             }
                             else {
                                 //different from reddit
-                                
+
                                 //deleting replies of the deleted comments
                                 Comment.deleteMany({ parent_id: ID }, function (err) {
                                     if (err) {

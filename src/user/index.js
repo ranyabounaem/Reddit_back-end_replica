@@ -1,4 +1,5 @@
 const User = require("../../models/UserSchema");
+const notification = require('../../models/notificationSchema.js');
 const validator = require("email-validator");
 const JWTconfig = require("../../JWT/giveToken");
 var bcrypt = require('bcrypt');
@@ -616,6 +617,15 @@ class UserHandler {
             */
             else
             {
+            const n = new notification({
+              type:'friendRequest',
+              username: userToAdd,
+              read: false,
+              sourceID: null,
+              message: user + ' has sent you a friend request',
+              date: Date()
+            })
+            n.save();
             AddReq(user,userToAdd);
             res.status(200).send({ message: "Friend request Sent" });
             }

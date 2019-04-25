@@ -147,10 +147,10 @@ app.post("/user/login", userHandler.handleLogin);
 * }
 */
 
- 
- app.put("/me/edit/email/:Username",passport.authenticate('jwt',{session:false}), userHandler.EditUserEmail);
- app.put("/me/edit/Password/:Username",passport.authenticate('jwt',{session:false}),userHandler.EditUserPassword);
- app.get("/me/About/:Username",passport.authenticate('jwt',{session:false}), userHandler.Getmyinfo);
+
+app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserEmail);
+app.put("/me/edit/Password/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserPassword);
+app.get("/me/About/:Username", passport.authenticate('jwt', { session: false }), userHandler.Getmyinfo);
 
 
 app.get("/user/info/:userToView", userHandler.getUserInfo);
@@ -278,214 +278,214 @@ app.put("/me/user/block", passport.authenticate('jwt', { session: false }), user
 * 
 */
 
-app.put("/me/user/Add",passport.authenticate('jwt',{session:false}),userHandler.addFriend);
- /**
- * @api {put} /me/user/Add  Add new friend
- * @apiName FriendAdd
- * @apiGroup me
- *
- * @apiHeader {String} auth Users unique token. 
- * @apiParam  {String} FriendUsername unique Username  of user to add. 
- * @apiParamExample {json} Input
- *    {
- *      "Username": "user1", 
-      
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {    
- *      "message": "Friend request Sent" 
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 fUsername not found
- *      {
- *       "error": "fUsername not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User to be added not found
- *      {
- *       "error": "User to be added not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 402 User cannot add himself
- *      {
- *       "error": "User cannot add himself"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 401 The sending User is blocked
- *      {
- *       "error": "The sending User is blocked"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 401 The user to be added is blocked
- *      {
- *       "error": "The user to be added is blocked"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 401 User not found
- *      {
- *       "error": "The User to be added is already a friend"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 401 User has already received a request from the other user
- *      {
- *       "error": "User has already received a request from the other user"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 401 User has already sent a request to the other user
- *      {
- *       "error": "User has already sent a request to the other user"
- *     }
- */
-
-
-app.put("/me/user/Unfriend",passport.authenticate('jwt',{session:false}),userHandler.unFriend);
-
- /**
- * @api {put} /me/user/Unfriend   unfriend
- * @apiName Unfriend
- * @apiGroup me
- *
- * @apiHeader {String} auth Users unique token.
- * @apiParam  {String} fUsername unique Username  of user to delete. 
- * @apiParamExample {json} Input
- *    {
- *      "Username": "user1", 
-      
- *    }
+app.put("/me/user/Add", passport.authenticate('jwt', { session: false }), userHandler.addFriend);
+/**
+* @api {put} /me/user/Add  Add new friend
+* @apiName FriendAdd
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token. 
+* @apiParam  {String} FriendUsername unique Username  of user to add. 
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+     
+*    }
 *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {    
- *      "message": "Friend is removed from friends list" 
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 fUsername not found
- *      {
- *       "error": "fUsername not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User to unFriend not found
- *      {
- *       "error": "User to unFriend not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 401 This user is not a friend
- *      {
- *       "error": "This user is not a friend"
- *     }
- */
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend request Sent" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be added not found
+*      {
+*       "error": "User to be added not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot add himself
+*      {
+*       "error": "User cannot add himself"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The sending User is blocked
+*      {
+*       "error": "The sending User is blocked"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user to be added is blocked
+*      {
+*       "error": "The user to be added is blocked"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User not found
+*      {
+*       "error": "The User to be added is already a friend"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User has already received a request from the other user
+*      {
+*       "error": "User has already received a request from the other user"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User has already sent a request to the other user
+*      {
+*       "error": "User has already sent a request to the other user"
+*     }
+*/
 
-app.put("/me/user/accept",passport.authenticate('jwt',{session:false}),userHandler.acceptRequest);
 
- /**
- * @api {put} /me/user/accept   Accept Request
- * @apiName AcceptRequest
- * @apiGroup me
- *
- * @apiHeader {String} auth Users unique token.
- * @apiParam  {String} fUsername unique Username  of user to Accept request from. 
- * @apiParamExample {json} Input
- *    {
- *      "Username": "user1", 
-      
- *    }
+app.put("/me/user/Unfriend", passport.authenticate('jwt', { session: false }), userHandler.unFriend);
+
+/**
+* @api {put} /me/user/Unfriend   unfriend
+* @apiName Unfriend
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiParam  {String} fUsername unique Username  of user to delete. 
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+     
+*    }
 *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {    
- *      "message": "Friend request accepted" 
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 fUsername not found
- *      {
- *       "error": "fUsername not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User to accept not found
- *      {
- *       "error": "User to accept not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 401 This user is already a friend
- *      {
- *       "error": "This user is already a friend"
- *     }
- *  @apiErrorExample {json} List error
- *     HTTP/1.1 401 There isn't a request to be accepted
- *      {
- *       "error": "There isn't a request to be accepted"
- *     }
- */
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend is removed from friends list" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to unFriend not found
+*      {
+*       "error": "User to unFriend not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 This user is not a friend
+*      {
+*       "error": "This user is not a friend"
+*     }
+*/
 
-app.put("/me/user/reject",passport.authenticate('jwt',{session:false}),userHandler.rejectRequest);
+app.put("/me/user/accept", passport.authenticate('jwt', { session: false }), userHandler.acceptRequest);
 
- /**
- * @api {put} /me/user/reject   Reject Request
- * @apiName RejectRequest
- * @apiGroup me
- *
- * @apiHeader {String} auth Users unique token.
- * @apiParam  {String} fUsername unique Username  of user to reject. 
- * @apiParamExample {json} Input
- *    {
- *      "Username": "user1", 
-      
- *    }
+/**
+* @api {put} /me/user/accept   Accept Request
+* @apiName AcceptRequest
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiParam  {String} fUsername unique Username  of user to Accept request from. 
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+     
+*    }
 *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {    
- *      "message": "Friend request rejected" 
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 fUsername not found
- *      {
- *       "error": "fUsername not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User to reject not found
- *      {
- *       "error": "User to reject not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 401 This user is already a friend
- *      {
- *       "error": "This user is already a friend"
- *     }
- *  @apiErrorExample {json} List error
- *     HTTP/1.1 401 There isn't a request to be rejected
- *      {
- *       "error": "There isn't a request to be rejected"
- *     }
- */
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend request accepted" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to accept not found
+*      {
+*       "error": "User to accept not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 This user is already a friend
+*      {
+*       "error": "This user is already a friend"
+*     }
+*  @apiErrorExample {json} List error
+*     HTTP/1.1 401 There isn't a request to be accepted
+*      {
+*       "error": "There isn't a request to be accepted"
+*     }
+*/
 
-app.get("/me/friends",passport.authenticate('jwt',{session:false}),userHandler.getFriends);
+app.put("/me/user/reject", passport.authenticate('jwt', { session: false }), userHandler.rejectRequest);
 
- /**
- * @api {Get} /me/friends   get friends
- * @apiName FriendList
- * @apiGroup me
- *
- * @apiHeader {String} auth Users unique token.
- * @apiSuccess  {[String]} FUsername unique Username  of the User.
- * @apiSuccessExample {json} Success
- *  
- *   HTTP/1.1 200 OK
- * 
- *    {"Friends" :["User1" , "User2"]}
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 500 server error
- */
+/**
+* @api {put} /me/user/reject   Reject Request
+* @apiName RejectRequest
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiParam  {String} fUsername unique Username  of user to reject. 
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+     
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend request rejected" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to reject not found
+*      {
+*       "error": "User to reject not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 This user is already a friend
+*      {
+*       "error": "This user is already a friend"
+*     }
+*  @apiErrorExample {json} List error
+*     HTTP/1.1 401 There isn't a request to be rejected
+*      {
+*       "error": "There isn't a request to be rejected"
+*     }
+*/
 
-app.get("/me/sentRequests",passport.authenticate('jwt',{session:false}),userHandler.getSentRequests);
+app.get("/me/friends", passport.authenticate('jwt', { session: false }), userHandler.getFriends);
+
+/**
+* @api {Get} /me/friends   get friends
+* @apiName FriendList
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiSuccess  {[String]} FUsername unique Username  of the User.
+* @apiSuccessExample {json} Success
+*  
+*   HTTP/1.1 200 OK
+* 
+*    {"Friends" :["User1" , "User2"]}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 500 server error
+*/
+
+app.get("/me/sentRequests", passport.authenticate('jwt', { session: false }), userHandler.getSentRequests);
 
 /**
 * @api {Get} /me/sentRequests  get sent requests
@@ -507,7 +507,7 @@ app.get("/me/sentRequests",passport.authenticate('jwt',{session:false}),userHand
 *     HTTP/1.1 500 server error
 */
 
-app.get("/me/receivedRequests",passport.authenticate('jwt',{session:false}),userHandler.getReceivedRequests);
+app.get("/me/receivedRequests", passport.authenticate('jwt', { session: false }), userHandler.getReceivedRequests);
 
 /**
 * @api {Get} /me/receivedRequests  get received requests
@@ -529,43 +529,43 @@ app.get("/me/receivedRequests",passport.authenticate('jwt',{session:false}),user
 *     HTTP/1.1 500 server error
 */
 
-app.put("/me/user/removeReq",passport.authenticate('jwt',{session:false}),userHandler.RemoveReq);
+app.put("/me/user/removeReq", passport.authenticate('jwt', { session: false }), userHandler.RemoveReq);
 
- /**
- * @api {put} /me/user/removeReq   delete friend request
- * @apiName RemoveFriendRequest
- * @apiGroup me
- *
- *
- * @apiHeader {String} auth Users unique token.
- * @apiParam  {String} fUsername unique Username  of user to unadd.  
- * @apiParamExample {json} Input
- *    {
- *      "Username": "user1", 
- *    }
+/**
+* @api {put} /me/user/removeReq   delete friend request
+* @apiName RemoveFriendRequest
+* @apiGroup me
+*
+*
+* @apiHeader {String} auth Users unique token.
+* @apiParam  {String} fUsername unique Username  of user to unadd.  
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+*    }
 *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {    
- *      "message": "Friend request Removed" 
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 fUsername not found
- *      {
- *       "error": "fUsername not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User to be removed not found
- *      {
- *       "error": "User to be removed not found"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 Request doesn't exist
- *      {
- *       "error": "Request doesn't exist"
- *     }
- */
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend request Removed" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be removed not found
+*      {
+*       "error": "User to be removed not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Request doesn't exist
+*      {
+*       "error": "Request doesn't exist"
+*     }
+*/
 
 
 /**
@@ -584,7 +584,7 @@ app.put("/me/user/removeReq",passport.authenticate('jwt',{session:false}),userHa
 //TODO POSTS: listing posts for a subreddit or only popular posts
 
 const listings = require('./src/listings');
-app.post('/me/listing', passport.authenticate('jwt', { session: false }),(req, res) => listings.listPosts(req, res));
+app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, res) => listings.listPosts(req, res));
 /** 
 * @api {post} /me/listing?type=value List Posts 
 * @apiName ListPosts
@@ -1374,11 +1374,11 @@ app.delete("/flair", (req, res) => { });
  * @apiError AccessDenied If the user isn't logged in.
  */
 const commentHandler = require('./src/Comments/Comment');
-app.get("/comment/:c_id",commentHandler.handleGetComment) ;
-app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
-app.post("/comment/:id",passport.authenticate('jwt',{session:false}),commentHandler.handlePostComment );
-app.put("/comment/:c_id",passport.authenticate('jwt',{session:false}), commentHandler.handleEditComment);
-app.delete("/comment/:c_id",passport.authenticate('jwt',{session:false}), commentHandler.handleDeleteComent);
+app.get("/comment/:c_id", commentHandler.handleGetComment);
+app.get("/comment/all/:id", commentHandler.handleGetAllComments);
+app.post("/comment/:id", passport.authenticate('jwt', { session: false }), commentHandler.handlePostComment);
+app.put("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleEditComment);
+app.delete("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleDeleteComent);
 
 
 /**
@@ -1387,7 +1387,7 @@ app.delete("/comment/:c_id",passport.authenticate('jwt',{session:false}), commen
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
 
-app.post("/sr/create", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.createSr(req, res));
+app.post("/sr/create", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.createSr(req, res));
 
 /**
 * @api {post} /sr/create   Create a new subreddit
@@ -1402,7 +1402,7 @@ app.post("/sr/create", passport.authenticate('jwt',{session:false}), (req, res) 
 * @apiSuccess {object} newSubreddit Returns the created subreddit (if any).
 */
 
-app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
+app.get("/sr/:srName/meta", (req, res) => subreddit.info(req, res));
 
 /**
 * @api {get} /sr/:srName/meta   Views subreddit meta
@@ -1422,7 +1422,7 @@ app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
 *
 */
 
-app.get("/sr/:srName/thread/:postId", (req, res) => subreddit.postInfo(req,res));
+app.get("/sr/:srName/thread/:postId", (req, res) => subreddit.postInfo(req, res));
 
 /**
 * @api {get} /sr/:srName/thread/:postId   Views subreddit meta
@@ -1435,7 +1435,7 @@ app.get("/sr/:srName/thread/:postId", (req, res) => subreddit.postInfo(req,res))
 *
 */
 
-app.delete("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.deleteSubreddit(req, res));
+app.delete("/sr/:srName", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.deleteSubreddit(req, res));
 
 /**
 * @api {delete} /sr/:srName   Delete a subreddit
@@ -1446,7 +1446,7 @@ app.delete("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, re
 * @apiSuccess {object} deletedSubreddit Returns the deleted subreddit (if any).
 */
 
-app.put("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.edit(req,res));
+app.put("/sr/:srName", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.edit(req, res));
 
 /**
 * @api {put} /sr/:srName/    Edit a subreddit
@@ -1461,7 +1461,7 @@ app.put("/sr/:srName", passport.authenticate('jwt',{session:false}), (req, res) 
 */
 
 
-app.post("/sr/:srName/thread", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.createPost(req, res));
+app.post("/sr/:srName/thread", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.createPost(req, res));
 
 /**
 * @api {post} /sr/:srName/thread    Create a thread inside subreddit
@@ -1474,7 +1474,7 @@ app.post("/sr/:srName/thread", passport.authenticate('jwt',{session:false}), (re
 * @apiParam {boolean}  Spoiler (NOT YET) [Spoiler==false] Mark if post is spoiler
 */
 
-app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.editPost(req, res));
+app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.editPost(req, res));
 
 /**
 * @api {put} /sr/:srName/thread/:postId    Edit a thread inside subreddit
@@ -1488,7 +1488,7 @@ app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:false
 * @apiSuccess {object} editedPost Returns the edited post inside subreddit.
 */
 
-app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.deletePost(req, res));
+app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.deletePost(req, res));
 
 /**
 * @api {delete} /sr/:srName/thread/:postId    Delete a thread inside subreddit
@@ -1499,7 +1499,7 @@ app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt',{session:fa
 * @apiSuccess {object} deletedPost Returns the deleted post inside subreddit.
 */
 
-app.post("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.subscribe(req, res));
+app.post("/sr/:srName/subs", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.subscribe(req, res));
 
 /**
 * @api {post} /sr/:srName/subs  Subscribe to a Sr
@@ -1510,7 +1510,7 @@ app.post("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (req,
 * @apiSuccess {string[]} subscribersList Returns the new subscribers list.
 */
 
-app.delete("/sr/:srName/subs", passport.authenticate('jwt',{session:false}), (req, res) => subreddit.unSubscribe(req, res));
+app.delete("/sr/:srName/subs", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.unSubscribe(req, res));
 
 /**
 * @api {delete} /sr/:srName/subs   Unsubscribe to a Sr
@@ -1551,7 +1551,7 @@ const subreddit = require('./Subreddits/subreddits')
 const privateMessage = require('./src/PM/Pm');
 
 
-app.post('/me/pm/compose', passport.authenticate('jwt', { session: false }),(req, res) => privateMessage.compose(req, res));
+app.post('/me/pm/compose', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.compose(req, res));
 /**
 * @api {post} /me/pm/compose    Compose a new message
 * @apiName Compose
@@ -1697,7 +1697,7 @@ app.post('/me/pm/markreadall', passport.authenticate('jwt', { session: false }),
 */
 
 
-app.post('/me/pm', passport.authenticate('jwt', { session: false }),(req, res) => privateMessage.retrieve(req, res));
+app.post('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.retrieve(req, res));
 /**
 * @api {post} /me/pm/   Retrieve
 * @apiName RetrieveMessages
@@ -1820,8 +1820,12 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  */
 
-app.get("/notif", (req, res) => { });
 
+const notificationHandler = require("./src/notifications");
+app.get("/notif", passport.authenticate('jwt', { session: false }), notificationHandler.handleGetNotification);
+app.put("/notif/read/:id",passport.authenticate('jwt', { session: false }), notificationHandler.handleReadNotification);
+app.put("/notif/unread/:id",passport.authenticate('jwt', { session: false }), notificationHandler.handleUnreadNotification);
+app.put("/notif/readall/",passport.authenticate('jwt', { session: false }), notificationHandler.handleReadAllNotifications);
 
 var server = app.listen(4000, function () { console.log('listening') });
 module.exports = server;
