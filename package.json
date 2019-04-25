@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jasmine",
-  "test-cover": "istanbul cover --include-all-sources spec/specs.js && istanbul check-coverage"
+    "test-cover": "istanbul cover --include-all-sources spec/specs.js && istanbul check-coverage"
   },
   "repository": {
     "type": "git",

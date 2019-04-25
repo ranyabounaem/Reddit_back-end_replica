@@ -688,39 +688,6 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }),(req, r
 
 // API for listing of Posts by a user
 
-/** 
-* @api {get} /user/:Username/listing?type=value List Posts 
-* @apiName ListPosts
-* @apiGroup UserService
-* @apiparam {String} Username Username of visited User.
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
-* @apiParam {Number} LPostID id of the last post displayed
-* @apiSuccess {Object[]} Posts   Array of the listed Posts  .
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*  "Posts":[
-*  {
-* "SubbredditName": "r/funny"
-* ,"PostID":1
-* ,"Meme": data:image/jpeg;base64,...............
-*  },
-* {
-* "SubbredditName": "r/Damn"
-* ,"PostID":2
-* ,"Meme": data:image/jpeg;base64,...............
-*  } 
-]
-*     }
-*
-* @apiError Server error no subreddits found to be listed
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 500 Server error
-*     {
-*       "error": "Server error"
-*     }
-*/
 
 //TODO VOTED
 
@@ -1127,7 +1094,7 @@ app.delete("/emoji", (req, res) => { });
 * @apiGroup test
 *
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
+* @apiParam {string} TESSST  Image(emoji) of the subreddit.
 * @apiParam {string} SubredditName Name of subreddit to add image to.
 * @apiSuccess {string} EMOJI_ID Unique id of image.
 *
