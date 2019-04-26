@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const jwt = require('../JWT/giveToken');
 const vote = require('../models/voteSchema');
 const getUser = jwt.getUsernameFromToken;
+const User = require('../../models/UserSchema');
 
 class SR {
     constructor(){
@@ -224,11 +225,20 @@ class SR {
                             res.status(500).send({ 'error': 'internal server error' });
                         }
                         else{
-                            user.findOne({Username: subscribed_user}, function(err){
-                                res.status(500).send({ 'error': 'internal server error' });
+                            User.findOne({Username: subscribed_user}, function(err){
+                                if(err){
+                                    res.status(500).send({ 'error': 'internal server error' });
+                                }
                             }).then(function(user){
                                 user.Subscriptions.push(subrName);
-                                res.status(200).send(record.subscribed_users);
+                                user.save(function(err){
+                                    if(err) {
+                                        res.status(500).send({ 'error': 'internal server error' });
+                                    }
+                                    else{
+                                        res.status(200).send(record.subscribed_users);
+                                    };
+                                });
                             });
                         };
                     });
