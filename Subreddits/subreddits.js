@@ -1,5 +1,6 @@
 const express = require('express');
 const srs = require('../models/subredditsSchema');
+const User=require('../models/UserSchema');
 const sr=srs.Subreddit;
 const pt = srs.SubredditPostSchema;
 const mongoose = require('mongoose');
@@ -189,39 +190,54 @@ class SR {
  * @param {object} Res - Response
  * @returns {JSON} Returns list of subscribers in subreddit.
  */
-    subscribe(req, res){
+subscribe(req, res){
 
-        var subscribed_user = getUser(req);
-        var subrName = req.params.srName;
+    var subscribed_user = getUser(req);
+    var subrName = req.params.srName;
 
-        sr.findOne({name: subrName}, function(err){
-            if(err){
-                res.status(500).send({ 'error': 'internal server error' });
-            };
-        }).then(function(record){
-            if(!record)
-            {
-                res.status(400).send({ 'error': 'invalid subreddit name' });
+    sr.findOne({name: subrName}, function(err){
+        if(err){
+            res.status(500).send({ 'error': 'internal server error' });
+        };
+    }).then(function(record){
+        if(!record)
+        {
+            res.status(400).send({ 'error': 'invalid subreddit name' });
+        }
+        else{
+            if(record.subscribed_users.indexOf(subscribed_user)==-1){
+                record.subscribed_users.push(subscribed_user);
+                record.save(function(err){
+                    if(err){
+                        res.status(500).send({ 'error': 'internal server error' });
+                    }
+                    else{
+                        User.findOne({Username: subscribed_user}, function(err){
+                            if(err){
+                                res.status(500).send({ 'error': 'internal server error' });
+                            }
+                        }).then(function(user){
+                            user.Subscriptions.push(subrName);
+                            user.save(function(err){
+                                if(err) {
+                                    res.status(500).send({ 'error': 'internal server error' });
+                                }
+                                else{
+                                    res.status(200).send(record.subscribed_users);
+                                };
+                            });
+                        });
+                    };
+                });
             }
             else{
-                if(record.subscribed_users.indexOf(subscribed_user)==-1){
-                    record.subscribed_users.push(subscribed_user);
-                    record.save(function(err){
-                        if(err){
-                            res.status(500).send({ 'error': 'internal server error' });
-                        }
-                        else{
-                            res.status(200).send(record.subscribed_users);
-                        };
-                    });
-                }
-                else{
-                    res.status(400).send({"error": "user already subscribed"});
-                }
-                
-            };
-        });
-    };
+                res.status(400).send({"error": "user already subscribed"});
+            }
+            
+        };
+    });
+};
+
 
 /**
  * @function unSubscribe
