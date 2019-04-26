@@ -224,7 +224,12 @@ class SR {
                             res.status(500).send({ 'error': 'internal server error' });
                         }
                         else{
-                            res.status(200).send(record.subscribed_users);
+                            user.findOne({Username: subscribed_user}, function(err){
+                                res.status(500).send({ 'error': 'internal server error' });
+                            }).then(function(user){
+                                user.Subscriptions.push(subrName);
+                                res.status(200).send(record.subscribed_users);
+                            });
                         };
                     });
                 }
