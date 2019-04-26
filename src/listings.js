@@ -71,6 +71,8 @@ class listings {
         // getting the names of the subbreddit a user is subscribed to 
         let subscribedSubbreddit = await User.findOne({ Username: owner }, { Subscriptions: 1, _id: 0 });
         // finding the posts that the subbreddit posted to retrieve for the user 
+        let newPosts = await posts.find({ subredditName: subscribedSubbreddit.Subscriptions }, { __v: 0 }).sort({ postDate: -1 })
+        .skip(startPosition * 15).limit(15);
         let topPosts = null;
         return topPosts;
     }
@@ -118,7 +120,7 @@ class listings {
             // if there is no error and it is not null send it 
             if (newPosts != null && newPosts.length != 0) {
                 res.status(200);
-                res.json(newPosts);
+                res.json({posts: newPosts});
                 return;
             }
             else {
