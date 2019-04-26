@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Subreddits.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Subreddits.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const express = require('express');
+const srs = require('../models/subredditsSchema');
+const sr=srs.Subreddit;
+const mongoose = require('mongoose');
+
+class SR {
+    constructor(){
+
+    }
+/**
+ * @description Create a subreddit.
+ * @param {object} Request - Request body: username, srName, srRules.
+ * @param {object} Response - 200 (Success).
+ * @returns {null}
+ */
+    createSr (req, res) {
+        var admin = req.body.username;
+        var subredditName = req.body.srName;
+        var subredditRules = req.body.srRules;
+        if(admin &amp;&amp;  subredditName &amp;&amp; subredditRules){
+            var subreddit = new sr({
+                name: subredditName,
+                adminUsername: admin,
+                rules: subredditRules,
+            });
+            subreddit.save(function (err) {
+                if (err) {
+                // internal Server error 
+                res.status(500)
+                res.json({ error: 'internalServerError or name may already exist' });
+                res.end()
+
+                }
+                else {
+                res.send(200);   // if everything worked as mentioned 
+                res.end()
+                }
+            });
+        }
+        else
+        {
+            res.json({error: 'err',
+            status:400});
+            res.end()
+        }
+    };
+
+/**
+ * @description Edit a subreddit's details.
+ * @param {object} Request - Request paramaters: srName - Request body: newRules, newName .
+ * @param {object} Response - 200 (Success).
+ */
+    edit (req, res){
+
+        var subredditName = req.params.srName;
+        var updatedRules = req.body.newRules;
+        var updatedName = req.body.newName;
+
+        if(subredditName &amp;&amp; updatedRules &amp;&amp; updatedName){
+            sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err){
+                if (err){
+                    res.json({error: 'internal server err',
+                    status:500});
+                    res.end();
+                }
+                else {
+                    res.status(200);
+                    res.end();
+                };
+            });
+        }
+        else {
+            res.json({error: 'err',
+            status:400});
+            res.end();
+        };         
+    };
+
+/**
+ * @description Get a subreddit's info. 
+ * @param {object} Req -  Request paramaters: srName.
+ * @param {object} Res - Return subreddit's username, date, posts and rules - 200 (Success).
+ * @returns {object} Username - 
+ */
+    info (req, res){
+
+        var subredditName = req.params.srName;
+
+        if(subredditName){
+            sr.findOne({name: subredditName}, function(err){
+                if(err)
+                {
+                    res.json({error: 'err',
+                    status:500});
+                    res.end();
+                }
+                else
+                {
+                    res.status(200);
+                }
+            }).then(function(record){
+                    res.json({username: record.admin_username, date: record.date, posts: record.posts, rules: record.rules})
+                    res.end();
+                });
+            }
+
+        else {
+            res.json({error: 'err',
+            status:400});
+            res.end();
+        };
+
+    };
+/**
+ * @description Create a post inside subreddit.
+ * @param {object} Request - Request paramaters: srName - Request body: username, title, threadBody.
+ * @param {object} Response - 200 (Success).
+ * @returns {null}
+ */
+    createPost(req, res){
+
+        var subrName = req.params.srName;
+        var creator = req.body.username;
+        var postTitle = req.body.title;
+        var postBody = req.body.threadBody;
+        var post = {
+            title: postTitle,
+            body: postBody,
+            creatorUsername: creator,
+            subredditName: subrName
+        };
+
+        if(creator &amp;&amp; postTitle &amp;&amp; postBody){
+            sr.findOne({name: subrName}, function(err){
+                if(err){
+                    res.json({error: 'err',
+                    status:500});
+                    res.end();
+                }
+            }).then(function(record){
+                record.posts.push(post);
+                record.save().then(function(){
+                    res.status(200);
+                    res.end();
+                });
+            });
+        }
+        else {
+            res.json({error: 'err',
+            status:400});
+            res.end();
+        };
+    };
+};
+module.exports = new SR();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Mar 24 2019 14:17:28 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

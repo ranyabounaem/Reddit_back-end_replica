@@ -179,13 +179,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "c_id",
             "description": "<p>Comment Unique ID.</p>"
           },
@@ -254,13 +247,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "c_id",
             "description": "<p>Comment Unique ID.</p>"
           }
@@ -322,60 +308,6 @@ define({ "api": [
             "optional": false,
             "field": "AccessDenied",
             "description": "<p>If this user can't get info of this comment.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Comment"
-  },
-  {
-    "type": "put",
-    "url": "/comment/lock/:c_id",
-    "title": "Lock a Comment to Disallow Replies on it",
-    "name": "LockComment",
-    "group": "Comment",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "c_id",
-            "description": "<p>Comment Unique ID.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentNotFound",
-            "description": "<p>The id of the comment wasn't found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentAlreadyLocked",
-            "description": "<p>The Comment is already locked.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "AccessDenied",
-            "description": "<p>If the user isn't logged in.</p>"
           }
         ]
       }
@@ -537,114 +469,6 @@ define({ "api": [
     "groupTitle": "Comment"
   },
   {
-    "type": "put",
-    "url": "/comment/spoil/:c_id",
-    "title": "Mark Comment as a Spoiler",
-    "name": "SpoilerComment",
-    "group": "Comment",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "c_id",
-            "description": "<p>Comment Unique ID.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentNotFound",
-            "description": "<p>The id of the comment wasn't found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentAlreadySpoiler",
-            "description": "<p>The Comment is already marked.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "AccessDenied",
-            "description": "<p>If the user isn't logged in.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Comment"
-  },
-  {
-    "type": "put",
-    "url": "/comment/unlock/:c_id",
-    "title": "UnLock a Comment to Allow Replies on it",
-    "name": "UnLockComment",
-    "group": "Comment",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "c_id",
-            "description": "<p>Comment Unique ID.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentNotFound",
-            "description": "<p>The id of the comment wasn't found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentNotLocked",
-            "description": "<p>The Comment is already unlocked.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "AccessDenied",
-            "description": "<p>If the user isn't logged in.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Comment"
-  },
-  {
     "type": "delete",
     "url": "/comment/unsave/:c_id",
     "title": "UnSave a Comment",
@@ -684,60 +508,6 @@ define({ "api": [
             "optional": false,
             "field": "CommentAlreadySaved",
             "description": "<p>You can't unsave an unsaved comment.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "AccessDenied",
-            "description": "<p>If the user isn't logged in.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Comment"
-  },
-  {
-    "type": "put",
-    "url": "/comment/unspoil/:c_id",
-    "title": "UnMark Comment as a Spoiler",
-    "name": "UnSpoilerComment",
-    "group": "Comment",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "c_id",
-            "description": "<p>Comment Unique ID.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentNotFound",
-            "description": "<p>The id of the comment wasn't found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentNotSpoiler",
-            "description": "<p>The Comment is already unmarked.</p>"
           },
           {
             "group": "Error 4xx",
@@ -838,34 +608,6 @@ define({ "api": [
     "filename": "./-/main.js",
     "group": "D__memestock_backend___main_js",
     "groupTitle": "D__memestock_backend___main_js",
-    "name": ""
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./apidoc/main.js",
-    "group": "D__memestock_backend_apidoc_main_js",
-    "groupTitle": "D__memestock_backend_apidoc_main_js",
     "name": ""
   },
   {
@@ -1579,6 +1321,426 @@ define({ "api": [
     "url": "private",
     "title": "",
     "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/commander/index.js",
+    "group": "D__memestock_backend_node_modules_commander_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_commander_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
     "filename": "./node_modules/component-emitter/index.js",
     "group": "D__memestock_backend_node_modules_component_emitter_index_js",
     "groupTitle": "D__memestock_backend_node_modules_component_emitter_index_js",
@@ -1919,9 +2081,59 @@ define({ "api": [
     "url": "public",
     "title": "",
     "version": "0.0.0",
-    "filename": "./node_modules/detect-file/index.js",
-    "group": "D__memestock_backend_node_modules_detect_file_index_js",
-    "groupTitle": "D__memestock_backend_node_modules_detect_file_index_js",
+    "filename": "./node_modules/delegates/index.js",
+    "group": "D__memestock_backend_node_modules_delegates_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_delegates_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/delegates/index.js",
+    "group": "D__memestock_backend_node_modules_delegates_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_delegates_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/delegates/index.js",
+    "group": "D__memestock_backend_node_modules_delegates_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_delegates_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/delegates/index.js",
+    "group": "D__memestock_backend_node_modules_delegates_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_delegates_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/delegates/index.js",
+    "group": "D__memestock_backend_node_modules_delegates_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_delegates_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/delegates/index.js",
+    "group": "D__memestock_backend_node_modules_delegates_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_delegates_index_js",
     "name": "Public"
   },
   {
@@ -2289,16 +2501,6 @@ define({ "api": [
     "url": "public",
     "title": "",
     "version": "0.0.0",
-    "filename": "./node_modules/findup-sync/index.js",
-    "group": "D__memestock_backend_node_modules_findup_sync_index_js",
-    "groupTitle": "D__memestock_backend_node_modules_findup_sync_index_js",
-    "name": "Public"
-  },
-  {
-    "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
     "filename": "./node_modules/fragment-cache/index.js",
     "group": "D__memestock_backend_node_modules_fragment_cache_index_js",
     "groupTitle": "D__memestock_backend_node_modules_fragment_cache_index_js",
@@ -2352,6 +2554,56 @@ define({ "api": [
     "filename": "./node_modules/growl/lib/growl.js",
     "group": "D__memestock_backend_node_modules_growl_lib_growl_js",
     "groupTitle": "D__memestock_backend_node_modules_growl_lib_growl_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/jasmine-growl-reporter/node_modules/growl/lib/growl.js",
+    "group": "D__memestock_backend_node_modules_jasmine_growl_reporter_node_modules_growl_lib_growl_js",
+    "groupTitle": "D__memestock_backend_node_modules_jasmine_growl_reporter_node_modules_growl_lib_growl_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/jsonwebtoken/node_modules/ms/index.js",
+    "group": "D__memestock_backend_node_modules_jsonwebtoken_node_modules_ms_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_jsonwebtoken_node_modules_ms_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/jsonwebtoken/node_modules/ms/index.js",
+    "group": "D__memestock_backend_node_modules_jsonwebtoken_node_modules_ms_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_jsonwebtoken_node_modules_ms_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/jsonwebtoken/node_modules/ms/index.js",
+    "group": "D__memestock_backend_node_modules_jsonwebtoken_node_modules_ms_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_jsonwebtoken_node_modules_ms_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/jsonwebtoken/node_modules/ms/index.js",
+    "group": "D__memestock_backend_node_modules_jsonwebtoken_node_modules_ms_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_jsonwebtoken_node_modules_ms_index_js",
     "name": "Public"
   },
   {
@@ -9899,6 +10151,356 @@ define({ "api": [
     "url": "private",
     "title": "",
     "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/dist/debug.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_dist_debug_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/browser.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/browser.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/browser.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/browser.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/browser.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_browser_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/common.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/common.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/common.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/common.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/common.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/common.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/common.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_common_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/node.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_node_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_node_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/node.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_node_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_node_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/debug/src/node.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_debug_src_node_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_debug_src_node_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/ms/index.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_ms_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_ms_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/ms/index.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_ms_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_ms_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/ms/index.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_ms_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_ms_index_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/needle/node_modules/ms/index.js",
+    "group": "D__memestock_backend_node_modules_needle_node_modules_ms_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_needle_node_modules_ms_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
     "filename": "./node_modules/nodemon/node_modules/debug/dist/debug.js",
     "group": "D__memestock_backend_node_modules_nodemon_node_modules_debug_dist_debug_js",
     "groupTitle": "D__memestock_backend_node_modules_nodemon_node_modules_debug_dist_debug_js",
@@ -10236,12 +10838,292 @@ define({ "api": [
   },
   {
     "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "protected",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Protected"
+  },
+  {
+    "type": "",
     "url": "public",
     "title": "",
     "version": "0.0.0",
-    "filename": "./node_modules/parse-passwd/index.js",
-    "group": "D__memestock_backend_node_modules_parse_passwd_index_js",
-    "groupTitle": "D__memestock_backend_node_modules_parse_passwd_index_js",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/authenticator.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_authenticator_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "protected",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/framework/connect.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_framework_connect_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_framework_connect_js",
+    "name": "Protected"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/http/request.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_http_request_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_http_request_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/http/request.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_http_request_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_http_request_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/http/request.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_http_request_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_http_request_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/http/request.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_http_request_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_http_request_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/index.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_index_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/middleware/authenticate.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/middleware/authenticate.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/middleware/authenticate.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/middleware/authenticate.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/middleware/authenticate.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/middleware/authenticate.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_middleware_authenticate_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/middleware/initialize.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_middleware_initialize_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_middleware_initialize_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "protected",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/strategies/session.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_strategies_session_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_strategies_session_js",
+    "name": "Protected"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport/lib/strategies/session.js",
+    "group": "D__memestock_backend_node_modules_passport_lib_strategies_session_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_lib_strategies_session_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/passport-strategy/lib/strategy.js",
+    "group": "D__memestock_backend_node_modules_passport_strategy_lib_strategy_js",
+    "groupTitle": "D__memestock_backend_node_modules_passport_strategy_lib_strategy_js",
     "name": "Public"
   },
   {
@@ -12276,9 +13158,74 @@ define({ "api": [
     "groupTitle": "Moderator"
   },
   {
+    "type": "put",
+    "url": "/notif/readall",
+    "title": "Mark all notifications as read",
+    "name": "ReadAllNotifications",
+    "group": "NotificationsService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "NotificationsService"
+  },
+  {
+    "type": "put",
+    "url": "/notif/read/:id",
+    "title": "Mark a notification as read",
+    "name": "ReadNotification",
+    "group": "NotificationsService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The notification ID sent in the url</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NotificationNotFound",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "NotificationsService"
+  },
+  {
     "type": "get",
     "url": "/notif/",
-    "title": "Retrieve",
+    "title": "Retrieve a maximum of 15 notifications",
     "name": "RetrieveNotifications",
     "group": "NotificationsService",
     "parameter": {
@@ -12294,9 +13241,10 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "Number",
-            "optional": false,
-            "field": "Starting",
-            "description": "<p>ID of Notifications (If Omitted, latest notifications will be sent.).</p>"
+            "optional": true,
+            "field": "startPosition",
+            "defaultValue": "0",
+            "description": "<p>0 means you want the latest 15 notifications and 1 means you want the next 15...etc.</p>"
           }
         ]
       }
@@ -12309,14 +13257,14 @@ define({ "api": [
             "type": "Array",
             "optional": false,
             "field": "Array",
-            "description": "<p>of Notifications.</p>"
+            "description": "<p>of Notifications. for example if the type is post then the source ID will be this post ID(your post).</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n\"notifications\":[\n  {\"type\": \"message\", \"content\": \"Mustafa Ahmed Sent you a message\", \"ID\": 5}\n  {\"type\": \"ban\", \"content\": \"You have been banned from subreddit /r/MemeGeeks\", \"ID\": 3}\n  ]\n   }",
+          "content": "   HTTP/1.1 200 OK\n   {\n\"notifications\":[\n  {\"_id\": \"dsjjda22\",\"username\": Marwan, \"type\": \"message\", \"message\": \"Mustafa_Ahmed Sent you a message\", \"sourceID\": null},\n  {\"_id\": \"gsdhsbd826\",\"username\": Mostafa,\"type\": \"post\", \"message\": \"Marwan commented on your post \", \"sourceID\": \"3546547fg\"},\n  {\"_id\": \"kdyufu787\",\"username\": Mostafa, \"type\": \"comment\", \"message\": \"Marwan replied on your comment \", \"sourceID\": \"gsdyu3g668\"},\n  {\"_id\": \"ldyufuhg7\",\"username\": Mostafa, \"type\": \"friendRequest\", \"message\": \"Mohamed sent you a freind request \", \"sourceID\": \"gsdyu3g6f6\"}\n  ]\n   }",
           "type": "json"
         }
       ]
@@ -12326,8 +13274,50 @@ define({ "api": [
     "groupTitle": "NotificationsService"
   },
   {
+    "type": "put",
+    "url": "/notif/unread/:id",
+    "title": "Mark a notification as unread",
+    "name": "UnreadNotification",
+    "group": "NotificationsService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The notification ID sent in the url.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NotificationNotFound",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "NotificationsService"
+  },
+  {
     "type": "post",
-    "url": "/:username/pm/block",
+    "url": "/me/pm/block",
     "title": "Block",
     "name": "Block",
     "group": "PMService",
@@ -12410,12 +13400,12 @@ define({ "api": [
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"userNotFound\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"internalServerBlockingError\"\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"onBlockList\"\n}",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"usersAlreadyOnBlockLists\"\n}",
           "type": "json"
         },
         {
@@ -12431,7 +13421,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/:username/pm/compose",
+    "url": "/me/pm/compose",
     "title": "Compose a new message",
     "name": "Compose",
     "group": "PMService",
@@ -12490,6 +13480,12 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "receiverNotFound",
+            "description": "<p>the username of the receiver was not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "blockedFromSending",
             "description": "<p>The user already blocking messages from the receiver</p>"
           },
@@ -12531,7 +13527,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/:username/pm/delete",
+    "url": "/me/pm/delete?messageID=value",
     "title": "Delete",
     "name": "Delete",
     "group": "PMService",
@@ -12572,6 +13568,12 @@ define({ "api": [
             "optional": false,
             "field": "messageNotFound",
             "description": "<p>The <code>id</code> of the Message was not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "internalServererror",
+            "description": "<p>internal error caused by unexplained behavior</p>"
           }
         ]
       },
@@ -12589,7 +13591,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/:username/pm/markread",
+    "url": "/me/pm/markread",
     "title": "Mark Read",
     "name": "MarkAsRead",
     "group": "PMService",
@@ -12637,6 +13639,12 @@ define({ "api": [
             "optional": false,
             "field": "messageNotFound",
             "description": "<p>The <code>id</code> of the Message was not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "internalServererror",
+            "description": "<p>internal error caused by unexplained behavior</p>"
           }
         ]
       },
@@ -12654,7 +13662,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/:username/pm/markreadall",
+    "url": "/me/pm/markreadall",
     "title": "Mark Read-all",
     "name": "MarkReadALL",
     "group": "PMService",
@@ -12693,15 +13701,21 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "noMessages",
+            "field": "messageNotFound",
             "description": "<p>No messages to mark empty array</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "internalServererror",
+            "description": "<p>internal error caused by unexplained behavior</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"noMessages\"\n}",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"messageNotFound\"\n}",
           "type": "json"
         }
       ]
@@ -12711,8 +13725,8 @@ define({ "api": [
     "groupTitle": "PMService"
   },
   {
-    "type": "get",
-    "url": "/:username/pm/",
+    "type": "post",
+    "url": "/me/pm/",
     "title": "Retrieve",
     "name": "RetrieveMessages",
     "group": "PMService",
@@ -12751,7 +13765,26 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n         {\n {[{\n\"_id\"         :\"5c901c662f87870699fa62e6\"\n\"sender”      :\"kefah\",\n\"receiver\"    : \"omar\",\n”subject”     :”URGENT VIP”,\n\"messageBody\" :”Dear, marwan please”,\n\"isRead\"      :true\n\"messageDate\" :\"2019-03-18 22:32:06.000Z\"\n },\n{\n\"_id\"         :\"5c901c662f87870699fa62e9\"\n\"sender”      :\"mariam \",\n\"receiver\"    : \"kefah\",\n”subject”     :”URGENT VIP”,\n\"messageBody\" :”Dear, kefah i want to ,\n\"isRead\"      :false\n\"messageDate\" :\"2019-03-13 22:32:06.000Z\"\n }\n]}\n    \n         }",
+          "content": "    HTTP/1.1 200 OK\n         {\n {[{\n\"_id\"         :\"5c901c662f87870699fa62e6\",\n\"sender”      :\"kefah\",\n\"receiver\"    : \"omar\",\n”subject”     :”URGENT VIP”,\n\"messageBody\" :”Dear, marwan please”,\n\"isRead\"      :true\n\"messageDate\" :\"2019-03-18 22:32:06.000Z\"\n },\n{\n\"_id\"         :\"5c901c662f87870699fa62e9\",\n\"sender”      :\"mariam \",\n\"receiver\"    : \"kefah\",\n”subject”     :”URGENT VIP”,\n\"messageBody\" :”Dear, kefah i want to ,\n\"isRead\"      :false\n\"messageDate\" :\"2019-03-13 22:32:06.000Z\"\n }\n]}\n    \n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "internalServerFindingError",
+            "description": "<p>internal error caused by unexplained behavior</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"internalServerFindingError\"\n}",
           "type": "json"
         }
       ]
@@ -12762,7 +13795,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/:username/pm/blocklist",
+    "url": "/me/pm/blocklist",
     "title": "Blocklist",
     "name": "retrieveBlockList",
     "group": "PMService",
@@ -12787,14 +13820,14 @@ define({ "api": [
             "type": "Array",
             "optional": false,
             "field": "blocklist",
-            "description": "<p>Array of people whom the user is blocking    .</p>"
+            "description": "<p>Array of people whom the user is blocking  from receieving messages from them  .</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n         {\n {[{\n\"_id\"         :\"5c901c662f87870699fa62e6\"\n\"blocked      :\"kefah\",\n },\n{\n\"_id\"         :\"5c901c662f87870699fa62e9\"\n\"blocked      :\"marwan \",\n }\n]}\n    \n         }",
+          "content": "    HTTP/1.1 200 OK\n         {\n {[{\n\"blocked      :\"kefah\"\n },\n{\n\"blocked      :\"marwan \"\n }\n]}\n    \n         }",
           "type": "json"
         }
       ]
@@ -12874,7 +13907,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/sr/:SubredditName/thread",
+    "url": "/sr/:srName/thread",
     "title": "Create a thread inside subreddit",
     "name": "CreateSrThread",
     "group": "SrService",
@@ -12885,36 +13918,29 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "Username",
-            "description": "<p>of creator.</p>"
+            "field": "Token",
+            "description": "<p>Send token.</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "ThreadTitle",
+            "field": "title",
             "description": "<p>Title of thread</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "ThreadData",
-            "description": "<p>Data inside thread.</p>"
+            "field": "threadBody",
+            "description": "<p>Body of the thread.</p>"
           },
           {
             "group": "Parameter",
             "type": "boolean",
             "optional": false,
             "field": "Spoiler",
-            "description": "<p>[Spoiler==false] Mark if post is spoiler</p>"
+            "description": "<p>(NOT YET) [Spoiler==false] Mark if post is spoiler</p>"
           }
         ]
       }
@@ -12925,58 +13951,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/sr/:SubredditName/thread",
-    "title": "Create a thread inside subreddit",
-    "name": "CreateSrThread",
-    "group": "SrService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "CreatorID",
-            "description": "<p>Id of creator.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "ThreadTitle",
-            "description": "<p>Title of thread</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "ThreadData",
-            "description": "<p>Data inside thread.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "boolean",
-            "optional": false,
-            "field": "Spoiler",
-            "description": "<p>[Spoiler==false] Mark if post is spoiler</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "post",
-    "url": "/sr/:Id",
+    "url": "/sr/create",
     "title": "Create a new subreddit",
     "name": "CreateSubreddit",
     "group": "SrService",
@@ -12985,38 +13960,38 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "string",
             "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "AdminId",
-            "description": "<p>Id of user that created SR.</p>"
+            "field": "Token",
+            "description": "<p>Send token.</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "SrName",
+            "field": "srName",
             "description": "<p>unique Name of the subreddit (no longer than 100 character).</p>"
           },
           {
             "group": "Parameter",
             "type": "string[]",
             "optional": false,
-            "field": "SubredditRules",
+            "field": "srRules",
             "description": "<p>list of subbreddit rules.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>(NOT YET) Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
           },
           {
             "group": "Parameter",
             "type": "string[]",
             "optional": false,
             "field": "ModUsername",
-            "description": "<p>Subreddit moderators' usernames.</p>"
+            "description": "<p>(NOT YET)  Subreddit moderators' usernames.</p>"
           }
         ]
       }
@@ -13026,74 +14001,10 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "string",
+            "type": "object",
             "optional": false,
-            "field": "SR_ID",
-            "description": "<p>Unique id of created sr.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "post",
-    "url": "/sr/:Id",
-    "title": "Create a new subreddit",
-    "name": "CreateSubreddit",
-    "group": "SrService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "AdminId",
-            "description": "<p>Id of user that created SR.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SrName",
-            "description": "<p>unique Name of the subreddit (no longer than 100 character).</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string[]",
-            "optional": false,
-            "field": "SubredditRules",
-            "description": "<p>list of subbreddit rules.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string[]",
-            "optional": false,
-            "field": "ModUsername",
-            "description": "<p>Subreddit moderators' usernames.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "SR_ID",
-            "description": "<p>Unique id of created sr.</p>"
+            "field": "newSubreddit",
+            "description": "<p>Returns the created subreddit (if any).</p>"
           }
         ]
       }
@@ -13104,7 +14015,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/sr/:Id/thread",
+    "url": "/sr/:srName/thread/:postId",
     "title": "Delete a thread inside subreddit",
     "name": "DeleteSrThread",
     "group": "SrService",
@@ -13117,242 +14028,6 @@ define({ "api": [
             "optional": false,
             "field": "Token",
             "description": "<p>Send token.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": ""
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "PostID",
-            "description": ""
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "delete",
-    "url": "/sr/:Id/thread",
-    "title": "Delete a thread inside subreddit",
-    "name": "DeleteSrThread",
-    "group": "SrService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>Send token.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": ""
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "PostID",
-            "description": ""
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "delete",
-    "url": "/sr/:Id",
-    "title": "Delete a subreddit",
-    "name": "DeleteSubreddit",
-    "group": "SrService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>Send token.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": ""
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "delete",
-    "url": "/sr/:Id",
-    "title": "Delete a subreddit",
-    "name": "DeleteSubreddit",
-    "group": "SrService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>Send token.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": ""
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "put",
-    "url": "/sr/:SubredditName/",
-    "title": "Edit a subreddit",
-    "name": "EditSubreddit",
-    "group": "SrService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string[]",
-            "optional": false,
-            "field": "NewRules",
-            "description": "<p>Updated rules.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Old name</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "NewName",
-            "description": "<p>New name</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "About",
-            "description": "<p>Updated about</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "put",
-    "url": "/sr/:SubredditName/",
-    "title": "Edit a subreddit",
-    "name": "EditSubreddit",
-    "group": "SrService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string[]",
-            "optional": false,
-            "field": "NewRules",
-            "description": "<p>Updated rules.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Old name</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "NewName",
-            "description": "<p>New name</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "About",
-            "description": "<p>Updated about</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "get",
-    "url": "/sr/:SubredditName/Listing/:type",
-    "title": "ListSubreddits Generate a list of subreddits      //MOSTAFA",
-    "name": "ListSubreddits",
-    "group": "SrService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token.",
-            "description": ""
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Type",
-            "description": "<p>List according to certain type</p>"
           }
         ]
       }
@@ -13362,10 +14037,153 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "deletedPost",
+            "description": "<p>Returns the deleted post inside subreddit.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "SrService"
+  },
+  {
+    "type": "delete",
+    "url": "/sr/:srName",
+    "title": "Delete a subreddit",
+    "name": "DeleteSubreddit",
+    "group": "SrService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Send token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "deletedSubreddit",
+            "description": "<p>Returns the deleted subreddit (if any).</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "SrService"
+  },
+  {
+    "type": "put",
+    "url": "/sr/:srName/thread/:postId",
+    "title": "Edit a thread inside subreddit",
+    "name": "EditSrThread",
+    "group": "SrService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Send token.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "title",
+            "description": "<p>New title of thread</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "threadBody",
+            "description": "<p>New body of the thread.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "editedPost",
+            "description": "<p>Returns the edited post inside subreddit.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "SrService"
+  },
+  {
+    "type": "put",
+    "url": "/sr/:srName/",
+    "title": "Edit a subreddit",
+    "name": "EditSubreddit",
+    "group": "SrService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Send token.</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "string[]",
             "optional": false,
-            "field": "SubredditIDs",
-            "description": "<p>Returns list of sorted subreddits</p>"
+            "field": "newRules",
+            "description": "<p>Updated rules.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "newName",
+            "description": "<p>New name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "About",
+            "description": "<p>(NOT YET) Updated about</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "editedSubreddit",
+            "description": "<p>Returns the edited subreddit (if any).</p>"
           }
         ]
       }
@@ -13376,7 +14194,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/sr/:SubredditName/Listing/:type",
+    "url": "/sr/:SubredditName/listing/:type",
     "title": "ListSubreddits   Generate a list of subreddits",
     "name": "ListSubreddits",
     "group": "SrService",
@@ -13426,7 +14244,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/sr/:SubredditName/subs",
+    "url": "/sr/:srName/subs",
     "title": "Subscribe to a Sr",
     "name": "SubredditSubscribtion",
     "group": "SrService",
@@ -13439,43 +14257,19 @@ define({ "api": [
             "optional": false,
             "field": "Token",
             "description": "<p>Send token.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": ""
           }
         ]
       }
     },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "post",
-    "url": "/sr/:SubredditName/subs",
-    "title": "Subscribe to a Sr",
-    "name": "SubredditSubscribtion",
-    "group": "SrService",
-    "parameter": {
+    "success": {
       "fields": {
-        "Parameter": [
+        "Success 200": [
           {
-            "group": "Parameter",
-            "type": "string",
+            "group": "Success 200",
+            "type": "string[]",
             "optional": false,
-            "field": "Token",
-            "description": "<p>Send token.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": ""
+            "field": "subscribersList",
+            "description": "<p>Returns the new subscribers list.</p>"
           }
         ]
       }
@@ -13486,7 +14280,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/sr/:SubredditName/subs",
+    "url": "/sr/:srName/subs",
     "title": "Unsubscribe to a Sr",
     "name": "SubredditUnsubscribtion",
     "group": "SrService",
@@ -13499,43 +14293,19 @@ define({ "api": [
             "optional": false,
             "field": "Token",
             "description": "<p>Send token.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": ""
           }
         ]
       }
     },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "SrService"
-  },
-  {
-    "type": "delete",
-    "url": "/sr/:SubredditName/subs",
-    "title": "Unsubscribe to a Sr",
-    "name": "SubredditUnsubscribtion",
-    "group": "SrService",
-    "parameter": {
+    "success": {
       "fields": {
-        "Parameter": [
+        "Success 200": [
           {
-            "group": "Parameter",
-            "type": "string",
+            "group": "Success 200",
+            "type": "string[]",
             "optional": false,
-            "field": "Token",
-            "description": "<p>Send token.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": ""
+            "field": "subscribersList",
+            "description": "<p>Returns the new subscribers list.</p>"
           }
         ]
       }
@@ -13546,65 +14316,10 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/sr/:SrName/meta",
+    "url": "/sr/:srName/thread/:postId",
     "title": "Views subreddit meta",
-    "name": "ViewSrMeta",
+    "name": "ViewPostInfo",
     "group": "SrService",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>of Creator.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "BannedUsers",
-            "description": "<p>ID of banned users.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "ModIds",
-            "description": "<p>ID of Modertors.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "PostIds",
-            "description": "<p>ID of posts in sr.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "Rules",
-            "description": "<p>Rules of sr.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "UserIds",
-            "description": "<p>Ids of subscribed users .</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number[]",
-            "optional": false,
-            "field": "SubCount",
-            "description": "<p>Number of subscribers.</p>"
-          }
-        ]
-      }
-    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -13612,15 +14327,28 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "SrName",
+            "field": "srName",
             "description": "<p>Subreddit name.</p>"
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "string",
             "optional": false,
-            "field": "Date",
-            "description": "<p>date of creation .</p>"
+            "field": "postId",
+            "description": "<p>ID of post.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "post",
+            "description": "<p>Returns post.</p>"
           }
         ]
       }
@@ -13631,65 +14359,10 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/sr/:SrName/meta",
+    "url": "/sr/:srName/meta",
     "title": "Views subreddit meta",
     "name": "ViewSrMeta",
     "group": "SrService",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "Creator",
-            "description": "<p>unique ID.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "BannedUsers",
-            "description": "<p>ID of banned users.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "ModIds",
-            "description": "<p>ID of Modertors.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "PostIds",
-            "description": "<p>ID of posts in sr.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "Rules",
-            "description": "<p>Rules of sr.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string[]",
-            "optional": false,
-            "field": "UserIds",
-            "description": "<p>Ids of subscribed users .</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number[]",
-            "optional": false,
-            "field": "SubCount",
-            "description": "<p>Number of subscribers.</p>"
-          }
-        ]
-      }
-    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -13697,15 +14370,77 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "SrName",
+            "field": "srName",
             "description": "<p>Subreddit name.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Username of Creator.</p>"
           },
           {
-            "group": "Parameter",
-            "type": "String",
+            "group": "Success 200",
+            "type": "string",
             "optional": false,
-            "field": "Date",
-            "description": "<p>date of creation .</p>"
+            "field": "date",
+            "description": "<p>date of creation.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "object[]",
+            "optional": false,
+            "field": "posts",
+            "description": "<p>All posts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string[]",
+            "optional": false,
+            "field": "rules",
+            "description": "<p>Rules of sr.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "Bio",
+            "description": "<p>Subreddit's bio.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string[]",
+            "optional": false,
+            "field": "BannedUsers",
+            "description": "<p>(NOT YET)   ID of banned users.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string[]",
+            "optional": false,
+            "field": "ModIds",
+            "description": "<p>(NOT YET)  ID of Modertors.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string[]",
+            "optional": false,
+            "field": "UserIds",
+            "description": "<p>(NOT YET  Ids of subscribed users .</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number[]",
+            "optional": false,
+            "field": "SubCount",
+            "description": "<p>(NOT YET)  Number of subscribers.</p>"
           }
         ]
       }
@@ -13864,8 +14599,8 @@ define({ "api": [
     "groupTitle": "UserService"
   },
   {
-    "type": "get",
-    "url": "/:username/listing?type=value",
+    "type": "post",
+    "url": "/me/listing?type=value",
     "title": "List Posts",
     "name": "ListPosts",
     "group": "UserService",
@@ -13904,14 +14639,14 @@ define({ "api": [
             "type": "Object[]",
             "optional": false,
             "field": "Posts",
-            "description": "<p>Array of the listed Posts  .</p>"
+            "description": "<p>Array of the listed Posts depending on the type  .</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n [    \n {\n\"SubbredditName\": \"r/funny\"\n,\"PostID\":1\n,\"Meme\": data:image/jpeg;base64,...............\n },\n{\n\"SubbredditName\": \"r/Damn\"\n,\"PostID\":2\n,\"Meme\": data:image/jpeg;base64,...............\n } \n]\n    }",
+          "content": "    HTTP/1.1 200 OK\n {\n [    \n {\n\"subredditName\": \"funny\"\n,\"_id\":\"sd232s2231\"\n,\"title\":\"love\"\n,\"postDate\":\"1998-04-23\"\n,\"body\": \"love is known for something\"\n },\n{\n\"subredditName\": \"nature\"\n,\"_id\":\"2dsds23123d\"\n,\"title\":\"vietnam nature\"\n,\"postDate\":\"1998-04-23\"\n,\"body\": \"vietnam nature is known for something\"\n } \n]\n    }",
           "type": "json"
         }
       ]
@@ -13922,8 +14657,8 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "PostsnotFound",
-            "description": ""
+            "field": "postsnotFound",
+            "description": "<p>no posts found for the user</p>"
           }
         ]
       },
@@ -13931,89 +14666,6 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"postsNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "UserService"
-  },
-  {
-    "type": "get",
-    "url": "/user/:Username/listing?type=value",
-    "title": "List Posts",
-    "name": "ListPosts",
-    "group": "UserService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>Username of visited User.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "ListingType",
-            "description": "<p>[ListingType == HOT] Type of the listing that the user wants for the posts.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "LPostID",
-            "description": "<p>id of the last post displayed</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "Posts",
-            "description": "<p>Array of the listed Posts  .</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n \"Posts\":[\n {\n\"SubbredditName\": \"r/funny\"\n,\"PostID\":1\n,\"Meme\": data:image/jpeg;base64,...............\n },\n{\n\"SubbredditName\": \"r/Damn\"\n,\"PostID\":2\n,\"Meme\": data:image/jpeg;base64,...............\n } \n]\n    }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Server",
-            "description": "<p>error no subreddits found to be listed</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 500 Server error\n{\n  \"error\": \"Server error\"\n}",
           "type": "json"
         }
       ]
@@ -14085,41 +14737,40 @@ define({ "api": [
     "groupTitle": "UserService"
   },
   {
-    "type": "Post",
-    "url": "/me/:username/Block/:BlockedUsername",
-    "title": "Block user",
-    "name": "BlockUser",
+    "type": "put",
+    "url": "/me/user/accept",
+    "title": "Accept Request",
+    "name": "AcceptRequest",
     "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of the User.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "BlockedUsername",
-            "description": "<p>unique Username  of the User to be blocked.</p>"
+            "field": "fUsername",
+            "description": "<p>unique Username  of user to Accept request from.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Input",
-          "content": "{\n  \"Username\": \"User1\",      \n}",
+          "content": "{\n  \"Username\": \"user1\", \n}",
           "type": "json"
         }
       ]
@@ -14128,7 +14779,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend request accepted\" \n}",
           "type": "json"
         }
       ]
@@ -14137,7 +14788,83 @@ define({ "api": [
       "examples": [
         {
           "title": "List error",
-          "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"UserNotFound\"\n}",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to accept not found\n {\n  \"error\": \"User to accept not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 This user is already a friend\n {\n  \"error\": \"This user is already a friend\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 There isn't a request to be accepted\n {\n  \"error\": \"There isn't a request to be accepted\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "put",
+    "url": "/me/user/block",
+    "title": "Block user",
+    "name": "BlockUser",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token .</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "blockedUser",
+            "description": "<p>unique Username  of the User to be blocked.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"blockedUser\": \"User1\"      \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 \n{\n    \"User Blocked\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 user already blocked\n     {\n     error:\"the user you want to block is already blocked\"\n    },\nHTTP/1.1 404 User not found\n     {\n    error:\"the user you want to block doesnt exist\"\n    },\nHTTP/1.1 404 User blocking himself\n     {\n      error:\"you cant block yourself\"\n    }",
           "type": "json"
         }
       ]
@@ -14148,55 +14875,38 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/me/:username/Block/",
+    "url": "/me/blockedusers",
     "title": "Get Blocked users",
     "name": "BlockedUsers",
-    "group": "me",
-    "parameter": {
+    "header": {
       "fields": {
-        "Parameter": [
+        "Header": [
           {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
+            "group": "Header",
             "type": "String",
             "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of the User.</p>"
+            "field": "auth",
+            "description": "<p>Users unique token .</p>"
           }
         ]
       }
     },
+    "group": "me",
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "BlockedUsername",
-            "description": "<p>unique Username  of the User to be blocked.</p>"
+            "optional": true,
+            "field": "String",
+            "description": "<p>BlockedUsername unique Username  of the User to be blocked.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK\n\n[{\n  \"BlockedUsername\": \"User1\",    \n}]",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "HTTP/1.1 500 Server Error",
+          "content": "HTTP/1.1 200 OK\n\n[\n  \"User1\",\n  \"User2\",\n  \"User3\",\n  \"User4\"     \n]",
           "type": "json"
         }
       ]
@@ -14253,7 +14963,7 @@ define({ "api": [
             "type": "string",
             "optional": false,
             "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
+            "description": "<p>Token That is sent with authentication.</p>"
           }
         ]
       },
@@ -14280,9 +14990,9 @@ define({ "api": [
   },
   {
     "type": "Put",
-    "url": "/me/:username/edit",
-    "title": "Edit  user",
-    "name": "EditUser_",
+    "url": "/me/edit/email/:Username",
+    "title": "Edit User email",
+    "name": "EditUserEmail",
     "group": "me",
     "parameter": {
       "fields": {
@@ -14303,17 +15013,82 @@ define({ "api": [
           },
           {
             "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Email\": \"user@reddit.com\",\n  \"Username\": \"User1\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"UserNotFound\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 406 Invalid Email format\n {\n  \"error\": \"Invalid Email format\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 406 Email already exists\n {\n     \"error\" : \"Email already exists\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "Put",
+    "url": "/me/edit/Password/:Username",
+    "title": "Edit User password",
+    "name": "EditUserPassword",
+    "group": "me",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Password",
-            "description": "<p>Password  of the User.</p>"
+            "field": "Username",
+            "description": "<p>unique Username  of the User.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "ImageId",
-            "description": "<p>ID of the User's image.</p>"
+            "field": "NewPassword",
+            "description": "<p>the new Password for the User.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "OldPassword",
+            "description": "<p>the Old Password of the User.</p>"
           },
           {
             "group": "Parameter",
@@ -14347,6 +15122,16 @@ define({ "api": [
           "title": "List error",
           "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"UserNotFound\"\n}",
           "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 Wrong Password\n {\n  \"error\": \"Wrong Password\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 406 Password too short\n {\n   error: \"Password too short\"\n}",
+          "type": "json"
         }
       ]
     },
@@ -14355,28 +15140,27 @@ define({ "api": [
     "groupTitle": "me"
   },
   {
-    "type": "Post",
-    "url": "/me/:Username/Friend/:FriendUsername",
+    "type": "put",
+    "url": "/me/user/Add",
     "title": "Add new friend",
     "name": "FriendAdd",
     "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of user .</p>"
-          },
           {
             "group": "Parameter",
             "type": "String",
@@ -14398,7 +15182,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend request Sent\" \n}",
           "type": "json"
         }
       ]
@@ -14407,7 +15191,42 @@ define({ "api": [
       "examples": [
         {
           "title": "List error",
-          "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"User Not found\"\n}",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to be added not found\n {\n  \"error\": \"User to be added not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 402 User cannot add himself\n {\n  \"error\": \"User cannot add himself\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 The sending User is blocked\n {\n  \"error\": \"The sending User is blocked\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 The user to be added is blocked\n {\n  \"error\": \"The user to be added is blocked\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 User not found\n {\n  \"error\": \"The User to be added is already a friend\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 User has already received a request from the other user\n {\n  \"error\": \"User has already received a request from the other user\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 User has already sent a request to the other user\n {\n  \"error\": \"User has already sent a request to the other user\"\n}",
           "type": "json"
         }
       ]
@@ -14418,19 +15237,19 @@ define({ "api": [
   },
   {
     "type": "Get",
-    "url": "/me/:Username/Friend/",
+    "url": "/me/friends",
     "title": "get friends",
     "name": "FriendList",
     "group": "me",
-    "parameter": {
+    "header": {
       "fields": {
-        "Parameter": [
+        "Header": [
           {
-            "group": "Parameter",
+            "group": "Header",
             "type": "String",
             "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of the User.</p>"
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
           }
         ]
       }
@@ -14440,7 +15259,7 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "[String]",
             "optional": false,
             "field": "FUsername",
             "description": "<p>unique Username  of the User.</p>"
@@ -14450,7 +15269,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "\nHTTP/1.1 200 OK\n\n [{\n   \"FUsername\": \"User1\",    \n }]",
+          "content": "\nHTTP/1.1 200 OK\n\n {\"Friends\" :[\"User1\" , \"User2\"]}",
           "type": "json"
         }
       ]
@@ -14460,123 +15279,6 @@ define({ "api": [
         {
           "title": "List error",
           "content": "HTTP/1.1 500 server error",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "me"
-  },
-  {
-    "type": "delete",
-    "url": "/me/:Username",
-    "title": "/Friend/:FUsername   delete friend request",
-    "name": "FriendReqdelete",
-    "group": "me",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of user .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "FUsername",
-            "description": "<p>unique Username  of user to unadd.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"Username\": \"user1\", \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "HTTP/1.1 500 server error",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "me"
-  },
-  {
-    "type": "delete",
-    "url": "/me/:Username/Friend/:FUsername",
-    "title": "unfriend",
-    "name": "Frienddelete",
-    "group": "me",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of user .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "FUsername",
-            "description": "<p>unique Username  of user to delete.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"Username\": \"user1\", \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"User Not found\"\n}",
           "type": "json"
         }
       ]
@@ -14587,7 +15289,102 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/me/:username",
+    "url": "/user/info:userToView",
+    "title": "get user info if NOT logged in",
+    "name": "GetUserInfo",
+    "group": "me",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "userToView",
+            "description": "<p>unique Username  of the User to be viewed.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 \n{\n     \"Username\":\"user1\",\n     Subscriptions:[\"sub1\",\"sub2\",\"sub3\"]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 user doesnt exist\n {\n \"message\": \"User doesnt exist\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "get",
+    "url": "/me/user/info/:userToView",
+    "title": "get user info if logged in",
+    "name": "GetUserInfoLogged",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token .</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "userToView",
+            "description": "<p>unique Username  of the User to be viewed.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 \n{\n     \"Username\":\"user1\",\n      Subscriptions:[\"sub1\",\"sub2\",\"sub3\"]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 user blocked you or doesnt exist\n {\n \"message\": \"User doesnt exist\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "get",
+    "url": "/me/About/:Username",
     "title": "Request my account information",
     "name": "Getmyinfo",
     "group": "me",
@@ -14598,8 +15395,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "username",
-            "description": "<p>Users unique username.</p>"
+            "field": "Username",
+            "description": "<p>User's unique username.</p>"
           },
           {
             "group": "Parameter",
@@ -14621,6 +15418,13 @@ define({ "api": [
     "success": {
       "fields": {
         "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Username",
+            "description": "<p>username  of the User.</p>"
+          },
           {
             "group": "Success 200",
             "type": "String",
@@ -14668,7 +15472,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n  \"Email\": \"user@reddit.com\",\n  \"About\": \"Im a reddit user\",\n  \"Imageid\": \"100001\"\n  \"Subscriptions\": [\"subbreddit:askreddit\",\"subbreddit:reddit\"],\n  \"Karma\" :2,\n  \"Cakeday\" : \"21-3-1440\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"Username\": \"User1\"\n  \"Email\": \"user@reddit.com\",\n  \"About\": \"Im a reddit user\",\n  \"Imageid\": \"100001\"\n  \"Subscriptions\": [\"subbreddit:askreddit\",\"subbreddit:reddit\"],\n  \"Karma\" :2,\n  \"Cakeday\" : \"21-3-1440\"\n}",
           "type": "json"
         }
       ]
@@ -14704,13 +15508,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Email",
-            "description": "<p>email  of the User.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "Username",
             "description": "<p>unique Username  of the User.</p>"
           },
@@ -14739,7 +15536,7 @@ define({ "api": [
             "type": "string",
             "optional": false,
             "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
+            "description": "<p>Token That is sent with authentication.</p>"
           }
         ]
       },
@@ -14765,48 +15562,40 @@ define({ "api": [
     "groupTitle": "me"
   },
   {
-    "type": "Post",
-    "url": "/me/:username/Report/:id",
-    "title": "report user comment or post",
-    "name": "Report",
+    "type": "put",
+    "url": "/me/user/reject",
+    "title": "Reject Request",
+    "name": "RejectRequest",
     "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of the User.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Id",
-            "description": "<p>unique Id  of the post or comment.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Type",
-            "description": "<p>type is post or comment.</p>"
+            "field": "fUsername",
+            "description": "<p>unique Username  of user to reject.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Input",
-          "content": "{\n  \"Id\": \"1\", \n  \"Type\":\"Post\"     \n}",
+          "content": "{\n  \"Username\": \"user1\", \n}",
           "type": "json"
         }
       ]
@@ -14815,7 +15604,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend request rejected\" \n}",
           "type": "json"
         }
       ]
@@ -14824,7 +15613,329 @@ define({ "api": [
       "examples": [
         {
           "title": "List error",
-          "content": "HTTP/1.1 404 User not found\n {\n  \"error\": \"Post Not found\"\n}",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to reject not found\n {\n  \"error\": \"User to reject not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 This user is already a friend\n {\n  \"error\": \"This user is already a friend\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 There isn't a request to be rejected\n {\n  \"error\": \"There isn't a request to be rejected\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "put",
+    "url": "/me/user/removeReq",
+    "title": "delete friend request",
+    "name": "RemoveFriendRequest",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fUsername",
+            "description": "<p>unique Username  of user to unadd.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Username\": \"user1\", \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend request Removed\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to be removed not found\n {\n  \"error\": \"User to be removed not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 Request doesn't exist\n {\n  \"error\": \"Request doesn't exist\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "Get",
+    "url": "/me/sentRequests",
+    "title": "get sent requests",
+    "name": "SentRequestsList",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "FUsername",
+            "description": "<p>unique Username  of the User.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "\nHTTP/1.1 200 OK\n\n {\n    \"sentRequests\" :[\"User1\" , \"User2\"]\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 500 server error",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "put",
+    "url": "/me/user/unblock",
+    "title": "unblock user",
+    "name": "UnblockUser",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token .</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "unblockedUser",
+            "description": "<p>unique Username  of the User to be unblocked.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"unblockedUser\": \"User1\"    \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 \n{\n    \"User unblocked\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 user isnt blocked\n {\n error:\"the user you want to unblock isnt blocked\"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "put",
+    "url": "/me/user/Unfriend",
+    "title": "unfriend",
+    "name": "Unfriend",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fUsername",
+            "description": "<p>unique Username  of user to delete.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Username\": \"user1\", \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Friend is removed from friends list\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 fUsername not found\n {\n  \"error\": \"fUsername not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 User to unFriend not found\n {\n  \"error\": \"User to unFriend not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 This user is not a friend\n {\n  \"error\": \"This user is not a friend\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "Get",
+    "url": "/me/receivedRequests",
+    "title": "get received requests",
+    "name": "receivedRequestsList",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "FUsername",
+            "description": "<p>unique Username  of the User.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "\nHTTP/1.1 200 OK\n\n {\n    \"receivedRequests\" :[\"User1\" , \"User2\"]\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 500 server error",
           "type": "json"
         }
       ]
@@ -14853,7 +15964,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "Image",
+            "field": "TESSST",
             "description": "<p>Image(emoji) of the subreddit.</p>"
           },
           {

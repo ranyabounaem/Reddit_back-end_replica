@@ -19,7 +19,15 @@ const UserSchema = new Schema({
         minlength:[8,"password too short"]
         
     },
- Subscriptions :[String]
+ Subscriptions :[String],
+
+ blockedUsers:[String],
+
+ Friends:[String],
+
+ SentReq:[String],
+
+ RecReq:[String]
 });
 
 const User = mongoose.model("User", UserSchema);

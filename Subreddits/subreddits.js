@@ -1,20 +1,25 @@
 const express = require('express');
 const srs = require('../models/subredditsSchema');
+const User=require('../models/UserSchema');
 const sr=srs.Subreddit;
+const pt = srs.SubredditPostSchema;
 const mongoose = require('mongoose');
+const jwt = require('../JWT/giveToken');
+const getUser = jwt.getUsernameFromToken;
 
 class SR {
     constructor(){
 
     }
 /**
- * @description Create a subreddit.
+ * @function createSr
+ * @summary Create a subreddit.
  * @param {object} Request - Request body: username, srName, srRules.
  * @param {object} Response - 200 (Success).
- * @returns {null}
+ * @returns {JSON} Returns the created subreddit.
  */
     createSr (req, res) {
-        var admin = req.body.username;
+        var admin = getUser(req);
         var subredditName = req.body.srName;
         var subredditRules = req.body.srRules;
         if(admin &&  subredditName && subredditRules){
@@ -23,64 +28,70 @@ class SR {
                 adminUsername: admin,
                 rules: subredditRules,
             });
-            subreddit.save(function (err) {
+            subreddit.save(function (err, record) {
                 if (err) {
                 // internal Server error 
-                res.status(500)
-                res.json({ error: 'internalServerError' });
-                res.end()
+                res.status(500).send({ 'error': 'internal server error' });
 
                 }
                 else {
-                res.send(200);   // if everything worked as mentioned 
-                res.end()
+                    res.status(200).send(record);
                 }
             });
         }
         else
         {
-            res.json({error: 'err',
-            status:400});
-            res.end()
+            res.status(400).send({ 'error': 'invalid paramaters' });
         }
     };
 
 /**
- * @description Edit a subreddit's details.
- * @param {object} Request - Request paramaters: srName - Request body: newRules, newName .
- * @param {object} Response - 200 (Success).
+ * @function edit
+ * @summary Edit a subreddit's details.
+ * @param {object} Request - The request
+ * @param {object} Response - The response.
+ * @returns {JSON} Returns the edited subreddit (old version).
  */
     edit (req, res){
 
         var subredditName = req.params.srName;
         var updatedRules = req.body.newRules;
         var updatedName = req.body.newName;
-
         if(subredditName && updatedRules && updatedName){
-            sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err){
-                if (err){
-                    res.json({error: 'internal server err',
-                    status:500});
-                    res.end();
+
+            sr.findOne({name : subredditName}).then(function(record){
+           
+               
+                if(!record){
+                    res.status(400).send({ 'error': 'invalid subreddit name' });
+                }
+                else if(record.adminUsername!=getUser(req)){
+                    res.status(403).send({ 'error': 'access forbidden' }) 
                 }
                 else {
-                    res.status(200);
-                    res.end();
+
+                    sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err, record){
+                        if (err){
+                            res.status(500).send({ 'error': 'internal server error' }) 
+                        }
+                        else {
+                            res.status(200).send(record);
+                        };
+                    });
                 };
             });
         }
         else {
-            res.json({error: 'err',
-            status:400});
-            res.end();
-        };         
+            res.status(400).send({ 'error': 'invalid paramaters' })  
+        };
     };
 
 /**
- * @description Get a subreddit's info. 
+ * @function info
+ * @summary Get a subreddit's info. 
  * @param {object} Req -  Request paramaters: srName.
  * @param {object} Res - Return subreddit's username, date, posts and rules - 200 (Success).
- * @returns {object} Username - 
+ * @returns {JSON} Returns all info of a subreddit.
  */
     info (req, res){
 
@@ -90,66 +101,363 @@ class SR {
             sr.findOne({name: subredditName}, function(err){
                 if(err)
                 {
-                    res.json({error: 'err',
-                    status:500});
-                    res.end();
-                }
-                else
-                {
-                    res.status(200);
-                }
+                    res.status(500).send({ 'error': 'internal server error' });
+                };
             }).then(function(record){
-                    res.json({username: record.admin_username, date: record.date, posts: record.posts, rules: record.rules})
-                    res.end();
-                });
-            }
+                if(!record)
+                {
+                    res.status(400).send({ 'error': 'invalid subreddit name' });
+                }
+                else {
+                res.status(200).send(record);
+                };
+            });
+        }
 
         else {
-            res.json({error: 'err',
-            status:400});
-            res.end();
+            res.status(400).send({'error': 'invalid parameter'});
         };
 
     };
 /**
- * @description Create a post inside subreddit.
+ * @function createPost
+ * @summary Create a post inside subreddit.
  * @param {object} Request - Request paramaters: srName - Request body: username, title, threadBody.
  * @param {object} Response - 200 (Success).
- * @returns {null}
+ * @returns {JSON} Returns the created post.
  */
     createPost(req, res){
 
         var subrName = req.params.srName;
-        var creator = req.body.username;
+        var creator = getUser(req);
         var postTitle = req.body.title;
         var postBody = req.body.threadBody;
-        var post = {
-            title: postTitle,
-            body: postBody,
-            creatorUsername: creator,
-            subredditName: subrName
-        };
 
+        
         if(creator && postTitle && postBody){
+
             sr.findOne({name: subrName}, function(err){
+
                 if(err){
-                    res.json({error: 'err',
-                    status:500});
-                    res.end();
+                    res.status(500).send({ 'error': 'internal server error' });
                 }
             }).then(function(record){
-                record.posts.push(post);
-                record.save().then(function(){
-                    res.status(200);
-                    res.end();
-                });
+                if(!record){
+                    res.status(400).send({ 'error': 'invalid subreddit name' });
+                }
+                else {
+                    let newPost = new pt({
+                        title: postTitle,
+                        body: postBody,
+                        creatorUsername: creator,
+                        subredditName: subrName
+                    });
+                    newPost.save(function (err) {
+
+                        if (err) {
+
+                            // internal Server error 
+                            res.status(500)
+                            res.json({ error: 'internalServerError ' });
+                            res.end();
+
+                        }
+                        else{
+                            record.posts.push(newPost._id);
+                            record.save(function(err){
+                                if(err)
+                                {
+                                    res.json({ error: 'internalServerError' });
+                                }
+                                else{
+                                res.status(200).send(newPost);
+                                };
+                            });
+                        }
+                    });
+                };
             });
         }
         else {
-            res.json({error: 'err',
-            status:400});
-            res.end();
+            res.status(400).send({ 'error': 'invalid paramaters' });
         };
+    };
+
+/**
+ * @function subscribe
+ * @summary Subscribe to a subreddit. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns list of subscribers in subreddit.
+ */
+subscribe(req, res){
+
+    var subscribed_user = getUser(req);
+    var subrName = req.params.srName;
+
+    sr.findOne({name: subrName}, function(err){
+        if(err){
+            res.status(500).send({ 'error': 'internal server error' });
+        };
+    }).then(function(record){
+        if(!record)
+        {
+            res.status(400).send({ 'error': 'invalid subreddit name' });
+        }
+        else{
+            if(record.subscribed_users.indexOf(subscribed_user)==-1){
+                record.subscribed_users.push(subscribed_user);
+                record.save(function(err){
+                    if(err){
+                        res.status(500).send({ 'error': 'internal server error' });
+                    }
+                    else{
+                        User.findOne({Username: subscribed_user}, function(err){
+                            if(err){
+                                res.status(500).send({ 'error': 'internal server error' });
+                            }
+                        }).then(function(user){
+                            user.Subscriptions.push(subrName);
+                            user.save(function(err){
+                                if(err) {
+                                    res.status(500).send({ 'error': 'internal server error' });
+                                }
+                                else{
+                                    res.status(200).send(record.subscribed_users);
+                                };
+                            });
+                        });
+                    };
+                });
+            }
+            else{
+                res.status(400).send({"error": "user already subscribed"});
+            }
+            
+        };
+    });
+};
+
+
+/**
+ * @function unSubscribe
+ * @summary Unsubscribe from a subreddit. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns list of subscribers of subreddit.
+ */
+
+    unSubscribe(req, res){
+
+        var unsubscribed_user = getUser(req);
+        var subrName = req.params.srName;
+
+        sr.findOne({name: subrName}, function(err){
+            if(err){
+                res.status(500).send({ 'error': 'internal server error' });
+            };
+        }).then(function(record){
+            if(!record){
+                res.status(400).send({ 'error': 'invalid subreddit name' });
+            }
+            else{
+                if(record.subscribed_users.indexOf(unsubscribed_user) > -1)
+                {
+                    record.subscribed_users.splice(record.subscribed_users.indexOf(unsubscribed_user), 1);
+                    record.save(function(err){
+                        if(err){
+                            res.status(500).send({ 'error': 'internal server error' });
+                        }
+                        else{
+                        res.status(200).send(record.subscribed_users);
+                        }
+                    });
+                }
+                else{
+                    res.status(400).send({ 'error': 'user not subscribed' });
+                };
+            }
+        });
+    };
+
+/**
+ * @function deletePost
+ * @summary Delete a post from a subreddit. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns the post that was deleted. (Old version)
+ */
+
+    deletePost(req, res){
+        var eraser = getUser(req);
+        var subrName = req.params.srName;
+        var postId = req.params.postId;
+        pt.findOne({_id: postId},function(err){
+            if(err){
+                res.status(500).send({ 'error': 'internal server error' });
+            };
+        }).then(function(checked){
+            if (!checked) {
+                res.status(400).send({ 'error': 'invalid postId' });
+            };
+            if(checked.creatorUsername != eraser)
+            {
+                res.status(403).send({ 'error': 'access forbidden' });
+            };
+            if(checked.subredditName != subrName){
+                res.status(400).send({ 'error': 'url subreddit is of different name than that of post' });
+            }
+            else{
+                pt.findOneAndDelete({_id: postId}, function(err, deleted){
+                    if(err)
+                    {
+                        res.status(500).send({ 'error': 'internal server error' });
+                    };
+                    if(!deleted)
+                    {
+                        res.status(400).send({ 'error': 'invalid postId' });
+                    }
+                    else{
+                        sr.findOne({name: subrName}).then(function(record){
+                            record.posts.splice(record.posts.indexOf(postId), 1);
+                            record.save(function(err){
+                                if(err)
+                                {
+                                    res.status(500).send({ 'error': 'internal server error' });
+                                }
+                                else{
+                                    res.status(200).send(record.posts);
+                                }
+                            });
+                        });
+                    };    
+                });
+            };
+        });
+    };
+
+/**
+ * @function editPost
+ * @summary Edit a post in a subreddit. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns the post that was edited (old version).
+ */
+
+    editPost(req, res){
+        var postId = req.params.postId;
+        var subrName = req.params.srName; //No use
+        var title = req.body.title;
+        var threadBody = req.body.threadBody;
+        var editor = getUser(req);
+        pt.findOne({_id: postId}, function(err){
+            if(err){
+                res.status(500).send({ 'error': 'internal server error' });
+            }
+        }).then(function(record){
+            if(!record){
+                res.status(400).send({ 'error': 'invalid postId' });
+            }
+            if(record.creatorUsername != editor){
+                res.status(403).send({ 'error': 'access forbidden' })
+            }
+            if(record.subredditName!=subrName){
+                res.status(400).send({'error': 'url subreddit is of different name than that of post'})
+            }
+            else{
+                pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody}, function(err, updated)
+                {
+                    if(err){
+                        res.status(500).send({ 'error': 'internal server error' }) 
+                    };
+                    if (!updated)
+                    {
+                        res.status(400).send({ 'error': 'invalid postId' });
+                    }
+                    else{
+                        res.status(200).send(updated);
+                    };  
+                });
+            };
+        });
+    };
+
+/**
+ * @function deleteSubreddit
+ * @summary Delete subreddit. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns the subreddit that was deleted.
+ */
+
+    deleteSubreddit(req, res){
+        var subrName = req.params.srName;
+        var eraser = getUser(req);
+        sr.findOne({name: subrName}, function(err){
+            if(err){
+                res.status(500).send({ 'error': 'internal server error' });
+            }
+        }).then(function(record){
+            if(!record){
+                res.status(400).send({ 'error': 'invalid subreddit name' });
+            }
+            else if (record.adminUsername!=eraser){
+                res.status(403).send({ 'error': 'access forbidden' });
+            }
+            else {
+                pt.deleteMany({subredditName: subrName}, function(err){
+                    if(err){
+                        res.status(500).send({ 'error': 'internal server error' });
+                    };
+                }).then(sr.findOneAndDelete({name: subrName}, function(err){
+                    if(err){
+                        res.status(500).send({ 'error': 'internal server error' }); 
+                    }; 
+                }).then(function(deleted){
+                    res.status(200).send(deleted);
+                }));
+            };
+        });
+    };
+
+ /**
+ * @function postInfo
+ * @summary Get post's information. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns the post's information as an object.
+ */   
+
+    postInfo(req, res){
+
+        var subrName = req.params.srName;
+        var postId = req.params.postId;
+        
+        sr.findOne({name: subrName}, function(err){
+            if(err)
+            {
+                res.status(500).send({ 'error': 'internal server error' });  
+            }
+        }).then(function(record){
+            if(!record){
+                res.status(400).send({ 'error': 'invalid subreddit name' }); 
+            }; 
+            if(record.posts.indexOf(postId)>-1)
+            {
+                pt.findOne({_id: postId}, function(err){
+                    if(err){
+                        res.status(500).send({ 'error': 'internal server error' }); 
+                    }; 
+                }).then(function(post){
+                    if(!post){
+                        res.status(500).send({ 'error': 'invalid postId' }); 
+                    }
+                    else{
+                        res.status(200).send(post);
+                    };
+                });
+            };
+        });
     };
 };
 module.exports = new SR();

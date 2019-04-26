@@ -42,33 +42,530 @@
  */
 
 const app = require("express")();
-const mongoose=require('mongoose');
-const bodyparser=require('body-parser');
+const mongoose = require('mongoose');
+const bodyparser = require('body-parser');
+const passport = require('passport');
+const passportConf = require('./JWT/passport');
+
 //contect to mongo
 mongoose.connect('mongodb://localhost:27017/reddit');
-mongoose.Promise=global.Promise;
-mongoose.connection.once('open',function(){console.log("Connection successful");}).on('error',function(error)
-{console.log("error:",error)});
+mongoose.Promise = global.Promise;
+mongoose.connection.once('open', function () { console.log("Connection successful"); }).on('error', function (error) { console.log("error:", error) });
 
 
+//middlewares 
 app.use(bodyparser.json());
-
-app.use(function(req,res,next) {
+app.use(passport.initialize());
+app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods"," POST,PUT,GET,DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    
+    res.setHeader("Access-Control-Allow-Methods", " POST,PUT,GET,DELETE");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, auth");
     next();
 });
 
 const userHandler = require("./src/user");
 
 // console.log(userHandler.handleRegistration);
-// app.post("/user/register", userHandler.handleRegistration);
-// app.post("/user/login", userHandler.handleLogin);
-// app.put("/me/edit/email/:Username", userHandler.EditUserEmail);
-// app.put("/me/edit/Password/:Username", userHandler.EditUserPassword);
-// app.get("/me/About/:Username", userHandler.Getmyinfo)
+app.post("/user/register", userHandler.handleRegistration);
+
+/**
+ * @api {post} /user/register Register new user
+ * @apiName CreateUser
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Email email  of the User.
+ * @apiParam  {String} Username unique Username  of the User.
+ * @apiParam  {String} Password Password  of the User.
+ * @apiSuccess {string} Token Token That is sent with authentication.
+ * @apiParamExample {json} Input
+ *    {
+ *      "Email": "user@reddit.com",
+ *      "Username": "User1",
+ *      "Password": "Password"
+      
+ *    }
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *  "token":"we8749832b7498c2b78942"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    
+ * HTTP/1.1 406 password short
+ * {
+ * "error":"Password too short"
+ * }
+ * 
+ *  HTTP/1.1 406 username repeated 
+ * {
+ * "error":"Username already exists"
+ * }
+ * HTTP/1.1 406 email repeated 
+ * {
+ * "error":"Email already exists"
+ * }
+ * 
+ * HTTP/1.1 406 email format 
+ * {
+ * "error":"Invalid Email format"
+ * }
+ */
+
+app.post("/user/login", userHandler.handleLogin);
+/**
+* @api {post} /user/Login login attempt
+* @apiName LoginUser
+* @apiGroup me
+* @apiParam  {String} Username unique Username  of the User.
+* @apiParam  {String} Password Password  of the User.
+* 
+* @apiSuccess {string} Token Token That is sent with authentication.
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User1",
+*      "Password": "Password"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {
+*  "token":"we8749832b7498c2b78942"
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*    HTTP/1.1 401 Invalid
+* {
+*          "error"":"Invalid Password"
+* }
+* 
+*  HTTP/1.1 404 Invalid
+* {
+*        "error"":"User doesnt exist"
+* }
+*/
+
+
+app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserEmail);
+app.put("/me/edit/Password/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserPassword);
+app.get("/me/About/:Username", passport.authenticate('jwt', { session: false }), userHandler.Getmyinfo);
+
+
+app.get("/user/info/:userToView", userHandler.getUserInfo);
+/**
+* @api {get} /user/info:userToView get user info if NOT logged in
+* @apiName GetUserInfo
+* @apiGroup me
+*  @apiParam  {String} userToView  unique Username  of the User to be viewed.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* {
+*      "Username":"user1",
+     Subscriptions:["sub1","sub2","sub3"]
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 user doesnt exist
+*      {
+*      "message": "User doesnt exist"
+*     }
+*/
+
+app.get("/me/user/info/:userToView", passport.authenticate('jwt', { session: false }), userHandler.getUserInfoLogged)
+/**
+ * @api {get} /me/user/info/:userToView get user info if logged in
+ * @apiName GetUserInfoLogged
+ * @apiGroup me
+* @apiHeader {String} auth Users unique token .
+ *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 
+ * {
+ *      "Username":"user1",
+      Subscriptions:["sub1","sub2","sub3"]
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 user blocked you or doesnt exist
+ *      {
+ *      "message": "User doesnt exist"
+ *     }
+ */
+
+app.get("/me/blockedusers", passport.authenticate('jwt', { session: false }), userHandler.getBlockedUsers)
+
+/**
+ * @api {get} /me/blockedusers  Get Blocked users
+ * @apiName BlockedUsers
+ * @apiHeader {String} auth Users unique token .
+ * @apiGroup me
+ *   @apiSuccess  [String] BlockedUsername unique Username  of the User to be blocked.
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * 
+ *    [
+ *      "User1",
+ *      "User2",
+ *      "User3",
+ *      "User4"     
+ *    ]    
+ */
+
+app.put("/me/user/unblock", passport.authenticate('jwt', { session: false }), userHandler.unblockUser);
+/**
+* @api {put} /me/user/unblock  unblock user
+* @apiName UnblockUser
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*  @apiParam  {String} unblockedUser  unique Username  of the User to be unblocked.
+* @apiParamExample {json} Input
+*    {
+*      "unblockedUser": "User1"    
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* {
+*     "User unblocked"
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 user isnt blocked
+*      {
+*      error:"the user you want to unblock isnt blocked""
+*     }
+*/
+
+app.put("/me/user/block", passport.authenticate('jwt', { session: false }), userHandler.blockUser);
+/**
+* @api {put} /me/user/block  Block user
+* @apiName BlockUser
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*  @apiParam  {String} blockedUser  unique Username  of the User to be blocked.
+* @apiParamExample {json} Input
+*    {
+*      "blockedUser": "User1"      
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* {
+*     "User Blocked"
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 user already blocked
+*      {
+*      error:"the user you want to block is already blocked"
+*     },
+* HTTP/1.1 404 User not found
+*      {
+*     error:"the user you want to block doesnt exist"
+*     },
+* HTTP/1.1 404 User blocking himself
+*      {
+*       error:"you cant block yourself"
+*     }
+* 
+* 
+* 
+* 
+* 
+*/
+
+app.put("/me/user/Add", passport.authenticate('jwt', { session: false }), userHandler.addFriend);
+/**
+* @api {put} /me/user/Add  Add new friend
+* @apiName FriendAdd
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token. 
+* @apiParam  {String} FriendUsername unique Username  of user to add. 
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+     
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend request Sent" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be added not found
+*      {
+*       "error": "User to be added not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot add himself
+*      {
+*       "error": "User cannot add himself"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The sending User is blocked
+*      {
+*       "error": "The sending User is blocked"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user to be added is blocked
+*      {
+*       "error": "The user to be added is blocked"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User not found
+*      {
+*       "error": "The User to be added is already a friend"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User has already received a request from the other user
+*      {
+*       "error": "User has already received a request from the other user"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User has already sent a request to the other user
+*      {
+*       "error": "User has already sent a request to the other user"
+*     }
+*/
+
+
+app.put("/me/user/Unfriend", passport.authenticate('jwt', { session: false }), userHandler.unFriend);
+
+/**
+* @api {put} /me/user/Unfriend   unfriend
+* @apiName Unfriend
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiParam  {String} fUsername unique Username  of user to delete. 
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+     
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend is removed from friends list" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to unFriend not found
+*      {
+*       "error": "User to unFriend not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 This user is not a friend
+*      {
+*       "error": "This user is not a friend"
+*     }
+*/
+
+app.put("/me/user/accept", passport.authenticate('jwt', { session: false }), userHandler.acceptRequest);
+
+/**
+* @api {put} /me/user/accept   Accept Request
+* @apiName AcceptRequest
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiParam  {String} fUsername unique Username  of user to Accept request from. 
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+     
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend request accepted" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to accept not found
+*      {
+*       "error": "User to accept not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 This user is already a friend
+*      {
+*       "error": "This user is already a friend"
+*     }
+*  @apiErrorExample {json} List error
+*     HTTP/1.1 401 There isn't a request to be accepted
+*      {
+*       "error": "There isn't a request to be accepted"
+*     }
+*/
+
+app.put("/me/user/reject", passport.authenticate('jwt', { session: false }), userHandler.rejectRequest);
+
+/**
+* @api {put} /me/user/reject   Reject Request
+* @apiName RejectRequest
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiParam  {String} fUsername unique Username  of user to reject. 
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+     
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend request rejected" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to reject not found
+*      {
+*       "error": "User to reject not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 This user is already a friend
+*      {
+*       "error": "This user is already a friend"
+*     }
+*  @apiErrorExample {json} List error
+*     HTTP/1.1 401 There isn't a request to be rejected
+*      {
+*       "error": "There isn't a request to be rejected"
+*     }
+*/
+
+app.get("/me/friends", passport.authenticate('jwt', { session: false }), userHandler.getFriends);
+
+/**
+* @api {Get} /me/friends   get friends
+* @apiName FriendList
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiSuccess  {[String]} FUsername unique Username  of the User.
+* @apiSuccessExample {json} Success
+*  
+*   HTTP/1.1 200 OK
+* 
+*    {"Friends" :["User1" , "User2"]}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 500 server error
+*/
+
+app.get("/me/sentRequests", passport.authenticate('jwt', { session: false }), userHandler.getSentRequests);
+
+/**
+* @api {Get} /me/sentRequests  get sent requests
+* @apiName SentRequestsList
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiSuccess  {String} FUsername unique Username  of the User.
+*  @apiSuccessExample {json} Success
+*  
+*   HTTP/1.1 200 OK
+* 
+*    {
+*       "sentRequests" :["User1" , "User2"]
+*    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 500 server error
+*/
+
+app.get("/me/receivedRequests", passport.authenticate('jwt', { session: false }), userHandler.getReceivedRequests);
+
+/**
+* @api {Get} /me/receivedRequests  get received requests
+* @apiName receivedRequestsList
+* @apiGroup me
+*
+* @apiHeader {String} auth Users unique token.
+* @apiSuccess  {String} FUsername unique Username  of the User.
+*  @apiSuccessExample {json} Success
+*  
+*   HTTP/1.1 200 OK
+* 
+*    {
+*       "receivedRequests" :["User1" , "User2"]
+*    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 500 server error
+*/
+
+app.put("/me/user/removeReq", passport.authenticate('jwt', { session: false }), userHandler.RemoveReq);
+
+/**
+* @api {put} /me/user/removeReq   delete friend request
+* @apiName RemoveFriendRequest
+* @apiGroup me
+*
+*
+* @apiHeader {String} auth Users unique token.
+* @apiParam  {String} fUsername unique Username  of user to unadd.  
+* @apiParamExample {json} Input
+*    {
+*      "Username": "user1", 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Friend request Removed" 
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 fUsername not found
+*      {
+*       "error": "fUsername not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be removed not found
+*      {
+*       "error": "User to be removed not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Request doesn't exist
+*      {
+*       "error": "Request doesn't exist"
+*     }
+*/
 
 
 /**
@@ -86,15 +583,16 @@ const userHandler = require("./src/user");
 
 //TODO POSTS: listing posts for a subreddit or only popular posts
 
-
+const listings = require('./src/listings');
+app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, res) => listings.listPosts(req, res));
 /** 
-* @api {get} /:username/listing?type=value List Posts 
+* @api {post} /me/listing?type=value List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
 * @apiParam {Number} startPosition Sending 15 posts per after the startposition  
-* @apiSuccess {Object[]} Posts   Array of the listed Posts  .
+* @apiSuccess {Object[]} Posts   Array of the listed Posts depending on the type  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *  {
@@ -116,16 +614,13 @@ const userHandler = require("./src/user");
 *]
 *     }
 *
-* @apiError PostsnotFound 
+* @apiError postsnotFound  no posts found for the user
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
 *       "error": "postsNotFound"
 *     }
 */
-
-const listings = require('./src/listings');
-app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
 
 
 // API for information about user
@@ -193,39 +688,6 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
 
 // API for listing of Posts by a user
 
-/** 
-* @api {get} /user/:Username/listing?type=value List Posts 
-* @apiName ListPosts
-* @apiGroup UserService
-* @apiparam {String} Username Username of visited User.
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} ListingType [ListingType == HOT] Type of the listing that the user wants for the posts.
-* @apiParam {Number} LPostID id of the last post displayed
-* @apiSuccess {Object[]} Posts   Array of the listed Posts  .
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*  "Posts":[
-*  {
-* "SubbredditName": "r/funny"
-* ,"PostID":1
-* ,"Meme": data:image/jpeg;base64,...............
-*  },
-* {
-* "SubbredditName": "r/Damn"
-* ,"PostID":2
-* ,"Meme": data:image/jpeg;base64,...............
-*  } 
-]
-*     }
-*
-* @apiError Server error no subreddits found to be listed
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 500 Server error
-*     {
-*       "error": "Server error"
-*     }
-*/
 
 //TODO VOTED
 
@@ -306,480 +768,243 @@ app.get('/:username/listing', (req, res) => listings.listPosts(req, res));
 
 
 
-/**
- * @api {post} /user/register Register new user
- * @apiName CreateUser
- * @apiGroup me
- *
- *
- * @apiParam  {String} Email email  of the User.
- * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Password Password  of the User.
- * @apiSuccess {string} Token SyncToken That is sent with authentication.
- * @apiParamExample {json} Input
- *    {
- *      "Email": "user@reddit.com",
- *      "Username": "User1",
- *      "Password": "Password"
-      
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {
- *  "token":"we8749832b7498c2b78942"
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *    
- * HTTP/1.1 406 password short
- * {
- * "error":"Password too short"
- * }
- * 
- *  HTTP/1.1 406 username repeated 
- * {
- * "error":"Username already exists"
- * }
- * HTTP/1.1 406 email repeated 
- * {
- * "error":"Email already exists"
- * }
- * 
- * HTTP/1.1 406 email format 
- * {
- * "error":"Invalid Email format"
- * }
- */
 
 /**
- * @api {post} /user/Login login attempt
- * @apiName LoginUser
- * @apiGroup me
- *
- *
- * @apiParam  {String} Email email  of the User.
- * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Password Password  of the User.
- * 
- * @apiSuccess {string} Token SyncToken That is sent with authentication.
- * @apiParamExample {json} Input
- *    {
- *      "Username": "User1",
- *      "Password": "Password"
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {
- *  "token":"we8749832b7498c2b78942"
- * }
- *    
- * 
- * @apiErrorExample {json} List error
- *    HTTP/1.1 401 Invalid
- * {
- *          "error"":"Invalid Password"
- * }
- * 
- *  HTTP/1.1 404 Invalid
- * {
- *        "error"":"User doesnt exist"
- * }
- */
-
-
-
- /**
- * @api {Put} /me/edit/Password/:Username Edit User password
- * @apiName EditUserPassword
- * @apiGroup me
- *
- *
- * @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} NewPassword the new Password for the User.
- * @apiParam  {String} OldPassword the Old Password of the User.
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParamExample {json} Input
- *    {
- *      "Email": "user@reddit.com",
- *      "Username": "User1",
- *      "Password": "Password",
- *      "ImageID" : 3
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User not found
- *      {
- *       "error": "UserNotFound"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 401 Wrong Password
- *      {
- *       "error": "Wrong Password"
- *     }
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 406 Password too short
- *      {
- *        error: "Password too short"
- *     }
- */
-
- /**
- * @api {Put} /me/edit/email/:Username Edit User email
- * @apiName EditUserEmail
- * @apiGroup me
- *
- *
- * @apiParam  {String} Email email  of the User.
- * @apiParam  {String} Username unique Username  of the User.
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParamExample {json} Input
- *    {
- *      "Email": "user@reddit.com",
- *      "Username": "User1"
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User not found
- *      {
- *       "error": "UserNotFound"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 406 Invalid Email format
- *      {
- *       "error": "Invalid Email format"
- *     }
- * @apiErrorExample {json} List error
- *     HTTP/1.1 406 Email already exists
- *      {
- *          "error" : "Email already exists"
- *      }
- */
-
- /**
- * @api {Post} /me/:username/Block/:BlockedUsername  Block user
- * @apiName BlockUser
- * @apiGroup me
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} Username unique Username  of the User.
- *  @apiParam  {String} BlockedUsername  unique Username  of the User to be blocked.
- * @apiParamExample {json} Input
- *    {
- *      "Username": "User1",      
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User not found
- *      {
- *       "error": "UserNotFound"
- *     }
- */
-
-
-
- /**
- * @api {get} /me/:username/Block/  Get Blocked users
- * @apiName BlockedUsers
- * @apiGroup me
- * @apiParam {string} Token SyncToken That is sent with authentication.
- *  @apiParam  {String} Username unique Username  of the User.
- *   @apiSuccess  {String} BlockedUsername unique Username  of the User to be blocked.
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * 
- *    [{
- *      "BlockedUsername": "User1",    
- *    }]
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 500 Server Error
- *      
- */
-
- /**
- * @api {Post} /me/:username/Report/:id  report user comment or post
- * @apiName Report
- * @apiGroup me
- *
- * @apiParam {string} Token SyncToken That is sent with authentication.
-  *  @apiParam  {String} Username unique Username  of the User.
- * @apiParam  {String} Id unique Id  of the post or comment.
- *  @apiParam  {String} Type type is post or comment.
- * 
- * @apiParamExample {json} Input
- *    {
- *      "Id": "1", 
- *      "Type":"Post"     
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User not found
- *      {
- *       "error": "Post Not found"
- *     }
- */
-
- /**
- * @api {Post} /me/:Username/Friend/:FriendUsername  Add new friend
- * @apiName FriendAdd
- * @apiGroup me
- *
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} Username unique Username  of user . 
- * @apiParam  {String} FriendUsername unique Username  of user to add. 
- * @apiParamExample {json} Input
- *    {
- *      "Username": "user1", 
-      
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User not found
- *      {
- *       "error": "User Not found"
- *     }
- */
-
- /**
- * @api {delete} /me/:Username/Friend/:FUsername   unfriend
- * @apiName Frienddelete
- * @apiGroup me
- *
- * @apiParam {string} Token SyncToken That is sent with authentication.
-  * @apiParam  {String} Username unique Username  of user . 
- * @apiParam  {String} FUsername unique Username  of user to delete. 
- * @apiParamExample {json} Input
- *    {
- *      "Username": "user1", 
-      
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 User not found
- *      {
- *       "error": "User Not found"
- *     }
- */
-
- /**
- * @api {Get} /me/:Username/Friend/   get friends
- * @apiName FriendList
- * @apiGroup me
- *
- * @apiParam  {String} Username unique Username  of the User.
-* @apiSuccess  {String} FUsername unique Username  of the User.
- *  @apiSuccessExample {json} Success
- *  
- *   HTTP/1.1 200 OK
- * 
- *    [{
- *      "FUsername": "User1",    
- *    }]
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 500 server error
- */
-
- /**
- * @api {delete} /me/:Username /Friend/:FUsername   delete friend request
- * @apiName FriendReqdelete
- * @apiGroup me
- *
- *
- * @apiParam  {String} Username unique Username  of user .
- *  @apiParam  {String} FUsername unique Username  of user to unadd.  
- * @apiParamExample {json} Input
- *    {
- *      "Username": "user1", 
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 500 server error
- */
-
- /**
- * @api {get} /Moderator/Reports/   Get all reports
- * @apiName Getreports
- * @apiGroup Moderator
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apisuccess  {String} ReporId unique ReporId  of the Repor.
-
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * [{
- *         "ReporId":"1010"
- * }]
- *    
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 500 server error
- */
-
- /**
- * @api {Put} /Moderator/Reports/:id   ignore report
- * @apiName Ignoreports
- * @apiGroup Moderator
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} ReporId unique ReporId  of the Repor.
+* @api {Put} /me/edit/Password/:Username Edit User password
+* @apiName EditUserPassword
+* @apiGroup me
+*
+*
+* @apiParam  {String} Username unique Username  of the User.
+* @apiParam  {String} NewPassword the new Password for the User.
+* @apiParam  {String} OldPassword the Old Password of the User.
+* @apiParam {string} Token SyncToken That is sent with authentication.
 * @apiParamExample {json} Input
- *    {
- *      "ReporId": "1101", 
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK   
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 Report not found
- * {
- *          "error":"report not found"
- * }
- */
+*    {
+*      "Email": "user@reddit.com",
+*      "Username": "User1",
+*      "Password": "Password",
+*      "ImageID" : 3
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User not found
+*      {
+*       "error": "UserNotFound"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 Wrong Password
+*      {
+*       "error": "Wrong Password"
+*     }
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 406 Password too short
+*      {
+*        error: "Password too short"
+*     }
+*/
 
- /**
- * @api {delete} /Moderator/Reports/:id   delete report
- * @apiName deletereports
- * @apiGroup Moderator
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} ReporId unique ReporId  of the Repor.
+/**
+* @api {Put} /me/edit/email/:Username Edit User email
+* @apiName EditUserEmail
+* @apiGroup me
+*
+*
+* @apiParam  {String} Email email  of the User.
+* @apiParam  {String} Username unique Username  of the User.
+* @apiParam {string} Token SyncToken That is sent with authentication.
 * @apiParamExample {json} Input
- *    {
- *      "ReporId": "1101", 
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK   
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 Report not found
- * {
- *          "error":"report not found"
- * }
- */
-
-  /**
- * @api {post} /Moderator/Ban/:Username&:SubbreditName   ban user
- * @apiName BanUser
- * @apiGroup Moderator
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} Username unique Username  of the User to be banned.
- * @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit to be banned from.
- * @apiParamExample {json} Input
- *    {
- *      "Username": "User0",
- *      "SubbreditName":"Ask reddit" 
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK   
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 Report not found
- * {
- *          "error":"user or subreddit not found"
- * }
- */
-
- /**
- * @api {delete} /Moderator/LeaveMod/:Username&:SubbreditName   Leave or remove Moderation
- * @apiName LeaveMod
- * @apiGroup Moderator
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} Username unique Username  of the Moderaor to remove or leave .
- * @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
- * @apiParamExample {json} Input
- *    {
- *      "Username": "User0",
- *      "SubbreditName":"Ask reddit" 
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK   
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 Report not found
- * {
- *          "error":"user or subreddit not found"
- * }
- */
-
- /**
- * @api {post} /Moderator/Invite/:Username&:SubbreditName   invite moderator
- * @apiName Addmod
- * @apiGroup Moderator
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} Username unique Username  of the Moderaor to be added .
- * @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
- * @apiSuccess {String} ModREQid unique invite Id  of the request .
- * @apiParamExample {json} Input
- *    {
- *      "Username": "User0",
- *      "SubbreditName":"Ask reddit" 
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK 
- * {
- * 
- *          "ModREQid":"101"
- * }  
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 Report not found
- * {
- *          "error":"user or subreddit not found"
- * }
- */
-
-  /**
- * @api {post} /Moderator/accept   accept invite moderator
- * @apiName Acceptmod
- * @apiGroup Moderator
- * @apiParam {string} Token SyncToken That is sent with authentication.
- * @apiParam  {String} ModREQid unique invite id  of request.
- * @apiParamExample {json} Input
- *    {
- *      "ModREQid": "1011",
- *       
- *    }
- *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK   
- * 
- * @apiErrorExample {json} List error
- *     HTTP/1.1 404 Report not found
- * {
- *          "error":"request not found"
- * }
- */
+*    {
+*      "Email": "user@reddit.com",
+*      "Username": "User1"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User not found
+*      {
+*       "error": "UserNotFound"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 406 Invalid Email format
+*      {
+*       "error": "Invalid Email format"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 406 Email already exists
+*      {
+*          "error" : "Email already exists"
+*      }
+*/
 
 
 
 
+/**
+* @api {get} /Moderator/Reports/   Get all reports
+* @apiName Getreports
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apisuccess  {String} ReporId unique ReporId  of the Repor.
+
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* [{
+*         "ReporId":"1010"
+* }]
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 500 server error
+*/
+
+/**
+* @api {Put} /Moderator/Reports/:id   ignore report
+* @apiName Ignoreports
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} ReporId unique ReporId  of the Repor.
+* @apiParamExample {json} Input
+*    {
+*      "ReporId": "1101", 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Report not found
+* {
+*          "error":"report not found"
+* }
+*/
+
+/**
+* @api {delete} /Moderator/Reports/:id   delete report
+* @apiName deletereports
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} ReporId unique ReporId  of the Repor.
+* @apiParamExample {json} Input
+*    {
+*      "ReporId": "1101", 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Report not found
+* {
+*          "error":"report not found"
+* }
+*/
+
+/**
+* @api {post} /Moderator/Ban/:Username&:SubbreditName   ban user
+* @apiName BanUser
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} Username unique Username  of the User to be banned.
+* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit to be banned from.
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SubbreditName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Report not found
+* {
+*          "error":"user or subreddit not found"
+* }
+*/
+
+/**
+* @api {delete} /Moderator/LeaveMod/:Username&:SubbreditName   Leave or remove Moderation
+* @apiName LeaveMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} Username unique Username  of the Moderaor to remove or leave .
+* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SubbreditName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Report not found
+* {
+*          "error":"user or subreddit not found"
+* }
+*/
+
+/**
+* @api {post} /Moderator/Invite/:Username&:SubbreditName   invite moderator
+* @apiName Addmod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} Username unique Username  of the Moderaor to be added .
+* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
+* @apiSuccess {String} ModREQid unique invite Id  of the request .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SubbreditName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK 
+* {
+* 
+*          "ModREQid":"101"
+* }  
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Report not found
+* {
+*          "error":"user or subreddit not found"
+* }
+*/
+
+/**
+* @api {post} /Moderator/accept   accept invite moderator
+* @apiName Acceptmod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} ModREQid unique invite id  of request.
+* @apiParamExample {json} Input
+*    {
+*      "ModREQid": "1011",
+*       
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Report not found
+* {
+*          "error":"request not found"
+* }
+*/
 
 
-app.get("/users", (req, res) => {});
-app.post("/users", (req, res) => {});
-app.put("/users", (req, res) => {});
-app.delete("/users", (req, res) => {});
+
+
+
+
+app.get("/users", (req, res) => { });
+app.post("/users", (req, res) => { });
+app.put("/users", (req, res) => { });
+app.delete("/users", (req, res) => { });
 
 
 /**
@@ -798,7 +1023,7 @@ app.delete("/users", (req, res) => {});
 * 
 */
 
- /**
+/**
 * @api {post} /emoji/   Create an emoji
 * @apiName CreateEmoji
 * @apiGroup EmojiService
@@ -846,10 +1071,10 @@ app.delete("/users", (req, res) => {});
 * }
 */
 
-app.get("/emoji", (req, res) => {});
-app.post("/emoji", (req, res) => {});
-app.put("/emoji", (req, res) => {});
-app.delete("/emoji", (req, res) => {});
+app.get("/emoji", (req, res) => { });
+app.post("/emoji", (req, res) => { });
+app.put("/emoji", (req, res) => { });
+app.delete("/emoji", (req, res) => { });
 
 /**
 * @api {post} /emoji/   Create an emoji
@@ -869,7 +1094,7 @@ app.delete("/emoji", (req, res) => {});
 * @apiGroup test
 *
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
+* @apiParam {string} TESSST  Image(emoji) of the subreddit.
 * @apiParam {string} SubredditName Name of subreddit to add image to.
 * @apiSuccess {string} EMOJI_ID Unique id of image.
 *
@@ -1003,10 +1228,10 @@ app.delete("/emoji", (req, res) => {});
 
 
 */
-app.get("/flair", (req, res) => {});
-app.post("/flair", (req, res) => {});
-app.put("/flair", (req, res) => {});
-app.delete("/flair", (req, res) => {});
+app.get("/flair", (req, res) => { });
+app.post("/flair", (req, res) => { });
+app.put("/flair", (req, res) => { });
+app.delete("/flair", (req, res) => { });
 
 
 /**
@@ -1036,40 +1261,38 @@ app.delete("/flair", (req, res) => {});
 
 
 
- /**
-  * @api {get} /comment/:c_id Get Details About Comment or a Reply
-  * @apiName GetComment
-  * @apiGroup Comment
-  * 
-  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-  * @apiParam {String} c_id Comment Unique ID.
-  * 
-  * @apiSuccess {String} content Text of the Comment.
-  * @apiSuccess {Date} c_date Date of the Posted Comment.
-  * @apiSuccess {Boolean} reply True if it is a reply.
-  * @apiSuccess {Boolean} spoiler True if it is a Spoiler.
-  * @apiSuccess {Boolean} locked True if the Replies are Disallowed on this Comment.
-  * 
-  * @apiError CommentNotFound The id of the comment wasn't found.
-  * @apiError AccessDenied If this user can't get info of this comment.
-  */
+/**
+ * @api {get} /comment/:c_id Get Details About Comment or a Reply
+ * @apiName GetComment
+ * @apiGroup Comment
+ * 
+ * @apiParam {String} c_id Comment Unique ID.
+ * 
+ * @apiSuccess {String} content Text of the Comment.
+ * @apiSuccess {Date} c_date Date of the Posted Comment.
+ * @apiSuccess {Boolean} reply True if it is a reply.
+ * @apiSuccess {Boolean} spoiler True if it is a Spoiler.
+ * @apiSuccess {Boolean} locked True if the Replies are Disallowed on this Comment.
+ * 
+ * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError AccessDenied If this user can't get info of this comment.
+ */
 
 
- /**
-  * @api {get} /comment/all/:id Get Comments or Replies for this ID
-  * @apiName GetAllComments
-  * @apiGroup Comment
-  * 
-  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-  * @apiParam {String} c_id Comment Unique ID.
-  * @apiParam {Boolean} [comment=false] True if the ID sent is a Comment ID not a Thread ID.
-  * 
-  * @apiSuccess {objects[]} comments Array of the comments or replies attached to this thread or comment.
-  * 
-  * @apiError ThreadNotFound The id of the thread wasn't found.
-  * @apiError CommentNotFound The id of the comment wasn't found.
-  * @apiError AccessDenied If this user can't get info of this comment.
-  */
+/**
+ * @api {get} /comment/all/:id Get Comments or Replies for this ID
+ * @apiName GetAllComments
+ * @apiGroup Comment
+ * 
+ * @apiParam {String} c_id Comment Unique ID.
+ * @apiParam {Boolean} [comment=false] True if the ID sent is a Comment ID not a Thread ID.
+ * 
+ * @apiSuccess {objects[]} comments Array of the comments or replies attached to this thread or comment.
+ * 
+ * @apiError ThreadNotFound The id of the thread wasn't found.
+ * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError AccessDenied If this user can't get info of this comment.
+ */
 
 /**
  * @api {delete} /comment/:c_id Delete a Comment
@@ -1083,129 +1306,79 @@ app.delete("/flair", (req, res) => {});
  * @apiError AccessDenied If this user can't delete this comment.
  */
 
- /**
-  * @api {put} /comment/:c_id Edit a Comment
-  * @apiName EditComment
-  * @apiGroup Comment
-  * 
-  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-  * @apiParam {String} c_id Comment Unique ID.
-  * @apiParam {String} content Text of the Edited Comment.
-  * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
-  * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
-  * 
-  * @apiError CommentNotFound The id of the comment wasn't found.
-  * @apiError AccessDenied If this user can't edit this comment.
-  */
+/**
+ * @api {put} /comment/:c_id Edit a Comment
+ * @apiName EditComment
+ * @apiGroup Comment
+ * 
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} c_id Comment Unique ID.
+ * @apiParam {String} content Text of the Edited Comment.
+ * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
+ * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
+ * 
+ * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError AccessDenied If this user can't edit this comment.
+ */
 
-  /**
-   * @api {put} /comment/vote/:c_id Vote for a Comment
-   * @apiName VoteComment
-   * @apiGroup Comment
-   * 
-   * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-   * @apiParam {String} c_id Comment Unique ID.
-   * @apiParam {Number=1,0,-1} direction Direction of the Vote as 1 indicates Upvote, -1 indicates Downvote and 0 means unvoting.
-   * 
-   * @apiError CommentNotFound The id of the comment wasn't found.
-   * @apiError AccessDenied If the user isn't logged in.
-   */
+/**
+ * @api {put} /comment/vote/:c_id Vote for a Comment
+ * @apiName VoteComment
+ * @apiGroup Comment
+ * 
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} c_id Comment Unique ID.
+ * @apiParam {Number=1,0,-1} direction Direction of the Vote as 1 indicates Upvote, -1 indicates Downvote and 0 means unvoting.
+ * 
+ * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError AccessDenied If the user isn't logged in.
+ */
 
-   /**
-    * @api {post} /comment/save/:c_id Save a Comment
-    * @apiName SaveComment
-    * @apiGroup Comment
-    * 
-    * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-    * @apiParam {String} c_id Comment Unique ID.
-    * 
-    * @apiError CommentNotFound The id of the comment wasn't found.
-    * @apiError CommentAlreadySaved The Comment has already been saved before.
-    * @apiError AccessDenied If the user isn't logged in.
-    */
+/**
+ * @api {post} /comment/save/:c_id Save a Comment
+ * @apiName SaveComment
+ * @apiGroup Comment
+ * 
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} c_id Comment Unique ID.
+ * 
+ * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError CommentAlreadySaved The Comment has already been saved before.
+ * @apiError AccessDenied If the user isn't logged in.
+ */
 
-    /**
-     * @api {delete} /comment/unsave/:c_id UnSave a Comment
-     * @apiName UnSaveComment
-     * @apiGroup Comment
-     * 
-     * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-     * @apiParam {String} c_id Comment Unique ID.
-     * 
-     * @apiError CommentNotFound The id of the comment wasn't found.
-     * @apiError CommentAlreadySaved You can't unsave an unsaved comment.
-     * @apiError AccessDenied If the user isn't logged in.
-     */
+/**
+ * @api {delete} /comment/unsave/:c_id UnSave a Comment
+ * @apiName UnSaveComment
+ * @apiGroup Comment
+ * 
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} c_id Comment Unique ID.
+ * 
+ * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError CommentAlreadySaved You can't unsave an unsaved comment.
+ * @apiError AccessDenied If the user isn't logged in.
+ */
 
-      /**
-       * @api {put} /comment/spoil/:c_id Mark Comment as a Spoiler
-       * @apiName SpoilerComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadySpoiler The Comment is already marked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-       /**
-       * @api {put} /comment/unspoil/:c_id UnMark Comment as a Spoiler
-       * @apiName UnSpoilerComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentNotSpoiler The Comment is already unmarked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-       /**
-       * @api {put} /comment/lock/:c_id Lock a Comment to Disallow Replies on it
-       * @apiName LockComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentAlreadyLocked The Comment is already locked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-       /**
-       * @api {put} /comment/unlock/:c_id UnLock a Comment to Allow Replies on it
-       * @apiName UnLockComment
-       * @apiGroup Comment
-       * 
-       * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-       * @apiParam {String} c_id Comment Unique ID.
-       * 
-       * @apiError CommentNotFound The id of the comment wasn't found.
-       * @apiError CommentNotLocked The Comment is already unlocked.
-       * @apiError AccessDenied If the user isn't logged in.
-       */
-
-        /**
-         * @api {get} /comment/expand/:c_id Retrieve additional comments omitted from a base comment tree
-         * @apiName ExpandComment
-         * @apiGroup Comment
-         * 
-         * @apiParam {String} c_id Comment Unique ID.
-         * 
-         * @apiSuccess {String[]} replies An array containing all the replies' IDs to this comment.
-         * 
-         * @apiError CommentNotFound The id of the comment wasn't found.
-         */
+/**
+ * @api {post} /comment/report/:id Report a comment
+ * @apiName ReportComment
+ * @apiGroup Comment
+ *
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} id Comment Unique ID.
+ * @apiParam {String} text A text containg the reason of the report. 
+ * 
+ * @apiError CommentNotFound The id of the comment wasn't found.
+ * @apiError EmptyText the text is empty.
+ * @apiError AccessDenied If the user isn't logged in.
+ */
 const commentHandler = require('./src/Comments/Comment');
-app.get("/comment/:c_id",commentHandler.handleGetComment) ;
-app.get("/comment/all/:id",commentHandler.handleGetAllComments) ;
-app.post("/comment/:id",commentHandler.handlePostComment );
-app.put("/comment", (req, res) => {});
-app.delete("/comment", (req, res) => {});
+app.get("/comment/:c_id", commentHandler.handleGetComment);
+app.get("/comment/all/:id", commentHandler.handleGetAllComments);
+app.post("/comment/:id", passport.authenticate('jwt', { session: false }), commentHandler.handlePostComment);
+app.put("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleEditComment);
+app.delete("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleDeleteComent);
 
 
 /**
@@ -1213,18 +1386,141 @@ app.delete("/comment", (req, res) => {});
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
+
+app.post("/sr/create", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.createSr(req, res));
+
 /**
 * @api {post} /sr/create   Create a new subreddit
 * @apiName CreateSubreddit
 * @apiGroup SrService
 *
-* @apiParam {string} username Id of user that created SR.
+* @apiParam {string} Token Send token.
 * @apiParam {string} srName  unique Name of the subreddit (no longer than 100 character).
 * @apiParam {string[]} srRules list of subbreddit rules.
 * @apiParam {string}  SyncToken  (NOT YET) Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {string[]}  ModUsername (NOT YET)  Subreddit moderators' usernames.
+* @apiSuccess {object} newSubreddit Returns the created subreddit (if any).
+*/
+
+app.get("/sr/:srName/meta", (req, res) => subreddit.info(req, res));
+
+/**
+* @api {get} /sr/:srName/meta   Views subreddit meta
+* @apiName ViewSrMeta
+* @apiGroup SrService
+*
+* @apiParam {string} srName Subreddit name.
+* @apiSuccess {string} username Username of Creator.
+* @apiSuccess {string} date  date of creation.
+* @apiSuccess {object[]} posts All posts. 
+* @apiSuccess {string[]} rules   Rules of sr.
+* @apiSuccess {string} Bio   Subreddit's bio.
+* @apiSuccess {string[]} BannedUsers (NOT YET)   ID of banned users.
+* @apiSuccess {string[]} ModIds (NOT YET)  ID of Modertors.
+* @apiSuccess {string[]} UserIds (NOT YET  Ids of subscribed users .
+* @apiSuccess {Number[]} SubCount (NOT YET)  Number of subscribers.
 *
 */
+
+app.get("/sr/:srName/thread/:postId", (req, res) => subreddit.postInfo(req, res));
+
+/**
+* @api {get} /sr/:srName/thread/:postId   Views subreddit meta
+* @apiName ViewPostInfo
+* @apiGroup SrService
+*
+* @apiParam {string} srName Subreddit name.
+* @apiParam {string} postId ID of post.
+* @apiSuccess {object} post Returns post.
+*
+*/
+
+app.delete("/sr/:srName", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.deleteSubreddit(req, res));
+
+/**
+* @api {delete} /sr/:srName   Delete a subreddit
+* @apiName DeleteSubreddit
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiSuccess {object} deletedSubreddit Returns the deleted subreddit (if any).
+*/
+
+app.put("/sr/:srName", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.edit(req, res));
+
+/**
+* @api {put} /sr/:srName/    Edit a subreddit
+* @apiName EditSubreddit
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string[]} newRules Updated rules.
+* @apiParam {string} newName  New name
+* @apiParam {string}  About (NOT YET) Updated about
+* @apiSuccess {object} editedSubreddit Returns the edited subreddit (if any).
+*/
+
+
+app.post("/sr/:srName/thread", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.createPost(req, res));
+
+/**
+* @api {post} /sr/:srName/thread    Create a thread inside subreddit
+* @apiName CreateSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} title Title of thread
+* @apiParam {string} threadBody Body of the thread.
+* @apiParam {boolean}  Spoiler (NOT YET) [Spoiler==false] Mark if post is spoiler
+*/
+
+app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.editPost(req, res));
+
+/**
+* @api {put} /sr/:srName/thread/:postId    Edit a thread inside subreddit
+* @apiName EditSrThread
+* @apiGroup SrService
+*
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} title New title of thread
+* @apiParam {string} threadBody New body of the thread.
+* @apiSuccess {object} editedPost Returns the edited post inside subreddit.
+*/
+
+app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.deletePost(req, res));
+
+/**
+* @api {delete} /sr/:srName/thread/:postId    Delete a thread inside subreddit
+* @apiName DeleteSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiSuccess {object} deletedPost Returns the deleted post inside subreddit.
+*/
+
+app.post("/sr/:srName/subs", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.subscribe(req, res));
+
+/**
+* @api {post} /sr/:srName/subs  Subscribe to a Sr
+* @apiName SubredditSubscribtion
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiSuccess {string[]} subscribersList Returns the new subscribers list.
+*/
+
+app.delete("/sr/:srName/subs", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.unSubscribe(req, res));
+
+/**
+* @api {delete} /sr/:srName/subs   Unsubscribe to a Sr
+* @apiName SubredditUnsubscribtion
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiSuccess {string[]} subscribersList Returns the new subscribers list.
+*/
+
 
 /**
 * @api {get} /sr/:SubredditName/listing/:type   ListSubreddits   Generate a list of subreddits 
@@ -1237,94 +1533,27 @@ app.delete("/comment", (req, res) => {});
 * @apiSuccess {string[]} SubredditIDs Returns list of sorted subreddits
 */
 
-/**
-* @api {get} /sr/:srName/meta   Views subreddit meta
-* @apiName ViewSrMeta
-* @apiGroup SrService
-*
-* @apiParam {string} srName Subreddit name.
-* @apiSuccess {string} username Username of Creator.
-* @apiSuccess {string} date  date of creation.
-* @apiSuccess {object[]} posts All posts. 
-* @apiSuccess {string[]} rules   Rules of sr.
-* @apiSuccess {string[]} BannedUsers (NOT YET)   ID of banned users.
-* @apiSuccess {string[]} ModIds (NOT YET)  ID of Modertors.
-* @apiSuccess {string[]} UserIds (NOT YET  Ids of subscribed users .
-* @apiSuccess {Number[]} SubCount (NOT YET)  Number of subscribers.
-
-*/
-
-/**
-* @api {put} /sr/:srName/    Edit a subreddit
-* @apiName EditSubreddit
-* @apiGroup SrService
-*
-* @apiParam {string[]} newRules Updated rules.
-* @apiParam {string} newName  New name
-* @apiParam {string}  About (NOT YET) Updated about
-*/
-
-/**
-* @api {post} /sr/:srName/thread    Create a thread inside subreddit
-* @apiName CreateSrThread
-* @apiGroup SrService
-*
-* @apiParam {string} username Username of creator.
-* @apiParam {string} title Title of thread
-* @apiParam {string} threadBody Body of the thread.
-* @apiParam {boolean}  Spoiler (NOT YET) [Spoiler==false] Mark if post is spoiler
-*/
-
-/**
-* @api {post} /sr/:srName/subs  Subscribe to a Sr
-* @apiName SubredditSubscribtion
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-*/
-
-/**
-* @api {delete} /sr/:srName/subs   Unsubscribe to a Sr
-* @apiName SubredditUnsubscribtion
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-*/
-
-/**
-* @api {delete} /sr/:id/thread    Delete a thread inside subreddit
-* @apiName DeleteSrThread
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-* @apiParam {string} PostID
-*/
-
-/**
-* @api {delete} /sr/:Id   Delete a subreddit
-* @apiName DeleteSubreddit
-* @apiGroup SrService
-*
-* @apiParam {string} Token Send token.
-* @apiParam {string} SubredditName
-*/
 
 const subreddit = require('./Subreddits/subreddits')
-app.post("/sr/create", (req, res) => subreddit.createSr(req, res));
-app.get("/sr/:srName/meta", (req, res) => subreddit.info(req,res));
-app.put("/sr/:srName", (req, res) => subreddit.edit(req,res));
-app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
+
+
+
+
+
+
+
 
 /**
  * @name PMService
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
+const privateMessage = require('./src/PM/Pm');
+
+
+app.post('/me/pm/compose', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.compose(req, res));
 /**
-* @api {post} /:username/pm/compose    Compose a new message
+* @api {post} /me/pm/compose    Compose a new message
 * @apiName Compose
 * @apiGroup PMService
 *
@@ -1338,6 +1567,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     }
 *
 * @apiError userNotFound The <code>id</code> of the User was not found.
+* @apiError receiverNotFound the username of the receiver was not found.
 * @apiError blockedFromSending The user already blocking messages from the receiver
 * @apiError overLengthedSubject The length of the subject is above 100 character
 * @apiError internalServerError error from the bank end and database manipulation
@@ -1358,8 +1588,10 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     }
 */
 
+
+app.post('/me/pm/block', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.block(req, res));
 /**
-* @api {post} /:username/pm/block   Block
+* @api {post} /me/pm/block   Block
 * @apiName Block
 * @apiGroup PMService
 *
@@ -1384,12 +1616,12 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "userNotFound"
+*       "error": "internalServerBlockingError"
 *     }
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
 *     {
-*       "error": "onBlockList"
+*       "error": "usersAlreadyOnBlockLists"
 *     }
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
@@ -1398,9 +1630,9 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     }
 */
 
-
+app.delete('/me/pm/delete', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.delete(req, res));
 /**
-* @api {delete} /:username/pm/delete   Delete
+* @api {delete} /me/pm/delete?messageID=value   Delete
 * @apiName Delete
 * @apiGroup PMService
 *
@@ -1412,6 +1644,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     }
 *
 * @apiError messageNotFound The <code>id</code> of the Message was not found.
+* @apiError internalServererror  internal error caused by unexplained behavior
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
@@ -1419,8 +1652,9 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     }
 */
 
+app.put('/me/pm/markread', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.markread(req, res));
 /**
-* @api {put} /:username/pm/markread   Mark Read
+* @api {put} /me/pm/markread   Mark Read
 * @apiName MarkAsRead
 * @apiGroup PMService
 *
@@ -1433,6 +1667,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     }
 *
 * @apiError messageNotFound The <code>id</code> of the Message was not found.
+* @apiError internalServererror  internal error caused by unexplained behavior
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
@@ -1440,8 +1675,10 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     }
 */
 
+
+app.post('/me/pm/markreadall', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.markreadall(req, res));
 /**
-* @api {post} /:username/pm/markreadall   Mark Read-all
+* @api {post} /me/pm/markreadall   Mark Read-all
 * @apiName MarkReadALL
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -1450,16 +1687,19 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     HTTP/1.1 200 OK
 *     {
 *     }
-* @apiError noMessages No messages to mark empty array
+* @apiError messageNotFound No messages to mark empty array
+* @apiError internalServererror  internal error caused by unexplained behavior
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
 *     {
-*       "error": "noMessages"
+*       "error": "messageNotFound"
 *     }
 */
 
+
+app.post('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.retrieve(req, res));
 /**
-* @api {get} /:username/pm/   Retrieve
+* @api {post} /me/pm/   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -1469,7 +1709,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *     HTTP/1.1 200 OK
 *          {
 *  {[{
-* "_id"         :"5c901c662f87870699fa62e6"
+* "_id"         :"5c901c662f87870699fa62e6",
 * "sender”      :"kefah",
 * "receiver"    : "omar",
 * ”subject”     :”URGENT VIP”,
@@ -1478,7 +1718,7 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 * "messageDate" :"2019-03-18 22:32:06.000Z"
 *  },
 * {
-* "_id"         :"5c901c662f87870699fa62e9"
+* "_id"         :"5c901c662f87870699fa62e9",
 * "sender”      :"mariam ",
 * "receiver"    : "kefah",
 * ”subject”     :”URGENT VIP”,
@@ -1488,44 +1728,36 @@ app.post("/sr/:srName/thread", (req, res) => subreddit.createPost(req, res));
 *  }
 * ]}
 *     
-*          }
+*  }
+* @apiError internalServerFindingError  internal error caused by unexplained behavior
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 403 Forbidden
+*     {
+*       "error": "internalServerFindingError"
+*     }
 */
+
+
+app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.retrieveBlock(req, res));
 /**
-* @api {get} /:username/pm/blocklist   Blocklist
+* @api {get} /me/pm/blocklist   Blocklist
 * @apiName retrieveBlockList
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiSuccess {Array} blocklist Array of people whom the user is blocking    .
+* @apiSuccess {Array} blocklist Array of people whom the user is blocking  from receieving messages from them  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *          {
 *  {[{
-* "_id"         :"5c901c662f87870699fa62e6"
-* "blocked      :"kefah",
+* "blocked      :"kefah"
 *  },
 * {
-* "_id"         :"5c901c662f87870699fa62e9"
-* "blocked      :"marwan ",
+* "blocked      :"marwan "
 *  }
 * ]}
 *     
 *          }
 */
-// mongoose.connect('mongodb://localhost/reddit');
-// mongoose.connection.once('open', function () {
-
-//     console.log('connection carried succesfully');
-// }).on('error', function () {
-
-
-const privateMessage = require('./src/PM/Pm');
-app.get('/:username/pm', (req, res) => privateMessage.retrieve(req, res));
-app.post('/:username/pm/compose', (req, res) => privateMessage.compose(req, res));
-app.get('/:username/pm/blocklist', (req, res) => privateMessage.retrieveBlock(req, res));
-app.post('/:username/pm/block', (req, res) => privateMessage.block(req, res));
-app.put('/:username/pm/markread',(req, res) => privateMessage.markread(req, res));
-app.post('/:username/pm/markreadall',(req, res) => privateMessage.markreadall(req, res));
-app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res));
 
 
 
@@ -1545,24 +1777,55 @@ app.delete('/:username/pm/delete',(req, res) => privateMessage.delete(req, res))
 
 
 /**
-* @api {get} /notif/   Retrieve
+* @api {get} /notif/   Retrieve a maximum of 15 notifications
 * @apiName RetrieveNotifications
 * @apiGroup NotificationsService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Number} Starting ID of Notifications (If Omitted, latest notifications will be sent.).
-* @apiSuccess {Array} Array of Notifications.
+* @apiParam {Number} [startPosition=0] 0 means you want the latest 15 notifications and 1 means you want the next 15...etc.
+* @apiSuccess {Array} Array of Notifications. for example if the type is post then the source ID will be this post ID(your post).
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
 *  "notifications":[
-*    {"type": "message", "content": "Mustafa Ahmed Sent you a message", "ID": 5}
-*    {"type": "ban", "content": "You have been banned from subreddit /r/MemeGeeks", "ID": 3}
+*    {"_id": "dsjjda22","username": Marwan, "type": "message", "message": "Mustafa_Ahmed Sent you a message", "sourceID": null},
+*    {"_id": "gsdhsbd826","username": Mostafa,"type": "post", "message": "Marwan commented on your post ", "sourceID": "3546547fg"},
+*    {"_id": "kdyufu787","username": Mostafa, "type": "comment", "message": "Marwan replied on your comment ", "sourceID": "gsdyu3g668"},
+*    {"_id": "ldyufuhg7","username": Mostafa, "type": "friendRequest", "message": "Mohamed sent you a freind request ", "sourceID": "gsdyu3g6f6"}
 *    ]
 *     }
-
 */
-app.get("/notif", (req, res) => {});
+
+/**
+ * @api {put} /notif/read/:id  Mark a notification as read
+ * @apiName ReadNotification
+ * @apiGroup NotificationsService
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} id The notification ID sent in the url
+ * @apiError NotificationNotFound
+ */
+
+/**
+ * @api {put} /notif/unread/:id  Mark a notification as unread
+ * @apiName UnreadNotification
+ * @apiGroup NotificationsService
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ * @apiParam {String} id The notification ID sent in the url.
+ * @apiError NotificationNotFound
+ */ 
+
+ /**
+ * @api {put} /notif/readall  Mark all notifications as read
+ * @apiName ReadAllNotifications
+ * @apiGroup NotificationsService
+ * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
+ */
 
 
-var server=app.listen(1337,function(){console.log('listening')});
-module.exports=server;
+const notificationHandler = require("./src/notifications");
+app.get("/notif", passport.authenticate('jwt', { session: false }), notificationHandler.handleGetNotification);
+app.put("/notif/read/:id",passport.authenticate('jwt', { session: false }), notificationHandler.handleReadNotification);
+app.put("/notif/unread/:id",passport.authenticate('jwt', { session: false }), notificationHandler.handleUnreadNotification);
+app.put("/notif/readall/",passport.authenticate('jwt', { session: false }), notificationHandler.handleReadAllNotifications);
+
+var server = app.listen(4000, function () { console.log('listening') });
+module.exports = server;

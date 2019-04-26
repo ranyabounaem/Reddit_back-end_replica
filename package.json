@@ -4,7 +4,8 @@
   "description": "REST API package for memestock",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine",
+    "test-cover": "istanbul cover --include-all-sources spec/specs.js && istanbul check-coverage"
   },
   "repository": {
     "type": "git",
@@ -17,16 +18,25 @@
   },
   "homepage": "https://github.com/atwamahmoud/memestock.backend#readme",
   "dependencies": {
+    "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
     "email-validator": "^2.0.4",
     "express": "^4.16.4",
+    "istanbul": "^0.4.5",
     "jasmine": "^3.3.1",
-    "jest": "^24.5.0",
+    "jasmine-node": "^1.16.2",
     "jsdoc": "^3.5.5",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^2.2.0",
     "mocha": "^6.0.2",
     "mongoose": "^5.4.18",
     "nodemon": "^1.18.10",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "request": "^2.88.0",
     "urlencode": "^1.1.0"
+  },
+  "devDependencies": {
+    "grunt-template-jasmine-istanbul": "^0.5.0"
   }
 }

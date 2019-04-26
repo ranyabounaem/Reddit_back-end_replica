@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: listings</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: listings</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>listings<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    
+    <h4 class="name" id="listings"><span class="type-signature"></span>new listings<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="listings.js.html">listings.js</a>, <a href="listings.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="listingPostsbyHot"><span class="type-signature">(async) </span>listingPostsbyHot<span class="signature">(owner, syncToken, startPosition)</span><span class="type-signature"> &rarr; {Array.&lt;Object>|Array.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Listing sorting the posts  by  hot feature
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>owner</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the username of the user to retrieve list for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>syncToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the token extracted from the request header to get the username of the sender</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startPosition</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the number of scrolls a user does to retirieve posts</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="listings.js.html">listings.js</a>, <a href="listings.js.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    returns array of 15 posts maximum depending on the start position
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Object></span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Object></span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>// returns   array of 15 posts maximum depending on the start positionlistings.listingPostsbyHot('kefah', 0);</code></pre>
+
+    <pre class="prettyprint"><code>listings.listingPostsbyHot('kefah', 1);</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="listingPostsbyNew"><span class="type-signature">(async) </span>listingPostsbyNew<span class="signature">(owner, syncToken, startPosition)</span><span class="type-signature"> &rarr; {Array.&lt;Object>|Array.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Listing sorting the posts  by  new feature
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>owner</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the username of the user to retrieve list for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>syncToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the token extracted from the request header to get the username of the sender</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startPosition</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the number of scrolls a user does to retirieve posts</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="listings.js.html">listings.js</a>, <a href="listings.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    returns array of 15 posts maximum depending on the start position
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Object></span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Object></span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>// returns   array of 15 posts maximum depending on the start positionlistings.listingPostsbyNew('kefah', 0);</code></pre>
+
+    <pre class="prettyprint"><code>listings.listingPostsbyNew('kefah', 1);</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="listingPostsbyTop"><span class="type-signature">(async) </span>listingPostsbyTop<span class="signature">(owner, syncToken, startPosition)</span><span class="type-signature"> &rarr; {Array.&lt;Object>|Array.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Listing sorting the posts  by  popular feature
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>owner</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the username of the user to retrieve list for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>syncToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the token extracted from the request header to get the username of the sender</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startPosition</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the number of scrolls a user does to retirieve posts</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="listings.js.html">listings.js</a>, <a href="listings.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    returns array of 15 posts maximum depending on the start position
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Object></span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Object></span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>// returns   array of 15 posts maximum depending on the start positionlistings.listingPostsbyTop('kefah', 0);</code></pre>
+
+    <pre class="prettyprint"><code>listings.listingPostsbyTop('kefah', 1);</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="listPosts"><span class="type-signature">(async) </span>listPosts<span class="signature">(req, res, syncToken)</span><span class="type-signature"> &rarr; {JSON|JSON|JSON|JSON|JSON}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Handles request List Posts
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The response.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>syncToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the synctokes of the user that we are going to extract from the username</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>req.query.type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the type of listings he wants to hot,new,popular</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>req.body.startPosition</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the number of scrolls the user did</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="listings.js.html">listings.js</a>, <a href="listings.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    [{"subredditName": "funny","_id":1,"title":"love","postDate":"1998-04-23","body": "love is known for something"},{"subredditName": "nature","_id":2,"title":"vietnam nature","postDate":"1998-04-23","body": "vietnam nature is known for something"} ]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">JSON</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    {error: 'undefinedQuery'}
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">JSON</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    {error: 'userNotFound'}
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">JSON</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    {error: 'postsNotFound'}
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">JSON</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    {error: 'internalServerError'}
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">JSON</span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>// returns   {"error": "errorType"} if there is an error in the request see Api for error responselistings.listPosts(req,res);</code></pre>
+
+    <pre class="prettyprint"><code>// returns OK status 200 with the json file of the posts listings.listPosts(req,res);</code></pre>
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="listings.html">listings</a></li><li><a href="privateMessaging.html">privateMessaging</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addFriend">addFriend</a></li><li><a href="global.html#blockUser">blockUser</a></li><li><a href="global.html#EditUserEmail">EditUserEmail</a></li><li><a href="global.html#EditUserPassword">EditUserPassword</a></li><li><a href="global.html#getBlockedUsers">getBlockedUsers</a></li><li><a href="global.html#Getmyinfo">Getmyinfo</a></li><li><a href="global.html#getUserInfo">getUserInfo</a></li><li><a href="global.html#getUserInfoLogged">getUserInfoLogged</a></li><li><a href="global.html#handleDeleteComment">handleDeleteComment</a></li><li><a href="global.html#handleEditComment">handleEditComment</a></li><li><a href="global.html#handleGetAllComments">handleGetAllComments</a></li><li><a href="global.html#handleGetComment">handleGetComment</a></li><li><a href="global.html#handleLogin">handleLogin</a></li><li><a href="global.html#handlePostComment">handlePostComment</a></li><li><a href="global.html#handleRegistration">handleRegistration</a></li><li><a href="global.html#RemoveReq">RemoveReq</a></li><li><a href="global.html#unblockUser">unblockUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Mar 31 2019 01:57:53 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

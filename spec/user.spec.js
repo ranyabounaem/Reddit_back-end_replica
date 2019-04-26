@@ -7,8 +7,45 @@ describe("user tests", () => {
   beforeAll(() => {
     server = require("../index");
   });
-  afterAll(() => {
-    server.close();
+
+  
+  afterAll(function (done) {
+    User.deleteOne({Username:'Uzumaki'},function(){done()})
+    User.deleteOne({Username:'sami'},function(){done()})
+    User.deleteOne({Username:'mostafa'},function(){done()})
+
+
+ });
+  
+//
+  describe("tests registering new users", () => {
+    let data = {};
+    let testBody = {
+      Username: "sami",
+      Password: "12345678",
+      Email: "sami@m.com"
+    };
+
+    beforeAll(done => {
+      request.post(
+        "http://localhost:4000/user/register",
+        { json: true, body: testBody },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        }
+      );
+    });
+    it("checks creation of new User in database", () => {
+      expect(data.status).toBe(200);
+
+      User.findOne({
+        $and: [{ Username: testBody.Username }, { Email: testBody.Email }]
+      }).then(function(user) {
+        expect(user).not.toBe(null);
+      });
+    });
   });
 
   describe("tests registering new users", () => {
@@ -182,7 +219,7 @@ describe("user tests", () => {
         }
       );
     });
-    it("adding new users", () => {
+    it("says that user doesnt exist", () => {
       expect(data.body.error).toBe("User doesnt exist");
       expect(data.status).toBe(404);
     });
@@ -233,11 +270,14 @@ describe("user tests", () => {
     });
     it("adding new users", () => {
       expect(data.status).toBe(200);
-      expect(data.body).toBe("successful login");
+      expect(data.body.message).toBe("successful login");
     });
   });
 
 //Hussein Tests
+
+const head={'auth':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJVenVtYWtpIiwiaWF0IjoxNTU1MDc5NjkwfQ.uaNWv4nF4sueP4W72rJmyJg0BBRJF9BDuVCXV2H3X5g'};
+const head2={'auth':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJtb3N0YWZhIiwiaWF0IjoxNTU1MDkwODAzfQ.VMeEMfrGAjgmxRr7ThWoiSKRtKO5hu95KennRHTJtcg'};
 
 describe("tests registering new users", () => {
   let data = {};
@@ -278,7 +318,7 @@ describe("tests editing users email", () => {
   beforeAll(done => {
     request.put(
       "http://localhost:4000/me/edit/email/Uzumaki",
-      { json: true, body: testBody },
+      { json: true, body: testBody ,headers:head},
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -303,7 +343,7 @@ describe("tests editing users email", () => {
   beforeAll(done => {
     request.put(
       "http://localhost:4000/me/edit/email/Uzumaki",
-      { json: true, body: testBody },
+      { json: true, body: testBody ,headers:head },
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -328,7 +368,7 @@ describe("tests editing users email", () => {
   beforeAll(done => {
     request.put(
       "http://localhost:4000/me/edit/email/Damn",
-      { json: true, body: testBody },
+      { json: true, body: testBody ,headers:head },
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -353,7 +393,7 @@ describe("tests editing users email", () => {
   beforeAll(done => {
     request.put(
       "http://localhost:4000/me/edit/email/mostafa",
-      { json: true, body: testBody },
+      { json: true, body: testBody ,headers:head },
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -379,7 +419,7 @@ describe("tests editing users password", () => {
   beforeAll(done => {
     request.put(
       "http://localhost:4000/me/edit/Password/mostafa",
-      { json: true, body: testBody },
+      { json: true, body: testBody ,headers:head },
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -405,7 +445,7 @@ describe("tests editing users password", () => {
   beforeAll(done => {
     request.put(
       "http://localhost:4000/me/edit/Password/mostafa",
-      { json: true, body: testBody },
+      { json: true, body: testBody  ,headers:head},
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -431,7 +471,7 @@ describe("tests editing users password", () => {
   beforeAll(done => {
     request.put(
       "http://localhost:4000/me/edit/Password/sdafal",
-      { json: true, body: testBody },
+      { json: true, body: testBody  ,headers:head},
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -456,7 +496,7 @@ describe("tests editing users password", () => {
     beforeAll(done => {
       request.put(
         "http://localhost:4000/me/edit/Password/Uzumaki",
-        { json: true, body: testBody },
+        { json: true, body: testBody  ,headers:head},
         (err, res, body) => {
           data.body = body;
           data.status = res.statusCode;
@@ -483,7 +523,7 @@ describe("tests editing users password", () => {
     beforeAll(done => {
       request.put(
         "http://localhost:4000/me/edit/Password/Uzumaki",
-        { json: true, body: testBody },
+        { json: true, body: testBody  ,headers:head},
         (err, res, body) => {
           data.body = body;
           data.status = res.statusCode;
@@ -510,7 +550,7 @@ describe("tests getting user's info", () => {
   beforeAll(done => {
     request.get(
       "http://localhost:4000/me/About/Uzumaki",
-      { json: true, body: testBody },
+      { json: true, body: testBody  ,headers:head},
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -535,7 +575,7 @@ describe("tests getting user's info", () => {
   beforeAll(done => {
     request.get(
       "http://localhost:4000/me/About/mohamed",
-      { json: true, body: testBody },
+      { json: true, body: testBody ,headers:head },
       (err, res, body) => {
         data.body = body;
         data.status = res.statusCode;
@@ -553,4 +593,660 @@ describe("tests getting user's info", () => {
   
 });
 
+
+//Hussein & Mostafa tests 2
+
+describe("Adds user", () => {
+  let data = {};
+  let testBody = {
+    fUsername:'mostafa'
+  };
+
+  beforeAll(done => {
+    request.put(
+      "http://localhost:4000/me/user/Add",
+      { json: true, body: testBody ,headers:head },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+    );
+  });
+  it("checks if Add successful", () => {
+    expect(data.status).toBe(200);
+    expect(data.body).toEqual({message : "Friend request Sent"});
+  });
+
+  
+});
+
+describe("accept request", () => {
+  let data = {};
+  let testBody = {
+    fUsername:'Uzumaki'
+  };
+
+  beforeAll(done => {
+    request.put(
+      "http://localhost:4000/me/user/accept",
+      { json: true, body: testBody ,headers:head2 },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+    );
+  });
+  it("checks if accepting request is successful", () => {
+    expect(data.status).toBe(200);
+    expect(data.body).toEqual({message : "Friend request accepted"});
+  });
+
+  
+});
+
+describe("blocks user", () => {
+    let data = {};
+    let testBody = {
+      blockedUser:'mostafa'
+    };
+
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/block",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if blocked successful", () => {
+      expect(data.status).toBe(200);
+      expect(data.body).toEqual({message : "User Blocked"});
+    });
+
+  });
+
+  describe("unfriend user", () => {
+    let data = {};
+    let testBody = {
+      fUsername:'mostafa'
+    };
+  
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/Unfriend",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if Unfriend is  unsuccessful", () => {
+      expect(data.status).toBe(401);
+      expect(data.body).toEqual({error : "This user is not a friend"});
+    });
+  
+  });
+  describe("Adds user", () => {
+    let data = {};
+    let testBody = {
+      fUsername:'mostafa'
+    };
+  
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/Add",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if Add unsuccessful", () => {
+      expect(data.status).toBe(401);
+      expect(data.body).toEqual({error : "The user to be added is blocked"});
+    });
+  
+    
+  });
+
+  describe("Adds user", () => {
+    let data = {};
+    let testBody = {
+      fUsername:'Uzumaki'
+    };
+  
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/Add",
+        { json: true, body: testBody ,headers:head2 },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if Add unsuccessful", () => {
+      expect(data.status).toBe(401);
+      expect(data.body).toEqual({error : "The sending User is blocked"});
+    });
+  
+    
+  });
+
+  
+  
+
+  describe("blocks user", () => {
+    let data = {};
+    let testBody = {
+      blockedUser:'Uzumaki'
+    };
+
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/block",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if blocked successful", () => {
+      expect(data.status).toBe(404);
+      expect(data.body).toEqual({error:"you cant block yourself"});
+    });
+
+    
+  });
+
+
+
+describe("blocks user thats already blocked", () => {
+  let data = {};
+  let testBody = {
+    blockedUser:'mostafa'
+  };
+
+  beforeAll(done => {
+    request.put(
+      "http://localhost:4000/me/user/block",
+      { json: true, body: testBody ,headers:head },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+    );
+  });
+  it("checks if blocked successful", () => {
+    expect(data.status).toBe(404);
+    expect(data.body).toEqual({error : "the user you want to block is already blocked"});
+  });
+
+  
+});
+
+describe("gets info of user that blocked you", () => {
+  let data = {};
+  let testBody = {
+    
+  };
+
+  beforeAll(done => {
+    request.get(
+      "http://localhost:4000/me/user/info/Uzumaki",
+      { json: true, body: testBody ,headers:head2 },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+);
+  });
+  it(",checks if unblocked ", () => {
+    expect(data.status).toBe(404);
+    expect(data.body).toEqual({message : "User doesnt exist"});
+  });
+
+});
+
+describe("unblocks user", () => {
+  let data = {};
+  let testBody = {
+    unblockedUser:'mostafa'
+  };
+
+  beforeAll(done => {
+    request.put(
+      "http://localhost:4000/me/user/unblock",
+      { json: true, body: testBody ,headers:head },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+    );
+  });
+  it("checks if unblocked ", () => {
+    expect(data.status).toBe(200);
+    expect(data.body).toEqual({message : "User Unblocked"});
+  });
+
+  
+});
+
+
+
+describe("unblocks user that isnt blocked", () => {
+  let data = {};
+  let testBody = {
+    unblockedUser:'mostafa'
+  };
+
+  beforeAll(done => {
+    request.put(
+      "http://localhost:4000/me/user/unblock",
+      { json: true, body: testBody ,headers:head },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+    );
+  });
+  it("checks if unblocked failed", () => {
+    expect(data.status).toBe(404);
+    expect(data.body).toEqual({error : "the user you want to unblock isnt blocked"});
+  });
+
+  
+});
+
+
+describe("gets info of user ", () => {
+  let data = {};
+  let testBody = {
+    
+  };
+
+  beforeAll(done => {
+    request.get(
+      "http://localhost:4000/me/user/info/Uzumaki",
+      { json: true, body: testBody ,headers:head2 },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+    );
+  });
+  it("checks if user sent ", () => {
+    expect(data.status).toBe(200);
+  });
+});
+
+  describe("gets info of user ", () => {
+    let data = {};
+    let testBody = {
+      
+    };
+  
+    beforeAll(done => {
+      request.get(
+        "http://localhost:4000/user/info/Uzumaki",
+        { json: true, body: testBody},
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if user retuned ", () => {
+      expect(data.status).toBe(200);
+    });
+
+  
+
+  });
+
+  
+describe("Adds user", () => {
+  let data = {};
+  let testBody = {
+    fUsername:'mostafa'
+  };
+
+  beforeAll(done => {
+    request.put(
+      "http://localhost:4000/me/user/Add",
+      { json: true, body: testBody ,headers:head },
+      (err, res, body) => {
+        data.body = body;
+        data.status = res.statusCode;
+        done();
+      
+        
+      }
+    );
+  });
+  it("checks if Add successful", () => {
+    expect(data.status).toBe(200);
+    expect(data.body).toEqual({message : "Friend request Sent"});
+  });
+
+  
+});
+
+describe("Adds user", () => {
+  let data = {};
+  let testBody = {
+    fUsername:"Uzumaki"
+  };
+
+  beforeAll(done => {
+      request.put(
+        "http://localhost:4000/me/user/Add",
+        { json: true, body: testBody ,headers:head },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if Add unsuccessful", () => {
+      expect(data.status).toBe(402);
+      expect(data.body).toEqual({error : "User cannot add himself"});
+    });
+
+    
+  });
+
+  describe("Adds user", () => {
+    let data = {};
+    let testBody = {
+      fUsername:"mostafa"
+    };
+  
+    beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/Add",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Add unsuccessful", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "User has already sent a request to the other user"});
+      });
+  
+      
+    });
+
+  
+
+
+  describe("remove request", () => {
+    let data = {};
+    let testBody = {
+      fUsername:"mostafa"
+    };
+  
+    beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/removeReq",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if unfriend successful", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({message : "Friend request Removed"});
+      });
+  
+      
+    });
+
+    describe("Adds user", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'mostafa'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/Add",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Add successful", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({message : "Friend request Sent"});
+      });
+    
+      
+    });
+
+    describe("reject request", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'mostafa'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/reject",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if rejecting request is unsuccessful", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "There isn't a request to be rejected"});
+      });
+    
+      
+    });
+    
+
+    describe("accept request", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'Uzumaki'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/accept",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if accepting request is successful", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({message : "Friend request accepted"});
+      });
+    
+      
+    });
+
+    describe("accept request", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'Uzumaki'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/accept",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Accepting request is unsuccessfull", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "This user is already a friend"});
+      });
+    
+      
+    });
+
+    describe("unfriend user", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'mostafa'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/Unfriend",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Unfriend successful", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({message : "Friend is removed from friends list"});
+      });
+    
+    });
+
+    describe("unfriend user", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'mostafa'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/Unfriend",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Unfriend is  unsuccessful", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "This user is not a friend"});
+      });
+    
+    });
+
+    describe("accept request", () => {
+      let data = {};
+      let testBody = {
+        fUsername:'Uzumaki'
+      };
+    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/me/user/accept",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if Accepting request is unsuccessfull", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({error : "There isn't a request to be accepted"});
+      });
+    
+      
+    });
+    
+    
 });
