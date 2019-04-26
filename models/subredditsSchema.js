@@ -11,10 +11,7 @@ const SubredditPostSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    subredditName: String,
-    postFile: {type: String, required: true},
-    spoiler: {type: Boolean, default: false},
-    votes: {type: Number, default: 0}
+    subredditName: String
 });
 
 const SubredditSchema = new Schema({
@@ -30,8 +27,7 @@ const SubredditSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    bio: [String],
-    subredditFile: {type: String, required: true}
+    bio: [String]
 });
 
 
