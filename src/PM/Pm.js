@@ -241,7 +241,7 @@ class PM {
                });
 
             }
-            else { // forbidden for anyone else except the recevier
+                        else { // forbidden for anyone else except the recevier
                res.send(403);
 
             }
@@ -477,7 +477,7 @@ class PM {
                   }
                   else {
                      // stringfing and setting the header automatically 
-                     res.json(result);
+                     res.json({messages:result});
                   }
                }).sort({ messageDate: -1 });
 
@@ -503,7 +503,7 @@ class PM {
                   }
                   else {
                      // stringfing and setting the header automatically 
-                     res.json(result);
+                     res.json({messages:result});
 
                   }
                   // sorting message by the date it was sent        
@@ -686,7 +686,7 @@ class PM {
          blockList.find(
             { blocker: owner },
             {
-               blocked: '1', _id: 0
+               blocked: 1, _id: 0
             },
             function (err, result) {
                if (err) {
@@ -697,7 +697,7 @@ class PM {
                }
                else {
                   // stringfing and setting the header automatically 
-                  res.json(result);
+                  res.json({blockList:result});
 
                }
 
