@@ -4,6 +4,7 @@ const sr=srs.Subreddit;
 const pt = srs.SubredditPostSchema;
 const mongoose = require('mongoose');
 const jwt = require('../JWT/giveToken');
+const vote = require('../models/voteSchema');
 const getUser = jwt.getUsernameFromToken;
 
 class SR {
@@ -26,6 +27,8 @@ class SR {
                 name: subredditName,
                 adminUsername: admin,
                 rules: subredditRules,
+                subredditFile: req.file.path,
+                modUsername: req.body.modUsername
             });
             subreddit.save(function (err, record) {
                 if (err) {
@@ -56,7 +59,7 @@ class SR {
         var subredditName = req.params.srName;
         var updatedRules = req.body.newRules;
         var updatedName = req.body.newName;
-        if(subredditName && updatedRules && updatedName){
+        if(subredditName && updatedRules && updatedName && req.body.newMods){
 
             sr.findOne({name : subredditName}).then(function(record){
            
@@ -69,7 +72,15 @@ class SR {
                 }
                 else {
 
-                    sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err, record){
+                    sr.findOneAndUpdate({name: subredditName}, 
+                        {
+                            name:updatedName,
+                            rules:updatedRules,
+                            modUsername: req.body.newMods,
+                            subredditFile: req.file.path,
+                            bio: req.body.newBio
+                        },
+                        function(err, record){
                         if (err){
                             res.status(500).send({ 'error': 'internal server error' }) 
                         }
@@ -149,7 +160,9 @@ class SR {
                         title: postTitle,
                         body: postBody,
                         creatorUsername: creator,
-                        subredditName: subrName
+                        subredditName: subrName,
+                        postFile: req.file.path,
+                        spoiler: req.body.spoiler
                     });
                     newPost.save(function (err) {
 
@@ -302,6 +315,7 @@ class SR {
                         res.status(400).send({ 'error': 'invalid postId' });
                     }
                     else{
+                        vote.deleteMany({votedID: deleted._id});
                         sr.findOne({name: subrName}).then(function(record){
                             record.posts.splice(record.posts.indexOf(postId), 1);
                             record.save(function(err){
@@ -311,7 +325,7 @@ class SR {
                                 }
                                 else{
                                     res.status(200).send(record.posts);
-                                }
+                                };
                             });
                         });
                     };    
@@ -349,7 +363,7 @@ class SR {
                 res.status(400).send({'error': 'url subreddit is of different name than that of post'})
             }
             else{
-                pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody}, function(err, updated)
+                pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody, spoiler: req.body.spoiler}, function(err, updated)
                 {
                     if(err){
                         res.status(500).send({ 'error': 'internal server error' }) 
@@ -365,6 +379,74 @@ class SR {
             };
         });
     };
+
+ /**
+ * @function votePost
+ * @summary Upvote or downvote a post. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns the post's information as an object.
+ */  
+
+    votePost(req, res){
+        var username = getUser(req);
+        var postId = req.params.postId;
+        var upvote = req.body.upvote;
+        pt.findOne({_id: req.params.postId}, function(err){
+            if(err){
+                res.status(500).send({ 'error': 'internal server error' });
+            };
+        }).then(function(record){
+            if(record)
+            {
+                vote.findOne({votedID: postId, username: username, upvote: upvote, post: true}, function(err){
+                    if (err){
+                        res.status(500).send({ 'error': 'internal server error' });
+                    };
+                }).then(function (voteRecord){
+                    if(voteRecord)
+                    {
+                        res.status(400).send({ 'error': `already voted: ${upvote} ` });
+                    }
+                    else{
+                        vote.create({votedID: postId, username: username, upvote: upvote, post:true}).then(function(){
+                            if(upvote){
+                                record.votes++;
+                            }
+                            else{
+                                record.votes--; 
+                            };
+                            record.save(function(err){
+                                if (err){
+                                    res.status(500).send({ 'error': 'internal server error' });
+                                }
+                                else{
+                                    res.status(200).send(record);
+                                };
+                            });
+                        });
+                    };
+                });
+            }
+            else{
+                res.status(400).send({ 'error': 'invalid postId' });
+            }
+        });
+    };
+
+ /**
+ * @function unvotePost
+ * @summary Unvote a post. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns the post's information as an object.
+ */  
+
+    unvotePost(req, res){
+        postId = req.params.postId;
+        username = getUser(req);
+        vote.findOne({votedID: postId, username: username})
+    }
 
 /**
  * @function deleteSubreddit
