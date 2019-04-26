@@ -592,27 +592,29 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
 * @apiParam {Number} startPosition Sending 15 posts per after the startposition  
-* @apiSuccess {Object[]} Posts   Array of the listed Posts depending on the type  .
+* @apiSuccess {Object} Posts   Object in the JSON that contains an array of objects the listed Posts depending on the type  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
-*  {
-*  [    
-*  {
-* "subredditName": "funny"
-* ,"_id":"sd232s2231"
-* ,"title":"love"
-* ,"postDate":"1998-04-23"
-* ,"body": "love is known for something"
-*  },
-* {
-* "subredditName": "nature"
-* ,"_id":"2dsds23123d"
-* ,"title":"vietnam nature"
-* ,"postDate":"1998-04-23"
-* ,"body": "vietnam nature is known for something"
-*  } 
-*]
-*     }
+*   {
+*    "posts": [
+*        {
+*            "_id": "5cc38191735094039ec8d927",
+*            "title": "Rush Hour 4",
+*            "body": "There are rumors that Rush Hour 4 might be in the making.",
+*            "creatorUsername": "sabek",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.236Z"
+*        },
+*        {
+*            "_id": "5cc38191735094039ec8d926",
+*            "title": "Avengers: Endgame",
+*            "body": "Unpopular opinion: Endgame is super overrated.",
+*            "creatorUsername": "captainmaged",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.221Z"
+*        }
+*            ]
+*  }
 *
 * @apiError postsnotFound  no posts found for the user
 * @apiErrorExample Error-Response:
@@ -1704,31 +1706,36 @@ app.post('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) 
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {Boolean} mine True if u need to retrieve the inbox false if u need to retrieve the sent.
-* @apiSuccess {Array} messages Array of Messages    .
-* @apiSuccessExample Success-Response:
+* @apiSuccess {Object}  messages       Object that contains an array  of objects that contains data of the messages
 *     HTTP/1.1 200 OK
-*          {
-*  {[{
-* "_id"         :"5c901c662f87870699fa62e6",
-* "sender”      :"kefah",
-* "receiver"    : "omar",
-* ”subject”     :”URGENT VIP”,
-* "messageBody" :”Dear, marwan please”,
-* "isRead"      :true
-* "messageDate" :"2019-03-18 22:32:06.000Z"
-*  },
-* {
-* "_id"         :"5c901c662f87870699fa62e9",
-* "sender”      :"mariam ",
-* "receiver"    : "kefah",
-* ”subject”     :”URGENT VIP”,
-* "messageBody" :”Dear, kefah i want to ,
-* "isRead"      :false
-* "messageDate" :"2019-03-13 22:32:06.000Z"
-*  }
-* ]}
-*     
-*  }
+*    {
+*    "messages": [
+*        {
+*            "_id": "5cb65052ef99a60342fd70b6",
+*            "sender": "mostafak",
+*            "receiverUsername": "mostafa",
+*            "subject": "m",
+*            "messageBody": "m",
+*            "messageDate": "2019-04-16T21:59:46.000Z"
+*        },
+*        {
+*            "_id": "5cb650430aa7d8033938c073",
+*            "sender": "mostafak",
+*            "receiverUsername": "mostafa",
+*            "subject": "m",
+*            "messageBody": "m",
+*            "messageDate": "2019-04-16T21:59:31.000Z"
+*        },
+*        {
+*            "_id": "5cb64e3537491f02f38ee6fb",
+*            "sender": "mostafak",
+*            "receiverUsername": "mostafak",
+*            "subject": "m",
+*            "messageBody": "m",
+*            "messageDate": "2019-04-16T21:50:45.000Z"
+*        }
+*               ]
+*     }
 * @apiError internalServerFindingError  internal error caused by unexplained behavior
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
@@ -1744,19 +1751,19 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
 * @apiName retrieveBlockList
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiSuccess {Array} blocklist Array of people whom the user is blocking  from receieving messages from them  .
+* @apiSuccess {Object} blockList object that contains an array of objects of people whom the user is blocking  from receieving messages from them  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
-*          {
-*  {[{
-* "blocked      :"kefah"
-*  },
-* {
-* "blocked      :"marwan "
-*  }
-* ]}
-*     
-*          }
+*   {
+*   "blockList": [
+*        {
+*            "blocked": "atwa_leader"
+*        },
+*        {
+*            "blocked": "mostafak"
+*        }
+*                 ]
+*      }
 */
 
 
