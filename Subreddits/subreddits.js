@@ -424,21 +424,37 @@ class SR {
                         res.status(400).send({ 'error': `already voted: ${upvote} ` });
                     }
                     else{
-                        vote.create({votedID: postId, username: username, upvote: upvote, post:true}).then(function(){
-                            if(upvote){
-                                record.votes++;
-                            }
-                            else{
-                                record.votes--; 
+                        vote.findOne({votedID: postId, username: username, upvote: !upvote, post: true}, function(err){
+                            if (err){
+                                res.status(500).send({ 'error': 'internal server error' });
                             };
-                            record.save(function(err){
-                                if (err){
-                                    res.status(500).send({ 'error': 'internal server error' });
+                        }).then(function(voteRecord2){
+                            if(voteRecord2){
+                                if(upvote == true){
+                                    voteRecord2.
                                 }
                                 else{
-                                    res.status(200).send(record);
+
                                 };
-                            });
+                            }
+                            else{
+                                vote.create({votedID: postId, username: username, upvote: upvote, post:true}).then(function(){
+                                    if(upvote){
+                                        record.votes++;
+                                    }
+                                    else{
+                                        record.votes--; 
+                                    };
+                                    record.save(function(err){
+                                        if (err){
+                                            res.status(500).send({ 'error': 'internal server error' });
+                                        }
+                                        else{
+                                            res.status(200).send(record);
+                                        };
+                                    });
+                                });
+                            };
                         });
                     };
                 });
