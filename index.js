@@ -898,27 +898,6 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 *      }
 */
 
-
-/**
-* @api {delete} /Moderator/Reports/:id   delete report
-* @apiName deletereports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ReporId unique ReporId  of the Repor.
-* @apiParamExample {json} Input
-*    {
-*      "ReporId": "1101", 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"report not found"
-* }
-*/
-
 /**
 * @api {post} /Moderator/Ban/:Username&:SubbreditName   ban user
 * @apiName BanUser
@@ -1890,7 +1869,6 @@ const reportHandler = require("./src/Reports/Report");
 * @apiName Getreports
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
-* @apisuccess  [{String}] reports array of all reports
 * @apisuccess  {String} reportedId id of comment or post
 * @apisuccess  {srName} subreddit of report
 * @apisuccess  {Boolean} post a type that is  true if post , false if comment
@@ -1929,7 +1907,6 @@ const reportHandler = require("./src/Reports/Report");
 *      {
 *       "error": "You are not a moderator to any subreddit"
 *     }
-* @apiErrorExample {json} List error
 *     HTTP/1.1 401 no reports
 *      {
 *       "error":"No reports"
@@ -1937,15 +1914,11 @@ const reportHandler = require("./src/Reports/Report");
 */
 app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.getReports(req, res));
 /**
-* @api {get} /Moderator/Reports/   Get all reports
-* @apiName Getreports
+* @api {Delete} /Moderator/Reports/:reportId   delete report 
+* @apiName DeleteReport
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
-* @apisuccess  [{String}] reports array of all reports
-* @apisuccess  {String} reportedId id of comment or post
-* @apisuccess  {srName} subreddit of report
-* @apisuccess  {Boolean} post a type that is  true if post , false if comment
-
+* @apiParam {string} reportId ID of report.
 *  @apiSuccessExample {json} Success
 *    HTTP/1.1 200 OK
 *  {message:"report deleted}
@@ -1956,13 +1929,11 @@ app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), 
 *      {
 *       "error": "You are not a moderator in this subreddit"
 *     }
-* @apiErrorExample {json} List error
 *     HTTP/1.1 401 report doesnt exist
 *      {
 *       "error":"report doesnt exist"
 *     }
 
-* @apiErrorExample {json} List error
 *     HTTP/1.1 401 ReportId not valid format
 *      {
 *       "error":"ReportId not valid"
@@ -1971,6 +1942,75 @@ app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), 
 
 
 app.delete('/Moderator/Reports/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deleteReport(req, res));
+
+/**
+* @api {Delete} /Moderator/Post/:reportId   delete reported post
+* @apiName DeletePost
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"post deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+
+*     HTTP/1.1 401 Report isnt for a post
+*      {
+*       "error":"This isnt a post report"
+*      }
+*/
+
+app.delete('/Moderator/Post/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deletePost(req, res));
+
+
+/**
+* @api {Delete} /Moderator/Comment/:reportId   delete reported comment
+* @apiName DeleteComment
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} :reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"Comment deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+*     HTTP/1.1 401 Report isnt for a post
+*      {
+*       "error":"This isnt a Comment report"
+*      }
+*/
+
+app.delete('/Moderator/Comment/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deleteComment(req, res));
 
 
 const notificationHandler = require("./src/notifications");
