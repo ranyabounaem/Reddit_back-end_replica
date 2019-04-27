@@ -40,9 +40,32 @@
  * //////////////////////////////////////
  * @see http://apidocjs.com/
  */
-
-const app = require("express")();
+const express = require("express");
+const app = express();
 const mongoose = require('mongoose');
+//Uploading files
+const multer = require ('multer');
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads/');
+    },
+    filename: function(req, file, cb){
+        cb(null, Date.now() + file.originalname)
+    }
+});
+const fileFilter = (req, file, cb) => {
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'video/mp4')
+        cb(null,true);
+    else
+        cb(null, false);
+};
+const upload = multer({
+    fileFilter: fileFilter,
+    storage: storage,
+    limits: {
+    fileSize: 1024 * 1024 * 5
+}});
+////////
 const bodyparser = require('body-parser');
 const passport = require('passport');
 const passportConf = require('./JWT/passport');
@@ -54,6 +77,9 @@ mongoose.connection.once('open', function () { console.log("Connection successfu
 
 
 //middlewares 
+// Uploading image
+app.use('/uploads', express.static('uploads'));
+/////
 app.use(bodyparser.json());
 app.use(passport.initialize());
 app.use(function (req, res, next) {
@@ -592,27 +618,29 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
 * @apiParam {Number} startPosition Sending 15 posts per after the startposition  
-* @apiSuccess {Object[]} Posts   Array of the listed Posts depending on the type  .
+* @apiSuccess {Object} Posts   Object in the JSON that contains an array of objects the listed Posts depending on the type  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
-*  {
-*  [    
-*  {
-* "subredditName": "funny"
-* ,"_id":"sd232s2231"
-* ,"title":"love"
-* ,"postDate":"1998-04-23"
-* ,"body": "love is known for something"
-*  },
-* {
-* "subredditName": "nature"
-* ,"_id":"2dsds23123d"
-* ,"title":"vietnam nature"
-* ,"postDate":"1998-04-23"
-* ,"body": "vietnam nature is known for something"
-*  } 
-*]
-*     }
+*   {
+*    "posts": [
+*        {
+*            "_id": "5cc38191735094039ec8d927",
+*            "title": "Rush Hour 4",
+*            "body": "There are rumors that Rush Hour 4 might be in the making.",
+*            "creatorUsername": "sabek",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.236Z"
+*        },
+*        {
+*            "_id": "5cc38191735094039ec8d926",
+*            "title": "Avengers: Endgame",
+*            "body": "Unpopular opinion: Endgame is super overrated.",
+*            "creatorUsername": "captainmaged",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.221Z"
+*        }
+*            ]
+*  }
 *
 * @apiError postsnotFound  no posts found for the user
 * @apiErrorExample Error-Response:
@@ -1389,7 +1417,7 @@ app.post("/comment/report/:id",passport.authenticate('jwt', { session: false }),
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
 
-app.post("/sr/create", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.createSr(req, res));
+app.post("/sr/create", upload.single('subredditFile'), passport.authenticate('jwt', { session: false }), (req, res) => subreddit.createSr(req, res));
 
 /**
 * @api {post} /sr/create   Create a new subreddit
@@ -1399,8 +1427,8 @@ app.post("/sr/create", passport.authenticate('jwt', { session: false }), (req, r
 * @apiParam {string} Token Send token.
 * @apiParam {string} srName  unique Name of the subreddit (no longer than 100 character).
 * @apiParam {string[]} srRules list of subbreddit rules.
-* @apiParam {string}  SyncToken  (NOT YET) Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string[]}  ModUsername (NOT YET)  Subreddit moderators' usernames.
+* @apiParam {object} subredditFile Subreddit's image or video (Supported file formats: jpeg/png/mp4).
+* @apiParam {string[]}  modUsername Subreddit moderators' usernames.
 * @apiSuccess {object} newSubreddit Returns the created subreddit (if any).
 */
 
@@ -1414,13 +1442,13 @@ app.get("/sr/:srName/meta", (req, res) => subreddit.info(req, res));
 * @apiParam {string} srName Subreddit name.
 * @apiSuccess {string} username Username of Creator.
 * @apiSuccess {string} date  date of creation.
-* @apiSuccess {object[]} posts All posts. 
+* @apiSuccess {string} postId All posts ids. 
 * @apiSuccess {string[]} rules   Rules of sr.
 * @apiSuccess {string} Bio   Subreddit's bio.
 * @apiSuccess {string[]} BannedUsers (NOT YET)   ID of banned users.
-* @apiSuccess {string[]} ModIds (NOT YET)  ID of Modertors.
-* @apiSuccess {string[]} UserIds (NOT YET  Ids of subscribed users .
-* @apiSuccess {Number[]} SubCount (NOT YET)  Number of subscribers.
+* @apiSuccess {string[]} modUsername Usernames of Modertors.
+* @apiSuccess {string[]} subscibers Subscriber usernames.
+* @apiSuccess {object} subredditFile Image or video of subreddit.
 *
 */
 
@@ -1448,7 +1476,7 @@ app.delete("/sr/:srName", passport.authenticate('jwt', { session: false }), (req
 * @apiSuccess {object} deletedSubreddit Returns the deleted subreddit (if any).
 */
 
-app.put("/sr/:srName", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.edit(req, res));
+app.put("/sr/:srName", upload.single('subredditFile'), passport.authenticate('jwt', { session: false }), (req, res) => subreddit.edit(req, res));
 
 /**
 * @api {put} /sr/:srName/    Edit a subreddit
@@ -1458,12 +1486,14 @@ app.put("/sr/:srName", passport.authenticate('jwt', { session: false }), (req, r
 * @apiParam {string} Token Send token.
 * @apiParam {string[]} newRules Updated rules.
 * @apiParam {string} newName  New name
-* @apiParam {string}  About (NOT YET) Updated about
+* @apiParam {string[]} newMods Updated moderators.
+* @apiParam {string}  newBio Updated about.
+* @apiParam {object} newFile New image or video.
 * @apiSuccess {object} editedSubreddit Returns the edited subreddit (if any).
 */
 
 
-app.post("/sr/:srName/thread", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.createPost(req, res));
+app.post("/sr/:srName/thread", upload.single('postFile'), passport.authenticate('jwt', { session: false }), (req, res) => subreddit.createPost(req, res));
 
 /**
 * @api {post} /sr/:srName/thread    Create a thread inside subreddit
@@ -1473,7 +1503,8 @@ app.post("/sr/:srName/thread", passport.authenticate('jwt', { session: false }),
 * @apiParam {string} Token Send token.
 * @apiParam {string} title Title of thread
 * @apiParam {string} threadBody Body of the thread.
-* @apiParam {boolean}  Spoiler (NOT YET) [Spoiler==false] Mark if post is spoiler
+* @apiParam {object} postFile Post image or video (Supported file formats: jpeg/png/mp4)
+* @apiParam {boolean}  spoiler  Mark if post is spoiler
 */
 
 app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.editPost(req, res));
@@ -1487,6 +1518,7 @@ app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: fa
 * @apiParam {string} Token Send token.
 * @apiParam {string} title New title of thread
 * @apiParam {string} threadBody New body of the thread.
+* @apiParam {boolean} spoiler New spoiler.
 * @apiSuccess {object} editedPost Returns the edited post inside subreddit.
 */
 
@@ -1499,6 +1531,41 @@ app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session:
 *
 * @apiParam {string} Token Send token.
 * @apiSuccess {object} deletedPost Returns the deleted post inside subreddit.
+*/
+
+app.post("/sr/:srName/thread/:postId/vote", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.votePost(req, res));
+
+/**
+* @api {post} /sr/:srName/thread/:postId/vote    Upvote or downvote a thread inside subreddit
+* @apiName VoteSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {boolean} upvote Is the user upvoting or downvoting.
+* @apiSuccess {object} votedPost Returns the voted post inside subreddit.
+*/
+
+app.delete("/sr/:srName/thread/:postId/vote", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.unvotePost(req, res));
+
+/**
+* @api {delete} /sr/:srName/thread/:postId/vote    Unvote a thread inside subreddit
+* @apiName UnvoteSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiSuccess {object} unvotedPost Returns the unvoted post inside subreddit.
+*/
+
+app.post("/sr/:srName/thread/:postId/report", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.reportPost(req, res));
+
+/**
+* @api {post} /sr/:srName/thread/:postId/report    Unvote a thread inside subreddit
+* @apiName ReportThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} reportText Reason for reporting the post.
+* @apiSuccess {object} reportedPost Returns the unvoted post inside subreddit.
 */
 
 app.post("/sr/:srName/subs", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.subscribe(req, res));
@@ -1706,31 +1773,36 @@ app.post('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) 
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {Boolean} mine True if u need to retrieve the inbox false if u need to retrieve the sent.
-* @apiSuccess {Array} messages Array of Messages    .
-* @apiSuccessExample Success-Response:
+* @apiSuccess {Object}  messages       Object that contains an array  of objects that contains data of the messages
 *     HTTP/1.1 200 OK
-*          {
-*  {[{
-* "_id"         :"5c901c662f87870699fa62e6",
-* "sender”      :"kefah",
-* "receiver"    : "omar",
-* ”subject”     :”URGENT VIP”,
-* "messageBody" :”Dear, marwan please”,
-* "isRead"      :true
-* "messageDate" :"2019-03-18 22:32:06.000Z"
-*  },
-* {
-* "_id"         :"5c901c662f87870699fa62e9",
-* "sender”      :"mariam ",
-* "receiver"    : "kefah",
-* ”subject”     :”URGENT VIP”,
-* "messageBody" :”Dear, kefah i want to ,
-* "isRead"      :false
-* "messageDate" :"2019-03-13 22:32:06.000Z"
-*  }
-* ]}
-*     
-*  }
+*    {
+*    "messages": [
+*        {
+*            "_id": "5cb65052ef99a60342fd70b6",
+*            "sender": "mostafak",
+*            "receiverUsername": "mostafa",
+*            "subject": "m",
+*            "messageBody": "m",
+*            "messageDate": "2019-04-16T21:59:46.000Z"
+*        },
+*        {
+*            "_id": "5cb650430aa7d8033938c073",
+*            "sender": "mostafak",
+*            "receiverUsername": "mostafa",
+*            "subject": "m",
+*            "messageBody": "m",
+*            "messageDate": "2019-04-16T21:59:31.000Z"
+*        },
+*        {
+*            "_id": "5cb64e3537491f02f38ee6fb",
+*            "sender": "mostafak",
+*            "receiverUsername": "mostafak",
+*            "subject": "m",
+*            "messageBody": "m",
+*            "messageDate": "2019-04-16T21:50:45.000Z"
+*        }
+*               ]
+*     }
 * @apiError internalServerFindingError  internal error caused by unexplained behavior
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 403 Forbidden
@@ -1746,19 +1818,19 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
 * @apiName retrieveBlockList
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiSuccess {Array} blocklist Array of people whom the user is blocking  from receieving messages from them  .
+* @apiSuccess {Object} blockList object that contains an array of objects of people whom the user is blocking  from receieving messages from them  .
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
-*          {
-*  {[{
-* "blocked      :"kefah"
-*  },
-* {
-* "blocked      :"marwan "
-*  }
-* ]}
-*     
-*          }
+*   {
+*   "blockList": [
+*        {
+*            "blocked": "atwa_leader"
+*        },
+*        {
+*            "blocked": "mostafak"
+*        }
+*                 ]
+*      }
 */
 
 
@@ -1821,6 +1893,12 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
  * @apiGroup NotificationsService
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  */
+
+const reportHandler = require("./src/Reports/Report");
+ 
+app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.getReports(req, res));
+
+
 
 
 const notificationHandler = require("./src/notifications");
