@@ -609,16 +609,19 @@ app.put("/me/user/removeReq", passport.authenticate('jwt', { session: false }), 
 
 //TODO POSTS: listing posts for a subreddit or only popular posts
 
+
 const listings = require('./src/listings');
-app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, res) => listings.listPosts(req, res));
+app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, res) => listings.listPosts(req, res));
 /** 
-* @api {post} /me/listing?type=value List Posts 
+* @api {get} /me/listing?type=value&_id=value&votes=value&hotindex=value  List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
-* @apiParam {Number} startPosition Sending 15 posts per after the startposition  
-* @apiSuccess {Object} Posts   Object in the JSON that contains an array of objects the listed Posts depending on the type  .
+* @apiParam {String} type     (hot,top,new) aType of the listing that the user wants for the posts.
+* @apiParam {String} _id      0 for the first time then the id  for the last post retrieved to avoid redundency 
+* @apiParam {Number} votes    the votes for the last post id 
+* @apiParam {Number} hotindex the hot score of the last post (0) if not of type hot   
+* @apiSuccess {Object} Posts   Object in the JSON that contains an array of objects the listed Posts depending on the type. Note: field hot index is only sent on the type hot request
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *   {
@@ -629,7 +632,7 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 *            "body": "There are rumors that Rush Hour 4 might be in the making.",
 *            "creatorUsername": "sabek",
 *            "subredditName": "Movies",
-*            "postDate": "2019-04-26T22:09:21.236Z"
+*            "postDate": "2019-04-26T22:09:21.236Z",
 *        },
 *        {
 *            "_id": "5cc38191735094039ec8d926",
@@ -637,7 +640,31 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 *            "body": "Unpopular opinion: Endgame is super overrated.",
 *            "creatorUsername": "captainmaged",
 *            "subredditName": "Movies",
-*            "postDate": "2019-04-26T22:09:21.221Z"
+*            "postDate": "2019-04-26T22:09:21.221Z",
+*        }
+*            ]
+*  }
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*   {
+*    "posts": [
+*        {
+*            "_id": "5cc38191735094039ec8d927",
+*            "title": "Rush Hour 4",
+*            "body": "There are rumors that Rush Hour 4 might be in the making.",
+*            "creatorUsername": "sabek",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.236Z",
+*            "hotindex": 9500
+*        },
+*        {
+*            "_id": "5cc38191735094039ec8d926",
+*            "title": "Avengers: Endgame",
+*            "body": "Unpopular opinion: Endgame is super overrated.",
+*            "creatorUsername": "captainmaged",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.221Z",
+*            "hotindex": 9490
 *        }
 *            ]
 *  }
