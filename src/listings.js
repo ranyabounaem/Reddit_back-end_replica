@@ -228,21 +228,21 @@ class listings {
                 let lastpost = await posts.findById(lastid);
                 let i = 0;
                 if (lastpost != null) {
-                    topPosts.forEach(element => {
-                        if (lastpost.votes == element.votes) {
+                    for (let l = 0; l < topPosts.length; l++) {
+                        if (lastpost.votes == topPosts[l].votes) {
                             // if it is older(means not sent yet) put it the arr
                             if (lastpost.postDate > element.postDate) {
-                                retrievedTopPosts.push(element);
+                                retrievedTopPosts.push(topPosts[l]);
                                 i = i + 1;
                             }
                             else  // db not sent contains older than what is sent  if they both have the same votes
                             {
-                                // do nothing here do not take that element it was sent before
+                                return;// do nothing here do not take that element it was sent before
                             }
 
                         }
                         else {
-                            retrievedTopPosts.push(element);
+                            retrievedTopPosts.push(topPosts[l]);
                             i = i + 1;
 
                         }
@@ -250,7 +250,7 @@ class listings {
                         if (i == 15) {
                             break;
                         }
-                    });
+                    }
                 }
                 else {
                     topPosts = topPosts;
