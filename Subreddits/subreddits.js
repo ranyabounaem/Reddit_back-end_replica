@@ -6,7 +6,6 @@ const pt = srs.SubredditPostSchema;
 const mongoose = require('mongoose');
 const jwt = require('../JWT/giveToken');
 const getUser = jwt.getUsernameFromToken;
-const User = require('../models/UserSchema');
 
 class SR {
     constructor(){
