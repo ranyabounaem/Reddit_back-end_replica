@@ -97,11 +97,11 @@ class listings {
                 // somethings needs to have a score that is 10 times something 12.5 hours ago to rank higher than it
             };
 
-            emit(this,hotalgo(this.votes, this.postDate));
+            emit(this, hotalgo(this.votes, this.postDate));
         };
         o.query = { subredditName: subscribedSubbreddit.Subscriptions };
         o.out = { inline: 1 };
-        o.sort = {_id:-1};
+        o.sort = { _id: -1 };
         let hotPosts = null;
         // finding the result by map/reduce of hot algo
         let results = await posts.mapReduce(o);
@@ -136,10 +136,10 @@ class listings {
         let hotarr = [];
         // results is already sorted here according to the hot algo
         results.forEach(function (element, i) {
-      
-                hotarr.push(element._id);
-                hotarr[i]["hotindex"] = element.value;
-            
+
+            hotarr.push(element._id);
+            hotarr[i]["hotindex"] = element.value;
+
         });
         if (lastid == 0) {
             // for the first time just sending the top 15
@@ -221,8 +221,40 @@ class listings {
             }
             else {
                 // duplicated persist here in one case
-                topPosts = await posts.find({ subredditName: subscribedSubbreddit.Subscriptions, votes: { $lte: lastvotes } }, { __v: 0 }).sort({ votes: -1, postDate: -1 })
-                    .limit(15);
+                topPosts = await posts.find({ subredditName: subscribedSubbreddit.Subscriptions, votes: { $lte: lastvotes } }, { __v: 0 }).sort({ votes: -1, postDate: -1 });
+                // top posts here may have the same post sent to the otherend 
+                // handle here the case of sending the last vote with number as other post located next in db 
+                let retrievedTopPosts = []; // array to handle this case
+                let lastpost = await posts.findById(lastid);
+                let i = 0;
+                if (lastpost != null) {
+                    topPosts.forEach(element => {
+                        if (lastpost.votes == element.votes) {
+                            // if it is older(means not sent yet) put it the arr
+                            if (lastpost.postDate > element.postDate) {
+                                retrievedTopPosts.push(element);
+                                i = i + 1;
+                            }
+                            else  // db not sent contains older than what is sent  if they both have the same votes
+                            {
+                                // do nothing here do not take that element it was sent before
+                            }
+
+                        }
+                        else {
+                            retrievedTopPosts.push(element);
+                            i = i + 1;
+
+                        }
+                        // take the 15 post and then break
+                        if (i == 15) {
+                            break;
+                        }
+                    });
+                }
+                else {
+                    topPosts = topPosts;
+                }
             }
         }
         return topPosts;
