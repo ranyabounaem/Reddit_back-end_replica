@@ -422,7 +422,7 @@ class CommentHandler {
                                             }
                                             retComment.save();
                                             res.status(200);
-                                            res.json("You have unvoted the comment successfully");
+                                            res.json("The comment has been unvoted successfully");
                                         }
                                     });
                                 }
