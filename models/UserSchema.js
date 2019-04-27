@@ -21,6 +21,8 @@ const UserSchema = new Schema({
     },
  Subscriptions :[String],
 
+ moderates:[String],
+
  blockedUsers:[String],
 
  Friends:[String],

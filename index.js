@@ -1827,6 +1827,12 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  */
 
+const reportHandler = require("./src/Reports/Report");
+ 
+app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.getReports(req, res));
+
+
+
 
 const notificationHandler = require("./src/notifications");
 app.get("/notif", passport.authenticate('jwt', { session: false }), notificationHandler.handleGetNotification);

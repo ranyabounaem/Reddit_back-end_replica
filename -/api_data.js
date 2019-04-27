@@ -120,54 +120,6 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/comment/expand/:c_id",
-    "title": "Retrieve additional comments omitted from a base comment tree",
-    "name": "ExpandComment",
-    "group": "Comment",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "c_id",
-            "description": "<p>Comment Unique ID.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String[]",
-            "optional": false,
-            "field": "replies",
-            "description": "<p>An array containing all the replies' IDs to this comment.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentNotFound",
-            "description": "<p>The id of the comment wasn't found.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Comment"
-  },
-  {
-    "type": "get",
     "url": "/comment/all/:id",
     "title": "Get Comments or Replies for this ID",
     "name": "GetAllComments",
@@ -400,6 +352,67 @@ define({ "api": [
             "optional": false,
             "field": "CommentNotFound",
             "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AccessDenied",
+            "description": "<p>If the user isn't logged in.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Comment"
+  },
+  {
+    "type": "post",
+    "url": "/comment/report/:id",
+    "title": "Report a comment",
+    "name": "ReportComment",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SyncToken",
+            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Comment Unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "text",
+            "description": "<p>A text containg the reason of the report.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CommentNotFound",
+            "description": "<p>The id of the comment wasn't found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "EmptyText",
+            "description": "<p>the text is empty.</p>"
           },
           {
             "group": "Error 4xx",
@@ -13755,20 +13768,13 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Array",
+            "type": "Object",
             "optional": false,
             "field": "messages",
-            "description": "<p>Array of Messages    .</p>"
+            "description": "<p>Object that contains an array  of objects that contains data of the messages HTTP/1.1 200 OK { &quot;messages&quot;: [ { &quot;_id&quot;: &quot;5cb65052ef99a60342fd70b6&quot;, &quot;sender&quot;: &quot;mostafak&quot;, &quot;receiverUsername&quot;: &quot;mostafa&quot;, &quot;subject&quot;: &quot;m&quot;, &quot;messageBody&quot;: &quot;m&quot;, &quot;messageDate&quot;: &quot;2019-04-16T21:59:46.000Z&quot; }, { &quot;_id&quot;: &quot;5cb650430aa7d8033938c073&quot;, &quot;sender&quot;: &quot;mostafak&quot;, &quot;receiverUsername&quot;: &quot;mostafa&quot;, &quot;subject&quot;: &quot;m&quot;, &quot;messageBody&quot;: &quot;m&quot;, &quot;messageDate&quot;: &quot;2019-04-16T21:59:31.000Z&quot; }, { &quot;_id&quot;: &quot;5cb64e3537491f02f38ee6fb&quot;, &quot;sender&quot;: &quot;mostafak&quot;, &quot;receiverUsername&quot;: &quot;mostafak&quot;, &quot;subject&quot;: &quot;m&quot;, &quot;messageBody&quot;: &quot;m&quot;, &quot;messageDate&quot;: &quot;2019-04-16T21:50:45.000Z&quot; } ] }</p>"
           }
         ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n         {\n {[{\n\"_id\"         :\"5c901c662f87870699fa62e6\",\n\"sender”      :\"kefah\",\n\"receiver\"    : \"omar\",\n”subject”     :”URGENT VIP”,\n\"messageBody\" :”Dear, marwan please”,\n\"isRead\"      :true\n\"messageDate\" :\"2019-03-18 22:32:06.000Z\"\n },\n{\n\"_id\"         :\"5c901c662f87870699fa62e9\",\n\"sender”      :\"mariam \",\n\"receiver\"    : \"kefah\",\n”subject”     :”URGENT VIP”,\n\"messageBody\" :”Dear, kefah i want to ,\n\"isRead\"      :false\n\"messageDate\" :\"2019-03-13 22:32:06.000Z\"\n }\n]}\n    \n }",
-          "type": "json"
-        }
-      ]
+      }
     },
     "error": {
       "fields": {
@@ -13817,17 +13823,17 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Array",
+            "type": "Object",
             "optional": false,
-            "field": "blocklist",
-            "description": "<p>Array of people whom the user is blocking  from receieving messages from them  .</p>"
+            "field": "blockList",
+            "description": "<p>object that contains an array of objects of people whom the user is blocking  from receieving messages from them  .</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n         {\n {[{\n\"blocked      :\"kefah\"\n },\n{\n\"blocked      :\"marwan \"\n }\n]}\n    \n         }",
+          "content": "  HTTP/1.1 200 OK\n{\n\"blockList\": [\n     {\n         \"blocked\": \"atwa_leader\"\n     },\n     {\n         \"blocked\": \"mostafak\"\n     }\n              ]\n   }",
           "type": "json"
         }
       ]
@@ -14636,17 +14642,17 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object[]",
+            "type": "Object",
             "optional": false,
             "field": "Posts",
-            "description": "<p>Array of the listed Posts depending on the type  .</p>"
+            "description": "<p>Object in the JSON that contains an array of objects the listed Posts depending on the type  .</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n {\n [    \n {\n\"subredditName\": \"funny\"\n,\"_id\":\"sd232s2231\"\n,\"title\":\"love\"\n,\"postDate\":\"1998-04-23\"\n,\"body\": \"love is known for something\"\n },\n{\n\"subredditName\": \"nature\"\n,\"_id\":\"2dsds23123d\"\n,\"title\":\"vietnam nature\"\n,\"postDate\":\"1998-04-23\"\n,\"body\": \"vietnam nature is known for something\"\n } \n]\n    }",
+          "content": "   HTTP/1.1 200 OK\n {\n  \"posts\": [\n      {\n          \"_id\": \"5cc38191735094039ec8d927\",\n          \"title\": \"Rush Hour 4\",\n          \"body\": \"There are rumors that Rush Hour 4 might be in the making.\",\n          \"creatorUsername\": \"sabek\",\n          \"subredditName\": \"Movies\",\n          \"postDate\": \"2019-04-26T22:09:21.236Z\"\n      },\n      {\n          \"_id\": \"5cc38191735094039ec8d926\",\n          \"title\": \"Avengers: Endgame\",\n          \"body\": \"Unpopular opinion: Endgame is super overrated.\",\n          \"creatorUsername\": \"captainmaged\",\n          \"subredditName\": \"Movies\",\n          \"postDate\": \"2019-04-26T22:09:21.221Z\"\n      }\n          ]\n}",
           "type": "json"
         }
       ]
