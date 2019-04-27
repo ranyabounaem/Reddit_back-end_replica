@@ -43,8 +43,6 @@
 const express = require("express");
 const app = express();
 const mongoose = require('mongoose');
-<<<<<<< HEAD
-=======
 //Uploading files
 const multer = require ('multer');
 const storage = multer.diskStorage({
@@ -68,7 +66,6 @@ const upload = multer({
     fileSize: 1024 * 1024 * 5
 }});
 ////////
->>>>>>> rany
 const bodyparser = require('body-parser');
 const passport = require('passport');
 const passportConf = require('./JWT/passport');

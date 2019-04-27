@@ -6,10 +6,7 @@ const pt = srs.SubredditPostSchema;
 const mongoose = require('mongoose');
 const jwt = require('../JWT/giveToken');
 const getUser = jwt.getUsernameFromToken;
-<<<<<<< HEAD
-=======
 const User = require('../models/UserSchema');
->>>>>>> rany
 
 class SR {
     constructor(){
