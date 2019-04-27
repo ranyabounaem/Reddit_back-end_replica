@@ -1440,13 +1440,13 @@ app.get("/sr/:srName/meta", (req, res) => subreddit.info(req, res));
 * @apiParam {string} srName Subreddit name.
 * @apiSuccess {string} username Username of Creator.
 * @apiSuccess {string} date  date of creation.
-* @apiSuccess {object[]} posts All posts. 
+* @apiSuccess {string} postId All posts ids. 
 * @apiSuccess {string[]} rules   Rules of sr.
 * @apiSuccess {string} Bio   Subreddit's bio.
 * @apiSuccess {string[]} BannedUsers (NOT YET)   ID of banned users.
-* @apiSuccess {string[]} ModIds (NOT YET)  ID of Modertors.
-* @apiSuccess {string[]} UserIds (NOT YET  Ids of subscribed users .
-* @apiSuccess {Number[]} SubCount (NOT YET)  Number of subscribers.
+* @apiSuccess {string[]} modUsername Usernames of Modertors.
+* @apiSuccess {string[]} subscibers Subscriber usernames.
+* @apiSuccess {object} subredditFile Image or video of subreddit.
 *
 */
 
