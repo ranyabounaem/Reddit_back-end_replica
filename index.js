@@ -1636,7 +1636,6 @@ const subreddit = require('./Subreddits/subreddits')
 
 
 
-
 /**
  * @name PMService
  * @note These are the routes for anything related to a user.
@@ -1791,13 +1790,13 @@ app.post('/me/pm/markreadall', passport.authenticate('jwt', { session: false }),
 */
 
 
-app.post('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.retrieve(req, res));
+app.get('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.retrieve(req, res));
 /**
-* @api {post} /me/pm/   Retrieve
+* @api {get} /me/pm/?mine=value   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Boolean} mine True if u need to retrieve the inbox false if u need to retrieve the sent.
+* @apiParam {Boolean} mine true if u need to retrieve the inbox false if u need to retrieve the sent.
 * @apiSuccess {Object}  messages       Object that contains an array  of objects that contains data of the messages
 *     HTTP/1.1 200 OK
 *    {
@@ -1857,6 +1856,8 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
 *                 ]
 *      }
 */
+
+
 
 
 
