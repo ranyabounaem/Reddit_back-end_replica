@@ -6,6 +6,7 @@ const Post = subredditsSchema.SubredditPostSchema;
 const user = require("../models/UserSchema");
 const notification = require("../models/notificationSchema");
 const vote = require("../models/voteSchema");
+const report = require('../models/Reports');
 const mongoose = require("mongoose");
 const ObjectId = require('mongodb').ObjectID
 
@@ -71,7 +72,7 @@ describe("comment tests", () => {
             })
         });
     });
-    describe("Initialising a comment to use it in the get methods", () => {
+    describe("", () => {
         let data = {};
         let testBody = {
             content: "Mostafa",
@@ -907,6 +908,54 @@ describe("comment tests", () => {
                             });
                         });
                     });
+                });
+            });
+        });
+        describe("tests reporting a comment", () => {
+            let data = {};
+            let testBody = {
+                text: "It is inappropriate"
+            };
+            beforeAll((done) => {
+                Request.post("http://localhost:4000/comment/report/" + c_id,   //th_id is the thread created above
+                    { json: true, body: testBody, headers: head },
+                    (err, res, body) => {
+                        data.body = body;
+                        data.status = res.statusCode;
+                        done();
+                    });
+            });
+            it("status 200 test", () => {
+                expect(data.status).toBe(200);
+                expect(data.body).toBe("You have successfully reported this comment");
+            });
+            it("Mongo test", () => {
+                report.findOne({ reportedId: c_id }).then(function (RetComment) {
+                    expect(RetComment).not.toBe(null);
+                });
+            });
+        });
+        describe("tests reporting a comment", () => {
+            let data = {};
+            let testBody = {
+                text: "It is inappropriate"
+            };
+            beforeAll((done) => {
+                Request.post("http://localhost:4000/comment/report/012345678901234567891234",   //any false id
+                    { json: true, body: testBody, headers: head },
+                    (err, res, body) => {
+                        data.body = body;
+                        data.status = res.statusCode;
+                        done();
+                    });
+            });
+            it("status 200 test", () => {
+                expect(data.status).toBe(404);
+                expect(data.body.error).toBe("There is no Comment with this ID");
+            });
+            it("Mongo test", () => {
+                report.findOne({ reportedId: "012345678901234567891234" }).then(function (RetComment) {
+                    expect(RetComment).toBe(null);
                 });
             });
         });

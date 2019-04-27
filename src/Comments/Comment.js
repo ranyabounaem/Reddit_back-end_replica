@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const Comment = require('../../models/commentSchema.js');
 const vote = require('../../models/voteSchema');
 const notification = require('../../models/notificationSchema.js');
+const report = require('../../models/Reports');
 const subredditsSchema = require('../../models/subredditsSchema.js');
 const Post = subredditsSchema.SubredditPostSchema;
 const ObjectId = require('mongodb').ObjectID;
@@ -444,17 +445,20 @@ class CommentHandler {
                 if (retComment == null) {
                     res.status(404).send({ 'error': 'There is no Comment with this ID' });
                 } else {
+                    let text;
                     if (req.body.text == undefined) {
-                        res.status(400).send({ 'error': 'You must send the reason of your report' });
+                        text="";
                     } else {
-                        if (retComment.reply == false) {     //if it is a comment to a post
-
-                            //create a new report instance and add it to the report schema
-                        } else {      //if it is a reply to comment
-
-                            //create a new report instance and add it to the report schema
-                        }
+                        text=req.body.text;
                     }
+                    const r = new report({
+                        description: text,
+                        reportedId: ID,
+                        srName: retComment.subreddit,
+                        post: false
+                    })
+                    r.save();
+                    res.status(200).json('You have successfully reported this comment');
                 }
             });
         }
