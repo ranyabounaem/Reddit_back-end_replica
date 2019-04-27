@@ -874,23 +874,7 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 
 
 
-/**
-* @api {get} /Moderator/Reports/   Get all reports
-* @apiName Getreports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apisuccess  {String} ReporId unique ReporId  of the Repor.
 
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK
-* [{
-*         "ReporId":"1010"
-* }]
-*    
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 500 server error
-*/
 
 /**
 * @api {Put} /Moderator/Reports/:id   ignore report
@@ -1893,7 +1877,58 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
  */
 
 const reportHandler = require("./src/Reports/Report");
- 
+
+
+/**
+* @api {get} /Moderator/Reports/   Get all reports
+* @apiName Getreports
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apisuccess  [{String}] reports array of all reports
+* @apisuccess  {String} reportedId id of comment or post
+* @apisuccess  {srName} subreddit of report
+* @apisuccess  {Boolean} post a type that is  true if post , false if comment
+
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* [{
+*         [
+    {
+        "_id": "5cc4b675d7eb7343e073df38",
+        "reportedId": "121213521",
+        "srName": "Education",
+        "post": true,
+        "__v": 0
+    },
+    {
+        "_id": "5cc4b675d7eb7343e073df39",
+        "reportedId": "435422",
+        "srName": "343545454",
+        "post": true,
+        "__v": 0
+    },
+    {
+        "_id": "5cc4b675d7eb7343e073df3b",
+        "reportedId": "4n",
+        "srName": "Education",
+        "post": true,
+        "__v": 0
+    }
+]
+* }]
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator to any subreddit"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 no reports
+*      {
+*       "error":"No reports"
+*     }
+*/
 app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.getReports(req, res));
 
 
