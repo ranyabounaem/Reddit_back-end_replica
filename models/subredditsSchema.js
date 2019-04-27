@@ -27,7 +27,13 @@ const SubredditSchema = new Schema({
         type: Date,
         default: Date.now
     },
+<<<<<<< HEAD
     bio: [String]
+=======
+    bio: [String],
+    subredditFile: {type: String, required: true},
+    modUsername: [String]
+>>>>>>> rany
 });
 
 

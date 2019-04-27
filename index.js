@@ -40,9 +40,35 @@
  * //////////////////////////////////////
  * @see http://apidocjs.com/
  */
-
-const app = require("express")();
+const express = require("express");
+const app = express();
 const mongoose = require('mongoose');
+<<<<<<< HEAD
+=======
+//Uploading files
+const multer = require ('multer');
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads/');
+    },
+    filename: function(req, file, cb){
+        cb(null, Date.now() + file.originalname)
+    }
+});
+const fileFilter = (req, file, cb) => {
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'video/mp4')
+        cb(null,true);
+    else
+        cb(null, false);
+};
+const upload = multer({
+    fileFilter: fileFilter,
+    storage: storage,
+    limits: {
+    fileSize: 1024 * 1024 * 5
+}});
+////////
+>>>>>>> rany
 const bodyparser = require('body-parser');
 const passport = require('passport');
 const passportConf = require('./JWT/passport');
@@ -1499,6 +1525,41 @@ app.delete("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session:
 *
 * @apiParam {string} Token Send token.
 * @apiSuccess {object} deletedPost Returns the deleted post inside subreddit.
+*/
+
+app.post("/sr/:srName/thread/:postId/vote", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.votePost(req, res));
+
+/**
+* @api {post} /sr/:srName/thread/:postId/vote    Upvote or downvote a thread inside subreddit
+* @apiName VoteSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {boolean} upvote Is the user upvoting or downvoting.
+* @apiSuccess {object} votedPost Returns the voted post inside subreddit.
+*/
+
+app.delete("/sr/:srName/thread/:postId/vote", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.unvotePost(req, res));
+
+/**
+* @api {delete} /sr/:srName/thread/:postId/vote    Unvote a thread inside subreddit
+* @apiName UnvoteSrThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiSuccess {object} unvotedPost Returns the unvoted post inside subreddit.
+*/
+
+app.post("/sr/:srName/thread/:postId/report", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.reportPost(req, res));
+
+/**
+* @api {post} /sr/:srName/thread/:postId/report    Unvote a thread inside subreddit
+* @apiName ReportThread
+* @apiGroup SrService
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} reportText Reason for reporting the post.
+* @apiSuccess {object} reportedPost Returns the unvoted post inside subreddit.
 */
 
 app.post("/sr/:srName/subs", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.subscribe(req, res));
