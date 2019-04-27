@@ -420,14 +420,14 @@ class PM {
   * @param {Object} req  The request.
   * @param {Object} res  The response.
   * @param {String} syncToken  the token extracted from the request header to get the username of the request sender
-  * @param {Boolean} req.body.mine  mine is true when retriving the messages sent to the request sender, false when retriving the messages sent by the request sender
+  * @param {Boolean} req.query.mine  mine is true when retriving the messages sent to the request sender, false when retriving the messages sent by the request sender
   * @example
   * // returns   {"error": "errorType"} if there is an error in the request see Api for error response
   * PM.retrieve(req,res);
   * @example
   * // returns  an array of messages object of the inbox or sent of the user with status 200
   * PM.retrieve(req,res);
-  * @returns {JSON}  {{[{"_id":"5c901c662f87870699fa62e6" ,"sender”      :"kefah",  "receiver"    : "omar", ”subject”     :”URGENT VIP”,"messageBody" :”Dear, marwan please”,"isRead"      :true "messageDate" :"2019-03-18 22:32:06.000Z"  }, { "_id"         :"5c901c662f87870699fa62e9" "sender”      :"mariam ","receiver"    : "kefah",”subject”     :”URGENT VIP”,"messageBody" :”Dear, kefah i want to ,"isRead"      :false "messageDate" :"2019-03-13 22:32:06.000Z"  } ]}} retrieved messages the array may be empty
+  * @returns {JSON}  {"messages":[{"_id":"5c901c662f87870699fa62e6" ,"sender”      :"kefah",  "receiver"    : "omar", ”subject”     :”URGENT VIP”,"messageBody" :”Dear, marwan please”,"isRead"      :true "messageDate" :"2019-03-18 22:32:06.000Z"  }, { "_id"         :"5c901c662f87870699fa62e9" "sender”      :"mariam ","receiver"    : "kefah",”subject”     :”URGENT VIP”,"messageBody" :”Dear, kefah i want to ,"isRead"      :false "messageDate" :"2019-03-13 22:32:06.000Z"  }]} retrieved messages the array may be empty
   * @returns {JSON} {error: 'parameterPassingError'} 
   * @returns {JSON} {error: 'internalServerFindingError'} 
   */
@@ -443,7 +443,7 @@ class PM {
          }
       */
 
-      let mine = req.body.mine;
+      let mine = req.query.mine;
 
       if (mine == undefined
          || owner == undefined
@@ -457,7 +457,7 @@ class PM {
       else {
 
          // retriving all the messages sent to me (inbox)
-         if (mine === true) {
+         if (mine === 'true') {
             privateMessage.find(
                { receiverUsername: owner, receiverDelete: false },
                {
@@ -483,7 +483,7 @@ class PM {
 
          }
          // here it is retriving message i sent (sent not inbox)
-         else if (mine === false) {
+         else if (mine === 'false') {
 
             privateMessage.find(
                { sender: owner, senderDelete: false },
@@ -662,7 +662,7 @@ class PM {
   * @example
   * // returns   an array of objects containing the usernames of the blocked users (from sending only messeages) status 200
   * PM.retrieveBlock(req,res);
-  * @returns {JSON} {{[{"_id" :"5c901c662f87870699fa62e6", "blocked      :"kefah" }, { "_id"         :"5c901c662f87870699fa62e9", "blocked      :"marwan "  }]}          }
+  * @returns {JSON} { "blockList" : [{"blocked      :"kefah" }, {"blocked      :"marwan "  }] } 
   * @returns {JSON} {error: 'paramterTypeError'} 
   * @returns {JSON} {error: 'internalServerFindingError'} 
   */
