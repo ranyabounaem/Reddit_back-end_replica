@@ -1418,6 +1418,8 @@ app.get("/comment/all/:id", commentHandler.handleGetAllComments);
 app.post("/comment/:id", passport.authenticate('jwt', { session: false }), commentHandler.handlePostComment);
 app.put("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleEditComment);
 app.delete("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleDeleteComent);
+app.put("/comment/vote/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleVoteComment);
+app.post("/comment/report/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleReportComment);
 
 
 /**
