@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const jwt = require('../JWT/giveToken');
 const vote = require('../models/voteSchema');
 const getUser = jwt.getUsernameFromToken;
-const User = require('../../models/UserSchema');
+const User = require('../models/UserSchema');
 
 class SR {
     constructor(){
@@ -281,14 +281,28 @@ class SR {
                             res.status(500).send({ 'error': 'internal server error' });
                         }
                         else{
-                        res.status(200).send(record.subscribed_users);
-                        }
+                            User.findOne({Username: unsubscribed_user}, function(err){
+                                if(err){
+                                    res.status(500).send({ 'error': 'internal server error' });
+                                };
+                            }).then(function(userRecord){
+                                userRecord.Subscriptions.splice(userRecord.Subscriptions.indexOf(subrName), 1);
+                                userRecord.save(function(err){
+                                    if(err){
+                                        res.status(500).send({ 'error': 'internal server error' });
+                                    }
+                                    else{
+                                        res.status(200).send(record);
+                                    };
+                                });
+                            });
+                        };
                     });
                 }
                 else{
                     res.status(400).send({ 'error': 'user not subscribed' });
                 };
-            }
+            };
         });
     };
 
@@ -424,6 +438,7 @@ class SR {
                         res.status(400).send({ 'error': `already voted: ${upvote} ` });
                     }
                     else{
+
                         vote.findOne({votedID: postId, username: username, upvote: !upvote, post: true}, function(err){
                             if (err){
                                 res.status(500).send({ 'error': 'internal server error' });
@@ -431,10 +446,49 @@ class SR {
                         }).then(function(voteRecord2){
                             if(voteRecord2){
                                 if(upvote == true){
-                                    voteRecord2.
+                                    voteRecord2.upvote = true;
+                                    record.votes++;
+                                    record.save(function(err){
+                                        if(err){
+                                            res.status(500).send({ 'error': 'internal server error' });
+                                        }
+                                        else{
+                                            voteRecord2.save(function(err){
+                                                if (err)
+                                                {
+                                                    res.status(500).send({ 'error': 'internal server error' });
+                                                }
+                                                else
+                                                {
+                                                    
+                                                    res.status(200).send(record);
+                                                };
+                                            });
+                                        };
+                                    });
+                                    
                                 }
                                 else{
-
+                                    voteRecord2.upvote = false;
+                                    record.votes--;
+                                    record.save(function(err){
+                                        if(err){
+                                            res.status(500).send({ 'error': 'internal server error' });
+                                        }
+                                        else{
+                                            voteRecord2.save(function(err){
+                                                if (err)
+                                                {
+                                                    res.status(500).send({ 'error': 'internal server error' });
+                                                }
+                                                else
+                                                {
+                                                    res.status(200).send(record);
+                                                };
+                                            });
+                                        };
+                                    })
+                                    
                                 };
                             }
                             else{
@@ -461,7 +515,7 @@ class SR {
             }
             else{
                 res.status(400).send({ 'error': 'invalid postId' });
-            }
+            };
         });
     };
 
@@ -474,10 +528,89 @@ class SR {
  */  
 
     unvotePost(req, res){
-        postId = req.params.postId;
-        username = getUser(req);
-        vote.findOne({votedID: postId, username: username})
+        var postId = req.params.postId;
+        var username = getUser(req);
+        vote.findOne({votedID: postId, username: username}, function (err){
+            if(err){
+                res.status(500).send({ 'error': 'internal server error' });
+            }
+        }).then(function(record){
+            if(record){
+                if(record.upvote==false)
+                {
+                    pt.findOne({_id: postId}, function(err){
+                        if(err)
+                        {
+                            res.status(500).send({ 'error': 'internal server error' });
+                        };
+                    }).then(function(record2){
+                        record2.votes++;
+                        vote.findOneAndDelete({votedID: postId, username: username}).then(function(){
+                            record2.save(function(err, record3){
+                                if(err){
+                                    res.status(500).send({ 'error': 'internal server error' });
+                                }
+                                else{
+                                    res.status(200).send({record3});
+                                };
+                            });
+                        });
+                    });
+                }
+                else{
+                    pt.findOne({_id: postId}, function(err){
+                        if(err)
+                        {
+                            res.status(500).send({ 'error': 'internal server error' });
+                        };
+                    }).then(function(record2){
+                        record2.votes--;
+                        vote.findOneAndDelete({votedID: postId, username: username}).then(function(){
+                            record2.save(function(err, record3){
+                                if(err){
+                                    res.status(500).send({ 'error': 'internal server error' });
+                                }
+                                else{
+                                    res.status(200).send({record3});
+                                };
+                            });   
+                        });
+                    });
+                };
+            }
+            else{
+                res.status(400).send({"error": "post already unvoted"});
+            };
+        });
+    };
+
+
+ 
+reportPost(req, res){
+    var postId = req.params.postId;
+    var reportText = req.body.reportText;
+    var username = getUser(req);
+    if(reportText)
+    {
+        pt.findOne({_id: postId}, function (err){
+            if(err){
+                res.status(500).send({ 'error': 'internal server error' });
+            }
+        }).then(function(record){
+            if(record){
+                //find if user alrdy reported this post, or if user has max of 5 reports
+                //if not: add postId to report schema 
+                res.status(200).send("OK");
+            }
+            else{
+                res.status(400).send({"error": "post already unvoted"});
+            };
+        });
     }
+    else{
+        res.status(400).send({ 'error': 'invalid report text' });
+    };
+};
 
 /**
  * @function deleteSubreddit

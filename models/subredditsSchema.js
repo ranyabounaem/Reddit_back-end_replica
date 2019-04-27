@@ -31,7 +31,8 @@ const SubredditSchema = new Schema({
         default: Date.now
     },
     bio: [String],
-    subredditFile: {type: String, required: true}
+    subredditFile: {type: String, required: true},
+    modUsername: [String]
 });
 
 

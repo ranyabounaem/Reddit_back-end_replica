@@ -40,8 +40,8 @@
  * //////////////////////////////////////
  * @see http://apidocjs.com/
  */
-
-const app = require("express")();
+const express = require("express");
+const app = express();
 const mongoose = require('mongoose');
 //Uploading files
 const multer = require ('multer');
@@ -50,7 +50,7 @@ const storage = multer.diskStorage({
         cb(null, './uploads/');
     },
     filename: function(req, file, cb){
-        cb(null, new Date.now() + file.originalname);
+        cb(null, Date.now() + file.originalname)
     }
 });
 const fileFilter = (req, file, cb) => {
@@ -1560,6 +1560,7 @@ app.post("/sr/:srName/thread/:postId/report", passport.authenticate('jwt', { ses
 * @apiGroup SrService
 *
 * @apiParam {string} Token Send token.
+* @apiParam {string} reportText Reason for reporting the post.
 * @apiSuccess {object} reportedPost Returns the unvoted post inside subreddit.
 */
 
