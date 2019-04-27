@@ -231,13 +231,13 @@ class listings {
                     for (let l = 0; l < topPosts.length; l++) {
                         if (lastpost.votes == topPosts[l].votes) {
                             // if it is older(means not sent yet) put it the arr
-                            if (lastpost.postDate > element.postDate) {
+                            if (lastpost.postDate > topPosts[l].postDate) {
                                 retrievedTopPosts.push(topPosts[l]);
                                 i = i + 1;
                             }
                             else  // db not sent contains older than what is sent  if they both have the same votes
                             {
-                                return;// do nothing here do not take that element it was sent before
+                                // do nothing here do not take that element it was sent before
                             }
 
                         }
@@ -251,6 +251,7 @@ class listings {
                             break;
                         }
                     }
+                    topPosts = retrievedTopPosts;
                 }
                 else {
                     topPosts = topPosts;
