@@ -6,6 +6,7 @@ const pt = srs.SubredditPostSchema;
 const mongoose = require('mongoose');
 const jwt = require('../JWT/giveToken');
 const getUser = jwt.getUsernameFromToken;
+const vote = require('../models/voteSchema');
 
 class SR {
     constructor(){
@@ -27,6 +28,8 @@ class SR {
                 name: subredditName,
                 adminUsername: admin,
                 rules: subredditRules,
+                subredditFile: req.file.path,
+                modUsername: req.body.modUsername
             });
             subreddit.save(function (err, record) {
                 if (err) {
@@ -59,7 +62,15 @@ class SR {
         var updatedName = req.body.newName;
         if(subredditName && updatedRules && updatedName){
 
-            sr.findOne({name : subredditName}).then(function(record){
+            sr.findOneAndUpdate({name: subredditName}, 
+                {
+                    name:updatedName,
+                    rules:updatedRules,
+                    modUsername: req.body.newMods,
+                    subredditFile: req.file.path,
+                    bio: req.body.newBio
+                },
+                function(err, record){
            
                
                 if(!record){
@@ -150,7 +161,9 @@ class SR {
                         title: postTitle,
                         body: postBody,
                         creatorUsername: creator,
-                        subredditName: subrName
+                        subredditName: subrName,
+                        postFile: req.file.path,
+                        spoiler: req.body.spoiler
                     });
                     newPost.save(function (err) {
 
@@ -332,6 +345,7 @@ subscribe(req, res){
                         res.status(400).send({ 'error': 'invalid postId' });
                     }
                     else{
+                        vote.deleteMany({votedID: deleted._id});
                         sr.findOne({name: subrName}).then(function(record){
                             record.posts.splice(record.posts.indexOf(postId), 1);
                             record.save(function(err){
@@ -341,7 +355,7 @@ subscribe(req, res){
                                 }
                                 else{
                                     res.status(200).send(record.posts);
-                                }
+                                };
                             });
                         });
                     };    
@@ -379,7 +393,7 @@ subscribe(req, res){
                 res.status(400).send({'error': 'url subreddit is of different name than that of post'})
             }
             else{
-                pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody}, function(err, updated)
+                pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody, spoiler: req.body.spoiler}, function(err, updated)
                 {
                     if(err){
                         res.status(500).send({ 'error': 'internal server error' }) 

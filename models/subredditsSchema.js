@@ -11,7 +11,10 @@ const SubredditPostSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    subredditName: String
+    subredditName: String,
+    postFile: {type: String, required: true},
+    spoiler: {type: Boolean, default: false},
+    votes: {type: Number, default: 0}
 });
 
 const SubredditSchema = new Schema({
