@@ -23,14 +23,17 @@ describe('Server', function () {
     let postsarr = [{
         title: 'what is love',
         body: 'love is more than anything in the world love is love ',
-        postDate: Date()
+        postDate: '2019-03-27T19:55:05.000Z'
         , subredditName: 'love'
+        , votes: 1
+
     }
         , {
         title: 'If you have a love in your life, who turns any moment',
         body: 'Share this love quote with your lover and see the smile on their face. It will be priceless.',
         postDate: Date()
         , subredditName: 'love'
+        , votes: 12
 
     }
         , {
@@ -38,55 +41,69 @@ describe('Server', function () {
         , body: 'for a quick morning walk, or going camping in the middle of nowhere for an entire week, the goal is probably to put away your phone and spend some time unplugged.But it’s hard to stay offline entirely when the scenes are so perfectly Instagrammable.'
         , postDate: Date()
         , subredditName: 'nature'
+        , votes: 42
 
     }
         ,
     {
         title: 'While we cant help you',
         body: 'with the weak Wi-Fi signal or that steep uphill hike, we can help you find the perfect nature quotes and captions for photos of every snap you take during your outdoor adventure.'
-        , postDate: Date()
+        , postDate: '2019-02-27T19:55:05.000Z'
         , subredditName: 'nature'
+        , votes: 14
+
     }
         ,
     {
         title: 'Comment for a giveaway'
         , body: 'How many countries in the world ??'
-        , postDate: Date(),
+        , postDate: '2019-01-27T19:55:05.000Z',
         subredditName: 'travel'
+        , votes: 20
+
     }
         ,
     {
         title: 'Do you prefer vietnam or singapore',
         body: 'you can share below your ansers',
-        postDate: Date(),
+        postDate: '2019-05-27T19:55:05.000Z',
         subredditName: 'travel'
+        , votes: 2
+
     }
         ,
     {
         title: 'Which destination are u heading next?',
         body: 'comment with your destinations',
-        postDate: Date()
+        postDate: '2019-06-27T19:55:05.000Z'
         , subredditName: 'travel'
+        , votes: 10
+
     }
         ,
     {
         title: 'which food is most appealing to your heart',
         body: 'comment for food lovers',
-        postDate: Date()
+        postDate: '2019-07-27T19:55:05.000Z'
         , subredditName: 'food'
+        , votes: 0
+
     }
         ,
     {
         title: 'Pizza with pineapply with or againsts??',
         body: 'for me i love it',
-        postDate: Date()
+        postDate: '2019-08-27T19:55:05.000Z'
         , subredditName: 'food'
+        , votes: 12
     }
         , {
         title: 'The heart wants what the heart wants.'
         , body: '(Cookies. It’s always cookies.'
-        , postDate: Date()
+        , postDate: '2019-09-27T19:55:05.000Z'
         , subredditName: 'food'
+        , votes: 3
+
     }];
 
     let subbredditarr = [{
@@ -95,16 +112,18 @@ describe('Server', function () {
     },
     {
         name: 'travel', rules: ["no males are allowed", "no females are allowed"],
-        date: Date()    }
+        date: Date()
+    }
         ,
     {
         name: 'nature', rules: ["no males are allowed", "no females are allowed"],
         date: Date()
-        
+
     },
     {
         name: 'food', rules: ["no males are allowed", "no females are allowed"],
-        date: Date()    }
+        date: Date()
+    }
     ];
     beforeAll(function (done) {
         server4 = require('../index.js');
@@ -119,16 +138,131 @@ describe('Server', function () {
         // for generation in db just
 
     });
+    // describe('Listing new with another _id reference param no error', function () {
 
-    describe('Listing New no error', function () {
-        // receiver username is undefined
-        let messageTest1 = {
-            startPosition: 0
-        };
+    //     let data = {};
+    //     let referenceid = {};
+    //     beforeAll(function (done) {  // mocking the get requedt
+    //         request.get(url + 'me/listing?type=new&_id=0&votes=0&hotindex=0'
+    //             , { json: true, headers: head }, function (error, response, body) {
+    //                 // making the reference id as the second post
+    //                 referenceid._id = body.posts[0]._id;
+    //                 referenceid.postDate = body.posts[0].postDate;
+    //             });
+    //     });
+    //     beforeEach(function (done) {  // mocking the get request
+    //         request.get(url + 'me/listing?type=new&_id='+referenceid._id+'&votes=0&hotindex=0'
+    //             , { json: true, headers: head }, function (error, response, body) {
+    //                 data.status = response.statusCode;
+    //                 data.body = body;
+    //                 done();
+    //             });
+    //     });
+    //     //  status 200 for ok
+    //     it('Status 200', function () {
+    //         // there are some posts inserted beforeall
+    //         expect(data.status).toBe(200);
+
+    //     });
+    //     it('testing the first one is less than specified dates ', function () {
+    //         expect(data.body.posts[0].postDate).toBeLessThan(referenceid.postDate);
+
+    //     });
+    //     it('testing the sorting forward test ', function () {
+    //         for (let index = 0; index < 14; index++) {
+    //             expect(data.body.posts[index].postDate).not.toBeLessThan(data.body.posts[index + 1].postDate);
+    //         }
+
+    //     });
+    //     it('testing the sorting backward technique ', function () {
+    //         for (let index = 0; index < 14; index++) {
+    //             expect(data.body.posts[index].postDate).toBeGreaterThanOrEqual(data.body.posts[index + 1].postDate);
+    //         }
+
+    //     });
+
+
+    // });
+    describe('Listing top with another vote param no error', function () {
+
         let data = {};
-        beforeAll(function (done) {  // mocking the post request with message test
-            request.post(url + 'me/listing?type=new'
-                , { json: true, headers: head, body: messageTest1 }, function (error, response, body) {
+        beforeAll(function (done) {  // mocking the get request
+            request.get(url + 'me/listing?type=top&_id=5cc4b1da09c9a441ae8152be&votes=10&hotindex=0'
+                , { json: true, headers: head }, function (error, response, body) {
+                    data.status = response.statusCode;
+                    data.body = body;
+                    done();
+
+                });
+        });
+        //  status 200 for ok
+        it('Status 200', function () {
+            // there are some posts inserted beforeall
+            expect(data.status).toBe(200);
+
+        });
+        it('testing the first one is less than specified votes ', function () {
+            expect(data.body.posts[0].votes).toBeLessThanOrEqual(10);
+
+        });
+        it('testing the sorting forward test ', function () {
+            for (let index = 0; index < 3; index++) {
+                expect(data.body.posts[index].votes).not.toBeLessThan(data.body.posts[index + 1].votes);
+            }
+
+        });
+        it('testing the sorting backward technique ', function () {
+            for (let index = 0; index < 3; index++) {
+                expect(data.body.posts[index].votes).toBeGreaterThanOrEqual(data.body.posts[index + 1].votes);
+            }
+
+        });
+
+
+    });
+    describe('Listing Hot with another hotindex param no error', function () {
+
+        let data = {};
+        beforeAll(function (done) {  // mocking the get request
+            request.get(url + 'me/listing?type=hot&_id=5cc4b1da09c9a441ae8152be&votes=0&hotindex=95858'
+                , { json: true, headers: head }, function (error, response, body) {
+                    data.status = response.statusCode;
+                    data.body = body;
+                    done();
+
+                });
+        });
+        //  status 200 for ok
+        it('Status 200', function () {
+            // there are some posts inserted beforeall
+            expect(data.status).toBe(200);
+
+        });
+        it('testing the first one is less than specified hotindex ', function () {
+            expect(data.body.posts[0].hotindex).toBeLessThan(95858);
+
+        });
+        it('testing the sorting forward test ', function () {
+            for (let index = 0; index < 3; index++) {
+                expect(data.body.posts[index].hotindex).not.toBeLessThan(data.body.posts[index + 1].hotindex);
+            }
+
+        });
+        it('testing the sorting backward technique ', function () {
+            for (let index = 0; index < 3; index++) {
+                expect(data.body.posts[index].hotindex).toBeGreaterThanOrEqual(data.body.posts[index + 1].hotindex);
+            }
+
+        });
+
+
+    });
+    describe('Listing New no error', function () {
+
+        let data = {};
+        beforeAll(function (done) {  // mocking the get request
+            request.get(url + 'me/listing?type=new&_id=0&votes=0&hotindex=0'
+                , { json: true, headers: head }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
                     done();
@@ -143,29 +277,125 @@ describe('Server', function () {
         });
 
         it('Limit posts Test more than 15', function () {
-            expect(data.body[15]).toBe(undefined);
+            expect(data.body.posts[15]).toBe(undefined);
         });
         it('Limit posts Test ', function () {
             // assuming there is at least one post we added above
-            expect(data.body[0]).not.toBe(undefined);
+            expect(data.body.posts[0]).not.toBe(undefined);
         });
 
         it('Database Test for the 15 post', function () {
             for (let index = 0; index < 15; index++) {
-                posts.find(data.body[index],
+                posts.find(data.body.posts[index],
                     function (err, result) { expect(result).not.toBe(null); });
             }
         });
 
         it('testing the sorting forward test ', function () {
             for (let index = 0; index < 14; index++) {
-                expect(data.body[index].postDate).not.toBeLessThan(data.body[index + 1].postDate);
+                expect(data.body.posts[index].postDate).not.toBeLessThan(data.body.posts[index + 1].postDate);
             }
 
         });
         it('testing the sorting backward technique ', function () {
             for (let index = 0; index < 14; index++) {
-                expect(data.body[index].postDate).toBeGreaterThanOrEqual(data.body[index + 1].postDate);
+                expect(data.body.posts[index].postDate).toBeGreaterThanOrEqual(data.body.posts[index + 1].postDate);
+            }
+
+        });
+
+
+    });
+
+    describe('Listing hot no error', function () {
+
+        let data = {};
+        beforeAll(function (done) {  // mocking the get request
+            request.get(url + 'me/listing?type=hot&_id=0&votes=0&hotindex=0'
+                , { json: true, headers: head }, function (error, response, body) {
+                    data.status = response.statusCode;
+                    data.body = body;
+                    done();
+                });
+        });
+        //  status 200 for ok
+        it('Status 200', function () {
+            // there are some posts inserted beforeall
+            expect(data.status).toBe(200);
+
+        });
+
+        it('Limit posts Test more than 15', function () {
+            expect(data.body.posts[15]).toBe(undefined);
+        });
+        it('Limit posts Test ', function () {
+            // assuming there is at least one post we added above
+            expect(data.body.posts[0]).not.toBe(undefined);
+        });
+
+        it('Database Test for the 15 post', function () {
+            for (let index = 0; index < 15; index++) {
+                posts.find(data.body.posts[index],
+                    function (err, result) { expect(result).not.toBe(null); });
+            }
+        });
+
+        it('testing the sorting forward test ', function () {
+            for (let index = 0; index < 14; index++) {
+                expect(data.body.posts[index].hotindex).not.toBeLessThan(data.body.posts[index + 1].hotindex);
+            }
+
+        });
+        it('testing the sorting backward technique ', function () {
+            for (let index = 0; index < 14; index++) {
+                expect(data.body.posts[index].hotindex).toBeGreaterThanOrEqual(data.body.posts[index + 1].hotindex);
+            }
+
+        });
+    });
+    describe('Listing top no error', function () {
+
+        let data = {};
+        beforeAll(function (done) {  // mocking the get request
+            request.get(url + 'me/listing?type=top&_id=0&votes=0&hotindex=0'
+                , { json: true, headers: head }, function (error, response, body) {
+                    data.status = response.statusCode;
+                    data.body = body;
+                    done();
+
+                });
+        });
+        //  status 200 for ok
+        it('Status 200', function () {
+            // there are some posts inserted beforeall
+            expect(data.status).toBe(200);
+
+        });
+
+        it('Limit posts Test more than 15', function () {
+            expect(data.body.posts[15]).toBe(undefined);
+        });
+        it('Limit posts Test ', function () {
+            // assuming there is at least one post we added above
+            expect(data.body.posts[0]).not.toBe(undefined);
+        });
+
+        it('Database Test for the 15 post', function () {
+            for (let index = 0; index < 15; index++) {
+                posts.find(data.body.posts[index],
+                    function (err, result) { expect(result).not.toBe(null); });
+            }
+        });
+
+        it('testing the sorting forward test ', function () {
+            for (let index = 0; index < 14; index++) {
+                expect(data.body.posts[index].votes).not.toBeLessThan(data.body.posts[index + 1].votes);
+            }
+
+        });
+        it('testing the sorting backward technique ', function () {
+            for (let index = 0; index < 14; index++) {
+                expect(data.body.posts[index].votes).toBeGreaterThanOrEqual(data.body.posts[index + 1].votes);
             }
 
         });
@@ -173,13 +403,11 @@ describe('Server', function () {
 
     });
     describe('Listing error undefined query', function () {
-        let messageTest1 = {
-            startPosition: 0
-        };
+
         let data = {};
-        beforeAll(function (done) {  // mocking the post request with message test
-            request.post(url + 'me/listing?type=bypdsdsd'
-                , { json: true, headers: head2, body: messageTest1 }, function (error, response, body) {
+        beforeAll(function (done) {  // mocking the get request
+            request.get(url + 'me/listing?type=bypdsdsd'
+                , { json: true, headers: head2 }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
                     done();
@@ -199,15 +427,12 @@ describe('Server', function () {
     });
 
     describe('Listing error  postsnotfound', function () {
-        // receiver username is undefined
-        let messageTest1 = {
-            startPosition: 0
-        };
-        let data = {};
-        beforeAll(function (done) {  // mocking the post request with message test
 
-            request.post(url + 'me/listing?type=new'
-                , { json: true, headers: head2, body: messageTest1 }, function (error, response, body) {
+        let data = {};
+        beforeAll(function (done) {  // mocking the get request
+
+            request.get(url + 'me/listing?type=new&_id=0&votes=0&hotindex=0'
+                , { json: true, headers: head2 }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
 

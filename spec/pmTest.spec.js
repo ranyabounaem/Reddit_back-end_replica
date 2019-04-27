@@ -405,7 +405,7 @@ describe('Server', function () {
 
         beforeEach(function (done) {
 
-            request.post(url + 'me/pm',
+            request.get(url + 'me/pm?mine=false',
                 { json: true, headers: head3, body: testBody }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
@@ -428,6 +428,9 @@ describe('Server', function () {
 
             });
         });
+        it('bodymatch ', function () {
+            expect(data.body.messages[0].receiverUsername).toBe("kefahmohamed");
+          });
         afterAll(function (done) {
 
             privateMessage.findOneAndDelete(messageTest1, function () {
@@ -462,7 +465,7 @@ describe('Server', function () {
         });
         beforeEach(function (done) {
 
-            request.post(url + 'me/pm',
+            request.get(url + 'me/pm?mine=true',
                 { json: true, headers: head2, body: testBody }, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
@@ -478,7 +481,9 @@ describe('Server', function () {
             expect(data.status).toBe(200);
 
         });
-
+        it('bodymatch ', function () {
+            expect(data.body.messages[0].sender).toBe("ahmedmohamedadel");
+          });
         it('body', function () {
 
             privateMessage.findOne({ receiverUsername: owner }, function (err, result) {
@@ -876,6 +881,10 @@ describe('Server', function () {
         it('Status 200', function () {
             expect(data.status).toBe(200);
         });
+        it('body not empty ', function () {
+            expect(data.body).toBe('{"blockList":[{"blocked":"ahmedmohamedadel"},{"blocked":"kefahmohamed"}]}');
+        });
+        
         it('Database Test', function () {
             blockList.findOneAndDelete(messageTestFind,
                 function (err, result) {
