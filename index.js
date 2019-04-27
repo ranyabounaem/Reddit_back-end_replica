@@ -899,30 +899,6 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 */
 
 
-
-
-
-
-/**
-* @api {Put} /Moderator/Reports/:id   ignore report
-* @apiName Ignoreports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ReporId unique ReporId  of the Repor.
-* @apiParamExample {json} Input
-*    {
-*      "ReporId": "1101", 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"report not found"
-* }
-*/
-
 /**
 * @api {delete} /Moderator/Reports/:id   delete report
 * @apiName deletereports
@@ -1958,8 +1934,41 @@ const reportHandler = require("./src/Reports/Report");
 *     }
 */
 app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.getReports(req, res));
+/**
+* @api {get} /Moderator/Reports/   Get all reports
+* @apiName Getreports
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apisuccess  [{String}] reports array of all reports
+* @apisuccess  {String} reportedId id of comment or post
+* @apisuccess  {srName} subreddit of report
+* @apisuccess  {Boolean} post a type that is  true if post , false if comment
+
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"report deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+*/
 
 
+app.delete('/Moderator/Reports/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deleteReport(req, res));
 
 
 const notificationHandler = require("./src/notifications");
