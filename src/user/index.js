@@ -7,6 +7,7 @@ const validator = require("email-validator");
 const JWTconfig = require("../../JWT/giveToken");
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
+const commentHandler = require('../Comments/Comment').cm;
 
 async function checkIfBlockedByMe (user,username)
 {
