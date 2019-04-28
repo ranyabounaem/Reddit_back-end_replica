@@ -31,8 +31,9 @@ const SubredditSchema = new Schema({
         default: Date.now
     },
     bio: [String],
-    subredditFile: {type: String, required: true},
-    modUsername: [String]
+    subredditFile: {type: String, required: false},
+    modUsername: [String],
+    bannedUsers: [String]
 });
 
 

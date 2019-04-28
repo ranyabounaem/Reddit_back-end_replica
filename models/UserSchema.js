@@ -23,6 +23,8 @@ const UserSchema = new Schema({
 
  moderates:[String],
 
+ ModReq:[String],
+
  blockedUsers:[String],
 
  Friends:[String],

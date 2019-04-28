@@ -932,101 +932,369 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 * }
 */
 
-/**
-* @api {post} /Moderator/Ban/:Username&:SubbreditName   ban user
-* @apiName BanUser
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of the User to be banned.
-* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit to be banned from.
-* @apiParamExample {json} Input
-*    {
-*      "Username": "User0",
-*      "SubbreditName":"Ask reddit" 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"user or subreddit not found"
-* }
-*/
 
-/**
-* @api {delete} /Moderator/LeaveMod/:Username&:SubbreditName   Leave or remove Moderation
-* @apiName LeaveMod
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of the Moderaor to remove or leave .
-* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
-* @apiParamExample {json} Input
-*    {
-*      "Username": "User0",
-*      "SubbreditName":"Ask reddit" 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"user or subreddit not found"
-* }
-*/
+const reportHandler = require("./src/Reports/Report");
 
+
+app.put("/Moderator/ban", passport.authenticate('jwt', { session: false }), reportHandler.Ban);
 /**
-* @api {post} /Moderator/Invite/:Username&:SubbreditName   invite moderator
-* @apiName Addmod
+* @api {put} /Moderator/ban   Remove moderator
+* @apiName Ban
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of the Moderaor to be added .
-* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
-* @apiSuccess {String} ModREQid unique invite Id  of the request .
+* @apiParam  {String} Username unique Username  of the user to be banned .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
 * @apiParamExample {json} Input
 *    {
 *      "Username": "User0",
-*      "SubbreditName":"Ask reddit" 
+*      "SrName":"Ask reddit" 
 *    }
 *  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK 
-* {
-* 
-*          "ModREQid":"101"
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "User banned successfully" 
+* } 
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Moderator banned successfully" 
 * }  
 * 
 * @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
+*     HTTP/1.1 404 Username not found
 * {
-*          "error":"user or subreddit not found"
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not authorized to ban
+* {
+*          "error":"User is not authorized to ban"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be banned doesn't exist
+* {
+*          "error":"User to be banned doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot ban himself
+* {
+*          "error":"User cannot ban himself"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot ban the creator of the subreddit
+* {
+*          "error":"User cannot ban the creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User doesn't have the authority to ban a moderator
+* {
+*          "error":"User doesn't have the authority to ban a moderator"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is already banned from Subreddit
+* {
+*          "error":"User is already banned from Subreddit"
 * }
 */
 
+app.put("/Moderator/unban", passport.authenticate('jwt', { session: false }), reportHandler.unBan);
 /**
-* @api {post} /Moderator/accept   accept invite moderator
-* @apiName Acceptmod
+* @api {put} /Moderator/unban   Remove moderator
+* @apiName unBan
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ModREQid unique invite id  of request.
+* @apiParam  {String} Username unique Username  of the user to be unbanned .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
 * @apiParamExample {json} Input
 *    {
-*      "ModREQid": "1011",
-*       
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "User unbanned successfully" 
+* } 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Username not found
+* {
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not authorized to unban
+* {
+*          "error":"User is not authorized to unban"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be unbanned doesn't exist
+* {
+*          "error":"User to be unbanned doesn't exist"
+*
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User isn't banned from Subreddit
+* {
+*          "error":"UseUser isn't banned from Subreddit"
+* }
+*/
+
+
+app.put("/Moderator/Invite", passport.authenticate('jwt', { session: false }), reportHandler.addMod);
+/**
+* @api {put} /Moderator/Invite   invite moderator
+* @apiName addMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} Username unique Username  of the Moderator to be added .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Moderator Invite Sent" 
+* }  
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Username not found
+* {
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not creator of the subreddit
+* {
+*          "error":"User is not creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not creator of the subreddit
+* {
+*          "error":"User is not creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be added as moderator doesn't exist
+* {
+*          "error":"User to be added as moderator doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot add himself
+* {
+*          "error":"User cannot add himself"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User has already received a Moderation request
+* {
+*          "error":"User has already received a Moderation request"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User is already a moderator
+* {
+*          "error":"User is already a moderator"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User is banned from Subreddit
+* {
+*          "error":"User is banned from Subreddit"
+* }
+*/
+
+app.put("/Moderator/remove", passport.authenticate('jwt', { session: false }), reportHandler.removeMod);
+/**
+* @api {put} /Moderator/remove   Remove moderator
+* @apiName removeMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} Username unique Username  of the Moderator to be removed .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Moderator removed" 
+* } 
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Request for moderation removed" 
+* }  
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Username not found
+* {
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not creator of the subreddit
+* {
+*          "error":"User is not creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be removed from moderation doesn't exist
+* {
+*          "error":"User to be removed from moderation doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot remove himself
+* {
+*          "error":"User cannot remove himself"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User isn't a moderator
+* {
+*          "error":"User isn't a moderator"
+* }
+*/
+
+app.put("/Moderator/accept", passport.authenticate('jwt', { session: false }), reportHandler.acceptModRequest);
+
+/**
+* @api {put} /Moderator/accept   accept moderator invite
+* @apiName AcceptmodInvite
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "SrName": "funny"
 *    }
 *  @apiSuccessExample {json} Success
 *    HTTP/1.1 200 OK   
+*    {
+*          message: "Moderator request accepted"
+*    }
 * 
 * @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
+*     HTTP/1.1 404 SrName not found
 * {
-*          "error":"request not found"
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Request doesn't exist
+* {
+*          "error": "Request doesn't exist"
 * }
 */
 
 
+app.put("/Moderator/reject", passport.authenticate('jwt', { session: false }), reportHandler.rejectModRequest);
 
+/**
+* @api {put} /Moderator/reject   reject moderator invite
+* @apiName rejectModRequest
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "SrName": "funny"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+*    {
+*          message: "Moderator request rejected"
+*    }
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Request doesn't exist
+* {
+*          "error": "Request doesn't exist"
+* }
+*/
 
+app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), reportHandler.leaveMod);
+
+/**
+* @api {put} /Moderator/leave   leave moderation
+* @apiName leaveMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "SrName": "funny"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+*    {
+*          message: "User has left moderation"
+*    }
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User isn't a moderator
+* {
+*          "error": "User isn't a moderator"
+* }
+*/
 
 
 app.get("/users", (req, res) => { });
@@ -1892,7 +2160,7 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  */
 
-const reportHandler = require("./src/Reports/Report");
+
  
 app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.getReports(req, res));
 
