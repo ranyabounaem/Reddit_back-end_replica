@@ -6,6 +6,8 @@ const posts=srs.SubredditPostSchema;
 const JWTconfig = require("../../JWT/giveToken");
 const ObjectId = require('mongodb').ObjectID;
 const Comment = require('../../models/commentSchema.js');
+const commentHandler = require('../Comments/Comment').cm;
+
 sr = srs.Subreddit;
 
 async function checkModReq(user, srName)
@@ -281,8 +283,7 @@ class reportHandler {
     *    This deletes  
     */
       else { 
-       const postDeleted= await Comment.findByIdAndDelete(reportToDelete.reportedId);
-       const deleted=await reports.findOneAndDelete({_id:reportToDeleteId});
+       commentHandler.deleteComment(reportToDelete.reportedId);
       res.status(404).send({message:"Comment deleted"});}
     
       }
