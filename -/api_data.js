@@ -12495,15 +12495,6 @@ define({ "api": [
         ]
       }
     },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found {\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "EmojiService"
@@ -12553,6 +12544,15 @@ define({ "api": [
           }
         ]
       }
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Report not found {\n         \"error\":\"request not found\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -12645,242 +12645,10 @@ define({ "api": [
     "groupTitle": "EmojiService"
   },
   {
-    "type": "post",
-    "url": "/flair/:Srid",
-    "title": "Creates  a  Flair",
-    "name": "Create",
-    "group": "FlairService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>of the subbreddit that  user wants to create flair for.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "FlairName",
-            "description": "<p>the flair string  added (maximum 100 characters) .</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SubbRedditNotFound",
-            "description": "<p>the subreddit the user want to add flair to is not found</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "OverlengthedFlair",
-            "description": "<p>The string length of the flair is over 100 character.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"SubbRedditNotFound\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OverlengthedSubject\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "FlairService"
-  },
-  {
-    "type": "delete",
-    "url": "/flair/:SrId",
-    "title": "Delete",
-    "name": "Delete",
-    "group": "FlairService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>of the subbreddit that  user wants to delete flair for.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "FlairName",
-            "description": "<p>the flair string  user want to delete (maximum 100 characters) .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SubbRedditNotFound",
-            "description": "<p>the subreddit the user want to add flair to is not found</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "OverlengthedFlair",
-            "description": "<p>The string length of the flair user want to delete is over 100 character.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "FlairNotFound",
-            "description": "<p>The flair string user want to delete is not found.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"FlairNotFound\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"SubbRedditNotFound\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"OverlengthedSubject\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "FlairService"
-  },
-  {
-    "type": "get",
-    "url": "/flair/:SrID",
-    "title": "Flair Retrieval",
-    "name": "RetrieveFlairs",
-    "group": "FlairService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>of the subbreddit that  user wants to get flair for.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Array",
-            "optional": false,
-            "field": "Flairs",
-            "description": "<p>Array of Flairs of the users for the subbredditID requested .</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n \"Flairs\":[\n    {\n\"SubbredditID\":3\n,”FlairID”:1\n,”FlairString”:”Doctor”\n },\n{\"SubbredditID\":3\n,”FlairID”:2,\n,\"FlairString\":”Math Teacher\"\n}\n]\n    }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SubbRedditNotFound",
-            "description": "<p>the subreddit the user want to add flair to is not found</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"SubbRedditNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "FlairService"
-  },
-  {
-    "type": "post",
+    "type": "put",
     "url": "/Moderator/accept",
-    "title": "accept invite moderator",
-    "name": "Acceptmod",
+    "title": "accept moderator invite",
+    "name": "AcceptmodInvite",
     "group": "Moderator",
     "parameter": {
       "fields": {
@@ -12896,69 +12664,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "ModREQid",
-            "description": "<p>unique invite id  of request.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"ModREQid\": \"1011\",\n   \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Moderator"
-  },
-  {
-    "type": "post",
-    "url": "/Moderator/Invite/:Username&:SubbreditName",
-    "title": "invite moderator",
-    "name": "Addmod",
-    "group": "Moderator",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>unique Username  of the Moderaor to be added .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SubbreditName",
+            "field": "SrName",
             "description": "<p>unique SubbreditName  of the Subbredit .</p>"
           }
         ]
@@ -12966,27 +12672,16 @@ define({ "api": [
       "examples": [
         {
           "title": "Input",
-          "content": "{\n  \"Username\": \"User0\",\n  \"SubbreditName\":\"Ask reddit\" \n}",
+          "content": "{\n  \"SrName\": \"funny\"\n}",
           "type": "json"
         }
       ]
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "ModREQid",
-            "description": "<p>unique invite Id  of the request .</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success",
-          "content": "   HTTP/1.1 200 OK \n{\n\n         \"ModREQid\":\"101\"\n}",
+          "content": "HTTP/1.1 200 OK   \n{\n      message: \"Moderator request accepted\"\n}",
           "type": "json"
         }
       ]
@@ -12995,7 +12690,17 @@ define({ "api": [
       "examples": [
         {
           "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"user or subreddit not found\"\n}",
+          "content": "    HTTP/1.1 404 SrName not found\n{\n         \"error\":\"SrName not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Subbreddit doesn't exist\n{\n         \"error\":\"Subbreddit doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Request doesn't exist\n{\n         \"error\": \"Request doesn't exist\"\n}",
           "type": "json"
         }
       ]
@@ -13005,10 +12710,10 @@ define({ "api": [
     "groupTitle": "Moderator"
   },
   {
-    "type": "post",
-    "url": "/Moderator/Ban/:Username&:SubbreditName",
-    "title": "ban user",
-    "name": "BanUser",
+    "type": "put",
+    "url": "/Moderator/ban",
+    "title": "Remove moderator",
+    "name": "Ban_const_reportHandler___require____src_Reports_Report___",
     "group": "Moderator",
     "parameter": {
       "fields": {
@@ -13025,21 +12730,21 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "Username",
-            "description": "<p>unique Username  of the User to be banned.</p>"
+            "description": "<p>unique Username  of the user to be banned .</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "SubbreditName",
-            "description": "<p>unique SubbreditName  of the Subbredit to be banned from.</p>"
+            "field": "SrName",
+            "description": "<p>unique SubbreditName  of the Subbredit .</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Input",
-          "content": "{\n  \"Username\": \"User0\",\n  \"SubbreditName\":\"Ask reddit\" \n}",
+          "content": "{\n  \"Username\": \"User0\",\n  \"SrName\":\"Ask reddit\" \n}",
           "type": "json"
         }
       ]
@@ -13048,7 +12753,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"User banned successfully\" \n}",
+          "type": "json"
+        },
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Moderator banned successfully\" \n}",
           "type": "json"
         }
       ]
@@ -13057,7 +12767,47 @@ define({ "api": [
       "examples": [
         {
           "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"user or subreddit not found\"\n}",
+          "content": "    HTTP/1.1 404 Username not found\n{\n         \"error\":\"Username not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 SrName not found\n{\n         \"error\":\"SrName not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Subbreddit doesn't exist\n{\n         \"error\":\"Subbreddit doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User is not authorized to ban\n{\n         \"error\":\"User is not authorized to ban\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 User to be banned doesn't exist\n{\n         \"error\":\"User to be banned doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User cannot ban himself\n{\n         \"error\":\"User cannot ban himself\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User cannot ban the creator of the subreddit\n{\n         \"error\":\"User cannot ban the creator of the subreddit\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User doesn't have the authority to ban a moderator\n{\n         \"error\":\"User doesn't have the authority to ban a moderator\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User is already banned from Subreddit\n{\n         \"error\":\"User is already banned from Subreddit\"\n}",
           "type": "json"
         }
       ]
@@ -13277,10 +13027,10 @@ define({ "api": [
     "groupTitle": "Moderator"
   },
   {
-    "type": "delete",
-    "url": "/Moderator/LeaveMod/:Username&:SubbreditName",
-    "title": "Leave or remove Moderation",
-    "name": "LeaveMod",
+    "type": "put",
+    "url": "/Moderator/Invite",
+    "title": "invite moderator",
+    "name": "addMod",
     "group": "Moderator",
     "parameter": {
       "fields": {
@@ -13297,13 +13047,13 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "Username",
-            "description": "<p>unique Username  of the Moderaor to remove or leave .</p>"
+            "description": "<p>unique Username  of the Moderator to be added .</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "SubbreditName",
+            "field": "SrName",
             "description": "<p>unique SubbreditName  of the Subbredit .</p>"
           }
         ]
@@ -13311,7 +13061,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Input",
-          "content": "{\n  \"Username\": \"User0\",\n  \"SubbreditName\":\"Ask reddit\" \n}",
+          "content": "{\n  \"Username\": \"User0\",\n  \"SrName\":\"Ask reddit\" \n}",
           "type": "json"
         }
       ]
@@ -13320,7 +13070,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Moderator Invite Sent\" \n}",
           "type": "json"
         }
       ]
@@ -13329,7 +13079,366 @@ define({ "api": [
       "examples": [
         {
           "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"user or subreddit not found\"\n}",
+          "content": "    HTTP/1.1 404 Username not found\n{\n         \"error\":\"Username not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 SrName not found\n{\n         \"error\":\"SrName not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Subbreddit doesn't exist\n{\n         \"error\":\"Subbreddit doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User is not creator of the subreddit\n{\n         \"error\":\"User is not creator of the subreddit\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User is not creator of the subreddit\n{\n         \"error\":\"User is not creator of the subreddit\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 User to be added as moderator doesn't exist\n{\n         \"error\":\"User to be added as moderator doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User cannot add himself\n{\n         \"error\":\"User cannot add himself\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 401 User has already received a Moderation request\n{\n         \"error\":\"User has already received a Moderation request\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 401 User is already a moderator\n{\n         \"error\":\"User is already a moderator\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 401 User is banned from Subreddit\n{\n         \"error\":\"User is banned from Subreddit\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Moderator"
+  },
+  {
+    "type": "put",
+    "url": "/Moderator/leave",
+    "title": "leave moderation",
+    "name": "leaveMod",
+    "group": "Moderator",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SrName",
+            "description": "<p>unique SubbreditName  of the Subbredit .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"SrName\": \"funny\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK   \n{\n      message: \"User has left moderation\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 SrName not found\n{\n         \"error\":\"SrName not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Subbreddit doesn't exist\n{\n         \"error\":\"Subbreddit doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 User isn't a moderator\n{\n         \"error\": \"User isn't a moderator\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Moderator"
+  },
+  {
+    "type": "put",
+    "url": "/Moderator/reject",
+    "title": "reject moderator invite",
+    "name": "rejectModRequest",
+    "group": "Moderator",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SrName",
+            "description": "<p>unique SubbreditName  of the Subbredit .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"SrName\": \"funny\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK   \n{\n      message: \"Moderator request rejected\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 SrName not found\n{\n         \"error\":\"SrName not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Subbreddit doesn't exist\n{\n         \"error\":\"Subbreddit doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Request doesn't exist\n{\n         \"error\": \"Request doesn't exist\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Moderator"
+  },
+  {
+    "type": "put",
+    "url": "/Moderator/remove",
+    "title": "Remove moderator",
+    "name": "removeMod",
+    "group": "Moderator",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Username",
+            "description": "<p>unique Username  of the Moderator to be removed .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SrName",
+            "description": "<p>unique SubbreditName  of the Subbredit .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Username\": \"User0\",\n  \"SrName\":\"Ask reddit\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Moderator removed\" \n}",
+          "type": "json"
+        },
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"Request for moderation removed\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Username not found\n{\n         \"error\":\"Username not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 SrName not found\n{\n         \"error\":\"SrName not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Subbreddit doesn't exist\n{\n         \"error\":\"Subbreddit doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User is not creator of the subreddit\n{\n         \"error\":\"User is not creator of the subreddit\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 User to be removed from moderation doesn't exist\n{\n         \"error\":\"User to be removed from moderation doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User cannot remove himself\n{\n         \"error\":\"User cannot remove himself\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 401 User isn't a moderator\n{\n         \"error\":\"User isn't a moderator\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Moderator"
+  },
+  {
+    "type": "put",
+    "url": "/Moderator/unban",
+    "title": "Remove moderator",
+    "name": "unBan",
+    "group": "Moderator",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Username",
+            "description": "<p>unique Username  of the user to be unbanned .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "SrName",
+            "description": "<p>unique SubbreditName  of the Subbredit .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"Username\": \"User0\",\n  \"SrName\":\"Ask reddit\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"message\": \"User unbanned successfully\" \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Username not found\n{\n         \"error\":\"Username not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 SrName not found\n{\n         \"error\":\"SrName not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Subbreddit doesn't exist\n{\n         \"error\":\"Subbreddit doesn't exist\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User is not authorized to unban\n{\n         \"error\":\"User is not authorized to unban\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 User to be unbanned doesn't exist\n{\n         \"error\":\"User to be unbanned doesn't exist\"",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 402 User isn't banned from Subreddit\n{\n         \"error\":\"UseUser isn't banned from Subreddit\"\n}",
           "type": "json"
         }
       ]
@@ -15260,6 +15369,67 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/user/CreateFlair",
+    "title": "create new flair",
+    "name": "CreateFlair",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token .</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "srName",
+            "description": "<p>subreddit in which to create flair</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "flair",
+            "description": "<p>the flair you want to create</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 \n{\n   message:\"flair created\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 didnt send srName\n {\n error:\"subreddit name missing\"\n}\n HTTP/1.1 404 you alreadfy have a flair in this sr\n {\n error:\"you alredy have a flair in this subreddit\"\n}\n HTTP/1.1 404 didnt send flair \n {\n {error:\"flair missing\"\n}\n HTTP/1.1 404 subreddit doent exist\n {\n error:\"subreddit doesnt exist\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "post",
     "url": "/user/register",
     "title": "Register new user",
     "name": "CreateUser",
@@ -15323,6 +15493,60 @@ define({ "api": [
         {
           "title": "List error",
           "content": "   \nHTTP/1.1 406 password short\n{\n\"error\":\"Password too short\"\n}\n\n HTTP/1.1 406 username repeated \n{\n\"error\":\"Username already exists\"\n}\nHTTP/1.1 406 email repeated \n{\n\"error\":\"Email already exists\"\n}\n\nHTTP/1.1 406 email format \n{\n\"error\":\"Invalid Email format\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "delete",
+    "url": "/user/FlairDelete/:srName",
+    "title": "gets flair for this user in specific subreddit",
+    "name": "DeleteFlair",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token .</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "srName",
+            "description": "<p>the subreddit name you want to delete from</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 \n {\n     \"message\": \"flair deleted\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 no flair exists\n {\nerror:\"No flairs\"\n}",
           "type": "json"
         }
       ]
@@ -15622,6 +15846,101 @@ define({ "api": [
         {
           "title": "List error",
           "content": "HTTP/1.1 500 server error",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "get",
+    "url": "/user/Flairs",
+    "title": "gets all flairs for this user",
+    "name": "GetAllFlairs",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token .</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 \n[\n    {\n        \"_id\": \"5cc5e38d58af9d0e34be6663\",\n        \"username\": \"mostafa_hazem\",\n        \"srName\": \"Education\",\n        \"flair\": \"el bob\",\n        \"__v\": 0\n    },\n    {\n        \"_id\": \"5cc5ed2bf14172494416af83\",\n        \"username\": \"mostafa_hazem\",\n        \"srName\": \"Technology\",\n        \"flair\": \"el bob2\",\n        \"__v\": 0\n    }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 no flair exists\n {\nerror:\"No flairs\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "get",
+    "url": "/user/Flairs/:srName",
+    "title": "gets flair for this user in specific subreddit",
+    "name": "GetFlair",
+    "group": "me",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "auth",
+            "description": "<p>Users unique token .</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "srName",
+            "description": "<p>the subreddit name you want to delete from</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 \n {\n     \"flair\": \"el bob\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 no flair exists\n {\nerror:\"No flairs\"\n}",
           "type": "json"
         }
       ]

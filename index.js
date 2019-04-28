@@ -91,7 +91,7 @@ app.use(function (req, res, next) {
 
 const userHandler = require("./src/user");
 
-// console.log(userHandler.handleRegistration);
+
 app.post("/user/register", userHandler.handleRegistration);
 
 /**
@@ -172,6 +172,124 @@ app.post("/user/login", userHandler.handleLogin);
 *        "error"":"User doesnt exist"
 * }
 */
+
+app.get("/user/Flairs", passport.authenticate('jwt', { session: false }), userHandler.getAllFlairs);
+/**
+* @api {get} /user/Flairs gets all flairs for this user
+* @apiName GetAllFlairs
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* [
+    {
+        "_id": "5cc5e38d58af9d0e34be6663",
+        "username": "mostafa_hazem",
+        "srName": "Education",
+        "flair": "el bob",
+        "__v": 0
+    },
+    {
+        "_id": "5cc5ed2bf14172494416af83",
+        "username": "mostafa_hazem",
+        "srName": "Technology",
+        "flair": "el bob2",
+        "__v": 0
+    }
+]
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 no flair exists
+*      {
+*     error:"No flairs"
+*     }
+
+*/
+
+
+app.get("/user/Flairs/:srName", passport.authenticate('jwt', { session: false }), userHandler.getFlairsSubreddit);
+
+/**
+* @api {get} /user/Flairs/:srName gets flair for this user in specific subreddit
+* @apiName GetFlair
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*@apiParam {string} srName the subreddit name you want to delete from
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+    {
+        "flair": "el bob"
+    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 no flair exists
+*      {
+*     error:"No flairs"
+*     }
+
+*/
+
+app.delete("/user/FlairDelete/:srName", passport.authenticate('jwt', { session: false }), userHandler.deleteFlair);
+
+/**
+* @api {delete} /user/FlairDelete/:srName gets flair for this user in specific subreddit
+* @apiName DeleteFlair
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*@apiParam {string} srName the subreddit name you want to delete from
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+    {
+        "message": "flair deleted"
+    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 no flair exists
+*      {
+*     error:"No flairs"
+*     }
+
+*/
+
+app.post("/user/CreateFlair", passport.authenticate('jwt', { session: false }), userHandler.createFlair);
+/**
+* @api {post} /user/CreateFlair create new flair
+* @apiName CreateFlair
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*  @apiParam  {String} srName  subreddit in which to create flair
+  @apiParam  {String} flair the flair you want to create
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* {
+*    message:"flair created"
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 didnt send srName
+*      {
+*      error:"subreddit name missing"
+*     }
+     HTTP/1.1 404 you alreadfy have a flair in this sr
+*      {
+*      error:"you alredy have a flair in this subreddit"
+*     }
+     HTTP/1.1 404 didnt send flair 
+*      {
+*      {error:"flair missing"
+*     }
+     HTTP/1.1 404 subreddit doent exist
+*      {
+*      error:"subreddit doesnt exist"
+*     }
+*/
+
+
+
 
 
 app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserEmail);
@@ -1393,105 +1511,6 @@ app.delete("/emoji", (req, res) => { });
 */
 
 
-/**
- * @name FlairService
- * @note These are the routes for anything related to a user.
- * @note This is just general routing, You can modify as you want but before the delivery of the documentation
- */
-/** 
-* @api {post} /flair/:Srid   Creates  a  Flair 
-* @apiName Create
-* @apiGroup FlairService
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} SubredditName of the subbreddit that  user wants to create flair for.
-* @apiParam {string} FlairName the flair string  added (maximum 100 characters) .
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*     }
-*
-* @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
-* @apiError OverlengthedFlair The string length of the flair is over 100 character.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "SubbRedditNotFound"
-*     }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 403 Forbidden
-*     {
-*       "error": "OverlengthedSubject"
-*     }
-*/
-
-/**
-* @api {delete} /flair/:SrId   Delete
-* @apiName Delete
-* @apiGroup FlairService
-* @apiParam {String} SubredditName of the subbreddit that  user wants to delete flair for.
-* @apiParam {string} FlairName the flair string  user want to delete (maximum 100 characters) .
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*     }
-* @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
-* @apiError OverlengthedFlair The string length of the flair user want to delete is over 100 character.
-* @apiError FlairNotFound The flair string user want to delete is not found.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "FlairNotFound"
-*     }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "SubbRedditNotFound"
-*     }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 403 Forbidden
-*     {
-*       "error": "OverlengthedSubject"
-*     }
-*/
-
-
-/**
-* @api {get} /flair/:SrID  Flair Retrieval
-* @apiName RetrieveFlairs
-* @apiGroup FlairService
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} SubredditName of the subbreddit that  user wants to get flair for.
-* @apiSuccess {Array} Flairs   Array of Flairs of the users for the subbredditID requested .
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*  "Flairs":[
-    {
-* "SubbredditID":3
-* ,”FlairID”:1
-* ,”FlairString”:”Doctor”
-*  },
-* {"SubbredditID":3
-* ,”FlairID”:2,
-* ,"FlairString":”Math Teacher"
-* }
-]
-*     }
-
-* @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "SubbRedditNotFound"
-*     }
-
-
-*/
-app.get("/flair", (req, res) => { });
-app.post("/flair", (req, res) => { });
-app.put("/flair", (req, res) => { });
-app.delete("/flair", (req, res) => { });
 
 
 /**

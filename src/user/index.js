@@ -1,4 +1,7 @@
 const User = require("../../models/UserSchema");
+const flair = require("../../models/Flair");
+const src= require("../../models/subredditsSchema");
+const sr=src.Subreddit;
 const notification = require('../../models/notificationSchema.js');
 const validator = require("email-validator");
 const JWTconfig = require("../../JWT/giveToken");
@@ -871,6 +874,127 @@ class UserHandler {
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
     res.status(200).send({receivedRequests: user.RecReq});
+  }
+  
+  /**
+   *     a function that craetes a new flair 
+   *     @function createFlair
+   *     @returns {JSON} the response for the request
+   */
+  async createFlair(req, res)
+  {
+    const username = JWTconfig.getUsernameFromToken(req);
+    const srName=req.body.srName
+
+    /**
+   *     checks if data is sent correctly
+   */
+    if(!srName){res.status(404).send({error:"subreddit name missing"})}
+    else
+  {
+    
+    /**
+   *     checks if user already has a flair in this subreddit 
+   */
+    const flairExists = await flair.findOne({$and: [{username }, {srName}]})
+
+    if (flairExists) {res.status(404).send({error:"you alredy have a flair in this subreddit"})}
+    else
+    {
+      const srExists=await sr.findOne({name:srName});
+      
+    /**
+   *     checks if subreddit exists 
+   */
+      if(!srExists) {res.status(404).send({error:"subreddit doesnt exist"})}
+      else
+      {
+        const flairName= req.body.flair;
+        /**
+   *     checks if flair name was sent 
+   */
+        if(!flairName){res.status(404).send({error:"flair missing"})}
+        else
+        {
+
+          /**
+   *     creates the flair in the flair coleection
+   */
+        const createFlair=await flair.create({username,srName,flair:flairName});
+        res.status(200).send({message:"flair created"})
+        }
+      }
+    }
+   }
+  }
+
+  /**
+   *     a function gets all flairs for user
+   *     @function getAllFlairs
+   *     @returns {JSON} the response for the request
+   */
+  async getAllFlairs(req, res)
+
+  {
+    const username = JWTconfig.getUsernameFromToken(req);
+  
+    
+    /**
+    *    This finds the flairs and checks if there are none 
+    */
+    const flairsReturned= await flair.find({username});
+    if (flairsReturned.length==0){res.status(404).send({error:"No flairs"});}
+
+    else
+    res.status(200).send(flairsReturned);
+  }
+
+  /**
+   *     a function gets all flairs for user
+   *     @function getFlairsSubreddit
+   *     @returns {JSON} the response for the request
+   */
+
+  async getFlairsSubreddit(req, res)
+
+  {
+    const username = JWTconfig.getUsernameFromToken(req);
+    const srName=req.params.srName
+    
+    /**
+    *    This finds the flair 
+    * 
+    */
+    const flairsReturned= await flair.findOne({$and: [{username }, {srName}]})
+    if (!flairsReturned){res.status(404).send({error:"No flairs"});}
+
+    else
+    res.status(200).send( {"flair":flairsReturned.flair});
+  }
+ 
+  async deleteFlair(req, res)
+
+  {
+    const username = JWTconfig.getUsernameFromToken(req);
+    const srName=req.params.srName
+    
+    /**
+    *    This finds the flair 
+    * 
+    */
+    const flairsReturned= await flair.findOne({$and: [{username }, {srName}]})
+    if (!flairsReturned){res.status(404).send({error:"No flairs"});}
+
+
+    /**
+    *    This deletes the flair 
+    * 
+    */
+    else{
+    const flairId=flairsReturned._id;
+    const flairDelete= await flair.findOneAndDelete({_id:flairId});
+    res.status(200).send( {message:"flair removed"});
+    }
   }
 
 
