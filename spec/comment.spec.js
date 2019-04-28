@@ -66,7 +66,11 @@ describe("comment tests", () => {
             Subreddit.deleteMany({ adminUsername: 'Mostafa0Sherif' }, function () {
                 Comment.deleteMany({ $or: [{ username: 'Mostafa0Sherif' }, { username: 'Mostafa1Sherif' }] }, function () {
                     user.deleteMany({ $or: [{ Username: 'Mostafa0Sherif' }, { Username: 'Mostafa1Sherif' }] }, function () {
-                        done();
+                        vote.deleteMany({$or: [{ username: 'Mostafa0Sherif' }, { username: 'Mostafa1Sherif' }]},function(){
+                            report.deleteMany({$and:[{reportedId: c_id},{post:false}]},function(){
+                                done();
+                            })
+                        })
                     })
                 })
             })

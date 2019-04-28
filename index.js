@@ -1652,7 +1652,7 @@ app.delete("/emoji", (req, res) => { });
  * @apiError EmptyText the text is empty.
  * @apiError AccessDenied If the user isn't logged in.
  */
-const commentHandler = require('./src/Comments/Comment');
+const commentHandler = require('./src/Comments/Comment').cHandler;
 app.get("/comment/:c_id", commentHandler.handleGetComment);
 app.get("/comment/all/:id", commentHandler.handleGetAllComments);
 app.post("/comment/:id", passport.authenticate('jwt', { session: false }), commentHandler.handlePostComment);
@@ -1660,6 +1660,7 @@ app.put("/comment/:c_id", passport.authenticate('jwt', { session: false }), comm
 app.delete("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleDeleteComent);
 app.put("/comment/vote/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleVoteComment);
 app.post("/comment/report/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleReportComment);
+
 
 
 /**
