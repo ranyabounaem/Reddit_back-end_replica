@@ -18,7 +18,6 @@ async function checkIfBlockedByMe (user,username)
   if(blockedUser){return true}
   else return false;
 }
-
 async function checkIfBlockedByHim (user,username){
   
   const blockedUser =await user.blockedUsers.find(function(userInBlockedArray)
@@ -30,7 +29,6 @@ async function checkIfBlockedByHim (user,username){
  else return false;
  
 }
-
 async function checkFriend(user, fUsername)
 {
   const Friend =await user.Friends.find(function(UserInFriendsarray) {
@@ -40,7 +38,6 @@ async function checkFriend(user, fUsername)
   if(Friend){return true;}
   else return false;
 }
-
 async function checkSentReq(user, fUsername)
 {
   const sentReq =await user.SentReq.find(function(UserInSentReqsarray) {
@@ -59,7 +56,6 @@ async function checkRecReq(user, fUsername)
   if(recReq){return true;}
   else return false;
 }
-
 function blockAndRemove(user, fUser)
 {
   user.Friends.pop(fUser.Username);
@@ -80,7 +76,6 @@ function AddReq(user, fUser)
   fUser.RecReq.push(user.Username);
   fUser.save();
 }
-
 function popSentRequest(user, fUser)
 {
   user.SentReq.pop(fUser.Username);
@@ -89,7 +84,6 @@ function popSentRequest(user, fUser)
   fUser.RecReq.pop(user.Username);
   fUser.save();
 }
-
 function removeFriend(user, fUser)
 {
   user.Friends.pop(fUser.Username);
@@ -98,8 +92,6 @@ function removeFriend(user, fUser)
   fUser.Friends.pop(user.Username);
   fUser.save();
 }
-
-acceptRequest
 function acceptRequest(user, fUser)
 {
 
@@ -739,7 +731,7 @@ class UserHandler {
 
      /**
    *     a function that accepts a friend request
-   *     @function addFriend
+   *     @function acceptRequest
    *     @returns {JSON} the response for the request
    */
   async acceptRequest(req, res)
@@ -788,7 +780,7 @@ class UserHandler {
 
      /**
    *     a function that rejects a friend request
-   *     @function addFriend
+   *     @function rejectRequest
    *     @returns {JSON} the response for the request
    */
   async rejectRequest(req, res)
@@ -838,7 +830,7 @@ class UserHandler {
 
    /**
    *     a function that returns the list of friends for a certain user
-   *     @function addFriend
+   *     @function getFriends
    *     @returns {JSON} the response for the request
    */
   async getFriends(req, res)
@@ -853,7 +845,7 @@ class UserHandler {
 
   /**
    *     a function that returns the list of Sent requests for a certain user
-   *     @function addFriend
+   *     @function getSentRequests
    *     @returns {JSON} the response for the request
    */
   async getSentRequests(req, res)
@@ -867,7 +859,7 @@ class UserHandler {
   }
   /**
    *     a function that returns the list of Received requests for a certain user
-   *     @function addFriend
+   *     @function getReceivedRequests
    *     @returns {JSON} the response for the request
    */
   async getReceivedRequests(req, res)
@@ -1001,6 +993,32 @@ class UserHandler {
     }
   }
 
-
+  /**
+   *     a function that edits the information About the user
+   *     @function editAbout
+   *     @returns {JSON} the response for the request
+   */
+  async editAbout(req, res)
+  {
+    /**
+    *    This finds the user that is going to edit the "About" information section using the username in token
+    */
+   const username = JWTconfig.getUsernameFromToken(req);
+   const user = await User.findOne({ Username: username });
+   /**
+   *    This checks if the About parameter isn't in the request
+   *     if not found it sends error 404 with message "About parameter not found"
+   *     Then it checks if the type of the About parameter is a string
+   *     else it changes the About 
+   */
+   if(req.body.About == null) return res.status(404).send("About parameter not found");
+   else if(typeof req.body.About != 'string' ) return res.status(402).send({error : "Enter a valid String containing information"});
+   else
+    {
+      user.About = req.body.About;
+      user.save();
+      return res.status(200).send({message: "About Information updated successfully"})
+    }
+  }
 }
 module.exports = new UserHandler();

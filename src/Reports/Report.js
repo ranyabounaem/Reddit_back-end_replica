@@ -181,7 +181,6 @@ class reportHandler {
    *     @function deletePost
    *     @returns {JSON} the response for the request
    */
- 
   async deletePost(req, res)
   {
     const username = JWTconfig.getUsernameFromToken(req);
@@ -291,6 +290,11 @@ class reportHandler {
    }
   }
   
+  /**
+   *     a function that Sends a request to a user to become a moderator
+   *     @function addMod
+   *     @returns {JSON} the response for the request
+   */
   async addMod(req, res)
   {
     /**
@@ -379,7 +383,11 @@ class reportHandler {
         }
       }
   }
-
+  /**
+   *     a function that either removes moderator request or remove the moderator from moderation
+   *     @function removeMod
+   *     @returns {JSON} the response for the request
+   */
   async removeMod(req, res)
   {
     /**
@@ -470,7 +478,11 @@ class reportHandler {
         }
       }
   }
-
+  /**
+   *     a function that accepts a request to a user to become a moderator
+   *     @function acceptModRequest
+   *     @returns {JSON} the response for the request
+   */
   async acceptModRequest(req, res)
   {
     /**
@@ -522,7 +534,11 @@ class reportHandler {
       }
     }
   }
-
+  /**
+   *     a function that rejects a request to a user to become a moderator
+   *     @function rejectModRequest
+   *     @returns {JSON} the response for the request
+   */
   async rejectModRequest(req, res)
   {
     /**
@@ -574,7 +590,11 @@ class reportHandler {
       }
     }
   }
-
+  /**
+   *     a function that allows the moderator to retire from moderation
+   *     @function leaveMod
+   *     @returns {JSON} the response for the request
+   */
   async leaveMod(req, res)
   {
     /**
@@ -626,7 +646,11 @@ class reportHandler {
       }
     }
   }
-
+  /**
+   *     a function that allows the moderator or creator of subreddit to ban a certain user from seeing this subreddit
+   *     @function Ban
+   *     @returns {JSON} the response for the request
+   */
   async Ban(req, res)
   {
     /**
@@ -736,7 +760,11 @@ class reportHandler {
       }
     }    
   }
-
+  /**
+   *      a function that allows the moderator or creator of subreddit to unban a certain user
+   *     @function unBan
+   *     @returns {JSON} the response for the request
+   */
   async unBan(req, res)
   {
     /**

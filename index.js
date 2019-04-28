@@ -292,8 +292,8 @@ app.post("/user/CreateFlair", passport.authenticate('jwt', { session: false }), 
 
 
 
-app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserEmail);
-app.put("/me/edit/Password/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserPassword);
+
+
 app.get("/me/About/:Username", passport.authenticate('jwt', { session: false }), userHandler.Getmyinfo);
 
 
@@ -943,7 +943,7 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 
 
 
-
+app.put("/me/edit/Password/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserPassword);
 /**
 * @api {Put} /me/edit/Password/:Username Edit User password
 * @apiName EditUserPassword
@@ -982,6 +982,38 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 *        error: "Password too short"
 *     }
 */
+
+app.put("/me/edit/About", passport.authenticate('jwt', { session: false }), userHandler.editAbout);
+/**
+* @api {Put} /me/edit/About Edit About Info
+* @apiName EditAbout
+* @apiGroup me
+* @apiParam  {String} About the About information of the User.
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParamExample {json} Input
+*    {
+*      "About": "My name is Uzumaki, I am the perfect being on Earth"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*    {
+*        "message": "About Information updated successfully"
+*    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 About parameter not found
+*      {
+*       "error": "About parameter not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 Enter a valid String containing information
+*      {
+*       "error": "Enter a valid String containing information"
+*     }
+*/
+
+app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserEmail);
 
 /**
 * @api {Put} /me/edit/email/:Username Edit User email
@@ -1023,7 +1055,6 @@ app.put("/Moderator/ban", passport.authenticate('jwt', { session: false }), repo
 /**
 * @api {put} /Moderator/ban   Remove moderator
 * @apiName Ban
-const reportHandler = require("./src/Reports/Report");
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
 * @apiParam  {String} Username unique Username  of the user to be banned .

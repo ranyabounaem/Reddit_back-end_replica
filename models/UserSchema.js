@@ -35,9 +35,9 @@ const UserSchema = new Schema({
 
  SentReq:[String],
 
- RecReq:[String]
+ RecReq:[String],
 
- 
+ About: String
 
 
 });
