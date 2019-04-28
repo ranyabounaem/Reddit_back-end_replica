@@ -10,6 +10,19 @@ const ObjectId = require('mongodb').ObjectID;
 const jwt = require('../../JWT/giveToken');
 const getUser = jwt.getUsernameFromToken;
 
+async function deleteComment(ID) {
+
+    const deletedComment = await Comment.findOneAndDelete({ _id: ID });
+    await Comment.deleteMany({ $and: [{ parent_id: ID }, { reply: true }] });
+    await report.deleteMany({ $and: [{ post: false }, { reportedId: ID }] });
+    await vote.deleteMany({ $and: [{ post: false }, { votedID: ID }] });
+    if (deletedComment == null) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 class CommentHandler {
     constructor() {
 
@@ -320,8 +333,23 @@ class CommentHandler {
                                         res.status(500);
                                         res.send({ "error": "internalServerError" });
                                     } else {
-                                        res.status(200);
-                                        res.json("Delete Successful");
+                                        //deleting votes of this comment
+                                        vote.deleteMany({ $and: [{ post: false }, { votedID: ID }] }, function (err) {
+                                            if (err) {
+                                                res.status(500);
+                                                res.send({ "error": "internalServerError" });
+                                            } else {
+                                                // deleting reports of this comment
+                                                report.deleteMany({ $and: [{ post: false }, { reportedId: ID }] }, function (err) {
+                                                    if (err) {
+                                                        res.status(500);
+                                                        res.send({ "error": "internalServerError" });
+                                                    } else {
+                                                        res.status(200).json("Delete Successful");
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -363,7 +391,7 @@ class CommentHandler {
                                     v.save();
                                     res.status(200).json('The comment has been upvoted successfully');
 
-                                 //creating a new instace (downvote) & decrementing the votes of the comment
+                                    //creating a new instace (downvote) & decrementing the votes of the comment
                                 } else if (req.body.direction === -1) {
                                     const v = new vote({
                                         username: user,
@@ -414,12 +442,12 @@ class CommentHandler {
                                             res.status(500);
                                             res.send({ "error": "internalServerError" });
                                         } else {
-                                            if(retVote.upvote === true){
+                                            if (retVote.upvote === true) {
                                                 //decrementing the votes if it was upvoted before
-                                                retComment.votes= retComment.votes -1;
-                                            }else{
+                                                retComment.votes = retComment.votes - 1;
+                                            } else {
                                                 //incrementing the votes if it was downvoted before
-                                                retComment.votes= retComment.votes +1;
+                                                retComment.votes = retComment.votes + 1;
                                             }
                                             retComment.save();
                                             res.status(200);
@@ -447,9 +475,9 @@ class CommentHandler {
                 } else {
                     let text;
                     if (req.body.text == undefined) {
-                        text="";
+                        text = "";
                     } else {
-                        text=req.body.text;
+                        text = req.body.text;
                     }
                     const r = new report({
                         description: text,
@@ -464,4 +492,5 @@ class CommentHandler {
         }
     }
 }
-module.exports = new CommentHandler();
+module.exports.cHandler = new CommentHandler();
+module.exports.cm =  deleteComment;
