@@ -169,6 +169,8 @@ class UserHandler {
             req.body.Password=hashed;
 
             const user = await User.create(req.body);
+            const addDate=await User.updateOne({ _id: user._id }, { $set: { cakeday:Date.now()} })
+            const saveDate= await user.save();
             /**
              *   This creates a new token
              */
@@ -368,7 +370,7 @@ class UserHandler {
        */
         res
           .status(200)
-          .send({ Username: req.params.Username, Email: RetUser.Email });
+          .send({ Username: req.params.Username, Email: RetUser.Email,cakeday:RetUser.cakeday });
       }
     });
   }
@@ -519,7 +521,8 @@ class UserHandler {
     const userinfo=
     {
       Username:req.params.userToView,
-      Subscriptions: userViewed.Subscriptions
+      Subscriptions: userViewed.Subscriptions,
+      cakeday:userViewed.cakeday
     }
 
     res.status(200).send(userinfo);
@@ -549,7 +552,8 @@ class UserHandler {
     const userinfo=
     {
       Username:req.params.userToView,
-      Subscriptions: userViewed.Subscriptions
+      Subscriptions: userViewed.Subscriptions,
+      cakeday:userViewed.cakeday
     }
 
     res.status(200).send(userinfo);

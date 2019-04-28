@@ -308,6 +308,7 @@ app.get("/user/info/:userToView", userHandler.getUserInfo);
 * {
 *      "Username":"user1",
      Subscriptions:["sub1","sub2","sub3"]
+     ,"cakeday":"2019-04-28T19:07:29.386Z"
 * }
 *    
 * 
@@ -329,7 +330,8 @@ app.get("/me/user/info/:userToView", passport.authenticate('jwt', { session: fal
  *    HTTP/1.1 200 
  * {
  *      "Username":"user1",
-      Subscriptions:["sub1","sub2","sub3"]
+      Subscriptions:["sub1","sub2","sub3"],
+      ,"cakeday":"2019-04-28T19:07:29.386Z"
  * }
  *    
  * 
@@ -805,7 +807,7 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
 * @apiParam {String} Username username of the user that the information is about.
 * @apiSuccess {String} Name name of the user
-* @apiSuccess {String} Cakeday date of the user joining reddit.
+* @apiSuccess {String} akeday date of the user joining reddit.
 * @apiSuccess {Number} Karma karma of the user
 * @apiSuccess {JPG} Pic profile picture of the user
 * @apiSuccessExample Success-Response:
@@ -813,7 +815,7 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 *     {
 *       "Username" : "TheRealBatman",
 *       "Name": "Mark",
-*       "Cakeday": "21-12-2019",
+*       "cakeday":"2019-04-28T19:07:29.386Z",
 *       "Karma": 1449,
 *       "Pic" : data:image/jpeg;base64,...............
 *      }

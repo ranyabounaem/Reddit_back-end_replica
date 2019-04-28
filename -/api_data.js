@@ -14922,7 +14922,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "Cakeday",
+            "field": "akeday",
             "description": "<p>date of the user joining reddit.</p>"
           },
           {
@@ -14944,7 +14944,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"Username\" : \"TheRealBatman\",\n  \"Name\": \"Mark\",\n  \"Cakeday\": \"21-12-2019\",\n  \"Karma\": 1449,\n  \"Pic\" : data:image/jpeg;base64,...............\n }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"Username\" : \"TheRealBatman\",\n  \"Name\": \"Mark\",\n  \"cakeday\":\"2019-04-28T19:07:29.386Z\",\n  \"Karma\": 1449,\n  \"Pic\" : data:image/jpeg;base64,...............\n }",
           "type": "json"
         }
       ]
@@ -15972,7 +15972,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "   HTTP/1.1 200 \n{\n     \"Username\":\"user1\",\n     Subscriptions:[\"sub1\",\"sub2\",\"sub3\"]\n}",
+          "content": "   HTTP/1.1 200 \n{\n     \"Username\":\"user1\",\n     Subscriptions:[\"sub1\",\"sub2\",\"sub3\"]\n     ,\"cakeday\":\"2019-04-28T19:07:29.386Z\"\n}",
           "type": "json"
         }
       ]
@@ -16026,7 +16026,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "   HTTP/1.1 200 \n{\n     \"Username\":\"user1\",\n      Subscriptions:[\"sub1\",\"sub2\",\"sub3\"]\n}",
+          "content": "   HTTP/1.1 200 \n{\n     \"Username\":\"user1\",\n      Subscriptions:[\"sub1\",\"sub2\",\"sub3\"],\n      ,\"cakeday\":\"2019-04-28T19:07:29.386Z\"\n}",
           "type": "json"
         }
       ]
