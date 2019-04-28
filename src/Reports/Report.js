@@ -143,8 +143,7 @@ class reportHandler {
 
     if (!ObjectId.isValid(reportToDeleteId))  {res.status(404).send({error:"ReportId not valid"});}
     else{
-  
-      *    This checks 
+   
     /**
     *    This checks if report exists 
     */

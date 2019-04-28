@@ -898,7 +898,7 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 *      }
 */
 
-/**
+reportHandler = require("./src/Reports/Report");
 app.put("/Moderator/ban", passport.authenticate('jwt', { session: false }), reportHandler.Ban);
 /**
 * @api {put} /Moderator/ban   Remove moderator
