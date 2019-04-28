@@ -12,7 +12,7 @@ const SubredditPostSchema = new Schema({
         default: Date.now
     },
     subredditName: String,
-    postFile: {type: String, required: true},
+    postFile: String,
     spoiler: {type: Boolean, default: false},
     votes: {type: Number, default: 0}
 });
@@ -31,8 +31,8 @@ const SubredditSchema = new Schema({
         default: Date.now
     },
     bio: [String],
-    subredditFile: {type: String, required: false},
-    modUsername: [String],
+    subredditFile: String,
+    modUsername: [String]
     bannedUsers: [String]
 });
 

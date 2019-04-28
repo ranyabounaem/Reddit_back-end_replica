@@ -1141,6 +1141,66 @@
   },
   {
     "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/busboy/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/busboy/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/busboy/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/busboy/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/busboy/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/busboy/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_busboy_node_modules_isarray_build_build_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
     "url": "public",
     "title": "",
     "version": "0.0.0",
@@ -2147,6 +2207,66 @@
     "filename": "./node_modules/delegates/index.js",
     "group": "D__memestock_backend_node_modules_delegates_index_js",
     "groupTitle": "D__memestock_backend_node_modules_delegates_index_js",
+    "name": "Public"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/dicer/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/dicer/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/dicer/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/dicer/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/dicer/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "name": "Private"
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./node_modules/dicer/node_modules/isarray/build/build.js",
+    "group": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
+    "groupTitle": "D__memestock_backend_node_modules_dicer_node_modules_isarray_build_build_js",
     "name": "Public"
   },
   {
@@ -12274,27 +12394,6 @@
         ]
       }
     },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "HTTP/1.1",
-            "description": "<p>200 Ok.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "   HTTP/1.1 404 Report not found {\n        \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "EmojiService"
@@ -12324,6 +12423,27 @@
           }
         ]
       }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "HTTP/1.1",
+            "description": "<p>200 Ok.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "   HTTP/1.1 404 Report not found {\n        \"error\":\"request not found\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -12947,6 +13067,150 @@
     "groupTitle": "Moderator"
   },
   {
+    "type": "Delete",
+    "url": "/Moderator/Comment/:reportId",
+    "title": "delete reported comment",
+    "name": "DeleteComment",
+    "group": "Moderator",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": ":reportId",
+            "description": "<p>ID of report.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "  HTTP/1.1 200 OK\n{message:\"Comment deleted}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 The user isnt a moderator\n {\n  \"error\": \"You are not a moderator in this subreddit\"\n}\nHTTP/1.1 401 report doesnt exist\n {\n  \"error\":\"report doesnt exist\"\n}\nHTTP/1.1 401 ReportId not valid format\n {\n  \"error\":\"ReportId not valid\"\n}\nHTTP/1.1 401 Report isnt for a post\n {\n  \"error\":\"This isnt a Comment report\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Moderator"
+  },
+  {
+    "type": "Delete",
+    "url": "/Moderator/Post/:reportId",
+    "title": "delete reported post",
+    "name": "DeletePost",
+    "group": "Moderator",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "reportId",
+            "description": "<p>ID of report.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "  HTTP/1.1 200 OK\n{message:\"post deleted}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 The user isnt a moderator\n {\n  \"error\": \"You are not a moderator in this subreddit\"\n}\nHTTP/1.1 401 report doesnt exist\n {\n  \"error\":\"report doesnt exist\"\n}\nHTTP/1.1 401 ReportId not valid format\n {\n  \"error\":\"ReportId not valid\"\n}\nHTTP/1.1 401 Report isnt for a post\n {\n  \"error\":\"This isnt a post report\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Moderator"
+  },
+  {
+    "type": "Delete",
+    "url": "/Moderator/Reports/:reportId",
+    "title": "delete report",
+    "name": "DeleteReport",
+    "group": "Moderator",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "reportId",
+            "description": "<p>ID of report.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "  HTTP/1.1 200 OK\n{message:\"report deleted}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 The user isnt a moderator\n {\n  \"error\": \"You are not a moderator in this subreddit\"\n}\nHTTP/1.1 401 report doesnt exist\n {\n  \"error\":\"report doesnt exist\"\n}\nHTTP/1.1 401 ReportId not valid format\n {\n  \"error\":\"ReportId not valid\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "Moderator"
+  },
+  {
     "type": "get",
     "url": "/Moderator/Reports/",
     "title": "Get all reports",
@@ -12972,70 +13236,29 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "ReporId",
-            "description": "<p>unique ReporId  of the Repor.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success",
-          "content": "   HTTP/1.1 200 OK\n[{\n        \"ReporId\":\"1010\"\n}]",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "HTTP/1.1 500 server error",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Moderator"
-  },
-  {
-    "type": "Put",
-    "url": "/Moderator/Reports/:id",
-    "title": "ignore report",
-    "name": "Ignoreports",
-    "group": "Moderator",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
+            "field": "reportedId",
+            "description": "<p>id of comment or post</p>"
           },
           {
-            "group": "Parameter",
-            "type": "String",
+            "group": "Success 200",
+            "type": "srName",
             "optional": false,
-            "field": "ReporId",
-            "description": "<p>unique ReporId  of the Repor.</p>"
+            "field": "subreddit",
+            "description": "<p>of report</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "post",
+            "description": "<p>a type that is  true if post , false if comment</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Input",
-          "content": "{\n  \"ReporId\": \"1101\", \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK",
+          "content": "   HTTP/1.1 200 OK\n[{\n        [\n    {\n        \"_id\": \"5cc4b675d7eb7343e073df38\",\n        \"reportedId\": \"121213521\",\n        \"srName\": \"Education\",\n        \"post\": true,\n        \"__v\": 0\n    },\n    {\n        \"_id\": \"5cc4b675d7eb7343e073df39\",\n        \"reportedId\": \"435422\",\n        \"srName\": \"343545454\",\n        \"post\": true,\n        \"__v\": 0\n    },\n    {\n        \"_id\": \"5cc4b675d7eb7343e073df3b\",\n        \"reportedId\": \"4n\",\n        \"srName\": \"Education\",\n        \"post\": true,\n        \"__v\": 0\n    }\n]\n}]",
           "type": "json"
         }
       ]
@@ -13044,7 +13267,7 @@
       "examples": [
         {
           "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"report not found\"\n}",
+          "content": "HTTP/1.1 401 The user isnt a moderator\n {\n  \"error\": \"You are not a moderator to any subreddit\"\n}\nHTTP/1.1 401 no reports\n {\n  \"error\":\"No reports\"\n}",
           "type": "json"
         }
       ]
@@ -13107,61 +13330,6 @@
         {
           "title": "List error",
           "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"user or subreddit not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Moderator"
-  },
-  {
-    "type": "delete",
-    "url": "/Moderator/Reports/:id",
-    "title": "delete report",
-    "name": "deletereports",
-    "group": "Moderator",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Token",
-            "description": "<p>SyncToken That is sent with authentication.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "ReporId",
-            "description": "<p>unique ReporId  of the Repor.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"ReporId\": \"1101\", \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"report not found\"\n}",
           "type": "json"
         }
       ]
@@ -13738,8 +13906,8 @@
     "groupTitle": "PMService"
   },
   {
-    "type": "post",
-    "url": "/me/pm/",
+    "type": "get",
+    "url": "/me/pm/?mine=value",
     "title": "Retrieve",
     "name": "RetrieveMessages",
     "group": "PMService",
@@ -13758,7 +13926,7 @@
             "type": "Boolean",
             "optional": false,
             "field": "mine",
-            "description": "<p>True if u need to retrieve the inbox false if u need to retrieve the sent.</p>"
+            "description": "<p>true if u need to retrieve the inbox false if u need to retrieve the sent.</p>"
           }
         ]
       }
@@ -13943,10 +14111,17 @@
           },
           {
             "group": "Parameter",
+            "type": "object",
+            "optional": false,
+            "field": "postFile",
+            "description": "<p>Post image or video (Supported file formats: jpeg/png/mp4)</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "boolean",
             "optional": false,
-            "field": "Spoiler",
-            "description": "<p>(NOT YET) [Spoiler==false] Mark if post is spoiler</p>"
+            "field": "spoiler",
+            "description": "<p>Mark if post is spoiler</p>"
           }
         ]
       }
@@ -13987,17 +14162,17 @@
           },
           {
             "group": "Parameter",
-            "type": "string",
+            "type": "object",
             "optional": false,
-            "field": "SyncToken",
-            "description": "<p>(NOT YET) Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
+            "field": "subredditFile",
+            "description": "<p>Subreddit's image or video (Supported file formats: jpeg/png/mp4).</p>"
           },
           {
             "group": "Parameter",
             "type": "string[]",
             "optional": false,
-            "field": "ModUsername",
-            "description": "<p>(NOT YET)  Subreddit moderators' usernames.</p>"
+            "field": "modUsername",
+            "description": "<p>Subreddit moderators' usernames.</p>"
           }
         ]
       }
@@ -14120,6 +14295,13 @@
             "optional": false,
             "field": "threadBody",
             "description": "<p>New body of the thread.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "boolean",
+            "optional": false,
+            "field": "spoiler",
+            "description": "<p>New spoiler.</p>"
           }
         ]
       }
@@ -14173,10 +14355,24 @@
           },
           {
             "group": "Parameter",
+            "type": "string[]",
+            "optional": false,
+            "field": "newMods",
+            "description": "<p>Updated moderators.</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "About",
-            "description": "<p>(NOT YET) Updated about</p>"
+            "field": "newBio",
+            "description": "<p>Updated about.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": false,
+            "field": "newFile",
+            "description": "<p>New image or video.</p>"
           }
         ]
       }
@@ -14250,6 +14446,49 @@
   },
   {
     "type": "post",
+    "url": "/sr/:srName/thread/:postId/report",
+    "title": "Unvote a thread inside subreddit",
+    "name": "ReportThread",
+    "group": "SrService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Send token.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "reportText",
+            "description": "<p>Reason for reporting the post.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "reportedPost",
+            "description": "<p>Returns the unvoted post inside subreddit.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "SrService"
+  },
+  {
+    "type": "post",
     "url": "/sr/:srName/subs",
     "title": "Subscribe to a Sr",
     "name": "SubredditSubscribtion",
@@ -14312,6 +14551,42 @@
             "optional": false,
             "field": "subscribersList",
             "description": "<p>Returns the new subscribers list.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "SrService"
+  },
+  {
+    "type": "delete",
+    "url": "/sr/:srName/thread/:postId/vote",
+    "title": "Unvote a thread inside subreddit",
+    "name": "UnvoteSrThread",
+    "group": "SrService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Send token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "unvotedPost",
+            "description": "<p>Returns the unvoted post inside subreddit.</p>"
           }
         ]
       }
@@ -14401,10 +14676,10 @@
           },
           {
             "group": "Success 200",
-            "type": "object[]",
+            "type": "string",
             "optional": false,
-            "field": "posts",
-            "description": "<p>All posts.</p>"
+            "field": "postId",
+            "description": "<p>All posts ids.</p>"
           },
           {
             "group": "Success 200",
@@ -14431,22 +14706,65 @@
             "group": "Success 200",
             "type": "string[]",
             "optional": false,
-            "field": "ModIds",
-            "description": "<p>(NOT YET)  ID of Modertors.</p>"
+            "field": "modUsername",
+            "description": "<p>Usernames of Modertors.</p>"
           },
           {
             "group": "Success 200",
             "type": "string[]",
             "optional": false,
-            "field": "UserIds",
-            "description": "<p>(NOT YET  Ids of subscribed users .</p>"
+            "field": "subscibers",
+            "description": "<p>Subscriber usernames.</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number[]",
+            "type": "object",
             "optional": false,
-            "field": "SubCount",
-            "description": "<p>(NOT YET)  Number of subscribers.</p>"
+            "field": "subredditFile",
+            "description": "<p>Image or video of subreddit.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "SrService"
+  },
+  {
+    "type": "post",
+    "url": "/sr/:srName/thread/:postId/vote",
+    "title": "Upvote or downvote a thread inside subreddit",
+    "name": "VoteSrThread",
+    "group": "SrService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Send token.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "boolean",
+            "optional": false,
+            "field": "upvote",
+            "description": "<p>Is the user upvoting or downvoting.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "votedPost",
+            "description": "<p>Returns the voted post inside subreddit.</p>"
           }
         ]
       }
@@ -14605,8 +14923,8 @@
     "groupTitle": "UserService"
   },
   {
-    "type": "post",
-    "url": "/me/listing?type=value",
+    "type": "get",
+    "url": "/me/listing?type=value&_id=value&votes=value&hotindex=value",
     "title": "List Posts",
     "name": "ListPosts",
     "group": "UserService",
@@ -14625,14 +14943,28 @@
             "type": "String",
             "optional": false,
             "field": "type",
-            "description": "<p>[type == hot] Type of the listing that the user wants for the posts.</p>"
+            "description": "<p>(hot,top,new) aType of the listing that the user wants for the posts.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>0 for the first time then the id  for the last post retrieved to avoid redundency</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "startPosition",
-            "description": "<p>Sending 15 posts per after the startposition</p>"
+            "field": "votes",
+            "description": "<p>the votes for the last post id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "hotindex",
+            "description": "<p>the hot score of the last post (0) if not of type hot</p>"
           }
         ]
       }
@@ -14645,14 +14977,19 @@
             "type": "Object",
             "optional": false,
             "field": "Posts",
-            "description": "<p>Object in the JSON that contains an array of objects the listed Posts depending on the type  .</p>"
+            "description": "<p>Object in the JSON that contains an array of objects the listed Posts depending on the type. Note: field hot index is only sent on the type hot request</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n {\n  \"posts\": [\n      {\n          \"_id\": \"5cc38191735094039ec8d927\",\n          \"title\": \"Rush Hour 4\",\n          \"body\": \"There are rumors that Rush Hour 4 might be in the making.\",\n          \"creatorUsername\": \"sabek\",\n          \"subredditName\": \"Movies\",\n          \"postDate\": \"2019-04-26T22:09:21.236Z\"\n      },\n      {\n          \"_id\": \"5cc38191735094039ec8d926\",\n          \"title\": \"Avengers: Endgame\",\n          \"body\": \"Unpopular opinion: Endgame is super overrated.\",\n          \"creatorUsername\": \"captainmaged\",\n          \"subredditName\": \"Movies\",\n          \"postDate\": \"2019-04-26T22:09:21.221Z\"\n      }\n          ]\n}",
+          "content": "   HTTP/1.1 200 OK\n {\n  \"posts\": [\n      {\n          \"_id\": \"5cc38191735094039ec8d927\",\n          \"title\": \"Rush Hour 4\",\n          \"body\": \"There are rumors that Rush Hour 4 might be in the making.\",\n          \"creatorUsername\": \"sabek\",\n          \"subredditName\": \"Movies\",\n          \"postDate\": \"2019-04-26T22:09:21.236Z\",\n      },\n      {\n          \"_id\": \"5cc38191735094039ec8d926\",\n          \"title\": \"Avengers: Endgame\",\n          \"body\": \"Unpopular opinion: Endgame is super overrated.\",\n          \"creatorUsername\": \"captainmaged\",\n          \"subredditName\": \"Movies\",\n          \"postDate\": \"2019-04-26T22:09:21.221Z\",\n      }\n          ]\n}",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n {\n  \"posts\": [\n      {\n          \"_id\": \"5cc38191735094039ec8d927\",\n          \"title\": \"Rush Hour 4\",\n          \"body\": \"There are rumors that Rush Hour 4 might be in the making.\",\n          \"creatorUsername\": \"sabek\",\n          \"subredditName\": \"Movies\",\n          \"postDate\": \"2019-04-26T22:09:21.236Z\",\n          \"hotindex\": 9500\n      },\n      {\n          \"_id\": \"5cc38191735094039ec8d926\",\n          \"title\": \"Avengers: Endgame\",\n          \"body\": \"Unpopular opinion: Endgame is super overrated.\",\n          \"creatorUsername\": \"captainmaged\",\n          \"subredditName\": \"Movies\",\n          \"postDate\": \"2019-04-26T22:09:21.221Z\",\n          \"hotindex\": 9490\n      }\n          ]\n}",
           "type": "json"
         }
       ]

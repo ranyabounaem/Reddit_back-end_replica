@@ -609,16 +609,19 @@ app.put("/me/user/removeReq", passport.authenticate('jwt', { session: false }), 
 
 //TODO POSTS: listing posts for a subreddit or only popular posts
 
+
 const listings = require('./src/listings');
-app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, res) => listings.listPosts(req, res));
+app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, res) => listings.listPosts(req, res));
 /** 
-* @api {post} /me/listing?type=value List Posts 
+* @api {get} /me/listing?type=value&_id=value&votes=value&hotindex=value  List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
-* @apiParam {Number} startPosition Sending 15 posts per after the startposition  
-* @apiSuccess {Object} Posts   Object in the JSON that contains an array of objects the listed Posts depending on the type  .
+* @apiParam {String} type     (hot,top,new) aType of the listing that the user wants for the posts.
+* @apiParam {String} _id      0 for the first time then the id  for the last post retrieved to avoid redundency 
+* @apiParam {Number} votes    the votes for the last post id 
+* @apiParam {Number} hotindex the hot score of the last post (0) if not of type hot   
+* @apiSuccess {Object} Posts   Object in the JSON that contains an array of objects the listed Posts depending on the type. Note: field hot index is only sent on the type hot request
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *   {
@@ -629,7 +632,7 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 *            "body": "There are rumors that Rush Hour 4 might be in the making.",
 *            "creatorUsername": "sabek",
 *            "subredditName": "Movies",
-*            "postDate": "2019-04-26T22:09:21.236Z"
+*            "postDate": "2019-04-26T22:09:21.236Z",
 *        },
 *        {
 *            "_id": "5cc38191735094039ec8d926",
@@ -637,7 +640,31 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 *            "body": "Unpopular opinion: Endgame is super overrated.",
 *            "creatorUsername": "captainmaged",
 *            "subredditName": "Movies",
-*            "postDate": "2019-04-26T22:09:21.221Z"
+*            "postDate": "2019-04-26T22:09:21.221Z",
+*        }
+*            ]
+*  }
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*   {
+*    "posts": [
+*        {
+*            "_id": "5cc38191735094039ec8d927",
+*            "title": "Rush Hour 4",
+*            "body": "There are rumors that Rush Hour 4 might be in the making.",
+*            "creatorUsername": "sabek",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.236Z",
+*            "hotindex": 9500
+*        },
+*        {
+*            "_id": "5cc38191735094039ec8d926",
+*            "title": "Avengers: Endgame",
+*            "body": "Unpopular opinion: Endgame is super overrated.",
+*            "creatorUsername": "captainmaged",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.221Z",
+*            "hotindex": 9490
 *        }
 *            ]
 *  }
@@ -871,75 +898,12 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 *      }
 */
 
-
-
-
 /**
-* @api {get} /Moderator/Reports/   Get all reports
-* @apiName Getreports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apisuccess  {String} ReporId unique ReporId  of the Repor.
-
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK
-* [{
-*         "ReporId":"1010"
-* }]
-*    
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 500 server error
-*/
-
-/**
-* @api {Put} /Moderator/Reports/:id   ignore report
-* @apiName Ignoreports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ReporId unique ReporId  of the Repor.
-* @apiParamExample {json} Input
-*    {
-*      "ReporId": "1101", 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"report not found"
-* }
-*/
-
-/**
-* @api {delete} /Moderator/Reports/:id   delete report
-* @apiName deletereports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ReporId unique ReporId  of the Repor.
-* @apiParamExample {json} Input
-*    {
-*      "ReporId": "1101", 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"report not found"
-* }
-*/
-
-
-const reportHandler = require("./src/Reports/Report");
-
-
 app.put("/Moderator/ban", passport.authenticate('jwt', { session: false }), reportHandler.Ban);
 /**
 * @api {put} /Moderator/ban   Remove moderator
 * @apiName Ban
+const reportHandler = require("./src/Reports/Report");
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
 * @apiParam  {String} Username unique Username  of the user to be banned .
@@ -1675,6 +1639,8 @@ app.get("/comment/all/:id", commentHandler.handleGetAllComments);
 app.post("/comment/:id", passport.authenticate('jwt', { session: false }), commentHandler.handlePostComment);
 app.put("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleEditComment);
 app.delete("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleDeleteComent);
+app.put("/comment/vote/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleVoteComment);
+app.post("/comment/report/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleReportComment);
 
 
 /**
@@ -1877,7 +1843,6 @@ const subreddit = require('./Subreddits/subreddits')
 
 
 
-
 /**
  * @name PMService
  * @note These are the routes for anything related to a user.
@@ -2032,13 +1997,13 @@ app.post('/me/pm/markreadall', passport.authenticate('jwt', { session: false }),
 */
 
 
-app.post('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.retrieve(req, res));
+app.get('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.retrieve(req, res));
 /**
-* @api {post} /me/pm/   Retrieve
+* @api {get} /me/pm/?mine=value   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Boolean} mine True if u need to retrieve the inbox false if u need to retrieve the sent.
+* @apiParam {Boolean} mine true if u need to retrieve the inbox false if u need to retrieve the sent.
 * @apiSuccess {Object}  messages       Object that contains an array  of objects that contains data of the messages
 *     HTTP/1.1 200 OK
 *    {
@@ -2098,6 +2063,8 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
 *                 ]
 *      }
 */
+
+
 
 
 
@@ -2161,10 +2128,154 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
  */
 
 
- 
+
+/**
+* @api {get} /Moderator/Reports/   Get all reports
+* @apiName Getreports
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apisuccess  {String} reportedId id of comment or post
+* @apisuccess  {srName} subreddit of report
+* @apisuccess  {Boolean} post a type that is  true if post , false if comment
+
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* [{
+*         [
+    {
+        "_id": "5cc4b675d7eb7343e073df38",
+        "reportedId": "121213521",
+        "srName": "Education",
+        "post": true,
+        "__v": 0
+    },
+    {
+        "_id": "5cc4b675d7eb7343e073df39",
+        "reportedId": "435422",
+        "srName": "343545454",
+        "post": true,
+        "__v": 0
+    },
+    {
+        "_id": "5cc4b675d7eb7343e073df3b",
+        "reportedId": "4n",
+        "srName": "Education",
+        "post": true,
+        "__v": 0
+    }
+]
+* }]
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator to any subreddit"
+*     }
+*     HTTP/1.1 401 no reports
+*      {
+*       "error":"No reports"
+*     }
+*/
 app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.getReports(req, res));
+/**
+* @api {Delete} /Moderator/Reports/:reportId   delete report 
+* @apiName DeleteReport
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"report deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+*/
 
 
+app.delete('/Moderator/Reports/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deleteReport(req, res));
+
+/**
+* @api {Delete} /Moderator/Post/:reportId   delete reported post
+* @apiName DeletePost
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"post deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+
+*     HTTP/1.1 401 Report isnt for a post
+*      {
+*       "error":"This isnt a post report"
+*      }
+*/
+
+app.delete('/Moderator/Post/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deletePost(req, res));
+
+
+/**
+* @api {Delete} /Moderator/Comment/:reportId   delete reported comment
+* @apiName DeleteComment
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} :reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"Comment deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+*     HTTP/1.1 401 Report isnt for a post
+*      {
+*       "error":"This isnt a Comment report"
+*      }
+*/
+
+app.delete('/Moderator/Comment/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deleteComment(req, res));
 
 
 const notificationHandler = require("./src/notifications");
