@@ -265,7 +265,10 @@ describe('Server', function () {
         let data = {};
         beforeAll(function(done){  // mocking the post request with message test
             request.post("http://127.0.0.1:4000/sr/create",
-                {json: true, body: sr, headers: husseinToken}, function (error, response, body) {
+                {form: {
+                  srName: 'Technology',
+                  srRules: ["No trade allowed."],
+                }, json: false, body: sr, headers: husseinToken}, function (error, response, body) {
                     data.status = response.statusCode;
                     data.body = body;
                     done();
@@ -285,7 +288,10 @@ describe('Server', function () {
           let data = {};
           beforeAll(function(done){  // mocking the post request with message test
               request.post("http://127.0.0.1:4000/sr/create",
-                  {json: true, body: sr, headers: mostafaToken}, function (error, response, body) {
+                  {form: {
+                    srName: 'Parenting',
+                    srRules: ["No kids allowed."]
+                   }, json: true, body: sr, headers: mostafaToken}, function (error, response, body) {
                       data.status = response.statusCode;
                       data.body = body;
                       done();
@@ -305,7 +311,10 @@ describe('Server', function () {
             let data = {};
             beforeAll(function(done){  // mocking the post request with message test
                 request.post("http://127.0.0.1:4000/sr/create",
-                    {json: true, body: sr, headers: aliToken}, function (error, response, body) {
+                    {form: {
+                      srName: 'Education',
+                      srRules: ["Nerds only."]
+                     },json: true, body: sr, headers: aliToken}, function (error, response, body) {
                         data.status = response.statusCode;
                         data.body = body;
                         done();
@@ -325,7 +334,10 @@ describe('Server', function () {
               let data = {};
               beforeAll(function(done){  // mocking the post request with message test
                   request.post("http://127.0.0.1:4000/sr/create",
-                      {json: true, body: sr, headers: atwaToken}, function (error, response, body) {
+                      {form: {
+                        srName: 'Movies',
+                        srRules: ["Movie geeks only."]
+                       }, json: true, body: sr, headers: atwaToken}, function (error, response, body) {
                           data.status = response.statusCode;
                           data.body = body;
                           done();
