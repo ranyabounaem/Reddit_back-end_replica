@@ -8,11 +8,13 @@ const jwt = require('../JWT/giveToken');
 const getUser = jwt.getUsernameFromToken;
 const vote = require('../models/voteSchema');
 const report = require('../models/Reports');
+const fs = require('fs');
 
 class SR {
     constructor() {
 
     }
+
     /**
      * @function createSr
      * @summary Create a subreddit.
@@ -21,24 +23,32 @@ class SR {
      * @returns {JSON} Returns the created subreddit.
      */
     createSr(req, res) {
+
         var admin = getUser(req);
         var subredditName = req.body.srName;
         var subredditRules = req.body.srRules;
-        var imageCheck = req.file;
+        const imgdata = req.body.base64image;
+        var bio = req.body.bio;
+        //ar imageCheck = req.file;
 
-        if (admin && subredditName && subredditRules) {
+        if (admin && subredditName && subredditRules && imgdata) {
+            const path = __dirname + '/../uploads/'+Date.now()+'.png'
+            const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+            fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
             var subreddit = new sr({
                 name: subredditName,
                 adminUsername: admin,
                 rules: subredditRules,
                 modUsername: req.body.modUsername,
-                if(imageCheck) { subredditFile: req.file.path }
-
+                subredditFile: path,
+                bio: bio
+                //if(imageCheck) { subredditFile: req.file.path }
             });
             subreddit.save(function (err, record) {
                 if (err) {
                     // internal Server error 
                     res.status(500).send({ 'error': 'internal server error' });
+                    console.log("help")
 
                 }
                 else {
@@ -64,14 +74,18 @@ class SR {
         var updatedRules = req.body.newRules;
         var updatedName = req.body.newName;
         var newMods = req.body.newMods;
-        if (subredditName && updatedRules && updatedName && newMods) {
-
+        const imgdata = req.body.base64image;
+        
+        if (subredditName && updatedRules && updatedName && newMods && imgdata) {
+            const path = __dirname + '/../uploads/'+Date.now()+'.png'
+            const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+            fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
             sr.findOneAndUpdate({ name: subredditName },
                 {
                     name: updatedName,
                     rules: updatedRules,
                     modUsername: req.body.newMods,
-                    subredditFile: req.file.path,
+                    subredditFile: path,
                     bio: req.body.newBio
                 },
                 function (err, record) {
@@ -139,18 +153,18 @@ class SR {
      * @param {object} Response - 200 (Success).
      * @returns {JSON} Returns the created post.
      */
-    createPost(req, res) {
 
+    createPost(req, res) {
+        const imgdata = req.body.base64image;
         var subrName = req.params.srName;
         var creator = getUser(req);
         var postTitle = req.body.title;
         var postBody = req.body.threadBody;
+        //var imageCheck = req.file;
+        //var spoilerCheck = req.body.spoiler;
 
-        var imageCheck = req.file;
-        var spoilerCheck = req.body.spoiler;
 
-
-        if (creator && postTitle && postBody) {
+        if (creator && postTitle && postBody && imgdata) {
 
             sr.findOne({ name: subrName }, function (err) {
 
@@ -162,13 +176,17 @@ class SR {
                     res.status(400).send({ 'error': 'invalid subreddit name' });
                 }
                 else {
+                    const path = __dirname + '/../uploads/'+Date.now()+'.png'
+                    const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+                    fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
                     let newPost = new pt({
                         title: postTitle,
                         body: postBody,
                         creatorUsername: creator,
                         subredditName: subrName,
-                        if(imageCheck) { subredditFile: req.file.path },
-                        if(spoilerCheck) { spoiler: req.body.spoiler }
+                        postFile: path
+                        //if(imageCheck) { subredditFile: req.file.path },
+                        //if(spoilerCheck) { spoiler: req.body.spoiler }
                     });
                     newPost.save(function (err) {
 

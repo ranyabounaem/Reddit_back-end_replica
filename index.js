@@ -1822,8 +1822,9 @@ app.post("/sr/create", upload.single('subredditFile'), passport.authenticate('jw
 * @apiParam {string} Token Send token.
 * @apiParam {string} srName  unique Name of the subreddit (no longer than 100 character).
 * @apiParam {string[]} srRules list of subbreddit rules.
-* @apiParam {object} subredditFile Subreddit's image or video (Supported file formats: jpeg/png/mp4).
+* @apiParam {string} base64image Subreddit's image encoded as base64 (Supported file formats: jpeg/png/mp4).
 * @apiParam {string[]}  modUsername Subreddit moderators' usernames.
+* @apiParam {string} bio Subreddit's bio.
 * @apiSuccess {object} newSubreddit Returns the created subreddit (if any).
 */
 
@@ -1883,7 +1884,7 @@ app.put("/sr/:srName", upload.single('subredditFile'), passport.authenticate('jw
 * @apiParam {string} newName  New name
 * @apiParam {string[]} newMods Updated moderators.
 * @apiParam {string}  newBio Updated about.
-* @apiParam {object} newFile New image or video.
+* @apiParam {string} base64image Subreddit's image encoded as base64 (Supported file formats: jpeg/png/mp4).
 * @apiSuccess {object} editedSubreddit Returns the edited subreddit (if any).
 */
 
@@ -1898,7 +1899,7 @@ app.post("/sr/:srName/thread", upload.single('postFile'), passport.authenticate(
 * @apiParam {string} Token Send token.
 * @apiParam {string} title Title of thread
 * @apiParam {string} threadBody Body of the thread.
-* @apiParam {object} postFile Post image or video (Supported file formats: jpeg/png/mp4)
+* @apiParam {string} base64image Post's image encoded as base64 (Supported file formats: jpeg/png/mp4).
 * @apiParam {boolean}  spoiler  Mark if post is spoiler
 */
 app.put("/sr/save/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.savePost(req, res));
