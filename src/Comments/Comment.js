@@ -6,6 +6,7 @@ const notification = require('../../models/notificationSchema.js');
 const report = require('../../models/Reports');
 const subredditsSchema = require('../../models/subredditsSchema.js');
 const Post = subredditsSchema.SubredditPostSchema;
+const User = require('../../models/UserSchema');
 const ObjectId = require('mongodb').ObjectID;
 const jwt = require('../../JWT/giveToken');
 const getUser = jwt.getUsernameFromToken;
@@ -388,6 +389,10 @@ class CommentHandler {
                                     })
                                     retComment.votes = retComment.votes + 1;
                                     retComment.save();
+                                    User.findOne({ Username: user }).then(function (retUser) {
+                                        retUser.karma = retUser.karma + 1;
+                                        retUser.save();
+                                    });
                                     v.save();
                                     res.status(200).json('The comment has been upvoted successfully');
 
@@ -401,6 +406,10 @@ class CommentHandler {
                                     })
                                     retComment.votes = retComment.votes - 1;
                                     retComment.save();
+                                    User.findOne({ Username: user }).then(function (retUser) {
+                                        retUser.karma = retUser.karma - 1;
+                                        retUser.save();
+                                    });
                                     v.save();
                                     res.status(200).json('The comment has been downvoted successfully');
 
@@ -421,6 +430,10 @@ class CommentHandler {
                                         //incrementing by 2 because I replaced an downvote with a upvote
                                         retComment.votes = retComment.votes + 2;
                                         retComment.save();
+                                        User.findOne({ Username: user }).then(function (retUser) {
+                                            retUser.karma = retUser.karma + 2;
+                                            retUser.save();
+                                        });
                                         res.status(200).json('The comment has been upvoted successfully');
                                     }
                                 } else if (req.body.direction === -1) {
@@ -433,6 +446,10 @@ class CommentHandler {
                                         //decrementing by 2 because I replaced an upvote with a downvote
                                         retComment.votes = retComment.votes - 2;
                                         retComment.save();
+                                        User.findOne({ Username: user }).then(function (retUser) {
+                                            retUser.karma = retUser.karma - 2;
+                                            retUser.save();
+                                        });
                                         res.status(200).json('The comment has been downvoted successfully');
                                     }
                                 } else if (req.body.direction === 0) {
@@ -445,9 +462,17 @@ class CommentHandler {
                                             if (retVote.upvote === true) {
                                                 //decrementing the votes if it was upvoted before
                                                 retComment.votes = retComment.votes - 1;
+                                                User.findOne({ Username: user }).then(function (retUser) {
+                                                    retUser.karma = retUser.karma - 1;
+                                                    retUser.save();
+                                                });
                                             } else {
                                                 //incrementing the votes if it was downvoted before
                                                 retComment.votes = retComment.votes + 1;
+                                                User.findOne({ Username: user }).then(function (retUser) {
+                                                    retUser.karma = retUser.karma + 1;
+                                                    retUser.save();
+                                                });
                                             }
                                             retComment.save();
                                             res.status(200);
@@ -493,4 +518,4 @@ class CommentHandler {
     }
 }
 module.exports.cHandler = new CommentHandler();
-module.exports.cm =  deleteComment;
+module.exports.cm = deleteComment;

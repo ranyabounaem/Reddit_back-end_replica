@@ -42,7 +42,9 @@ const UserSchema = new Schema({
     title:String
  }],
 
- About: String
+ About: String,
+
+ karma : {type: Number, default:0}
 
 
 });

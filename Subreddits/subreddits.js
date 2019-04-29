@@ -1,7 +1,7 @@
 const express = require('express');
 const srs = require('../models/subredditsSchema');
-const User=require('../models/UserSchema');
-const sr=srs.Subreddit;
+const User = require('../models/UserSchema');
+const sr = srs.Subreddit;
 const pt = srs.SubredditPostSchema;
 const mongoose = require('mongoose');
 const jwt = require('../JWT/giveToken');
@@ -10,35 +10,35 @@ const vote = require('../models/voteSchema');
 const report = require('../models/Reports');
 
 class SR {
-    constructor(){
+    constructor() {
 
     }
-/**
- * @function createSr
- * @summary Create a subreddit.
- * @param {object} Request - Request body: username, srName, srRules.
- * @param {object} Response - 200 (Success).
- * @returns {JSON} Returns the created subreddit.
- */
-    createSr (req, res) {
+    /**
+     * @function createSr
+     * @summary Create a subreddit.
+     * @param {object} Request - Request body: username, srName, srRules.
+     * @param {object} Response - 200 (Success).
+     * @returns {JSON} Returns the created subreddit.
+     */
+    createSr(req, res) {
         var admin = getUser(req);
         var subredditName = req.body.srName;
         var subredditRules = req.body.srRules;
-        var imageCheck=req.file;
+        var imageCheck = req.file;
 
-        if(admin &&  subredditName && subredditRules){
+        if (admin && subredditName && subredditRules) {
             var subreddit = new sr({
                 name: subredditName,
                 adminUsername: admin,
                 rules: subredditRules,
                 modUsername: req.body.modUsername,
-                if(imageCheck){subredditFile: req.file.path}
-                
+                if(imageCheck) { subredditFile: req.file.path }
+
             });
             subreddit.save(function (err, record) {
                 if (err) {
-                // internal Server error 
-                res.status(500).send({ 'error': 'internal server error' });
+                    // internal Server error 
+                    res.status(500).send({ 'error': 'internal server error' });
 
                 }
                 else {
@@ -46,122 +46,119 @@ class SR {
                 }
             });
         }
-        else
-        {
+        else {
             res.status(400).send({ 'error': 'invalid paramaters' });
         }
     };
 
-/**
- * @function edit
- * @summary Edit a subreddit's details.
- * @param {object} Request - The request
- * @param {object} Response - The response.
- * @returns {JSON} Returns the edited subreddit (old version).
- */
-    edit (req, res){
+    /**
+     * @function edit
+     * @summary Edit a subreddit's details.
+     * @param {object} Request - The request
+     * @param {object} Response - The response.
+     * @returns {JSON} Returns the edited subreddit (old version).
+     */
+    edit(req, res) {
 
         var subredditName = req.params.srName;
         var updatedRules = req.body.newRules;
         var updatedName = req.body.newName;
         var newMods = req.body.newMods;
-        if(subredditName && updatedRules && updatedName && newMods){
+        if (subredditName && updatedRules && updatedName && newMods) {
 
-            sr.findOneAndUpdate({name: subredditName}, 
+            sr.findOneAndUpdate({ name: subredditName },
                 {
-                    name:updatedName,
-                    rules:updatedRules,
+                    name: updatedName,
+                    rules: updatedRules,
                     modUsername: req.body.newMods,
                     subredditFile: req.file.path,
                     bio: req.body.newBio
                 },
-                function(err, record){
-           
-               
-                if(!record){
-                    res.status(400).send({ 'error': 'invalid subreddit name' });
-                }
-                else if(record.adminUsername!=getUser(req)){
-                    res.status(403).send({ 'error': 'access forbidden' }) 
-                }
-                else {
+                function (err, record) {
 
-                    sr.findOneAndUpdate({name: subredditName}, {name:updatedName, rules:updatedRules}, function(err, record){
-                        if (err){
-                            res.status(500).send({ 'error': 'internal server error' }) 
-                        }
-                        else {
-                            res.status(200).send(record);
-                        };
-                    });
-                };
-            });
+
+                    if (!record) {
+                        res.status(400).send({ 'error': 'invalid subreddit name' });
+                    }
+                    else if (record.adminUsername != getUser(req)) {
+                        res.status(403).send({ 'error': 'access forbidden' })
+                    }
+                    else {
+
+                        sr.findOneAndUpdate({ name: subredditName }, { name: updatedName, rules: updatedRules }, function (err, record) {
+                            if (err) {
+                                res.status(500).send({ 'error': 'internal server error' })
+                            }
+                            else {
+                                res.status(200).send(record);
+                            };
+                        });
+                    };
+                });
         }
         else {
-            res.status(400).send({ 'error': 'invalid paramaters' })  
+            res.status(400).send({ 'error': 'invalid paramaters' })
         };
     };
 
-/**
- * @function info
- * @summary Get a subreddit's info. 
- * @param {object} Req -  Request paramaters: srName.
- * @param {object} Res - Return subreddit's username, date, posts and rules - 200 (Success).
- * @returns {JSON} Returns all info of a subreddit.
- */
-    info (req, res){
+    /**
+     * @function info
+     * @summary Get a subreddit's info. 
+     * @param {object} Req -  Request paramaters: srName.
+     * @param {object} Res - Return subreddit's username, date, posts and rules - 200 (Success).
+     * @returns {JSON} Returns all info of a subreddit.
+     */
+    info(req, res) {
 
         var subredditName = req.params.srName;
 
-        if(subredditName){
-            sr.findOne({name: subredditName}, function(err){
-                if(err)
-                {
+        if (subredditName) {
+            sr.findOne({ name: subredditName }, function (err) {
+                if (err) {
                     res.status(500).send({ 'error': 'internal server error' });
                 };
-            }).then(function(record){
-                if(!record)
-                {
+            }).then(function (record) {
+                if (!record) {
                     res.status(400).send({ 'error': 'invalid subreddit name' });
                 }
                 else {
-                res.status(200).send(record);
+                    res.status(200).send(record);
                 };
             });
         }
 
         else {
-            res.status(400).send({'error': 'invalid parameter'});
+            res.status(400).send({ 'error': 'invalid parameter' });
         };
 
     };
-/**
- * @function createPost
- * @summary Create a post inside subreddit.
- * @param {object} Request - Request paramaters: srName - Request body: username, title, threadBody.
- * @param {object} Response - 200 (Success).
- * @returns {JSON} Returns the created post.
- */
-    createPost(req, res){
+    /**
+     * @function createPost
+     * @summary Create a post inside subreddit.
+     * @param {object} Request - Request paramaters: srName - Request body: username, title, threadBody.
+     * @param {object} Response - 200 (Success).
+     * @returns {JSON} Returns the created post.
+     */
+    createPost(req, res) {
 
         var subrName = req.params.srName;
         var creator = getUser(req);
         var postTitle = req.body.title;
         var postBody = req.body.threadBody;
 
-        var imageCheck=req.file;
-        var spoilerCheck=req.body.spoiler;
+        var imageCheck = req.file;
+        var spoilerCheck = req.body.spoiler;
 
 
-        if(creator && postTitle && postBody){
+        if (creator && postTitle && postBody) {
 
-            sr.findOne({name: subrName}, function(err){
+            sr.findOne({ name: subrName }, function (err) {
 
-                if(err){
+                if (err) {
                     res.status(500).send({ 'error': 'internal server error' });
                 }
-            }).then(function(record){
-                if(!record){
+            }).then(function (record) {
+                if (!record) {
                     res.status(400).send({ 'error': 'invalid subreddit name' });
                 }
                 else {
@@ -170,8 +167,8 @@ class SR {
                         body: postBody,
                         creatorUsername: creator,
                         subredditName: subrName,
-                     if(imageCheck){subredditFile: req.file.path},
-                     if(spoilerCheck){spoiler:req.body.spoiler}
+                        if(imageCheck) { subredditFile: req.file.path },
+                        if(spoilerCheck) { spoiler: req.body.spoiler }
                     });
                     newPost.save(function (err) {
 
@@ -183,15 +180,14 @@ class SR {
                             res.end();
 
                         }
-                        else{
+                        else {
                             record.posts.push(newPost._id);
-                            record.save(function(err){
-                                if(err)
-                                {
+                            record.save(function (err) {
+                                if (err) {
                                     res.json({ error: 'internalServerError' });
                                 }
-                                else{
-                                res.status(200).send(newPost);
+                                else {
+                                    res.status(200).send(newPost);
                                 };
                             });
                         }
@@ -204,103 +200,101 @@ class SR {
         };
     };
 
-/**
- * @function subscribe
- * @summary Subscribe to a subreddit. 
- * @param {object} Req -  Request
- * @param {object} Res - Response
- * @returns {JSON} Returns list of subscribers in subreddit.
- */
-subscribe(req, res){
+    /**
+     * @function subscribe
+     * @summary Subscribe to a subreddit. 
+     * @param {object} Req -  Request
+     * @param {object} Res - Response
+     * @returns {JSON} Returns list of subscribers in subreddit.
+     */
+    subscribe(req, res) {
 
-    var subscribed_user = getUser(req);
-    var subrName = req.params.srName;
+        var subscribed_user = getUser(req);
+        var subrName = req.params.srName;
 
-    sr.findOne({name: subrName}, function(err){
-        if(err){
-            res.status(500).send({ 'error': 'internal server error' });
-        };
-    }).then(function(record){
-        if(!record)
-        {
-            res.status(400).send({ 'error': 'invalid subreddit name' });
-        }
-        else{
-            if(record.subscribed_users.indexOf(subscribed_user)==-1){
-                record.subscribed_users.push(subscribed_user);
-                record.save(function(err){
-                    if(err){
-                        res.status(500).send({ 'error': 'internal server error' });
-                    }
-                    else{
-                        User.findOne({Username: subscribed_user}, function(err){
-                            if(err){
-                                res.status(500).send({ 'error': 'internal server error' });
-                            }
-                        }).then(function(user){
-                            user.Subscriptions.push(subrName);
-                            user.save(function(err){
-                                if(err) {
+        sr.findOne({ name: subrName }, function (err) {
+            if (err) {
+                res.status(500).send({ 'error': 'internal server error' });
+            };
+        }).then(function (record) {
+            if (!record) {
+                res.status(400).send({ 'error': 'invalid subreddit name' });
+            }
+            else {
+                if (record.subscribed_users.indexOf(subscribed_user) == -1) {
+                    record.subscribed_users.push(subscribed_user);
+                    record.save(function (err) {
+                        if (err) {
+                            res.status(500).send({ 'error': 'internal server error' });
+                        }
+                        else {
+                            User.findOne({ Username: subscribed_user }, function (err) {
+                                if (err) {
                                     res.status(500).send({ 'error': 'internal server error' });
                                 }
-                                else{
-                                    res.status(200).send(record.subscribed_users);
-                                };
+                            }).then(function (user) {
+                                user.Subscriptions.push(subrName);
+                                user.save(function (err) {
+                                    if (err) {
+                                        res.status(500).send({ 'error': 'internal server error' });
+                                    }
+                                    else {
+                                        res.status(200).send(record.subscribed_users);
+                                    };
+                                });
                             });
-                        });
-                    };
-                });
-            }
-            else{
-                res.status(400).send({"error": "user already subscribed"});
-            }
-            
-        };
-    });
-};
+                        };
+                    });
+                }
+                else {
+                    res.status(400).send({ "error": "user already subscribed" });
+                }
+
+            };
+        });
+    };
 
 
-/**
- * @function unSubscribe
- * @summary Unsubscribe from a subreddit. 
- * @param {object} Req -  Request
- * @param {object} Res - Response
- * @returns {JSON} Returns list of subscribers of subreddit.
- */
+    /**
+     * @function unSubscribe
+     * @summary Unsubscribe from a subreddit. 
+     * @param {object} Req -  Request
+     * @param {object} Res - Response
+     * @returns {JSON} Returns list of subscribers of subreddit.
+     */
 
-    unSubscribe(req, res){
+    unSubscribe(req, res) {
 
         var unsubscribed_user = getUser(req);
         var subrName = req.params.srName;
 
-        sr.findOne({name: subrName}, function(err){
-            if(err){
+        sr.findOne({ name: subrName }, function (err) {
+            if (err) {
                 res.status(500).send({ 'error': 'internal server error' });
             };
-        }).then(function(record){
-            if(!record){
+        }).then(function (record) {
+            if (!record) {
                 res.status(400).send({ 'error': 'invalid subreddit name' });
             }
-            else{
-                if(record.subscribed_users.indexOf(unsubscribed_user) > -1)
-                {
+            else {
+                if (record.subscribed_users.indexOf(unsubscribed_user) > -1) {
                     record.subscribed_users.splice(record.subscribed_users.indexOf(unsubscribed_user), 1);
-                    record.save(function(err){
-                        if(err){
+                    record.save(function (err) {
+                        if (err) {
                             res.status(500).send({ 'error': 'internal server error' });
                         }
-                        else{
-                            User.findOne({Username: unsubscribed_user}, function(err){
-                                if(err){
+                        else {
+                            User.findOne({ Username: unsubscribed_user }, function (err) {
+                                if (err) {
                                     res.status(500).send({ 'error': 'internal server error' });
                                 };
-                            }).then(function(userRecord){
+                            }).then(function (userRecord) {
                                 userRecord.Subscriptions.splice(userRecord.Subscriptions.indexOf(subrName), 1);
-                                userRecord.save(function(err){
-                                    if(err){
+                                userRecord.save(function (err) {
+                                    if (err) {
                                         res.status(500).send({ 'error': 'internal server error' });
                                     }
-                                    else{
+                                    else {
                                         res.status(200).send(record);
                                     };
                                 });
@@ -308,211 +302,215 @@ subscribe(req, res){
                         };
                     });
                 }
-                else{
+                else {
                     res.status(400).send({ 'error': 'user not subscribed' });
                 };
             };
         });
     };
 
-/**
- * @function deletePost
- * @summary Delete a post from a subreddit. 
- * @param {object} Req -  Request
- * @param {object} Res - Response
- * @returns {JSON} Returns the post that was deleted. (Old version)
- */
+    /**
+     * @function deletePost
+     * @summary Delete a post from a subreddit. 
+     * @param {object} Req -  Request
+     * @param {object} Res - Response
+     * @returns {JSON} Returns the post that was deleted. (Old version)
+     */
 
-    deletePost(req, res){
+    deletePost(req, res) {
         var eraser = getUser(req);
         var subrName = req.params.srName;
         var postId = req.params.postId;
-        pt.findOne({_id: postId},function(err){
-            if(err){
+        pt.findOne({ _id: postId }, function (err) {
+            if (err) {
                 res.status(500).send({ 'error': 'internal server error' });
             };
-        }).then(function(checked){
+        }).then(function (checked) {
             if (!checked) {
                 res.status(400).send({ 'error': 'invalid postId' });
             };
-            if(checked.creatorUsername != eraser)
-            {
+            if (checked.creatorUsername != eraser) {
                 res.status(403).send({ 'error': 'access forbidden' });
             };
-            if(checked.subredditName != subrName){
+            if (checked.subredditName != subrName) {
                 res.status(400).send({ 'error': 'url subreddit is of different name than that of post' });
             }
-            else{
-                pt.findOneAndDelete({_id: postId}, function(err, deleted){
-                    if(err)
-                    {
+            else {
+                pt.findOneAndDelete({ _id: postId }, function (err, deleted) {
+                    if (err) {
                         res.status(500).send({ 'error': 'internal server error' });
                     };
-                    if(!deleted)
-                    {
+                    if (!deleted) {
                         res.status(400).send({ 'error': 'invalid postId' });
                     }
-                    else{
-                        vote.deleteMany({votedID: deleted._id});
-                        sr.findOne({name: subrName}).then(function(record){
+                    else {
+                        vote.deleteMany({ votedID: deleted._id });
+                        sr.findOne({ name: subrName }).then(function (record) {
                             record.posts.splice(record.posts.indexOf(postId), 1);
-                            record.save(function(err){
-                                if(err)
-                                {
+                            record.save(function (err) {
+                                if (err) {
                                     res.status(500).send({ 'error': 'internal server error' });
                                 }
-                                else{
+                                else {
                                     res.status(200).send(record.posts);
                                 };
                             });
                         });
-                    };    
+                    };
                 });
             };
         });
     };
 
-/**
- * @function editPost
- * @summary Edit a post in a subreddit. 
- * @param {object} Req -  Request
- * @param {object} Res - Response
- * @returns {JSON} Returns the post that was edited (old version).
- */
+    /**
+     * @function editPost
+     * @summary Edit a post in a subreddit. 
+     * @param {object} Req -  Request
+     * @param {object} Res - Response
+     * @returns {JSON} Returns the post that was edited (old version).
+     */
 
-    editPost(req, res){
+    editPost(req, res) {
         var postId = req.params.postId;
         var subrName = req.params.srName; //No use
         var title = req.body.title;
         var threadBody = req.body.threadBody;
         var editor = getUser(req);
-        pt.findOne({_id: postId}, function(err){
-            if(err){
+        pt.findOne({ _id: postId }, function (err) {
+            if (err) {
                 res.status(500).send({ 'error': 'internal server error' });
             }
-        }).then(function(record){
-            if(!record){
+        }).then(function (record) {
+            if (!record) {
                 res.status(400).send({ 'error': 'invalid postId' });
             }
-            if(record.creatorUsername != editor){
+            if (record.creatorUsername != editor) {
                 res.status(403).send({ 'error': 'access forbidden' })
             }
-            if(record.subredditName!=subrName){
-                res.status(400).send({'error': 'url subreddit is of different name than that of post'})
+            if (record.subredditName != subrName) {
+                res.status(400).send({ 'error': 'url subreddit is of different name than that of post' })
             }
-            else{
-                pt.findOneAndUpdate({_id: postId}, {title: title, body: threadBody, spoiler: req.body.spoiler}, function(err, updated)
-                {
-                    if(err){
-                        res.status(500).send({ 'error': 'internal server error' }) 
+            else {
+                pt.findOneAndUpdate({ _id: postId }, { title: title, body: threadBody, spoiler: req.body.spoiler }, function (err, updated) {
+                    if (err) {
+                        res.status(500).send({ 'error': 'internal server error' })
                     };
-                    if (!updated)
-                    {
+                    if (!updated) {
                         res.status(400).send({ 'error': 'invalid postId' });
                     }
-                    else{
+                    else {
                         res.status(200).send(updated);
-                    };  
+                    };
                 });
             };
         });
     };
 
- /**
- * @function votePost
- * @summary Upvote or downvote a post. 
- * @param {object} Req -  Request
- * @param {object} Res - Response
- * @returns {JSON} Returns the post's information as an object.
- */  
+    /**
+    * @function votePost
+    * @summary Upvote or downvote a post. 
+    * @param {object} Req -  Request
+    * @param {object} Res - Response
+    * @returns {JSON} Returns the post's information as an object.
+    */
 
-    votePost(req, res){
+    votePost(req, res) {
         var username = getUser(req);
         var postId = req.params.postId;
         var upvote = req.body.upvote;
-        pt.findOne({_id: req.params.postId}, function(err){
-            if(err){
+        pt.findOne({ _id: req.params.postId }, function (err) {
+            if (err) {
                 res.status(500).send({ 'error': 'internal server error' });
             };
-        }).then(function(record){
-            if(record)
-            {
-                vote.findOne({votedID: postId, username: username, upvote: upvote, post: true}, function(err){
-                    if (err){
+        }).then(function (record) {
+            if (record) {
+                vote.findOne({ votedID: postId, username: username, upvote: upvote, post: true }, function (err) {
+                    if (err) {
                         res.status(500).send({ 'error': 'internal server error' });
                     };
-                }).then(function (voteRecord){
-                    if(voteRecord)
-                    {
+                }).then(function (voteRecord) {
+                    if (voteRecord) {
                         res.status(400).send({ 'error': `already voted: ${upvote} ` });
                     }
-                    else{
+                    else {
 
-                        vote.findOne({votedID: postId, username: username, upvote: !upvote, post: true}, function(err){
-                            if (err){
+                        vote.findOne({ votedID: postId, username: username, upvote: !upvote, post: true }, function (err) {
+                            if (err) {
                                 res.status(500).send({ 'error': 'internal server error' });
                             };
-                        }).then(function(voteRecord2){
-                            if(voteRecord2){
-                                if(upvote == true){
+                        }).then(function (voteRecord2) {
+                            if (voteRecord2) {
+                                if (upvote == true) {
                                     voteRecord2.upvote = true;
-                                    record.votes++;
-                                    record.save(function(err){
-                                        if(err){
+                                    record.votes = record.votes + 2;
+                                    User.findOne({ Username: username }).then(function (retUser) {
+                                        retUser.karma = retUser.karma + 2;
+                                        retUser.save();
+                                    });
+                                    record.save(function (err) {
+                                        if (err) {
                                             res.status(500).send({ 'error': 'internal server error' });
                                         }
-                                        else{
-                                            voteRecord2.save(function(err){
-                                                if (err)
-                                                {
+                                        else {
+                                            voteRecord2.save(function (err) {
+                                                if (err) {
                                                     res.status(500).send({ 'error': 'internal server error' });
                                                 }
-                                                else
-                                                {
-                                                    
+                                                else {
+
                                                     res.status(200).send(record);
                                                 };
                                             });
                                         };
                                     });
-                                    
+
                                 }
-                                else{
+                                else {
                                     voteRecord2.upvote = false;
-                                    record.votes--;
-                                    record.save(function(err){
-                                        if(err){
+                                    record.votes = record.votes - 2;
+                                    User.findOne({ Username: username }).then(function (retUser) {
+                                        retUser.karma = retUser.karma - 2;
+                                        retUser.save();
+                                    });
+                                    record.save(function (err) {
+                                        if (err) {
                                             res.status(500).send({ 'error': 'internal server error' });
                                         }
-                                        else{
-                                            voteRecord2.save(function(err){
-                                                if (err)
-                                                {
+                                        else {
+                                            voteRecord2.save(function (err) {
+                                                if (err) {
                                                     res.status(500).send({ 'error': 'internal server error' });
                                                 }
-                                                else
-                                                {
+                                                else {
                                                     res.status(200).send(record);
                                                 };
                                             });
                                         };
                                     })
-                                    
+
                                 };
                             }
-                            else{
-                                vote.create({votedID: postId, username: username, upvote: upvote, post:true}).then(function(){
-                                    if(upvote){
+                            else {
+                                vote.create({ votedID: postId, username: username, upvote: upvote, post: true }).then(function () {
+                                    if (upvote) {
                                         record.votes++;
+                                        User.findOne({ Username: username }).then(function (retUser) {
+                                            retUser.karma = retUser.karma + 1;
+                                            retUser.save();
+                                        });
                                     }
-                                    else{
-                                        record.votes--; 
+                                    else {
+                                        record.votes--;
+                                        User.findOne({ Username: username }).then(function (retUser) {
+                                            retUser.karma = retUser.karma - 1;
+                                            retUser.save();
+                                        });
                                     };
-                                    record.save(function(err){
-                                        if (err){
+                                    record.save(function (err) {
+                                        if (err) {
                                             res.status(500).send({ 'error': 'internal server error' });
                                         }
-                                        else{
+                                        else {
                                             res.status(200).send(record);
                                         };
                                     });
@@ -522,183 +520,185 @@ subscribe(req, res){
                     };
                 });
             }
-            else{
+            else {
                 res.status(400).send({ 'error': 'invalid postId' });
             };
         });
     };
 
- /**
- * @function unvotePost
- * @summary Unvote a post. 
- * @param {object} Req -  Request
- * @param {object} Res - Response
- * @returns {JSON} Returns the post's information as an object.
- */  
+    /**
+    * @function unvotePost
+    * @summary Unvote a post. 
+    * @param {object} Req -  Request
+    * @param {object} Res - Response
+    * @returns {JSON} Returns the post's information as an object.
+    */
 
-    unvotePost(req, res){
+    unvotePost(req, res) {
         var postId = req.params.postId;
         var username = getUser(req);
-        vote.findOne({votedID: postId, username: username}, function (err){
-            if(err){
+        vote.findOne({ votedID: postId, username: username }, function (err) {
+            if (err) {
                 res.status(500).send({ 'error': 'internal server error' });
             }
-        }).then(function(record){
-            if(record){
-                if(record.upvote==false)
-                {
-                    pt.findOne({_id: postId}, function(err){
-                        if(err)
-                        {
+        }).then(function (record) {
+            if (record) {
+                if (record.upvote == false) {
+                    pt.findOne({ _id: postId }, function (err) {
+                        if (err) {
                             res.status(500).send({ 'error': 'internal server error' });
                         };
-                    }).then(function(record2){
+                    }).then(function (record2) {
                         record2.votes++;
-                        vote.findOneAndDelete({votedID: postId, username: username}).then(function(){
-                            record2.save(function(err, record3){
-                                if(err){
+                        User.findOne({ Username: username }).then(function (retUser) {
+                            retUser.karma = retUser.karma + 1;
+                            retUser.save();
+                        });
+                        vote.findOneAndDelete({ votedID: postId, username: username }).then(function () {
+                            record2.save(function (err, record3) {
+                                if (err) {
                                     res.status(500).send({ 'error': 'internal server error' });
                                 }
-                                else{
-                                    res.status(200).send({record3});
+                                else {
+                                    res.status(200).send({ record3 });
                                 };
                             });
                         });
                     });
                 }
-                else{
-                    pt.findOne({_id: postId}, function(err){
-                        if(err)
-                        {
+                else {
+                    pt.findOne({ _id: postId }, function (err) {
+                        if (err) {
                             res.status(500).send({ 'error': 'internal server error' });
                         };
-                    }).then(function(record2){
+                    }).then(function (record2) {
                         record2.votes--;
-                        vote.findOneAndDelete({votedID: postId, username: username}).then(function(){
-                            record2.save(function(err, record3){
-                                if(err){
+                        User.findOne({ Username: username }).then(function (retUser) {
+                            retUser.karma = retUser.karma - 1;
+                            retUser.save();
+                        });
+                        vote.findOneAndDelete({ votedID: postId, username: username }).then(function () {
+                            record2.save(function (err, record3) {
+                                if (err) {
                                     res.status(500).send({ 'error': 'internal server error' });
                                 }
-                                else{
-                                    res.status(200).send({record3});
+                                else {
+                                    res.status(200).send({ record3 });
                                 };
-                            });   
+                            });
                         });
                     });
                 };
             }
-            else{
-                res.status(400).send({"error": "post already unvoted"});
+            else {
+                res.status(400).send({ "error": "post already unvoted" });
             };
         });
     };
 
 
- 
-reportPost(req, res){
-    var postId = req.params.postId;
-    var reportText = req.body.reportText;
-    var username = getUser(req);
-    if(reportText)
-    {
-        pt.findOne({_id: postId}, function (err){
-            if(err){
-                res.status(500).send({ 'error': 'internal server error' });
-            }
-        }).then(function(record){
-            if(record){
-                //find if user alrdy reported this post, or if user has max of 5 reports
-                //if not: add postId to report schema 
-                report.findOne({reportedId:postId}).then(function(rep){
 
-                 if(!rep){   
-                report.create({reportedId:record._id,post:true,srName:record.subredditName,description:reportText}).then(function()
-                
-                { res.status(200).send("reported");})}
-                else {res.status(400).send({"error": "already reported"});}})
+    reportPost(req, res) {
+        var postId = req.params.postId;
+        var reportText = req.body.reportText;
+        var username = getUser(req);
+        if (reportText) {
+            pt.findOne({ _id: postId }, function (err) {
+                if (err) {
+                    res.status(500).send({ 'error': 'internal server error' });
+                }
+            }).then(function (record) {
+                if (record) {
+                    //find if user alrdy reported this post, or if user has max of 5 reports
+                    //if not: add postId to report schema 
+                    report.findOne({ reportedId: postId }).then(function (rep) {
 
-            }
-            else{
-                res.status(400).send({"error": "invalid post id"});
-            };
-        });
-    }
-    else{
-        res.status(400).send({ 'error': 'invalid report text' });
+                        if (!rep) {
+                            report.create({ reportedId: record._id, post: true, srName: record.subredditName, description: reportText }).then(function () { res.status(200).send("reported"); })
+                        }
+                        else { res.status(400).send({ "error": "already reported" }); }
+                    })
+
+                }
+                else {
+                    res.status(400).send({ "error": "invalid post id" });
+                };
+            });
+        }
+        else {
+            res.status(400).send({ 'error': 'invalid report text' });
+        };
     };
-};
 
-/**
- * @function deleteSubreddit
- * @summary Delete subreddit. 
- * @param {object} Req -  Request
- * @param {object} Res - Response
- * @returns {JSON} Returns the subreddit that was deleted.
- */
+    /**
+     * @function deleteSubreddit
+     * @summary Delete subreddit. 
+     * @param {object} Req -  Request
+     * @param {object} Res - Response
+     * @returns {JSON} Returns the subreddit that was deleted.
+     */
 
-    deleteSubreddit(req, res){
+    deleteSubreddit(req, res) {
         var subrName = req.params.srName;
         var eraser = getUser(req);
-        sr.findOne({name: subrName}, function(err){
-            if(err){
+        sr.findOne({ name: subrName }, function (err) {
+            if (err) {
                 res.status(500).send({ 'error': 'internal server error' });
             }
-        }).then(function(record){
-            if(!record){
+        }).then(function (record) {
+            if (!record) {
                 res.status(400).send({ 'error': 'invalid subreddit name' });
             }
-            else if (record.adminUsername!=eraser){
+            else if (record.adminUsername != eraser) {
                 res.status(403).send({ 'error': 'access forbidden' });
             }
             else {
-                pt.deleteMany({subredditName: subrName}, function(err){
-                    if(err){
+                pt.deleteMany({ subredditName: subrName }, function (err) {
+                    if (err) {
                         res.status(500).send({ 'error': 'internal server error' });
                     };
-                }).then(sr.findOneAndDelete({name: subrName}, function(err){
-                    if(err){
-                        res.status(500).send({ 'error': 'internal server error' }); 
-                    }; 
-                }).then(function(deleted){
+                }).then(sr.findOneAndDelete({ name: subrName }, function (err) {
+                    if (err) {
+                        res.status(500).send({ 'error': 'internal server error' });
+                    };
+                }).then(function (deleted) {
                     res.status(200).send(deleted);
                 }));
             };
         });
     };
 
- /**
- * @function postInfo
- * @summary Get post's information. 
- * @param {object} Req -  Request
- * @param {object} Res - Response
- * @returns {JSON} Returns the post's information as an object.
- */   
+    /**
+    * @function postInfo
+    * @summary Get post's information. 
+    * @param {object} Req -  Request
+    * @param {object} Res - Response
+    * @returns {JSON} Returns the post's information as an object.
+    */
 
-    postInfo(req, res){
+    postInfo(req, res) {
 
         var subrName = req.params.srName;
         var postId = req.params.postId;
-        
-        sr.findOne({name: subrName}, function(err){
-            if(err)
-            {
-                res.status(500).send({ 'error': 'internal server error' });  
+
+        sr.findOne({ name: subrName }, function (err) {
+            if (err) {
+                res.status(500).send({ 'error': 'internal server error' });
             }
-        }).then(function(record){
-            if(!record){
-                res.status(400).send({ 'error': 'invalid subreddit name' }); 
-            }; 
-            if(record.posts.indexOf(postId)>-1)
-            {
-                pt.findOne({_id: postId}, function(err){
-                    if(err){
-                        res.status(500).send({ 'error': 'internal server error' }); 
-                    }; 
-                }).then(function(post){
-                    if(!post){
-                        res.status(500).send({ 'error': 'invalid postId' }); 
+        }).then(function (record) {
+            if (!record) {
+                res.status(400).send({ 'error': 'invalid subreddit name' });
+            };
+            if (record.posts.indexOf(postId) > -1) {
+                pt.findOne({ _id: postId }, function (err) {
+                    if (err) {
+                        res.status(500).send({ 'error': 'internal server error' });
+                    };
+                }).then(function (post) {
+                    if (!post) {
+                        res.status(500).send({ 'error': 'invalid postId' });
                     }
-                    else{
+                    else {
                         res.status(200).send(post);
                     };
                 });
@@ -713,22 +713,24 @@ reportPost(req, res){
  * @param {object} Res - Response
  * @returns {JSON} Returns the post's information as an object.
  */
- async   savePost(req, res)
-    {
+    async   savePost(req, res) {
         const postId = req.params.postId;
         const username = jwt.getUsernameFromToken(req);
 
         const user = await User.findOne({ Username: username });
 
-        const postSave=await pt.findOne({_id:postId});
+        const postSave = await pt.findOne({ _id: postId });
 
-        if(!postSave){res.status(404).send({ 'error': 'post doesnt exist' });}
+        if (!postSave) { res.status(404).send({ 'error': 'post doesnt exist' }); }
 
-        else
-        {
-            const checkIfSaved =await user.SavedPosts.find(function(srInReport) {
-              
-             return srInReport.postId == postId;});
+        else {
+            const checkIfSaved = await user.SavedPosts.find(function (srInReport) {
+
+                return srInReport.postId == postId;
+            });
+
+
+            if (checkIfSaved) { res.status(404).send({ error: "post already saved" }); }
 
 
              if(checkIfSaved) {
@@ -746,10 +748,12 @@ reportPost(req, res){
                 
             user.SavedPosts.push({"postId":postId,"title":postSave.title});
 
-            user.save();
+                user.SavedPosts.push({ "postId": postId, "title": postSave.title });
 
-                res.status(200).send({ message: "post saved"}); 
-             }
+                user.save();
+
+                res.status(200).send({ message: "post saved" });
+            }
         }
     }
 
