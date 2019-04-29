@@ -1440,138 +1440,6 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
 */
 
 
-app.get("/users", (req, res) => { });
-app.post("/users", (req, res) => { });
-app.put("/users", (req, res) => { });
-app.delete("/users", (req, res) => { });
-
-
-/**
- * @name EmojiService
- * @note These are the routes for anything related to a user.
- * @note This is just general routing, You can modify as you want but before the delivery of the documentation
- */
-/**
-* @api {get} /emoji/   Get's an emoji
-* @apiName GetEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} Image.
-* 
-*/
-
-/**
-* @api {post} /emoji/   Create an emoji
-* @apiName CreateEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} EMOJI_ID Unique id of image.
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"request not found"
-* }
-*/
-
-/**
-* @api {delete} /emoji/   Delete an emoji
-* @apiName DeleteEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess HTTP/1.1 200 Ok.
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found {
-*          "error":"request not found"
-*  }
-*/
-
-/**
-* @api {put} /emoji/   Edit an emoji (instead of deleting then creating)
-* @apiName EditEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
-* @apiSuccess {string} EMOJI_ID New unique id of new image.
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found {
-*          "error":"request not found"
-* }
-*/
-
-app.get("/emoji", (req, res) => { });
-app.post("/emoji", (req, res) => { });
-app.put("/emoji", (req, res) => { });
-app.delete("/emoji", (req, res) => { });
-
-/**
-* @api {post} /emoji/   Create an emoji
-* @apiName CreateEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} EMOJI_ID Unique id of image.
-*
-*/
-
-/**
-* @api {post} /emoji/   Create an emoji
-* @apiName CreateEmoji
-* @apiGroup test
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} TESSST  Image(emoji) of the subreddit.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} EMOJI_ID Unique id of image.
-*
-*/
-
-/**
-* @api {delete} /emoji/   Delete an emoji
-* @apiName DeleteEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-*
-*/
-
-/**
-* @api {put} /emoji/   Edit an emoji (instead of deleting then creating)
-* @apiName EditEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
-* @apiSuccess {string} EMOJI_ID New unique id of new image.
-*
-*/
-/**
-* @api {get} /emoji/   Edit an emoji (instead of deleting then creating)
-* @apiName GetEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} EMOJI_ID New unique id of new image.
-*
-*/
-
-
 
 
 /**
@@ -1820,6 +1688,35 @@ app.post("/sr/:srName/thread", upload.single('postFile'), passport.authenticate(
 * @apiParam {boolean}  spoiler  Mark if post is spoiler
 */
 app.put("/sr/save/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.savePost(req, res));
+
+/**
+* @api {put} /sr/save/:postId"  save/unsave post to your homepage
+* @apiName save/unsave
+* @apiGroup SrService
+*
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} postId Id of post you wish to save
+ @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"post saved" }
+
+*    HTTP/1.1 200 OK
+*  {message:"post unsaved" }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 post doesnt exist
+*      {
+*       "error": "post doesnt exist"
+*     }
+*   
+
+*    
+*/
+
+
+
 
 app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.editPost(req, res));
 

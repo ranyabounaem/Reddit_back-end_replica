@@ -731,7 +731,15 @@ reportPost(req, res){
              return srInReport.postId == postId;});
 
 
-             if(checkIfSaved) {res.status(404).send({error:"post already saved"});}
+             if(checkIfSaved) {
+
+                user.SavedPosts.pop({"postId":postId,"title":postSave.title});
+
+                user.save();
+                 
+                res.status(404).send({error:"post Unsaved"});
+            
+            }
              
              
             else{
@@ -740,7 +748,7 @@ reportPost(req, res){
 
             user.save();
 
-            res.status(200).send({ message: "post saved"}); 
+                res.status(200).send({ message: "post saved"}); 
              }
         }
     }
