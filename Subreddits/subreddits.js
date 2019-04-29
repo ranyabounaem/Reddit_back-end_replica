@@ -609,14 +609,17 @@ reportPost(req, res){
             if(record){
                 //find if user alrdy reported this post, or if user has max of 5 reports
                 //if not: add postId to report schema 
+                report.findOne({reportedId:postId}).then(function(rep){
 
+                 if(!rep){   
                 report.create({reportedId:record._id,post:true,srName:record.subredditName,description:reportText}).then(function()
                 
-                { res.status(200).send("reported");})
+                { res.status(200).send("reported");})}
+                else {res.status(400).send({"error": "already reported"});}})
 
             }
             else{
-                res.status(400).send({"error": "already reported"});
+                res.status(400).send({"error": "invalid post id"});
             };
         });
     }

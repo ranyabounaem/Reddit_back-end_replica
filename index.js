@@ -1873,7 +1873,7 @@ app.delete("/sr/:srName/thread/:postId/vote", passport.authenticate('jwt', { ses
 app.post("/sr/:srName/thread/:postId/report", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.reportPost(req, res));
 
 /**
-* @api {post} /sr/:srName/thread/:postId/report    Unvote a thread inside subreddit
+* @api {post} /sr/:srName/thread/:postId/report    report thread
 * @apiName ReportThread
 * @apiGroup SrService
 *

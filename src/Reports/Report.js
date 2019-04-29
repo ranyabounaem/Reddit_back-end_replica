@@ -229,7 +229,7 @@ class reportHandler {
     */
       else { 
       const postDeleted= await posts.findByIdAndDelete(reportToDelete.reportedId);
-      const deleted=await reports.findOneAndDelete({_id:reportToDeleteId});
+      const deleted=await reports.deleteMany({reportedId:reportToDelete.reportedId});
       res.status(404).send({message:"Post deleted"});}
     
       }

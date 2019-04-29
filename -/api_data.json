@@ -14556,7 +14556,7 @@
   {
     "type": "post",
     "url": "/sr/:srName/thread/:postId/report",
-    "title": "Unvote a thread inside subreddit",
+    "title": "report thread",
     "name": "ReportThread",
     "group": "SrService",
     "parameter": {
