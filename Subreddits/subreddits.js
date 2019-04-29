@@ -149,7 +149,10 @@ class SR {
         var postTitle = req.body.title;
         var postBody = req.body.threadBody;
 
-        
+        var imageCheck=req.file;
+        var spoilerCheck=req.body.spoiler;
+
+
         if(creator && postTitle && postBody){
 
             sr.findOne({name: subrName}, function(err){
@@ -167,8 +170,8 @@ class SR {
                         body: postBody,
                         creatorUsername: creator,
                         subredditName: subrName,
-                        postFile: req.file.path,
-                        spoiler: req.body.spoiler
+                     if(imageCheck){subredditFile: req.file.path},
+                     if(spoilerCheck){spoiler:req.body.spoiler}
                     });
                     newPost.save(function (err) {
 
