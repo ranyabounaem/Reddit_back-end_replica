@@ -217,7 +217,7 @@ class CommentHandler {
                             if (comments == null) {
                                 res.status(404).send({ 'error': 'There are no Comments for this Thread' })
                             } else {
-                                res.status(200).send(comments);
+                                res.status(200).send({comments});
                             }
                         });
                     }
