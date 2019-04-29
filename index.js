@@ -91,7 +91,7 @@ app.use(function (req, res, next) {
 
 const userHandler = require("./src/user");
 
-// console.log(userHandler.handleRegistration);
+
 app.post("/user/register", userHandler.handleRegistration);
 
 /**
@@ -173,9 +173,127 @@ app.post("/user/login", userHandler.handleLogin);
 * }
 */
 
+app.get("/user/Flairs", passport.authenticate('jwt', { session: false }), userHandler.getAllFlairs);
+/**
+* @api {get} /user/Flairs gets all flairs for this user
+* @apiName GetAllFlairs
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* [
+    {
+        "_id": "5cc5e38d58af9d0e34be6663",
+        "username": "mostafa_hazem",
+        "srName": "Education",
+        "flair": "el bob",
+        "__v": 0
+    },
+    {
+        "_id": "5cc5ed2bf14172494416af83",
+        "username": "mostafa_hazem",
+        "srName": "Technology",
+        "flair": "el bob2",
+        "__v": 0
+    }
+]
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 no flair exists
+*      {
+*     error:"No flairs"
+*     }
 
-app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserEmail);
-app.put("/me/edit/Password/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserPassword);
+*/
+
+
+app.get("/user/Flairs/:srName", passport.authenticate('jwt', { session: false }), userHandler.getFlairsSubreddit);
+
+/**
+* @api {get} /user/Flairs/:srName gets flair for this user in specific subreddit
+* @apiName GetFlair
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*@apiParam {string} srName the subreddit name you want to delete from
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+    {
+        "flair": "el bob"
+    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 no flair exists
+*      {
+*     error:"No flairs"
+*     }
+
+*/
+
+app.delete("/user/FlairDelete/:srName", passport.authenticate('jwt', { session: false }), userHandler.deleteFlair);
+
+/**
+* @api {delete} /user/FlairDelete/:srName gets flair for this user in specific subreddit
+* @apiName DeleteFlair
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*@apiParam {string} srName the subreddit name you want to delete from
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+    {
+        "message": "flair deleted"
+    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 no flair exists
+*      {
+*     error:"No flairs"
+*     }
+
+*/
+
+app.post("/user/CreateFlair", passport.authenticate('jwt', { session: false }), userHandler.createFlair);
+/**
+* @api {post} /user/CreateFlair create new flair
+* @apiName CreateFlair
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*  @apiParam  {String} srName  subreddit in which to create flair
+  @apiParam  {String} flair the flair you want to create
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* {
+*    message:"flair created"
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 didnt send srName
+*      {
+*      error:"subreddit name missing"
+*     }
+     HTTP/1.1 404 you alreadfy have a flair in this sr
+*      {
+*      error:"you alredy have a flair in this subreddit"
+*     }
+     HTTP/1.1 404 didnt send flair 
+*      {
+*      {error:"flair missing"
+*     }
+     HTTP/1.1 404 subreddit doent exist
+*      {
+*      error:"subreddit doesnt exist"
+*     }
+*/
+
+
+
+
+
+
+
 app.get("/me/About/:Username", passport.authenticate('jwt', { session: false }), userHandler.Getmyinfo);
 
 
@@ -190,6 +308,7 @@ app.get("/user/info/:userToView", userHandler.getUserInfo);
 * {
 *      "Username":"user1",
      Subscriptions:["sub1","sub2","sub3"]
+     ,"cakeday":"2019-04-28T19:07:29.386Z"
 * }
 *    
 * 
@@ -208,11 +327,36 @@ app.get("/me/user/info/:userToView", passport.authenticate('jwt', { session: fal
 * @apiHeader {String} auth Users unique token .
  *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
  *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 
- * {
- *      "Username":"user1",
-      Subscriptions:["sub1","sub2","sub3"]
- * }
+ *    HTTP/1.1 200 if friends 
+ {
+    "Username": "mostafa_hazem",
+    "Subscriptions": [],
+    "About":"im a nice user, hi",
+    "cakeday": "2019-04-29T01:07:28.002Z",
+    "savedPosts": [
+        {
+            "_id": "5cc64e61cd11128f20a8feb0",
+            "postId": "5cc6402a0eeec17074898ddc",
+            "title": "Laptops"
+        },
+        
+        {
+            "_id": "5cc650cf37392481409af63f",
+            "postId": "5cc6402a0eeec17074898de3",
+            "title": "Rush Hour 4"
+        }
+    ],
+    "Friends": [
+        "Ali_yasser"
+    ]
+}
+
+* HTTP/1.1 200 if not friends 
+{
+    "Username": "TestmanSe7",
+    "cakeday": "2019-04-29T01:07:28.406Z",
+    "About":"im a nicer project"
+}
  *    
  * 
  * @apiErrorExample {json} List error
@@ -609,16 +753,19 @@ app.put("/me/user/removeReq", passport.authenticate('jwt', { session: false }), 
 
 //TODO POSTS: listing posts for a subreddit or only popular posts
 
+
 const listings = require('./src/listings');
-app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, res) => listings.listPosts(req, res));
+app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, res) => listings.listPosts(req, res));
 /** 
-* @api {post} /me/listing?type=value List Posts 
+* @api {get} /me/listing?type=value&_id=value&votes=value&hotindex=value  List Posts 
 * @apiName ListPosts
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} type [type == hot] Type of the listing that the user wants for the posts.
-* @apiParam {Number} startPosition Sending 15 posts per after the startposition  
-* @apiSuccess {Object} Posts   Object in the JSON that contains an array of objects the listed Posts depending on the type  .
+* @apiParam {String} type     (hot,top,new) aType of the listing that the user wants for the posts.
+* @apiParam {String} _id      0 for the first time then the id  for the last post retrieved to avoid redundency 
+* @apiParam {Number} votes    the votes for the last post id 
+* @apiParam {Number} hotindex the hot score of the last post (0) if not of type hot   
+* @apiSuccess {Object} Posts   Object in the JSON that contains an array of objects the listed Posts depending on the type. Note: field hot index is only sent on the type hot request
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *   {
@@ -629,7 +776,7 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 *            "body": "There are rumors that Rush Hour 4 might be in the making.",
 *            "creatorUsername": "sabek",
 *            "subredditName": "Movies",
-*            "postDate": "2019-04-26T22:09:21.236Z"
+*            "postDate": "2019-04-26T22:09:21.236Z",
 *        },
 *        {
 *            "_id": "5cc38191735094039ec8d926",
@@ -637,7 +784,31 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 *            "body": "Unpopular opinion: Endgame is super overrated.",
 *            "creatorUsername": "captainmaged",
 *            "subredditName": "Movies",
-*            "postDate": "2019-04-26T22:09:21.221Z"
+*            "postDate": "2019-04-26T22:09:21.221Z",
+*        }
+*            ]
+*  }
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*   {
+*    "posts": [
+*        {
+*            "_id": "5cc38191735094039ec8d927",
+*            "title": "Rush Hour 4",
+*            "body": "There are rumors that Rush Hour 4 might be in the making.",
+*            "creatorUsername": "sabek",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.236Z",
+*            "hotindex": 9500
+*        },
+*        {
+*            "_id": "5cc38191735094039ec8d926",
+*            "title": "Avengers: Endgame",
+*            "body": "Unpopular opinion: Endgame is super overrated.",
+*            "creatorUsername": "captainmaged",
+*            "subredditName": "Movies",
+*            "postDate": "2019-04-26T22:09:21.221Z",
+*            "hotindex": 9490
 *        }
 *            ]
 *  }
@@ -651,36 +822,6 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 */
 
 
-// API for information about user
-
-/** 
-* @api {get} /user/:Username/about/ About
-* @apiName AboutUser
-* @apiGroup UserService
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} Username username of the user that the information is about.
-* @apiSuccess {String} Name name of the user
-* @apiSuccess {String} Cakeday date of the user joining reddit.
-* @apiSuccess {Number} Karma karma of the user
-* @apiSuccess {JPG} Pic profile picture of the user
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "Username" : "TheRealBatman",
-*       "Name": "Mark",
-*       "Cakeday": "21-12-2019",
-*       "Karma": 1449,
-*       "Pic" : data:image/jpeg;base64,...............
-*      }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 403 Forbidden
-*     {
-*       "error": "User not found"
-*     }
-*/
-
-
-//API for listings of comments 
 
 /** 
 * @api {get} /user/:Username/comments/listing?type=value  List Comments 
@@ -764,23 +905,57 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
  * @apiSuccess {Number} Karma Karma of the User.
  * @apiSuccess {String} Cakeday Date of joining Reddit.
  * @apiSuccess {String[]} Subscriptions  subreddit subscriptons  of the User.
+ * @apiSuccess {String[]} moderates subreddits moderated
+ * @apiSuccess {String[]} recreq friend requests received
+ * @apiSuccess {String[]} sentreq freind requests sent
+ * @apiSuccess {String[]} modreq moderation requests
+ * @apiSuccess {String[]} freinds list of all friends
+ * @apiSuccess {String[]} blocked list of all blocked users
  * 
- *  @apiParamExample {json} Input
- *    {
- *      "Username": "User1",     
- *    }
  * 
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
- *    {
- *      "Username": "User1"
- *      "Email": "user@reddit.com",
- *      "About": "Im a reddit user",
- *      "Imageid": "100001"
- *      "Subscriptions": ["subbreddit:askreddit","subbreddit:reddit"],
- *      "Karma" :2,
- *      "Cakeday" : "21-3-1440"
- *    }
+ * {
+    "Subscriptions": [
+        "Movies",
+        "Technology",
+        "Education"
+    ],
+    "moderates": [
+        "Movies"
+    ],
+    "ModReq": [
+        "Technology"
+    ],
+    "blockedUsers": [
+        "Ayman"
+    ],
+    "Friends": [
+        "Ali_yasser"
+    ],
+    "SentReq": [
+        "TestmanSe7"
+    ],
+    "RecReq": [
+        "zaghw"
+    ],
+    "_id": "5cc64e50c206fb368c8e4fa5",
+    "Username": "mostafa_hazem",
+    "Email": "mostafa_hazem@m.com",
+    "SavedPosts": [
+        {
+            "_id": "5cc64e61cd11128f20a8feb0",
+            "postId": "5cc6402a0eeec17074898ddc",
+            "title": "Laptops"
+        },
+        {
+            "_id": "5cc650cf37392481409af63f",
+            "postId": "5cc6402a0eeec17074898de3",
+            "title": "Rush Hour 4"
+        }
+    ],
+    "cakeday": "2019-04-29T01:07:28.002Z"
+}
  * 
  * @apiErrorExample {json} List error
  *    HTTP/1.1 404 User not found
@@ -796,7 +971,7 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 
 
 
-
+app.put("/me/edit/Password/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserPassword);
 /**
 * @api {Put} /me/edit/Password/:Username Edit User password
 * @apiName EditUserPassword
@@ -836,6 +1011,38 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 *     }
 */
 
+app.put("/me/edit/About", passport.authenticate('jwt', { session: false }), userHandler.editAbout);
+/**
+* @api {Put} /me/edit/About Edit About Info
+* @apiName EditAbout
+* @apiGroup me
+* @apiParam  {String} About the About information of the User.
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParamExample {json} Input
+*    {
+*      "About": "My name is Uzumaki, I am the perfect being on Earth"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*    {
+*        "message": "About Information updated successfully"
+*    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 About parameter not found
+*      {
+*       "error": "About parameter not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 Enter a valid String containing information
+*      {
+*       "error": "Enter a valid String containing information"
+*     }
+*/
+
+app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserEmail);
+
 /**
 * @api {Put} /me/edit/email/:Username Edit User email
 * @apiName EditUserEmail
@@ -871,162 +1078,366 @@ app.post('/me/listing', passport.authenticate('jwt', { session: false }), (req, 
 *      }
 */
 
-
-
-
+reportHandler = require("./src/Reports/Report");
+app.put("/Moderator/ban", passport.authenticate('jwt', { session: false }), reportHandler.Ban);
 /**
-* @api {get} /Moderator/Reports/   Get all reports
-* @apiName Getreports
+* @api {put} /Moderator/ban   Remove moderator
+* @apiName Ban
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
-* @apisuccess  {String} ReporId unique ReporId  of the Repor.
-
+* @apiParam  {String} Username unique Username  of the user to be banned .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
 *  @apiSuccessExample {json} Success
 *    HTTP/1.1 200 OK
-* [{
-*         "ReporId":"1010"
-* }]
-*    
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 500 server error
-*/
-
-/**
-* @api {Put} /Moderator/Reports/:id   ignore report
-* @apiName Ignoreports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ReporId unique ReporId  of the Repor.
-* @apiParamExample {json} Input
-*    {
-*      "ReporId": "1101", 
-*    }
+* {    
+*      "message": "User banned successfully" 
+* } 
 *  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"report not found"
-* }
-*/
-
-/**
-* @api {delete} /Moderator/Reports/:id   delete report
-* @apiName deletereports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ReporId unique ReporId  of the Repor.
-* @apiParamExample {json} Input
-*    {
-*      "ReporId": "1101", 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"report not found"
-* }
-*/
-
-/**
-* @api {post} /Moderator/Ban/:Username&:SubbreditName   ban user
-* @apiName BanUser
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of the User to be banned.
-* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit to be banned from.
-* @apiParamExample {json} Input
-*    {
-*      "Username": "User0",
-*      "SubbreditName":"Ask reddit" 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"user or subreddit not found"
-* }
-*/
-
-/**
-* @api {delete} /Moderator/LeaveMod/:Username&:SubbreditName   Leave or remove Moderation
-* @apiName LeaveMod
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of the Moderaor to remove or leave .
-* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
-* @apiParamExample {json} Input
-*    {
-*      "Username": "User0",
-*      "SubbreditName":"Ask reddit" 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"user or subreddit not found"
-* }
-*/
-
-/**
-* @api {post} /Moderator/Invite/:Username&:SubbreditName   invite moderator
-* @apiName Addmod
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of the Moderaor to be added .
-* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
-* @apiSuccess {String} ModREQid unique invite Id  of the request .
-* @apiParamExample {json} Input
-*    {
-*      "Username": "User0",
-*      "SubbreditName":"Ask reddit" 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK 
-* {
-* 
-*          "ModREQid":"101"
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Moderator banned successfully" 
 * }  
 * 
 * @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
+*     HTTP/1.1 404 Username not found
 * {
-*          "error":"user or subreddit not found"
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not authorized to ban
+* {
+*          "error":"User is not authorized to ban"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be banned doesn't exist
+* {
+*          "error":"User to be banned doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot ban himself
+* {
+*          "error":"User cannot ban himself"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot ban the creator of the subreddit
+* {
+*          "error":"User cannot ban the creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User doesn't have the authority to ban a moderator
+* {
+*          "error":"User doesn't have the authority to ban a moderator"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is already banned from Subreddit
+* {
+*          "error":"User is already banned from Subreddit"
 * }
 */
 
+app.put("/Moderator/unban", passport.authenticate('jwt', { session: false }), reportHandler.unBan);
 /**
-* @api {post} /Moderator/accept   accept invite moderator
-* @apiName Acceptmod
+* @api {put} /Moderator/unban   Remove moderator
+* @apiName unBan
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ModREQid unique invite id  of request.
+* @apiParam  {String} Username unique Username  of the user to be unbanned .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
 * @apiParamExample {json} Input
 *    {
-*      "ModREQid": "1011",
-*       
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "User unbanned successfully" 
+* } 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Username not found
+* {
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not authorized to unban
+* {
+*          "error":"User is not authorized to unban"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be unbanned doesn't exist
+* {
+*          "error":"User to be unbanned doesn't exist"
+*
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User isn't banned from Subreddit
+* {
+*          "error":"UseUser isn't banned from Subreddit"
+* }
+*/
+
+
+app.put("/Moderator/Invite", passport.authenticate('jwt', { session: false }), reportHandler.addMod);
+/**
+* @api {put} /Moderator/Invite   invite moderator
+* @apiName addMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} Username unique Username  of the Moderator to be added .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Moderator Invite Sent" 
+* }  
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Username not found
+* {
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not creator of the subreddit
+* {
+*          "error":"User is not creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not creator of the subreddit
+* {
+*          "error":"User is not creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be added as moderator doesn't exist
+* {
+*          "error":"User to be added as moderator doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot add himself
+* {
+*          "error":"User cannot add himself"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User has already received a Moderation request
+* {
+*          "error":"User has already received a Moderation request"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User is already a moderator
+* {
+*          "error":"User is already a moderator"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User is banned from Subreddit
+* {
+*          "error":"User is banned from Subreddit"
+* }
+*/
+
+app.put("/Moderator/remove", passport.authenticate('jwt', { session: false }), reportHandler.removeMod);
+/**
+* @api {put} /Moderator/remove   Remove moderator
+* @apiName removeMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} Username unique Username  of the Moderator to be removed .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Moderator removed" 
+* } 
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Request for moderation removed" 
+* }  
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Username not found
+* {
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not creator of the subreddit
+* {
+*          "error":"User is not creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be removed from moderation doesn't exist
+* {
+*          "error":"User to be removed from moderation doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot remove himself
+* {
+*          "error":"User cannot remove himself"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User isn't a moderator
+* {
+*          "error":"User isn't a moderator"
+* }
+*/
+
+app.put("/Moderator/accept", passport.authenticate('jwt', { session: false }), reportHandler.acceptModRequest);
+
+/**
+* @api {put} /Moderator/accept   accept moderator invite
+* @apiName AcceptmodInvite
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "SrName": "funny"
 *    }
 *  @apiSuccessExample {json} Success
 *    HTTP/1.1 200 OK   
+*    {
+*          message: "Moderator request accepted"
+*    }
 * 
 * @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
+*     HTTP/1.1 404 SrName not found
 * {
-*          "error":"request not found"
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Request doesn't exist
+* {
+*          "error": "Request doesn't exist"
 * }
 */
 
 
+app.put("/Moderator/reject", passport.authenticate('jwt', { session: false }), reportHandler.rejectModRequest);
 
+/**
+* @api {put} /Moderator/reject   reject moderator invite
+* @apiName rejectModRequest
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "SrName": "funny"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+*    {
+*          message: "Moderator request rejected"
+*    }
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Request doesn't exist
+* {
+*          "error": "Request doesn't exist"
+* }
+*/
 
+app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), reportHandler.leaveMod);
+
+/**
+* @api {put} /Moderator/leave   leave moderation
+* @apiName leaveMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "SrName": "funny"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+*    {
+*          message: "User has left moderation"
+*    }
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User isn't a moderator
+* {
+*          "error": "User isn't a moderator"
+* }
+*/
 
 
 app.get("/users", (req, res) => { });
@@ -1161,105 +1572,6 @@ app.delete("/emoji", (req, res) => { });
 */
 
 
-/**
- * @name FlairService
- * @note These are the routes for anything related to a user.
- * @note This is just general routing, You can modify as you want but before the delivery of the documentation
- */
-/** 
-* @api {post} /flair/:Srid   Creates  a  Flair 
-* @apiName Create
-* @apiGroup FlairService
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} SubredditName of the subbreddit that  user wants to create flair for.
-* @apiParam {string} FlairName the flair string  added (maximum 100 characters) .
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*     }
-*
-* @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
-* @apiError OverlengthedFlair The string length of the flair is over 100 character.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "SubbRedditNotFound"
-*     }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 403 Forbidden
-*     {
-*       "error": "OverlengthedSubject"
-*     }
-*/
-
-/**
-* @api {delete} /flair/:SrId   Delete
-* @apiName Delete
-* @apiGroup FlairService
-* @apiParam {String} SubredditName of the subbreddit that  user wants to delete flair for.
-* @apiParam {string} FlairName the flair string  user want to delete (maximum 100 characters) .
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*     }
-* @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
-* @apiError OverlengthedFlair The string length of the flair user want to delete is over 100 character.
-* @apiError FlairNotFound The flair string user want to delete is not found.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "FlairNotFound"
-*     }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "SubbRedditNotFound"
-*     }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 403 Forbidden
-*     {
-*       "error": "OverlengthedSubject"
-*     }
-*/
-
-
-/**
-* @api {get} /flair/:SrID  Flair Retrieval
-* @apiName RetrieveFlairs
-* @apiGroup FlairService
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} SubredditName of the subbreddit that  user wants to get flair for.
-* @apiSuccess {Array} Flairs   Array of Flairs of the users for the subbredditID requested .
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*  "Flairs":[
-    {
-* "SubbredditID":3
-* ,”FlairID”:1
-* ,”FlairString”:”Doctor”
-*  },
-* {"SubbredditID":3
-* ,”FlairID”:2,
-* ,"FlairString":”Math Teacher"
-* }
-]
-*     }
-
-* @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "SubbRedditNotFound"
-*     }
-
-
-*/
-app.get("/flair", (req, res) => { });
-app.post("/flair", (req, res) => { });
-app.put("/flair", (req, res) => { });
-app.delete("/flair", (req, res) => { });
 
 
 /**
@@ -1507,6 +1819,7 @@ app.post("/sr/:srName/thread", upload.single('postFile'), passport.authenticate(
 * @apiParam {object} postFile Post image or video (Supported file formats: jpeg/png/mp4)
 * @apiParam {boolean}  spoiler  Mark if post is spoiler
 */
+app.put("/sr/save/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.savePost(req, res));
 
 app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.editPost(req, res));
 
@@ -1560,7 +1873,7 @@ app.delete("/sr/:srName/thread/:postId/vote", passport.authenticate('jwt', { ses
 app.post("/sr/:srName/thread/:postId/report", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.reportPost(req, res));
 
 /**
-* @api {post} /sr/:srName/thread/:postId/report    Unvote a thread inside subreddit
+* @api {post} /sr/:srName/thread/:postId/report    report thread
 * @apiName ReportThread
 * @apiGroup SrService
 *
@@ -1605,7 +1918,6 @@ app.delete("/sr/:srName/subs", passport.authenticate('jwt', { session: false }),
 
 
 const subreddit = require('./Subreddits/subreddits')
-
 
 
 
@@ -1767,13 +2079,13 @@ app.post('/me/pm/markreadall', passport.authenticate('jwt', { session: false }),
 */
 
 
-app.post('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.retrieve(req, res));
+app.get('/me/pm', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.retrieve(req, res));
 /**
-* @api {post} /me/pm/   Retrieve
+* @api {get} /me/pm/?mine=value   Retrieve
 * @apiName RetrieveMessages
 * @apiGroup PMService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {Boolean} mine True if u need to retrieve the inbox false if u need to retrieve the sent.
+* @apiParam {Boolean} mine true if u need to retrieve the inbox false if u need to retrieve the sent.
 * @apiSuccess {Object}  messages       Object that contains an array  of objects that contains data of the messages
 *     HTTP/1.1 200 OK
 *    {
@@ -1836,6 +2148,8 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
 
 
 
+
+
 /**
  * @name NotificationsService
  * @note These are the routes for anything related to a user.
@@ -1895,11 +2209,155 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  */
 
-const reportHandler = require("./src/Reports/Report");
- 
+
+
+/**
+* @api {get} /Moderator/Reports/   Get all reports
+* @apiName Getreports
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apisuccess  {String} reportedId id of comment or post
+* @apisuccess  {srName} subreddit of report
+* @apisuccess  {Boolean} post a type that is  true if post , false if comment
+
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* [{
+*         [
+    {
+        "_id": "5cc4b675d7eb7343e073df38",
+        "reportedId": "121213521",
+        "srName": "Education",
+        "post": true,
+        "__v": 0
+    },
+    {
+        "_id": "5cc4b675d7eb7343e073df39",
+        "reportedId": "435422",
+        "srName": "343545454",
+        "post": true,
+        "__v": 0
+    },
+    {
+        "_id": "5cc4b675d7eb7343e073df3b",
+        "reportedId": "4n",
+        "srName": "Education",
+        "post": true,
+        "__v": 0
+    }
+]
+* }]
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator to any subreddit"
+*     }
+*     HTTP/1.1 401 no reports
+*      {
+*       "error":"No reports"
+*     }
+*/
 app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.getReports(req, res));
+/**
+* @api {Delete} /Moderator/Reports/:reportId   delete report 
+* @apiName DeleteReport
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"report deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+*/
 
 
+app.delete('/Moderator/Reports/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deleteReport(req, res));
+
+/**
+* @api {Delete} /Moderator/Post/:reportId   delete reported post
+* @apiName DeletePost
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"post deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+
+*     HTTP/1.1 401 Report isnt for a post
+*      {
+*       "error":"This isnt a post report"
+*      }
+*/
+
+app.delete('/Moderator/Post/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deletePost(req, res));
+
+
+/**
+* @api {Delete} /Moderator/Comment/:reportId   delete reported comment
+* @apiName DeleteComment
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} :reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"Comment deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+*     HTTP/1.1 401 Report isnt for a post
+*      {
+*       "error":"This isnt a Comment report"
+*      }
+*/
+
+app.delete('/Moderator/Comment/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deleteComment(req, res));
 
 
 const notificationHandler = require("./src/notifications");

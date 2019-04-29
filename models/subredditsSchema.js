@@ -32,7 +32,8 @@ const SubredditSchema = new Schema({
     },
     bio: [String],
     subredditFile: String,
-    modUsername: [String]
+    modUsername: [String],
+    bannedUsers: [String]
 });
 
 

@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const jwt = require('../JWT/giveToken');
 const getUser = jwt.getUsernameFromToken;
 const vote = require('../models/voteSchema');
+const report = require('../models/Reports');
 
 class SR {
     constructor(){
@@ -23,13 +24,16 @@ class SR {
         var admin = getUser(req);
         var subredditName = req.body.srName;
         var subredditRules = req.body.srRules;
+        var imageCheck=req.file;
+
         if(admin &&  subredditName && subredditRules){
             var subreddit = new sr({
                 name: subredditName,
                 adminUsername: admin,
                 rules: subredditRules,
-                subredditFile: req.file.path,
-                modUsername: req.body.modUsername
+                modUsername: req.body.modUsername,
+                if(imageCheck){subredditFile: req.file.path}
+                
             });
             subreddit.save(function (err, record) {
                 if (err) {
@@ -60,7 +64,8 @@ class SR {
         var subredditName = req.params.srName;
         var updatedRules = req.body.newRules;
         var updatedName = req.body.newName;
-        if(subredditName && updatedRules && updatedName){
+        var newMods = req.body.newMods;
+        if(subredditName && updatedRules && updatedName && newMods){
 
             sr.findOneAndUpdate({name: subredditName}, 
                 {
@@ -144,7 +149,10 @@ class SR {
         var postTitle = req.body.title;
         var postBody = req.body.threadBody;
 
-        
+        var imageCheck=req.file;
+        var spoilerCheck=req.body.spoiler;
+
+
         if(creator && postTitle && postBody){
 
             sr.findOne({name: subrName}, function(err){
@@ -162,8 +170,8 @@ class SR {
                         body: postBody,
                         creatorUsername: creator,
                         subredditName: subrName,
-                        postFile: req.file.path,
-                        spoiler: req.body.spoiler
+                     if(imageCheck){subredditFile: req.file.path},
+                     if(spoilerCheck){spoiler:req.body.spoiler}
                     });
                     newPost.save(function (err) {
 
@@ -601,10 +609,17 @@ reportPost(req, res){
             if(record){
                 //find if user alrdy reported this post, or if user has max of 5 reports
                 //if not: add postId to report schema 
-                res.status(200).send("OK");
+                report.findOne({reportedId:postId}).then(function(rep){
+
+                 if(!rep){   
+                report.create({reportedId:record._id,post:true,srName:record.subredditName,description:reportText}).then(function()
+                
+                { res.status(200).send("reported");})}
+                else {res.status(400).send({"error": "already reported"});}})
+
             }
             else{
-                res.status(400).send({"error": "post already unvoted"});
+                res.status(400).send({"error": "invalid post id"});
             };
         });
     }
@@ -690,5 +705,45 @@ reportPost(req, res){
             };
         });
     };
+
+    /**
+ * @function savePost
+ * @summary Get post's information. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns the post's information as an object.
+ */
+ async   savePost(req, res)
+    {
+        const postId = req.params.postId;
+        const username = jwt.getUsernameFromToken(req);
+
+        const user = await User.findOne({ Username: username });
+
+        const postSave=await pt.findOne({_id:postId});
+
+        if(!postSave){res.status(404).send({ 'error': 'post doesnt exist' });}
+
+        else
+        {
+            const checkIfSaved =await user.SavedPosts.find(function(srInReport) {
+              
+             return srInReport.postId == postId;});
+
+
+             if(checkIfSaved) {res.status(404).send({error:"post already saved"});}
+             
+             
+            else{
+                
+            user.SavedPosts.push({"postId":postId,"title":postSave.title});
+
+            user.save();
+
+            res.status(200).send({ message: "post saved"}); 
+             }
+        }
+    }
+
 };
 module.exports = new SR();

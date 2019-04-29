@@ -1,9 +1,13 @@
 const User = require("../../models/UserSchema");
+const flair = require("../../models/Flair");
+const src= require("../../models/subredditsSchema");
+const sr=src.Subreddit;
 const notification = require('../../models/notificationSchema.js');
 const validator = require("email-validator");
 const JWTconfig = require("../../JWT/giveToken");
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
+const commentHandler = require('../Comments/Comment').cm;
 
 async function checkIfBlockedByMe (user,username)
 {
@@ -15,7 +19,6 @@ async function checkIfBlockedByMe (user,username)
   if(blockedUser){return true}
   else return false;
 }
-
 async function checkIfBlockedByHim (user,username){
   
   const blockedUser =await user.blockedUsers.find(function(userInBlockedArray)
@@ -27,7 +30,6 @@ async function checkIfBlockedByHim (user,username){
  else return false;
  
 }
-
 async function checkFriend(user, fUsername)
 {
   const Friend =await user.Friends.find(function(UserInFriendsarray) {
@@ -37,7 +39,6 @@ async function checkFriend(user, fUsername)
   if(Friend){return true;}
   else return false;
 }
-
 async function checkSentReq(user, fUsername)
 {
   const sentReq =await user.SentReq.find(function(UserInSentReqsarray) {
@@ -56,7 +57,6 @@ async function checkRecReq(user, fUsername)
   if(recReq){return true;}
   else return false;
 }
-
 function blockAndRemove(user, fUser)
 {
   user.Friends.pop(fUser.Username);
@@ -77,7 +77,6 @@ function AddReq(user, fUser)
   fUser.RecReq.push(user.Username);
   fUser.save();
 }
-
 function popSentRequest(user, fUser)
 {
   user.SentReq.pop(fUser.Username);
@@ -86,7 +85,6 @@ function popSentRequest(user, fUser)
   fUser.RecReq.pop(user.Username);
   fUser.save();
 }
-
 function removeFriend(user, fUser)
 {
   user.Friends.pop(fUser.Username);
@@ -95,8 +93,6 @@ function removeFriend(user, fUser)
   fUser.Friends.pop(user.Username);
   fUser.save();
 }
-
-acceptRequest
 function acceptRequest(user, fUser)
 {
 
@@ -166,6 +162,8 @@ class UserHandler {
             req.body.Password=hashed;
 
             const user = await User.create(req.body);
+            const addDate=await User.updateOne({ _id: user._id }, { $set: { cakeday:Date.now()} })
+            const saveDate= await user.save();
             /**
              *   This creates a new token
              */
@@ -365,7 +363,7 @@ class UserHandler {
        */
         res
           .status(200)
-          .send({ Username: req.params.Username, Email: RetUser.Email });
+          .send(RetUser);
       }
     });
   }
@@ -508,21 +506,43 @@ class UserHandler {
     const blockedUser = await checkIfBlockedByHim(userViewed,username);
 
     if(blockedUser){res.status(404).send({message:"User doesnt exist"})}
-
     else{
+
+      const Friend = await checkFriend(userViewed,username);
+
+      if(!Friend){
     /**
        *return info 
        */
     const userinfo=
     {
       Username:req.params.userToView,
-      Subscriptions: userViewed.Subscriptions
+      cakeday:userViewed.cakeday,
+      About:userViewed.About
     }
 
     res.status(200).send(userinfo);
     }
+
+    else {
+
+      const userinfo1=
+      {
+        Username:req.params.userToView,
+        Subscriptions: userViewed.Subscriptions,
+        cakeday:userViewed.cakeday,
+        savedPosts:userViewed.SavedPosts,
+        About:userViewed.About,
+        Friends:userViewed.Friends
+      }
+  
+      res.status(200).send(userinfo1);
+
+
+    }
   }
 }
+  }
 
   
 /**
@@ -546,7 +566,8 @@ class UserHandler {
     const userinfo=
     {
       Username:req.params.userToView,
-      Subscriptions: userViewed.Subscriptions
+      Subscriptions: userViewed.Subscriptions,
+      cakeday:userViewed.cakeday
     }
 
     res.status(200).send(userinfo);
@@ -732,7 +753,7 @@ class UserHandler {
 
      /**
    *     a function that accepts a friend request
-   *     @function addFriend
+   *     @function acceptRequest
    *     @returns {JSON} the response for the request
    */
   async acceptRequest(req, res)
@@ -781,7 +802,7 @@ class UserHandler {
 
      /**
    *     a function that rejects a friend request
-   *     @function addFriend
+   *     @function rejectRequest
    *     @returns {JSON} the response for the request
    */
   async rejectRequest(req, res)
@@ -831,7 +852,7 @@ class UserHandler {
 
    /**
    *     a function that returns the list of friends for a certain user
-   *     @function addFriend
+   *     @function getFriends
    *     @returns {JSON} the response for the request
    */
   async getFriends(req, res)
@@ -846,7 +867,7 @@ class UserHandler {
 
   /**
    *     a function that returns the list of Sent requests for a certain user
-   *     @function addFriend
+   *     @function getSentRequests
    *     @returns {JSON} the response for the request
    */
   async getSentRequests(req, res)
@@ -860,7 +881,7 @@ class UserHandler {
   }
   /**
    *     a function that returns the list of Received requests for a certain user
-   *     @function addFriend
+   *     @function getReceivedRequests
    *     @returns {JSON} the response for the request
    */
   async getReceivedRequests(req, res)
@@ -872,7 +893,154 @@ class UserHandler {
     const user = await User.findOne({ Username: username });
     res.status(200).send({receivedRequests: user.RecReq});
   }
+  
+  /**
+   *     a function that craetes a new flair 
+   *     @function createFlair
+   *     @returns {JSON} the response for the request
+   */
+  async createFlair(req, res)
+  {
+    const username = JWTconfig.getUsernameFromToken(req);
+    const srName=req.body.srName
+
+    /**
+   *     checks if data is sent correctly
+   */
+    if(!srName){res.status(404).send({error:"subreddit name missing"})}
+    else
+  {
+    
+    /**
+   *     checks if user already has a flair in this subreddit 
+   */
+    const flairExists = await flair.findOne({$and: [{username }, {srName}]})
+
+    if (flairExists) {res.status(404).send({error:"you alredy have a flair in this subreddit"})}
+    else
+    {
+      const srExists=await sr.findOne({name:srName});
+      
+    /**
+   *     checks if subreddit exists 
+   */
+      if(!srExists) {res.status(404).send({error:"subreddit doesnt exist"})}
+      else
+      {
+        const flairName= req.body.flair;
+        /**
+   *     checks if flair name was sent 
+   */
+        if(!flairName){res.status(404).send({error:"flair missing"})}
+        else
+        {
+
+          /**
+   *     creates the flair in the flair coleection
+   */
+        const createFlair=await flair.create({username,srName,flair:flairName});
+        res.status(200).send({message:"flair created"})
+        }
+      }
+    }
+   }
+  }
+
+  /**
+   *     a function gets all flairs for user
+   *     @function getAllFlairs
+   *     @returns {JSON} the response for the request
+   */
+  async getAllFlairs(req, res)
+
+  {
+    const username = JWTconfig.getUsernameFromToken(req);
+  
+    
+    /**
+    *    This finds the flairs and checks if there are none 
+    */
+    const flairsReturned= await flair.find({username});
+    if (flairsReturned.length==0){res.status(404).send({error:"No flairs"});}
+
+    else
+    res.status(200).send(flairsReturned);
+  }
+
+  /**
+   *     a function gets all flairs for user
+   *     @function getFlairsSubreddit
+   *     @returns {JSON} the response for the request
+   */
+
+  async getFlairsSubreddit(req, res)
+
+  {
+    const username = JWTconfig.getUsernameFromToken(req);
+    const srName=req.params.srName
+    
+    /**
+    *    This finds the flair 
+    * 
+    */
+    const flairsReturned= await flair.findOne({$and: [{username }, {srName}]})
+    if (!flairsReturned){res.status(404).send({error:"No flairs"});}
+
+    else
+    res.status(200).send( {"flair":flairsReturned.flair});
+  }
+ 
+  async deleteFlair(req, res)
+
+  {
+    const username = JWTconfig.getUsernameFromToken(req);
+    const srName=req.params.srName
+    
+    /**
+    *    This finds the flair 
+    * 
+    */
+    const flairsReturned= await flair.findOne({$and: [{username }, {srName}]})
+    if (!flairsReturned){res.status(404).send({error:"No flairs"});}
 
 
+    /**
+    *    This deletes the flair 
+    * 
+    */
+    else{
+    const flairId=flairsReturned._id;
+    const flairDelete= await flair.findOneAndDelete({_id:flairId});
+    res.status(200).send( {message:"flair removed"});
+    }
+  }
+
+  /**
+   *     a function that edits the information About the user
+   *     @function editAbout
+   *     @returns {JSON} the response for the request
+   */
+  async editAbout(req, res)
+  {
+    /**
+    *    This finds the user that is going to edit the "About" information section using the username in token
+    */
+   const username = JWTconfig.getUsernameFromToken(req);
+   const user = await User.findOne({ Username: username });
+   /**
+   *    This checks if the About parameter isn't in the request
+   *     if not found it sends error 404 with message "About parameter not found"
+   *     Then it checks if the type of the About parameter is a string
+   *     else it changes the About 
+   */
+   if(req.body.About == null) return res.status(404).send("About parameter not found");
+   else if(typeof req.body.About != 'string' ) return res.status(402).send({error : "Enter a valid String containing information"});
+   else
+    {
+      user.About = req.body.About;
+      user.save();
+      return res.status(200).send({message: "About Information updated successfully"})
+    }
+  }
 }
 module.exports = new UserHandler();
