@@ -1081,7 +1081,7 @@ app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: fals
 reportHandler = require("./src/Reports/Report");
 app.put("/Moderator/ban", passport.authenticate('jwt', { session: false }), reportHandler.Ban);
 /**
-* @api {put} /Moderator/ban   Remove moderator
+* @api {put} /Moderator/ban   Ban User
 * @apiName Ban
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
@@ -1152,7 +1152,7 @@ app.put("/Moderator/ban", passport.authenticate('jwt', { session: false }), repo
 
 app.put("/Moderator/unban", passport.authenticate('jwt', { session: false }), reportHandler.unBan);
 /**
-* @api {put} /Moderator/unban   Remove moderator
+* @api {put} /Moderator/unban   unban User
 * @apiName unBan
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
@@ -1203,7 +1203,7 @@ app.put("/Moderator/unban", passport.authenticate('jwt', { session: false }), re
 
 app.put("/Moderator/Invite", passport.authenticate('jwt', { session: false }), reportHandler.addMod);
 /**
-* @api {put} /Moderator/Invite   invite moderator
+* @api {put} /Moderator/Invite   Invite moderator
 * @apiName addMod
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
