@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const jwt = require('../JWT/giveToken');
 const getUser = jwt.getUsernameFromToken;
 const vote = require('../models/voteSchema');
+const report = require('../models/Reports');
 
 class SR {
     constructor(){
@@ -601,10 +602,14 @@ reportPost(req, res){
             if(record){
                 //find if user alrdy reported this post, or if user has max of 5 reports
                 //if not: add postId to report schema 
-                res.status(200).send("OK");
+
+                report.create({reportedId:record._id,post:true,srName:record.subredditName,description:reportText}).then(function()
+                
+                { res.status(200).send("reported");})
+
             }
             else{
-                res.status(400).send({"error": "post already unvoted"});
+                res.status(400).send({"error": "already reported"});
             };
         });
     }
