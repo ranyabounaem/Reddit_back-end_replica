@@ -1,5 +1,6 @@
 const request = require("request");
 const User = require("../models/UserSchema.js");
+const notification = require('../models/notificationSchema');
 const mongoose = require("mongoose");
 
 describe("user tests", () => {
@@ -10,12 +11,15 @@ describe("user tests", () => {
 
   
   afterAll(function (done) {
-    User.deleteOne({Username:'Uzumaki'},function(){done()})
-    User.deleteOne({Username:'sami'},function(){done()})
-    User.deleteOne({Username:'mostafa'},function(){done()})
+    User.deleteMany({ Username: { $in: ['Uzumaki', 'sami', 'mostafa'] } }, function () {
+      notification.deleteMany({ username: { $in: ['Uzumaki', 'sami', 'mostafa'] }}, function(){
+          done();
+      });
+    });
 
+  });
 
- });
+ 
   
 //
   describe("tests registering new users", () => {
