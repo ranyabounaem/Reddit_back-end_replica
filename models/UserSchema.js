@@ -29,7 +29,9 @@ const UserSchema = new Schema({
 
  SentReq:[String],
 
- RecReq:[String]
+ RecReq:[String],
+
+ Karma : {type: Number, default:0}
 });
 
 const User = mongoose.model("User", UserSchema);
