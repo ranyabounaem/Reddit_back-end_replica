@@ -12260,391 +12260,6 @@
     "name": "Public"
   },
   {
-    "type": "post",
-    "url": "/emoji/",
-    "title": "Create an emoji",
-    "name": "CreateEmoji",
-    "group": "EmojiService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Image",
-            "description": "<p>Image(emoji) of the subreddit.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit to add image to.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "EMOJI_ID",
-            "description": "<p>Unique id of image.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found\n{\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "EmojiService"
-  },
-  {
-    "type": "post",
-    "url": "/emoji/",
-    "title": "Create an emoji",
-    "name": "CreateEmoji",
-    "group": "EmojiService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Image",
-            "description": "<p>Image(emoji) of the subreddit.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit to add image to.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "EMOJI_ID",
-            "description": "<p>Unique id of image.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "EmojiService"
-  },
-  {
-    "type": "delete",
-    "url": "/emoji/",
-    "title": "Delete an emoji",
-    "name": "DeleteEmoji",
-    "group": "EmojiService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit to add image to.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "EmojiService"
-  },
-  {
-    "type": "delete",
-    "url": "/emoji/",
-    "title": "Delete an emoji",
-    "name": "DeleteEmoji",
-    "group": "EmojiService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit to add image to.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "HTTP/1.1",
-            "description": "<p>200 Ok.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "   HTTP/1.1 404 Report not found {\n        \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "EmojiService"
-  },
-  {
-    "type": "put",
-    "url": "/emoji/",
-    "title": "Edit an emoji (instead of deleting then creating)",
-    "name": "EditEmoji",
-    "group": "EmojiService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit to add image to.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Image",
-            "description": "<p>Image(emoji) of the subreddit.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "EMOJI_ID",
-            "description": "<p>New unique id of new image.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "EmojiService"
-  },
-  {
-    "type": "put",
-    "url": "/emoji/",
-    "title": "Edit an emoji (instead of deleting then creating)",
-    "name": "EditEmoji",
-    "group": "EmojiService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit to add image to.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "Image",
-            "description": "<p>Image(emoji) of the subreddit.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "EMOJI_ID",
-            "description": "<p>New unique id of new image.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "    HTTP/1.1 404 Report not found {\n         \"error\":\"request not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "EmojiService"
-  },
-  {
-    "type": "get",
-    "url": "/emoji/",
-    "title": "Edit an emoji (instead of deleting then creating)",
-    "name": "GetEmoji",
-    "group": "EmojiService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit to add image to.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "EMOJI_ID",
-            "description": "<p>New unique id of new image.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "EmojiService"
-  },
-  {
-    "type": "get",
-    "url": "/emoji/",
-    "title": "Get's an emoji",
-    "name": "GetEmoji",
-    "group": "EmojiService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit to add image to.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "Image.",
-            "description": ""
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "EmojiService"
-  },
-  {
     "type": "put",
     "url": "/Moderator/accept",
     "title": "accept moderator invite",
@@ -14883,6 +14498,54 @@
     "groupTitle": "SrService"
   },
   {
+    "type": "put",
+    "url": "/sr/save/:postId\"",
+    "title": "save/unsave post to your homepage",
+    "name": "save_unsave",
+    "group": "SrService",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Send token.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "postId",
+            "description": "<p>Id of post you wish to save</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "  HTTP/1.1 200 OK\n{message:\"post saved\" }\n  HTTP/1.1 200 OK\n{message:\"post unsaved\" }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 401 post doesnt exist\n {\n  \"error\": \"post doesnt exist\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "SrService"
+  },
+  {
     "type": "get",
     "url": "/user/:Username/comments/listing?type=value",
     "title": "List Comments",
@@ -16620,55 +16283,5 @@
     "version": "0.0.0",
     "filename": "./index.js",
     "groupTitle": "me"
-  },
-  {
-    "type": "post",
-    "url": "/emoji/",
-    "title": "Create an emoji",
-    "name": "CreateEmoji",
-    "group": "test",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "TESSST",
-            "description": "<p>Image(emoji) of the subreddit.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "SubredditName",
-            "description": "<p>Name of subreddit to add image to.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "EMOJI_ID",
-            "description": "<p>Unique id of image.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "test"
   }
 ]

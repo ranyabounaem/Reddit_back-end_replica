@@ -733,7 +733,20 @@ class SR {
             if (checkIfSaved) { res.status(404).send({ error: "post already saved" }); }
 
 
-            else {
+             if(checkIfSaved) {
+
+                user.SavedPosts.pop({"postId":postId,"title":postSave.title});
+
+                user.save();
+                 
+                res.status(404).send({error:"post Unsaved"});
+            
+            }
+             
+             
+            else{
+                
+            user.SavedPosts.push({"postId":postId,"title":postSave.title});
 
                 user.SavedPosts.push({ "postId": postId, "title": postSave.title });
 
