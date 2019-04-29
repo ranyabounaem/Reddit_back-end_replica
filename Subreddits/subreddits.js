@@ -61,7 +61,8 @@ class SR {
         var subredditName = req.params.srName;
         var updatedRules = req.body.newRules;
         var updatedName = req.body.newName;
-        if(subredditName && updatedRules && updatedName){
+        var newMods = req.body.newMods;
+        if(subredditName && updatedRules && updatedName && newMods){
 
             sr.findOneAndUpdate({name: subredditName}, 
                 {
