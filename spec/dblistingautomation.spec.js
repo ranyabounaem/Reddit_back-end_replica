@@ -258,442 +258,437 @@ describe('Server', function () {
 
 
       describe("Creating 1st subreddit", function () {
-        let sr = {
-            "srName": "Technology",
-            "srRules": ["No trade allowed."]
-        };
         let data = {};
-        beforeAll(function(done){  // mocking the post request with message test
-            request.post("http://127.0.0.1:4000/sr/create",
-                {form: {
-                  srName: 'Technology',
-                  srRules: ["No trade allowed."],
-                }, json: false, body: sr, headers: husseinToken}, function (error, response, body) {
-                    data.status = response.statusCode;
-                    data.body = body;
-                    done();
-                });
+        beforeAll(function(done){  
+          let formData = {
+            subredditFile: fs.createReadStream(__dirname + '/../uploads/help.png'),
+            srName: 'Technology',
+            srRules: ["No trade allowed."],
+          };
+          request.post("http://127.0.0.1:4000/sr/create", {formData: formData, json: true, headers: husseinToken}, function (error, response, body) {
+            data.status = response.statusCode;
+            data.body = body;
+            done();
+          });
         });
 
         it("Useless", () => {
-          expect(1).toBe(1);})
+          expect(1).toBe(1);
+        });
+      });
 
+      describe("Creating 2nd subreddit", function () {
+        let data = {};
+        beforeAll(function(done){
+          let formData = {
+            srName: 'Parenting',
+            srRules: ["No kids allowed."]
+          }; 
+          request.post("http://127.0.0.1:4000/sr/create", {json: true, formData: formData, headers: mostafaToken}, function (error, response, body) {
+            data.status = response.statusCode;
+            data.body = body;
+            done();
+          });
         });
 
-        describe("Creating 2nd subreddit", function () {
-          let sr = {
-              "srName": "Parenting",
-              "srRules": ["No kids allowed."]
-          };
-          let data = {};
-          beforeAll(function(done){  // mocking the post request with message test
-              request.post("http://127.0.0.1:4000/sr/create",
-                  {form: {
-                    srName: 'Parenting',
-                    srRules: ["No kids allowed."]
-                   }, json: true, body: sr, headers: mostafaToken}, function (error, response, body) {
-                      data.status = response.statusCode;
-                      data.body = body;
-                      done();
-                  });
-          });
-  
-          it("Useless", () => {
-            expect(1).toBe(1);})
-  
-          });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
+      });
 
-          describe("Creating 3rd subreddit", function () {
-            let sr = {
-                "srName": "Education",
-                "srRules": ["Nerds only."]
+      describe("Creating 3rd subreddit", function () {
+        let data = {};
+        beforeAll(function(done){
+          let formData = {
+            srName: 'Education',
+            srRules: ["Nerds only."]
+          }; 
+          request.post("http://127.0.0.1:4000/sr/create", {json: true, formData: formData, headers: aliToken}, function (error, response, body) {
+            data.status = response.statusCode;
+            data.body = body;
+            done();
+          });
+        });
+
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
+      });
+
+      describe("Creating 4th subreddit", function () {
+        let data = {};
+        beforeAll(function(done){
+          let formData = {
+            srName: 'Movies',
+            srRules: ["Movie geeks only."]
+          }; 
+          request.post("http://127.0.0.1:4000/sr/create", {json: true, formData: formData, headers: atwaToken}, function (error, response, body) {
+            data.status = response.statusCode;
+            data.body = body;
+            done();
+          });
+        });
+
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
+      });
+
+
+      //// POSTS AUTOMATION ////
+
+      describe("Creating 1st post inside 1st subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+            let formData = {  
+                postFile: fs.createReadStream(__dirname + '/../uploads/help.png'),
+                title: 'Laptops',
+                threadBody: 'Asus just released their new laptop for the most reasonable price!'
             };
-            let data = {};
-            beforeAll(function(done){  // mocking the post request with message test
-                request.post("http://127.0.0.1:4000/sr/create",
-                    {form: {
-                      srName: 'Education',
-                      srRules: ["Nerds only."]
-                     },json: true, body: sr, headers: aliToken}, function (error, response, body) {
-                        data.status = response.statusCode;
-                        data.body = body;
-                        done();
-                    });
+            request.post("http://127.0.0.1:4000/sr/Technology/thread",
+            {formData: formData, json: true, headers: husseinToken},
+            function(error, response, body){
+                data.status = response.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
             });
-    
-            it("Useless", () => {
-              expect(1).toBe(1);})
-    
+        });
+
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
+
+      });
+
+      describe("Creating 2nd post inside 1st subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+            let formData = {  
+                postFile: fs.createReadStream(__dirname + '/../uploads/help.png'),
+                title: 'Mobiles',
+                threadBody: 'Apple just released iPhone IXX with similar features to the iPhone 8 but 100 times expensive!'
+            };
+            request.post("http://127.0.0.1:4000/sr/Technology/thread",
+            {formData: formData, json: true, headers: mostafaToken},
+            function(error, response, body){
+                data.status = response.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
             });
+        });
 
-            describe("Creating 4th subreddit", function () {
-              let sr = {
-                  "srName": "Movies",
-                  "srRules": ["Movie geeks only."]
-              };
-              let data = {};
-              beforeAll(function(done){  // mocking the post request with message test
-                  request.post("http://127.0.0.1:4000/sr/create",
-                      {form: {
-                        srName: 'Movies',
-                        srRules: ["Movie geeks only."]
-                       }, json: true, body: sr, headers: atwaToken}, function (error, response, body) {
-                          data.status = response.statusCode;
-                          data.body = body;
-                          done();
-                      });
-              });
-      
-              it("Useless", () => {
-                expect(1).toBe(1);})
-      
-              });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
 
+      });
 
-              //// POSTS AUTOMATION ////
+      describe("Creating 1st post inside 2nd subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+            let formData = {  
+                postFile: fs.createReadStream(__dirname + '/../uploads/help.png'),
+                title: 'Getting rid of your kid',
+                threadBody: "If you can't take it anymore, here are 5 steps to get rid of your child!"
+            };
+            request.post("http://127.0.0.1:4000/sr/Parenting/thread",
+            {formData: formData, json: true, headers: amirToken},
+            function(error, response, body){
+                data.status = response.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
 
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
 
-              describe("Creating 1st post inside 1st subreddit", function() {
-                let data = {};
-                let pt = {
-                    "title": "Laptops",
-                    "threadBody": "Asus just released their new laptop for the most reasonable price!"
-                };
-                beforeAll(function(done){
-        
-                    request.post("http://127.0.0.1:4000/sr/Technology/thread",
-                    {json:true, body: pt, headers: husseinToken},
-                    function(error, request, body){
-                        data.status = request.statusCode;
-                        data.body = body;
-                        postid = data.body._id;
-                        done();
-                    });
-                });
-        
-                it("Useless", () => {
-                  expect(1).toBe(1);})
-        
-                });
+      });
 
+      describe("Creating 2nd post inside 2nd subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+            let formData = {  
+                postFile: fs.createReadStream(__dirname + '/../uploads/help.png'),
+                title: 'Treating your child',
+                threadBody: "Destroy it."
+            };
+            request.post("http://127.0.0.1:4000/sr/Parenting/thread",
+            {formData: formData, json: true, headers: zaghwToken},
+            function(error, response, body){
+                data.status = response.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
 
-                describe("Creating 2nd post inside 1st subreddit", function() {
-                  let data = {};
-                  let pt = {
-                      "title": "Mobiles",
-                      "threadBody": "Apple just released iPhone IXX with similar features to the iPhone 8 but 100 times expensive!"
-                  };
-                  beforeAll(function(done){
-          
-                      request.post("http://127.0.0.1:4000/sr/Technology/thread",
-                      {json:true, body: pt, headers: mostafaToken},
-                      function(error, request, body){
-                          data.status = request.statusCode;
-                          data.body = body;
-                          postid = data.body._id;
-                          done();
-                      });
-                  });
-          
-                  it("Useless", () => {
-                    expect(1).toBe(1);})
-          
-                  });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
 
+      });
 
-                  describe("Creating 1st post inside 2nd subreddit", function() {
-                    let data = {};
-                    let pt = {
-                        "title": "Getting rid of your kid",
-                        "threadBody": "If you can't take it anymore, here are 5 steps to get rid of your child!"
-                    };
-                    beforeAll(function(done){
-            
-                        request.post("http://127.0.0.1:4000/sr/Parenting/thread",
-                        {json:true, body: pt, headers: amirToken},
-                        function(error, request, body){
-                            data.status = request.statusCode;
-                            data.body = body;
-                            postid = data.body._id;
-                            done();
-                        });
-                    });
-            
-                    it("Useless", () => {
-                      expect(1).toBe(1);})
-            
-                    });
+      describe("Creating 1st post inside 3rd subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+            let formData = {  
+                postFile: fs.createReadStream(__dirname + '/../uploads/help.png'),
+                title: 'First time seeing a female',
+                threadBody: "I decided to get out of my studying room today, and I saw a woman. I thought it was a pokemon but turned out to be my mother."
+            };
+            request.post("http://127.0.0.1:4000/sr/Education/thread",
+            {formData: formData, json: true, headers: atwaToken},
+            function(error, response, body){
+                data.status = response.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
 
-                    describe("Creating 2nd post inside 2nd subreddit", function() {
-                      let data = {};
-                      let pt = {
-                          "title": "Treating your child",
-                          "threadBody": "If you need to learn how to treat your child, just get rid of it!"
-                      };
-                      beforeAll(function(done){
-              
-                          request.post("http://127.0.0.1:4000/sr/Parenting/thread",
-                          {json:true, body: pt, headers: zaghwToken},
-                          function(error, request, body){
-                              data.status = request.statusCode;
-                              data.body = body;
-                              postid = data.body._id;
-                              done();
-                          });
-                      });
-              
-                      it("Useless", () => {
-                        expect(1).toBe(1);})
-              
-                      });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
 
-                      describe("Creating 1st post inside 3rd subreddit", function() {
-                        let data = {};
-                        let pt = {
-                            "title": "First time seeing a female",
-                            "threadBody": "I decided to get out of my studying room today, and I saw a woman. I thought it was a pokemon but turned out to be my mother."
-                        };
-                        beforeAll(function(done){
-                
-                            request.post("http://127.0.0.1:4000/sr/Education/thread",
-                            {json:true, body: pt, headers: atwaToken},
-                            function(error, request, body){
-                                data.status = request.statusCode;
-                                data.body = body;
-                                postid = data.body._id;
-                                done();
-                            });
-                        });
-                
-                        it("Useless", () => {
-                          expect(1).toBe(1);})
-                
-                        });
+      });
 
+      describe("Creating 2nd post inside 3rd subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+            let formData = {  
+                postFile: fs.createReadStream(__dirname + '/../uploads/help.png'),
+                title: 'Is studying for 16 hours a day enough?',
+                threadBody: "I was thinking if 16 hours are enough. I can't figure a way to fit more studying hours into my day. I don't even eat anymore."
+            };
+            request.post("http://127.0.0.1:4000/sr/Education/thread",
+            {formData: formData, json: true, headers: aliToken},
+            function(error, response, body){
+                data.status = response.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
 
-                        describe("Creating 2nd post inside 3rd subreddit", function() {
-                          let data = {};
-                          let pt = {
-                              "title": "Is studying for 16 hours a day enough?",
-                              "threadBody": "I was thinking if 16 hours are enough. I can't figure a way to fit more studying hours into my day. I don't even eat anymore."
-                          };
-                          beforeAll(function(done){
-                  
-                              request.post("http://127.0.0.1:4000/sr/Education/thread",
-                              {json:true, body: pt, headers: aliToken},
-                              function(error, request, body){
-                                  data.status = request.statusCode;
-                                  data.body = body;
-                                  postid = data.body._id;
-                                  done();
-                              });
-                          });
-                  
-                          it("Useless", () => {
-                            expect(1).toBe(1);})
-                  
-                          });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
 
+      });
 
-                          describe("Creating 1st post inside 4th subreddit", function() {
-                            let data = {};
-                            let pt = {
-                                "title": "Avengers: Endgame",
-                                "threadBody": "Unpopular opinion: Endgame is super overrated."
-                            };
-                            beforeAll(function(done){
-                    
-                                request.post("http://127.0.0.1:4000/sr/Movies/thread",
-                                {json:true, body: pt, headers: captainmagedToken},
-                                function(error, request, body){
-                                    data.status = request.statusCode;
-                                    data.body = body;
-                                    postid = data.body._id;
-                                    done();
-                                });
-                            });
-                    
-                            it("Useless", () => {
-                              expect(1).toBe(1);})
-                    
-                            });
+      describe("Creating 1st post inside 4th subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+            let formData = {  
+                postFile: fs.createReadStream(__dirname + '/../uploads/help.png'),
+                title: 'Avengers: Endgame',
+                threadBody: "Unpopular opinion: Endgame is super overrated."
+            };
+            request.post("http://127.0.0.1:4000/sr/Movies/thread",
+            {formData: formData, json: true, headers: captainmagedToken},
+            function(error, response, body){
+                data.status = response.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
 
-                            describe("Creating 2nd post inside 4th subreddit", function() {
-                              let data = {};
-                              let pt = {
-                                  "title": "Rush Hour 4",
-                                  "threadBody": "There are rumors that Rush Hour 4 might be in the making."
-                              };
-                              beforeAll(function(done){
-                      
-                                  request.post("http://127.0.0.1:4000/sr/Movies/thread",
-                                  {json:true, body: pt, headers: sabekToken},
-                                  function(error, request, body){
-                                      data.status = request.statusCode;
-                                      data.body = body;
-                                      postid = data.body._id;
-                                      done();
-                                  });
-                              });
-                      
-                              it("Useless", () => {
-                                expect(1).toBe(1);})
-                      
-                              });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
 
-                              //// SUBSCRIPTIONS AUTOMATION CLOWNS ////
+      });
 
-                              describe("Subscribe to 1st subreddit", function() {
-                                let data = {};
-                                beforeAll(function(done){
-                        
-                                    request.post("http://127.0.0.1:4000/sr/Technology/subs",
-                                    {json:true,headers: husseinToken},
-                                    function(error, request, body){
-                                        data.status = request.statusCode;
-                                        data.body = body;
-                                        postid = data.body._id;
-                                        done();
-                                    });
-                                });
+      describe("Creating 2nd post inside 4th subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+            let formData = {  
+                postFile: fs.createReadStream(__dirname + '/../uploads/help.png'),
+                title: 'Rush Hour 4',
+                threadBody: "There are rumors that Rush Hour 4 might be in the making."
+            };
+            request.post("http://127.0.0.1:4000/sr/Movies/thread",
+            {formData: formData, json: true, headers: sabekToken},
+            function(error, response, body){
+                data.status = response.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
 
-                                it("Useless", () => {
-                                  expect(1).toBe(1);})
-                        
-                                });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
 
-                                describe("Subscribe to 1st subreddit", function() {
-                                  let data = {};
-                                  beforeAll(function(done){
-                          
-                                      request.post("http://127.0.0.1:4000/sr/Technology/subs",
-                                      {json:true,headers: mostafaToken},
-                                      function(error, request, body){
-                                          data.status = request.statusCode;
-                                          data.body = body;
-                                          postid = data.body._id;
-                                          done();
-                                      });
-                                  });
+      });
 
-                                  it("Useless", () => {
-                                    expect(1).toBe(1);})
-                          
-                                  });
+      //// SUBSCRIPTIONS AUTOMATION CLOWNS ////
 
-                                  describe("Subscribe to 2nd subreddit", function() {
-                                    let data = {};
-                                    beforeAll(function(done){
-                            
-                                        request.post("http://127.0.0.1:4000/sr/Parenting/subs",
-                                        {json:true,headers: zaghwToken},
-                                        function(error, request, body){
-                                            data.status = request.statusCode;
-                                            data.body = body;
-                                            postid = data.body._id;
-                                            done();
-                                        });
-                                    });
+      describe("Subscribe to 1st subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
 
-                                    it("Useless", () => {
-                                      expect(1).toBe(1);})
-                            
-                                    });
+            request.post("http://127.0.0.1:4000/sr/Technology/subs",
+            {json:true,headers: husseinToken},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
 
-                                    describe("Subscribe to 2nd subreddit", function() {
-                                      let data = {};
-                                      beforeAll(function(done){
-                              
-                                          request.post("http://127.0.0.1:4000/sr/Parenting/subs",
-                                          {json:true,headers: aliToken},
-                                          function(error, request, body){
-                                              data.status = request.statusCode;
-                                              data.body = body;
-                                              postid = data.body._id;
-                                              done();
-                                          });
-                                      });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
 
-                                      it("Useless", () => {
-                                        expect(1).toBe(1);})
-                              
-                                      });
+      });
 
-                                      describe("Subscribe to 3rd subreddit", function() {
-                                        let data = {};
-                                        beforeAll(function(done){
-                                
-                                            request.post("http://127.0.0.1:4000/sr/Education/subs",
-                                            {json:true,headers: amirToken},
-                                            function(error, request, body){
-                                                data.status = request.statusCode;
-                                                data.body = body;
-                                                postid = data.body._id;
-                                                done();
-                                            });
-                                        });
+      describe("Subscribe to 1st subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
 
-                                        it("Useless", () => {
-                                          expect(1).toBe(1);})
-                                
-                                        });
+            request.post("http://127.0.0.1:4000/sr/Technology/subs",
+            {json:true,headers: mostafaToken},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
 
-                                        describe("Subscribe to 3rd subreddit", function() {
-                                          let data = {};
-                                          beforeAll(function(done){
-                                  
-                                              request.post("http://127.0.0.1:4000/sr/Education/subs",
-                                              {json:true,headers: atwaToken},
-                                              function(error, request, body){
-                                                  data.status = request.statusCode;
-                                                  data.body = body;
-                                                  postid = data.body._id;
-                                                  done();
-                                              });
-                                          });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
 
-                                          it("Useless", () => {
-                                            expect(1).toBe(1);})
-                                  
-                                          });
+      });
 
-                                          describe("Subscribe to 4th subreddit", function() {
-                                            let data = {};
-                                            beforeAll(function(done){
-                                    
-                                                request.post("http://127.0.0.1:4000/sr/Movies/subs",
-                                                {json:true,headers: captainmagedToken},
-                                                function(error, request, body){
-                                                    data.status = request.statusCode;
-                                                    data.body = body;
-                                                    postid = data.body._id;
-                                                    done();
-                                                });
-                                            });
+      describe("Subscribe to 2nd subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
 
-                                            it("Useless", () => {
-                                              expect(1).toBe(1);})
-                                    
-                                            });
+            request.post("http://127.0.0.1:4000/sr/Parenting/subs",
+            {json:true,headers: zaghwToken},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
 
-                                            describe("Subscribe to 4th subreddit", function() {
-                                              let data = {};
-                                              beforeAll(function(done){
-                                      
-                                                  request.post("http://127.0.0.1:4000/sr/Movies/subs",
-                                                  {json:true,headers: sabekToken},
-                                                  function(error, request, body){
-                                                      data.status = request.statusCode;
-                                                      data.body = body;
-                                                      postid = data.body._id;
-                                                      done();
-                                                  });
-                                              });
-  
-                                              it("Useless", () => {
-                                                expect(1).toBe(1);})
-                                      
-                                              });
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
+
+      });
+
+    describe("Subscribe to 2nd subreddit", function() {
+      let data = {};
+      beforeAll(function(done){
+
+          request.post("http://127.0.0.1:4000/sr/Parenting/subs",
+          {json:true,headers: aliToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              postid = data.body._id;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
+
+    describe("Subscribe to 3rd subreddit", function() {
+      let data = {};
+      beforeAll(function(done){
+
+          request.post("http://127.0.0.1:4000/sr/Education/subs",
+          {json:true,headers: amirToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              postid = data.body._id;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
+
+    describe("Subscribe to 3rd subreddit", function() {
+      let data = {};
+      beforeAll(function(done){
+
+          request.post("http://127.0.0.1:4000/sr/Education/subs",
+          {json:true,headers: atwaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              postid = data.body._id;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+    });
+
+    describe("Subscribe to 4th subreddit", function() {
+      let data = {};
+      beforeAll(function(done){
+
+          request.post("http://127.0.0.1:4000/sr/Movies/subs",
+          {json:true,headers: captainmagedToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              postid = data.body._id;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
+
+    describe("Subscribe to 4th subreddit", function() {
+      let data = {};
+      beforeAll(function(done){
+
+          request.post("http://127.0.0.1:4000/sr/Movies/subs",
+          {json:true,headers: sabekToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              postid = data.body._id;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
 
 
     

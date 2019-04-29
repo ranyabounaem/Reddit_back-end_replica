@@ -1,7 +1,12 @@
 {
 "spec_dir":"spec",
 "spec_files":[
-    "./srTest.spec.js"
+    "./user.spec.js",
+    "./comment.spec.js",
+    "./pmTest.spec.js",
+    "./listings.spec.js",
+    "./srTest.spec.js",
+    "./dblistingautomation.spec.js"
 
 
 

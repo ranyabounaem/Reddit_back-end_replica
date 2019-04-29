@@ -138,13 +138,10 @@ describe("Subreddits testing", function () {
                 threadBody: 'Tool just released their new album after 15 years of inactivity!'
             };
             request.post("http://127.0.0.1:4000/sr/Metal/thread",
-            {formData: formData, headers: head},
+            {formData: formData, json: true, headers: head},
             function(error, response, body){
                 data.status = response.statusCode;
-                console.log(response.statusCode);
                 data.body = body;
-                console.log(data);
-                console.log(body._id);
                 postid = data.body._id;
                 done();
             });
@@ -163,150 +160,148 @@ describe("Subreddits testing", function () {
         });
     });
 
+
+    describe("Editing a post inside subreddit", function() {
+        let data = {};
+        let pt = {
+            "title": "DemonHunter",
+            "threadBody": "Demon Hunter just released their new album after 15 years of inactivity!"
+        };
+        beforeAll(function(done){
+
+            request.put(`http://127.0.0.1:4000/sr/Metal/thread/${postid}`,
+            {json:true, body: pt, headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
+
+        it("Editing a post inside subreddit status test", function(){
+            expect(data.status).toBe(200);
+            //expect(data.body.title).toBe("AskingAlexandria"); IT RETURNS OLD POST THAT WAS UPDATED
+
+        });
+
+        it("Editing a post inside subreddit database test", function(){
+            post.findOne({_id: postid, title: "DemonHunter"}, function(err, record){
+                expect(record).not.toBe(null);
+            });
+        });
+
+    });
+
+    describe("Deleting a post inside subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+
+            request.delete(`http://127.0.0.1:4000/sr/Metal/thread/${postid}`,
+            {json:true,headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
+
+        it("Deleting a post inside subreddit status test", function(){
+            expect(data.status).toBe(200);
+            expect(data.body.length).toBe(0);
+
+        });
+
+        it("Deleting a post inside subreddit database test", function(){
+            post.findOne({_id: postid, title: "AskingAlexandria"}, function(err, record){
+                expect(record).toBe(null);
+            });
+        });
+
+    });
+
+
+
+    describe("Subscribe to a subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+
+            request.post("http://127.0.0.1:4000/sr/Metal/subs",
+            {json:true,headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
+
+        it("Subscribe to a subreddit status test", function(){
+            expect(data.status).toBe(200);
+            expect(data.body.length).toBe(1);
+
+        });
+
+        it("Subscribing to a subreddit database test", function(){
+            subreddit.findOne({name: "Metal"}, function(err, record){
+                expect(record.subscribed_users.length).toBe(1);
+            });
+        });
+
+    });
+
+
+    describe("Unsubscribe from a subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+
+            request.delete("http://127.0.0.1:4000/sr/Metal/subs",
+            {json:true,headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                done();
+            });
+        });
+
+        it("Unsubscribing from a subreddit status test", function(){
+            expect(data.status).toBe(200);
+            expect(data.body.subscribed_users.length).toBe(0);
+
+        });
+
+        it("Unsubscribing from a subreddit database test", function(){
+            subreddit.findOne({name: "Metal"}, function(err, record){
+                expect(record.subscribed_users.length).toBe(0);
+            });
+        });
+
+    });
+
+    describe("Deleting a subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+
+            request.delete("http://127.0.0.1:4000/sr/Metal",
+            {json:true,headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                done();
+            });
+        });
+
+        it("Deleting a subreddit status test", function(){
+            expect(data.status).toBe(200);
+           // expect(data.body).toBe(undefined);// FINDONEANDDELETE RETURNS UNDEFINED ????!!!!
+
+        });
+
+        it("Deleting a subreddit database test", function(){
+            expect(subreddit.count()==0);
+        });
+    });
+
 });
-
-    // describe("Editing a post inside subreddit", function() {
-    //     let data = {};
-    //     let pt = {
-    //         "title": "DemonHunter",
-    //         "threadBody": "Demon Hunter just released their new album after 15 years of inactivity!"
-    //     };
-    //     beforeAll(function(done){
-
-    //         request.put(`http://127.0.0.1:4000/sr/Metal/thread/${postid}`,
-    //         {form: {
-    //             title: 'DemonHunter',
-    //             threadBody: "Demon Hunter just released their new album after 15 years of inactivity!"
-    //            }, json:true, body: pt, headers: head},
-    //         function(error, request, body){
-    //             data.status = request.statusCode;
-    //             data.body = body;
-    //             postid = data.body._id;
-    //             done();
-    //         });
-    //     });
-
-    //     it("Editing a post inside subreddit status test", function(){
-    //         expect(data.status).toBe(200);
-    //         //expect(data.body.title).toBe("AskingAlexandria"); IT RETURNS OLD POST THAT WAS UPDATED
-
-    //     });
-
-    //     it("Editing a post inside subreddit database test", function(){
-    //         post.findOne({_id: postid, title: "DemonHunter"}, function(err, record){
-    //             expect(record).not.toBe(null);
-    //         });
-    //     });
-
-    // });
-
-    // describe("Deleting a post inside subreddit", function() {
-    //     let data = {};
-    //     beforeAll(function(done){
-
-    //         request.delete(`http://127.0.0.1:4000/sr/Metal/thread/${postid}`,
-    //         {json:true,headers: head},
-    //         function(error, request, body){
-    //             data.status = request.statusCode;
-    //             data.body = body;
-    //             postid = data.body._id;
-    //             done();
-    //         });
-    //     });
-
-    //     it("Deleting a post inside subreddit status test", function(){
-    //         expect(data.status).toBe(200);
-    //         expect(data.body.length).toBe(0);
-
-    //     });
-
-    //     it("Deleting a post inside subreddit database test", function(){
-    //         post.findOne({_id: postid, title: "AskingAlexandria"}, function(err, record){
-    //             expect(record).toBe(null);
-    //         });
-    //     });
-
-    // });
-
-    // describe("Subscribe to a subreddit", function() {
-    //     let data = {};
-    //     beforeAll(function(done){
-
-    //         request.post("http://127.0.0.1:4000/sr/Metal/subs",
-    //         {json:true,headers: head},
-    //         function(error, request, body){
-    //             data.status = request.statusCode;
-    //             data.body = body;
-    //             postid = data.body._id;
-    //             done();
-    //         });
-    //     });
-
-    //     it("Subscribe to a subreddit status test", function(){
-    //         expect(data.status).toBe(200);
-    //         expect(data.body.length).toBe(1);
-
-    //     });
-
-    //     it("Subscribing to a subreddit database test", function(){
-    //         subreddit.findOne({name: "Metal"}, function(err, record){
-    //             expect(record.subscribed_users.length).toBe(1);
-    //         });
-    //     });
-
-    // });
-
-    // describe("Unsubscribe from a subreddit", function() {
-    //     let data = {};
-    //     beforeAll(function(done){
-
-    //         request.delete("http://127.0.0.1:4000/sr/Metal/subs",
-    //         {json:true,headers: head},
-    //         function(error, request, body){
-    //             data.status = request.statusCode;
-    //             data.body = body;
-    //             postid = data.body._id;
-    //             done();
-    //         });
-    //     });
-
-    //     it("Unsubscribing from a subreddit status test", function(){
-    //         expect(data.status).toBe(200);
-    //         expect(data.body.length).toBe(0);
-
-    //     });
-
-    //     it("Unsubscribing from a subreddit database test", function(){
-    //         subreddit.findOne({name: "Metal"}, function(err, record){
-    //             expect(record.subscribed_users.length).toBe(0);
-    //         });
-    //     });
-
-    // });
-
-    // describe("Deleting a subreddit", function() {
-    //     let data = {};
-    //     beforeAll(function(done){
-
-    //         request.delete("http://127.0.0.1:4000/sr/Metal",
-    //         {json:true,headers: head},
-    //         function(error, request, body){
-    //             data.status = request.statusCode;
-    //             data.body = body;
-    //             done();
-    //         });
-    //     });
-
-    //     it("Deleting a subreddit status test", function(){
-    //         expect(data.status).toBe(200);
-    //        // expect(data.body).toBe(undefined);// FINDONEANDDELETE RETURNS UNDEFINED ????!!!!
-
-    //     });
-
-    //     it("Deleting a subreddit database test", function(){
-    //         expect(subreddit.count()==0);
-    //     });
-    // });
-
-
 
