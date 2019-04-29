@@ -1745,32 +1745,6 @@ app.put("/comment/vote/:id",passport.authenticate('jwt', { session: false }), co
  * }
  */
 
-/**
- * @api {post} /comment/save/:c_id Save a Comment
- * @apiName SaveComment
- * @apiGroup Comment
- * 
- * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
- * @apiParam {String} c_id Comment Unique ID.
- * 
- * 
- * @apiError CommentNotFound The id of the comment wasn't found.
- * @apiError CommentAlreadySaved The Comment has already been saved before.
- * @apiError AccessDenied If the user isn't logged in.
- */
-
-/**
- * @api {delete} /comment/unsave/:c_id UnSave a Comment
- * @apiName UnSaveComment
- * @apiGroup Comment
- * 
- * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
- * @apiParam {String} c_id Comment Unique ID.
- * 
- * @apiError CommentNotFound The id of the comment wasn't found.
- * @apiError CommentAlreadySaved You can't unsave an unsaved comment.
- * @apiError AccessDenied If the user isn't logged in.
- */
 app.post("/comment/report/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleReportComment);
 /**
  * @api {post} /comment/report/:id Report a comment
