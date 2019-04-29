@@ -1461,10 +1461,46 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
  * 
  * @apiSuccess {String} c_id The Created Comment ID.
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {    
+ *      "c_id": "mfh567djfp4y5pd86rt3u274" 
+ * }
  * 
  * @apiError ThreadNotFound The id of the thread wasn't found.
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If the user isn't logged in.
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Post not found
+ * {
+ *          "error": "There is no post with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Wrong request
+ * {
+ *          "error": "The request must include content of the comment"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Empty Comment
+ * {
+ *          "error": "You can not post an empty Comment"
+ * } 
+  *  @apiErrorExample {json} List error
+ *     HTTP/1.1 403 Comment Locked
+ * {
+ *          "error": "You can not reply to a locked comment"
+ * } 
+ * 
  */
 
 
@@ -1482,8 +1518,33 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * @apiSuccess {Boolean} spoiler True if it is a Spoiler.
  * @apiSuccess {Boolean} locked True if the Replies are Disallowed on this Comment.
  * 
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {    
+ *  "_id": "mfh567djfp4y5pd86rt3u274",
+ *  "username": "Mostafa",
+ *  "subreddit": "Sports",
+ *  "content":"Al Ahly above all",
+ *  "parent_id": "kfh56hdjfp5y5pd86rt3u274",
+ *  "dateAded": "2019-04-29 12:31:13.440Z",
+ *  "votes": 23,
+ *  "spoiler": true,
+ *  "locked": false
+ * }
+ * 
  * @apiError CommentNotFound The id of the comment wasn't found.
- * @apiError AccessDenied If this user can't get info of this comment.
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ * 
  */
 
 
@@ -1496,10 +1557,59 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * @apiParam {Boolean} [comment=false] True if the ID sent is a Comment ID not a Thread ID.
  * 
  * @apiSuccess {objects[]} comments Array of the comments or replies attached to this thread or comment.
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * [{    
+ *  "_id": "mfh567djfp4y5pd86rt3u274",
+ *  "username": "Mostafa",
+ *  "subreddit": "Sports",
+ *  "content":"Al Ahly above all",
+ *  "parent_id": "kfh56hdjfp5y5pd86rt3u274",
+ *  "dateAded": "2019-04-29 12:31:13.440Z",
+ *  "votes": 23,
+ *  "spoiler": true,
+ *  "locked": false
+ * },{
+ * "_id": "lkhy7djfp4y5pd86rt3u274",
+ *  "username": "Mohamed",
+ *  "subreddit": "Sports",
+ *  "content":"Al Ahly is the best team",
+ *  "parent_id": "kfh56hdjfp5y5pd86rt3u274",
+ *  "dateAded": "2019-04-29 12:31:13.440Z",
+ *  "votes": 12,
+ *  "spoiler": false,
+ *  "locked": true
+ * }]
  * 
  * @apiError ThreadNotFound The id of the thread wasn't found.
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If this user can't get info of this comment.
+ * 
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Post not found
+ * {
+ *          "error": "There is no post with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comments not found
+ * {
+ *          "error": "There are no Comments for this Thread"
+ * }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Replies not found
+ * {
+ *          "error": "There are no Replies for this Comment
+ * }
  */
 
 /**
@@ -1509,9 +1619,28 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * 
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  * @apiParam {Number} c_id Comment Unique ID.
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"Delete Successful"}
  * 
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If this user can't delete this comment.
+ * 
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 403 Access Denied
+ * {
+ *          "error": "You can only delete your own comments"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
  */
 
 /**
@@ -1525,8 +1654,38 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
  * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
  * 
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"update successful"}
+ * 
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If this user can't edit this comment.
+ * 
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 403 Access Denied
+ * {
+ *          "error": "You can only edit your own comments"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Wrong request
+ * {
+ *          "error": "The request must include content of the comment"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Empty Comment
+ * {
+ *          "error": "You can not post an empty Comment"
+ * } 
  */
 
 /**
@@ -1537,9 +1696,48 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  * @apiParam {String} c_id Comment Unique ID.
  * @apiParam {Number=1,0,-1} direction Direction of the Vote as 1 indicates Upvote, -1 indicates Downvote and 0 means unvoting.
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"The comment has been downvoted successfully"}
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"The comment has been upvoted successfully"}
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"The comment has been unvoted successfully"}
  * 
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If the user isn't logged in.
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Wrong request
+ * {
+ *          "error": "Please enter a valid value for the direction (1,0,-1)"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 401 Already Upvoted
+ * {
+ *          "error": "You have already upvoted the comment"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 401 Already downvoted
+ * {
+ *          "error": "Please enter a valid value for the direction (1,0,-1)"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 401 Already unvoted
+ * {
+ *          "error": "You have already downvoted the comment"
+ * }
  */
 
 /**
@@ -1549,6 +1747,7 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * 
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  * @apiParam {String} c_id Comment Unique ID.
+ * 
  * 
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError CommentAlreadySaved The Comment has already been saved before.
@@ -1577,9 +1776,24 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * @apiParam {String} id Comment Unique ID.
  * @apiParam {String} text A text containg the reason of the report. 
  * 
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {" You have successfully reported this comment"}
+ * 
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError EmptyText the text is empty.
  * @apiError AccessDenied If the user isn't logged in.
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
  */
 const commentHandler = require('./src/Comments/Comment').cHandler;
 app.get("/comment/:c_id", commentHandler.handleGetComment);
