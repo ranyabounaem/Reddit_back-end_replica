@@ -24,13 +24,16 @@ class SR {
         var admin = getUser(req);
         var subredditName = req.body.srName;
         var subredditRules = req.body.srRules;
+        var imageCheck=req.file;
+
         if(admin &&  subredditName && subredditRules){
             var subreddit = new sr({
                 name: subredditName,
                 adminUsername: admin,
                 rules: subredditRules,
-                subredditFile: req.file.path,
-                modUsername: req.body.modUsername
+                modUsername: req.body.modUsername,
+                if(imageCheck){subredditFile: req.file.path}
+                
             });
             subreddit.save(function (err, record) {
                 if (err) {
