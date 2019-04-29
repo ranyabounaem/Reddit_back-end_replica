@@ -44,7 +44,7 @@ const UserSchema = new Schema({
 
  About: String,
 
- Karma : {type: Number, default:0}
+ karma : {type: Number, default:0}
 
 
 });
