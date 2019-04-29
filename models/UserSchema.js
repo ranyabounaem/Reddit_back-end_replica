@@ -37,6 +37,11 @@ const UserSchema = new Schema({
 
  RecReq:[String],
 
+ SavedPosts:[{
+    postId:String,
+    title:String
+ }],
+
  About: String
 
 

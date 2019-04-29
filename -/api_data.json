@@ -12713,7 +12713,7 @@
     "type": "put",
     "url": "/Moderator/ban",
     "title": "Remove moderator",
-    "name": "Ban_const_reportHandler___require____src_Reports_Report___",
+    "name": "Ban",
     "group": "Moderator",
     "parameter": {
       "fields": {
@@ -14884,86 +14884,6 @@
   },
   {
     "type": "get",
-    "url": "/user/:Username/about/",
-    "title": "About",
-    "name": "AboutUser",
-    "group": "UserService",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "Username",
-            "description": "<p>username of the user that the information is about.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "Name",
-            "description": "<p>name of the user</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "akeday",
-            "description": "<p>date of the user joining reddit.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "Karma",
-            "description": "<p>karma of the user</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JPG",
-            "optional": false,
-            "field": "Pic",
-            "description": "<p>profile picture of the user</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"Username\" : \"TheRealBatman\",\n  \"Name\": \"Mark\",\n  \"cakeday\":\"2019-04-28T19:07:29.386Z\",\n  \"Karma\": 1449,\n  \"Pic\" : data:image/jpeg;base64,...............\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Forbidden\n{\n  \"error\": \"User not found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "UserService"
-  },
-  {
-    "type": "get",
     "url": "/user/:Username/comments/listing?type=value",
     "title": "List Comments",
     "name": "ListComments",
@@ -15557,6 +15477,66 @@
   },
   {
     "type": "Put",
+    "url": "/me/edit/About",
+    "title": "Edit About Info",
+    "name": "EditAbout",
+    "group": "me",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "About",
+            "description": "<p>the About information of the User.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>SyncToken That is sent with authentication.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"About\": \"My name is Uzumaki, I am the perfect being on Earth\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n    \"message\": \"About Information updated successfully\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 About parameter not found\n {\n  \"error\": \"About parameter not found\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 402 Enter a valid String containing information\n {\n  \"error\": \"Enter a valid String containing information\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./index.js",
+    "groupTitle": "me"
+  },
+  {
+    "type": "Put",
     "url": "/me/edit/email/:Username",
     "title": "Edit User email",
     "name": "EditUserEmail",
@@ -16026,7 +16006,7 @@
       "examples": [
         {
           "title": "Success",
-          "content": "   HTTP/1.1 200 \n{\n     \"Username\":\"user1\",\n      Subscriptions:[\"sub1\",\"sub2\",\"sub3\"],\n      ,\"cakeday\":\"2019-04-28T19:07:29.386Z\"\n}",
+          "content": "   HTTP/1.1 200 if friends \n {\n    \"Username\": \"mostafa_hazem\",\n    \"Subscriptions\": [],\n    \"About\":\"im a nice user, hi\",\n    \"cakeday\": \"2019-04-29T01:07:28.002Z\",\n    \"savedPosts\": [\n        {\n            \"_id\": \"5cc64e61cd11128f20a8feb0\",\n            \"postId\": \"5cc6402a0eeec17074898ddc\",\n            \"title\": \"Laptops\"\n        },\n        \n        {\n            \"_id\": \"5cc650cf37392481409af63f\",\n            \"postId\": \"5cc6402a0eeec17074898de3\",\n            \"title\": \"Rush Hour 4\"\n        }\n    ],\n    \"Friends\": [\n        \"Ali_yasser\"\n    ]\n}\nHTTP/1.1 200 if not friends \n{\n    \"Username\": \"TestmanSe7\",\n    \"cakeday\": \"2019-04-29T01:07:28.406Z\",\n    \"About\":\"im a nicer project\"\n}",
           "type": "json"
         }
       ]
@@ -16068,14 +16048,7 @@
             "description": "<p>SyncToken That is sent with authentication..</p>"
           }
         ]
-      },
-      "examples": [
-        {
-          "title": "Input",
-          "content": "{\n  \"Username\": \"User1\",     \n}",
-          "type": "json"
-        }
-      ]
+      }
     },
     "success": {
       "fields": {
@@ -16128,13 +16101,55 @@
             "optional": false,
             "field": "Subscriptions",
             "description": "<p>subreddit subscriptons  of the User.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "moderates",
+            "description": "<p>subreddits moderated</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "recreq",
+            "description": "<p>friend requests received</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "sentreq",
+            "description": "<p>freind requests sent</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "modreq",
+            "description": "<p>moderation requests</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "freinds",
+            "description": "<p>list of all friends</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "blocked",
+            "description": "<p>list of all blocked users</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n  \"Username\": \"User1\"\n  \"Email\": \"user@reddit.com\",\n  \"About\": \"Im a reddit user\",\n  \"Imageid\": \"100001\"\n  \"Subscriptions\": [\"subbreddit:askreddit\",\"subbreddit:reddit\"],\n  \"Karma\" :2,\n  \"Cakeday\" : \"21-3-1440\"\n}",
+          "content": "   HTTP/1.1 200 OK\n{\n    \"Subscriptions\": [\n        \"Movies\",\n        \"Technology\",\n        \"Education\"\n    ],\n    \"moderates\": [\n        \"Movies\"\n    ],\n    \"ModReq\": [\n        \"Technology\"\n    ],\n    \"blockedUsers\": [\n        \"Ayman\"\n    ],\n    \"Friends\": [\n        \"Ali_yasser\"\n    ],\n    \"SentReq\": [\n        \"TestmanSe7\"\n    ],\n    \"RecReq\": [\n        \"zaghw\"\n    ],\n    \"_id\": \"5cc64e50c206fb368c8e4fa5\",\n    \"Username\": \"mostafa_hazem\",\n    \"Email\": \"mostafa_hazem@m.com\",\n    \"SavedPosts\": [\n        {\n            \"_id\": \"5cc64e61cd11128f20a8feb0\",\n            \"postId\": \"5cc6402a0eeec17074898ddc\",\n            \"title\": \"Laptops\"\n        },\n        {\n            \"_id\": \"5cc650cf37392481409af63f\",\n            \"postId\": \"5cc6402a0eeec17074898de3\",\n            \"title\": \"Rush Hour 4\"\n        }\n    ],\n    \"cakeday\": \"2019-04-29T01:07:28.002Z\"\n}",
           "type": "json"
         }
       ]

@@ -327,12 +327,36 @@ app.get("/me/user/info/:userToView", passport.authenticate('jwt', { session: fal
 * @apiHeader {String} auth Users unique token .
  *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
  *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 
- * {
- *      "Username":"user1",
-      Subscriptions:["sub1","sub2","sub3"],
-      ,"cakeday":"2019-04-28T19:07:29.386Z"
- * }
+ *    HTTP/1.1 200 if friends 
+ {
+    "Username": "mostafa_hazem",
+    "Subscriptions": [],
+    "About":"im a nice user, hi",
+    "cakeday": "2019-04-29T01:07:28.002Z",
+    "savedPosts": [
+        {
+            "_id": "5cc64e61cd11128f20a8feb0",
+            "postId": "5cc6402a0eeec17074898ddc",
+            "title": "Laptops"
+        },
+        
+        {
+            "_id": "5cc650cf37392481409af63f",
+            "postId": "5cc6402a0eeec17074898de3",
+            "title": "Rush Hour 4"
+        }
+    ],
+    "Friends": [
+        "Ali_yasser"
+    ]
+}
+
+* HTTP/1.1 200 if not friends 
+{
+    "Username": "TestmanSe7",
+    "cakeday": "2019-04-29T01:07:28.406Z",
+    "About":"im a nicer project"
+}
  *    
  * 
  * @apiErrorExample {json} List error
@@ -798,36 +822,6 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 */
 
 
-// API for information about user
-
-/** 
-* @api {get} /user/:Username/about/ About
-* @apiName AboutUser
-* @apiGroup UserService
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} Username username of the user that the information is about.
-* @apiSuccess {String} Name name of the user
-* @apiSuccess {String} akeday date of the user joining reddit.
-* @apiSuccess {Number} Karma karma of the user
-* @apiSuccess {JPG} Pic profile picture of the user
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "Username" : "TheRealBatman",
-*       "Name": "Mark",
-*       "cakeday":"2019-04-28T19:07:29.386Z",
-*       "Karma": 1449,
-*       "Pic" : data:image/jpeg;base64,...............
-*      }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 403 Forbidden
-*     {
-*       "error": "User not found"
-*     }
-*/
-
-
-//API for listings of comments 
 
 /** 
 * @api {get} /user/:Username/comments/listing?type=value  List Comments 
@@ -911,23 +905,57 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
  * @apiSuccess {Number} Karma Karma of the User.
  * @apiSuccess {String} Cakeday Date of joining Reddit.
  * @apiSuccess {String[]} Subscriptions  subreddit subscriptons  of the User.
+ * @apiSuccess {String[]} moderates subreddits moderated
+ * @apiSuccess {String[]} recreq friend requests received
+ * @apiSuccess {String[]} sentreq freind requests sent
+ * @apiSuccess {String[]} modreq moderation requests
+ * @apiSuccess {String[]} freinds list of all friends
+ * @apiSuccess {String[]} blocked list of all blocked users
  * 
- *  @apiParamExample {json} Input
- *    {
- *      "Username": "User1",     
- *    }
  * 
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
- *    {
- *      "Username": "User1"
- *      "Email": "user@reddit.com",
- *      "About": "Im a reddit user",
- *      "Imageid": "100001"
- *      "Subscriptions": ["subbreddit:askreddit","subbreddit:reddit"],
- *      "Karma" :2,
- *      "Cakeday" : "21-3-1440"
- *    }
+ * {
+    "Subscriptions": [
+        "Movies",
+        "Technology",
+        "Education"
+    ],
+    "moderates": [
+        "Movies"
+    ],
+    "ModReq": [
+        "Technology"
+    ],
+    "blockedUsers": [
+        "Ayman"
+    ],
+    "Friends": [
+        "Ali_yasser"
+    ],
+    "SentReq": [
+        "TestmanSe7"
+    ],
+    "RecReq": [
+        "zaghw"
+    ],
+    "_id": "5cc64e50c206fb368c8e4fa5",
+    "Username": "mostafa_hazem",
+    "Email": "mostafa_hazem@m.com",
+    "SavedPosts": [
+        {
+            "_id": "5cc64e61cd11128f20a8feb0",
+            "postId": "5cc6402a0eeec17074898ddc",
+            "title": "Laptops"
+        },
+        {
+            "_id": "5cc650cf37392481409af63f",
+            "postId": "5cc6402a0eeec17074898de3",
+            "title": "Rush Hour 4"
+        }
+    ],
+    "cakeday": "2019-04-29T01:07:28.002Z"
+}
  * 
  * @apiErrorExample {json} List error
  *    HTTP/1.1 404 User not found
@@ -1791,6 +1819,7 @@ app.post("/sr/:srName/thread", upload.single('postFile'), passport.authenticate(
 * @apiParam {object} postFile Post image or video (Supported file formats: jpeg/png/mp4)
 * @apiParam {boolean}  spoiler  Mark if post is spoiler
 */
+app.put("/sr/save/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.savePost(req, res));
 
 app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.editPost(req, res));
 

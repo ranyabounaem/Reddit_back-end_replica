@@ -363,7 +363,7 @@ class UserHandler {
        */
         res
           .status(200)
-          .send({ Username: req.params.Username, Email: RetUser.Email,cakeday:RetUser.cakeday });
+          .send(RetUser);
       }
     });
   }
@@ -506,22 +506,43 @@ class UserHandler {
     const blockedUser = await checkIfBlockedByHim(userViewed,username);
 
     if(blockedUser){res.status(404).send({message:"User doesnt exist"})}
-
     else{
+
+      const Friend = await checkFriend(userViewed,username);
+
+      if(!Friend){
     /**
        *return info 
        */
     const userinfo=
     {
       Username:req.params.userToView,
-      Subscriptions: userViewed.Subscriptions,
-      cakeday:userViewed.cakeday
+      cakeday:userViewed.cakeday,
+      About:userViewed.About
     }
 
     res.status(200).send(userinfo);
     }
+
+    else {
+
+      const userinfo1=
+      {
+        Username:req.params.userToView,
+        Subscriptions: userViewed.Subscriptions,
+        cakeday:userViewed.cakeday,
+        savedPosts:userViewed.SavedPosts,
+        About:userViewed.About,
+        Friends:userViewed.Friends
+      }
+  
+      res.status(200).send(userinfo1);
+
+
+    }
   }
 }
+  }
 
   
 /**

@@ -695,5 +695,45 @@ reportPost(req, res){
             };
         });
     };
+
+    /**
+ * @function savePost
+ * @summary Get post's information. 
+ * @param {object} Req -  Request
+ * @param {object} Res - Response
+ * @returns {JSON} Returns the post's information as an object.
+ */
+ async   savePost(req, res)
+    {
+        const postId = req.params.postId;
+        const username = jwt.getUsernameFromToken(req);
+
+        const user = await User.findOne({ Username: username });
+
+        const postSave=await pt.findOne({_id:postId});
+
+        if(!postSave){res.status(404).send({ 'error': 'post doesnt exist' });}
+
+        else
+        {
+            const checkIfSaved =await user.SavedPosts.find(function(srInReport) {
+              
+             return srInReport.postId == postId;});
+
+
+             if(checkIfSaved) {res.status(404).send({error:"post already saved"});}
+             
+             
+            else{
+                
+            user.SavedPosts.push({"postId":postId,"title":postSave.title});
+
+            user.save();
+
+            res.status(200).send({ message: "post saved"}); 
+             }
+        }
+    }
+
 };
 module.exports = new SR();
