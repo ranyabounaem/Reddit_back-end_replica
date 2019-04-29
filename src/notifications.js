@@ -22,7 +22,7 @@ class notificationHandler {
             if (retNotifs == null) {
                 res.status(404).send({ 'error': 'You do not have any Notifications' });
             } else {
-                res.status(200).send(retNotifs);
+                res.status(200).send({notifications:retNotifs});
             }
         });
     }
