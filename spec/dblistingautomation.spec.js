@@ -6,6 +6,7 @@ const subbreddit = subbredditsSchema.Subreddit;
 const posts = subbredditsSchema.SubredditPostSchema;
 const users = require('../models/UserSchema');
 const jasmine = require('jasmine');
+const fs = require('fs');
 // testing compose/block/unblock/retrieveblock
 describe('Server', function () {
     let server6;
