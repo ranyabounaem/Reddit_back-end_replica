@@ -39,7 +39,7 @@ class notificationHandler {
                 if (retNotif == null) {
                     res.status(404).send({ 'error': 'There is no Notification with this ID for this user' });
                 } else {
-                    res.status(200).json("marked read successfully");
+                    res.status(200).json({"message":"marked read successfully"});
                 }
             });
         }
@@ -57,7 +57,7 @@ class notificationHandler {
                 if (retNotif == null) {
                     res.status(404).send({ 'error': 'There is no Notification with this ID for this user' });
                 } else {
-                    res.status(200).json("marked unread successfully");
+                    res.status(200).json({"message":"marked unread successfully"});
                 }
             });
         }
@@ -69,7 +69,7 @@ class notificationHandler {
             if (retNotif == null) {
                 res.status(404).send({ 'error': 'There is no Notification for this user' });
             } else {
-                res.status(200).json("All notifications marked read successfully");
+                res.status(200).json({"message":"All notifications marked read successfully"});
             }
         });
     }

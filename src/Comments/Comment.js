@@ -286,7 +286,7 @@ class CommentHandler {
                             //edit the comment after making all the validations
                             Comment.findOneAndUpdate({ _id: ID },
                                 { content: req.body.content, locked: l, spoiler: s }).then(function (retComment) {
-                                    res.status(200).json("update successful");
+                                    res.status(200).send({"message":"update successful"});
                                 });
                         }
                     }
@@ -346,7 +346,7 @@ class CommentHandler {
                                                         res.status(500);
                                                         res.send({ "error": "internalServerError" });
                                                     } else {
-                                                        res.status(200).json("Delete Successful");
+                                                        res.status(200).send({"message":"Delete Successful"});
                                                     }
                                                 });
                                             }
@@ -394,7 +394,7 @@ class CommentHandler {
                                         retUser.save();
                                     });
                                     v.save();
-                                    res.status(200).json('The comment has been upvoted successfully');
+                                    res.status(200).json({'message':'The comment has been upvoted successfully'});
 
                                     //creating a new instace (downvote) & decrementing the votes of the comment
                                 } else if (req.body.direction === -1) {
@@ -411,7 +411,7 @@ class CommentHandler {
                                         retUser.save();
                                     });
                                     v.save();
-                                    res.status(200).json('The comment has been downvoted successfully');
+                                    res.status(200).json({'message':'The comment has been downvoted successfully'});
 
                                     //you can't unvote if this comment wasn't voted before by this user
                                 } else if (req.body.direction === 0) {
@@ -434,7 +434,7 @@ class CommentHandler {
                                             retUser.karma = retUser.karma + 2;
                                             retUser.save();
                                         });
-                                        res.status(200).json('The comment has been upvoted successfully');
+                                        res.status(200).send({'message':'The comment has been upvoted successfully'});
                                     }
                                 } else if (req.body.direction === -1) {
                                     //updating the vote to downvoted if it wasn't already downvoted
@@ -450,7 +450,7 @@ class CommentHandler {
                                             retUser.karma = retUser.karma - 2;
                                             retUser.save();
                                         });
-                                        res.status(200).json('The comment has been downvoted successfully');
+                                        res.status(200).json({'message':'The comment has been downvoted successfully'});
                                     }
                                 } else if (req.body.direction === 0) {
                                     //updating the vote to unvoted and deleting the instance from the vote schema
@@ -476,7 +476,7 @@ class CommentHandler {
                                             }
                                             retComment.save();
                                             res.status(200);
-                                            res.json("The comment has been unvoted successfully");
+                                            res.json({"message":"The comment has been unvoted successfully"});
                                         }
                                     });
                                 }
@@ -511,7 +511,7 @@ class CommentHandler {
                         post: false
                     })
                     r.save();
-                    res.status(200).json('You have successfully reported this comment');
+                    res.status(200).json({'message':'You have successfully reported this comment'});
                 }
             });
         }
