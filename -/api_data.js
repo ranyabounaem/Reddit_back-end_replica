@@ -25,6 +25,15 @@ define({ "api": [
         ]
       }
     },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{\"Delete Successful\"}",
+          "type": "json"
+        }
+      ]
+    },
     "error": {
       "fields": {
         "Error 4xx": [
@@ -41,7 +50,24 @@ define({ "api": [
             "description": "<p>If this user can't delete this comment.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 403 Access Denied\n{\n         \"error\": \"You can only delete your own comments\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Comment not found\n{\n         \"error\": \"There is no Comment with this ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Invalid ID\n{\n         \"error\": \"There is not a valid ID\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -96,6 +122,15 @@ define({ "api": [
         ]
       }
     },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{\"update successful\"}",
+          "type": "json"
+        }
+      ]
+    },
     "error": {
       "fields": {
         "Error 4xx": [
@@ -112,7 +147,34 @@ define({ "api": [
             "description": "<p>If this user can't edit this comment.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 403 Access Denied\n{\n         \"error\": \"You can only edit your own comments\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Comment not found\n{\n         \"error\": \"There is no Comment with this ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Invalid ID\n{\n         \"error\": \"There is not a valid ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Wrong request\n{\n         \"error\": \"The request must include content of the comment\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Empty Comment\n{\n         \"error\": \"You can not post an empty Comment\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -156,7 +218,14 @@ define({ "api": [
             "description": "<p>Array of the comments or replies attached to this thread or comment.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n[{    \n \"_id\": \"mfh567djfp4y5pd86rt3u274\",\n \"username\": \"Mostafa\",\n \"subreddit\": \"Sports\",\n \"content\":\"Al Ahly above all\",\n \"parent_id\": \"kfh56hdjfp5y5pd86rt3u274\",\n \"dateAded\": \"2019-04-29 12:31:13.440Z\",\n \"votes\": 23,\n \"spoiler\": true,\n \"locked\": false\n},{\n\"_id\": \"lkhy7djfp4y5pd86rt3u274\",\n \"username\": \"Mohamed\",\n \"subreddit\": \"Sports\",\n \"content\":\"Al Ahly is the best team\",\n \"parent_id\": \"kfh56hdjfp5y5pd86rt3u274\",\n \"dateAded\": \"2019-04-29 12:31:13.440Z\",\n \"votes\": 12,\n \"spoiler\": false,\n \"locked\": true\n}]",
+          "type": "json"
+        }
+      ]
     },
     "error": {
       "fields": {
@@ -180,7 +249,34 @@ define({ "api": [
             "description": "<p>If this user can't get info of this comment.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Comment not found\n{\n         \"error\": \"There is no Comment with this ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Post not found\n{\n         \"error\": \"There is no post with this ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Invalid ID\n{\n         \"error\": \"There is not a valid ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Comments not found\n{\n         \"error\": \"There are no Comments for this Thread\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Replies not found\n{\n         \"error\": \"There are no Replies for this Comment\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -219,7 +315,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "Date",
             "optional": false,
-            "field": "c_date",
+            "field": "dateAdded",
             "description": "<p>Date of the Posted Comment.</p>"
           },
           {
@@ -242,9 +338,44 @@ define({ "api": [
             "optional": false,
             "field": "locked",
             "description": "<p>True if the Replies are Disallowed on this Comment.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>The user who posted this comment.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "votes",
+            "description": "<p>The number of votes.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "subreddit",
+            "description": "<p>The comment belongs to this subreddit.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "parent_id",
+            "description": "<p>The id the Post/Comment that is above this Comment/Reply.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n \"_id\": \"mfh567djfp4y5pd86rt3u274\",\n \"username\": \"Mostafa\",\n \"subreddit\": \"Sports\",\n \"content\":\"Al Ahly above all\",\n \"parent_id\": \"kfh56hdjfp5y5pd86rt3u274\",\n \"dateAdded\": \"2019-04-29 12:31:13.440Z\",\n \"votes\": 23,\n \"spoiler\": true,\n \"locked\": false\n}",
+          "type": "json"
+        }
+      ]
     },
     "error": {
       "fields": {
@@ -254,15 +385,21 @@ define({ "api": [
             "optional": false,
             "field": "CommentNotFound",
             "description": "<p>The id of the comment wasn't found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "AccessDenied",
-            "description": "<p>If this user can't get info of this comment.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Comment not found\n{\n         \"error\": \"There is no Comment with this ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Invalid ID\n{\n         \"error\": \"There is not a valid ID\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -336,7 +473,14 @@ define({ "api": [
             "description": "<p>The Created Comment ID.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{    \n     \"c_id\": \"mfh567djfp4y5pd86rt3u274\" \n}",
+          "type": "json"
+        }
+      ]
     },
     "error": {
       "fields": {
@@ -360,7 +504,39 @@ define({ "api": [
             "description": "<p>If the user isn't logged in.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Comment not found\n{\n         \"error\": \"There is no Comment with this ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Post not found\n{\n         \"error\": \"There is no post with this ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Invalid ID\n{\n         \"error\": \"There is not a valid ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Wrong request\n{\n         \"error\": \"The request must include content of the comment\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Empty Comment\n{\n         \"error\": \"You can not post an empty Comment\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 403 Comment Locked\n{\n         \"error\": \"You can not reply to a locked comment\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -399,6 +575,15 @@ define({ "api": [
         ]
       }
     },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{\" You have successfully reported this comment\"}",
+          "type": "json"
+        }
+      ]
+    },
     "error": {
       "fields": {
         "Error 4xx": [
@@ -421,115 +606,19 @@ define({ "api": [
             "description": "<p>If the user isn't logged in.</p>"
           }
         ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Comment"
-  },
-  {
-    "type": "post",
-    "url": "/comment/save/:c_id",
-    "title": "Save a Comment",
-    "name": "SaveComment",
-    "group": "Comment",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "c_id",
-            "description": "<p>Comment Unique ID.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentNotFound",
-            "description": "<p>The id of the comment wasn't found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentAlreadySaved",
-            "description": "<p>The Comment has already been saved before.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "AccessDenied",
-            "description": "<p>If the user isn't logged in.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./index.js",
-    "groupTitle": "Comment"
-  },
-  {
-    "type": "delete",
-    "url": "/comment/unsave/:c_id",
-    "title": "UnSave a Comment",
-    "name": "UnSaveComment",
-    "group": "Comment",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "SyncToken",
-            "description": "<p>Sent as Header used for Synchronization and preventing CHRF Attack.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "c_id",
-            "description": "<p>Comment Unique ID.</p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentNotFound",
-            "description": "<p>The id of the comment wasn't found.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CommentAlreadySaved",
-            "description": "<p>You can't unsave an unsaved comment.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "AccessDenied",
-            "description": "<p>If the user isn't logged in.</p>"
-          }
-        ]
-      }
+      },
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Comment not found\n{\n         \"error\": \"There is no Comment with this ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Invalid ID\n{\n         \"error\": \"There is not a valid ID\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -573,6 +662,25 @@ define({ "api": [
         ]
       }
     },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{\"The comment has been downvoted successfully\"}",
+          "type": "json"
+        },
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{\"The comment has been upvoted successfully\"}",
+          "type": "json"
+        },
+        {
+          "title": "Success",
+          "content": "   HTTP/1.1 200 OK\n{\"The comment has been unvoted successfully\"}",
+          "type": "json"
+        }
+      ]
+    },
     "error": {
       "fields": {
         "Error 4xx": [
@@ -589,7 +697,39 @@ define({ "api": [
             "description": "<p>If the user isn't logged in.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 404 Comment not found\n{\n         \"error\": \"There is no Comment with this ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Invalid ID\n{\n         \"error\": \"There is not a valid ID\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 400 Wrong request\n{\n         \"error\": \"Please enter a valid value for the direction (1,0,-1)\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 401 Already Upvoted\n{\n         \"error\": \"You have already upvoted the comment\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 401 Already downvoted\n{\n         \"error\": \"Please enter a valid value for the direction (1,0,-1)\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "List error",
+          "content": "    HTTP/1.1 401 Already unvoted\n{\n         \"error\": \"You have already downvoted the comment\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./index.js",
@@ -12327,7 +12467,7 @@ define({ "api": [
   {
     "type": "put",
     "url": "/Moderator/ban",
-    "title": "Remove moderator",
+    "title": "Ban User",
     "name": "Ban",
     "group": "Moderator",
     "parameter": {
@@ -12644,7 +12784,7 @@ define({ "api": [
   {
     "type": "put",
     "url": "/Moderator/Invite",
-    "title": "invite moderator",
+    "title": "Invite moderator",
     "name": "addMod",
     "group": "Moderator",
     "parameter": {
@@ -12978,7 +13118,7 @@ define({ "api": [
   {
     "type": "put",
     "url": "/Moderator/unban",
-    "title": "Remove moderator",
+    "title": "unban User",
     "name": "unBan",
     "group": "Moderator",
     "parameter": {
