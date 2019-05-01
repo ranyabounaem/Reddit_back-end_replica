@@ -10,7 +10,7 @@ const fs = require('fs');
 // testing compose/block/unblock/retrieveblock
 describe('Server', function () {
     let server6;
-
+  //comment for merging to take effect
 
     //creates users for database
      const husseinToken={'auth':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJIdXNlZWluX2VoYWIiLCJpYXQiOjE1NTUxODI0OTR9._ar5M80qZu8Ru2eUevLm9Y1QMZ-SbfEivsmrxEYpRa4'};
