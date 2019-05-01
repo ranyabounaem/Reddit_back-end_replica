@@ -32,7 +32,7 @@ class SR {
         //ar imageCheck = req.file;
 
         if (admin && subredditName && subredditRules && imgdata) {
-            const path = __dirname + '/../uploads/'+Date.now()+'.png';
+            const path = __dirname + '/../uploads/'+Date.now()+'.png'
             const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
             fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
             var subreddit = new sr({
@@ -40,7 +40,7 @@ class SR {
                 adminUsername: admin,
                 rules: subredditRules,
                 modUsername: req.body.modUsername,
-                subredditFile: '/uploads/'+Date.now()+'.png',
+                subredditFile: path,
                 bio: bio
                 //if(imageCheck) { subredditFile: req.file.path }
             });
@@ -48,6 +48,7 @@ class SR {
                 if (err) {
                     // internal Server error 
                     res.status(500).send({ 'error': 'internal server error' });
+                    console.log("help")
 
                 }
                 else {
@@ -76,7 +77,7 @@ class SR {
         const imgdata = req.body.base64image;
         
         if (subredditName && updatedRules && updatedName && newMods && imgdata) {
-            const path = '/uploads/'+Date.now()+'.png';
+            const path = __dirname + '/../uploads/'+Date.now()+'.png'
             const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
             fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
             sr.findOneAndUpdate({ name: subredditName },
@@ -175,7 +176,7 @@ class SR {
                     res.status(400).send({ 'error': 'invalid subreddit name' });
                 }
                 else {
-                    const path = __dirname + '/../uploads/'+Date.now()+'.png';
+                    const path = __dirname + '/../uploads/'+Date.now()+'.png'
                     const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
                     fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
                     let newPost = new pt({
@@ -183,7 +184,7 @@ class SR {
                         body: postBody,
                         creatorUsername: creator,
                         subredditName: subrName,
-                        postFile: '/uploads/'+Date.now()+'.png',
+                        postFile: path
                         //if(imageCheck) { subredditFile: req.file.path },
                         //if(spoilerCheck) { spoiler: req.body.spoiler }
                     });
