@@ -495,7 +495,7 @@ describe("comment tests", () => {
             });
             it("status 200 test", () => {
                 expect(data.status).toBe(200);
-                expect(data.body).toBe('update successful');
+                expect(data.body.message).toBe('update successful');
             });
             it("Mongo test", () => {
                 Comment.findOne({ content: "Edited Mostafa" }).then(function (RetComment) {
@@ -646,7 +646,7 @@ describe("comment tests", () => {
             });
             it("status 200 test", () => {
                 expect(data.status).toBe(200);
-                expect(data.body).toBe('Delete Successful');
+                expect(data.body.message).toBe('Delete Successful');
             });
             it("Mongo test", () => {
                 Comment.findOne({ content: "Mostafa2" }).then(function (RetComment) {
@@ -670,7 +670,7 @@ describe("comment tests", () => {
             });
             it("status 200 test", () => {
                 expect(data.status).toBe(200);
-                expect(data.body).toBe('The comment has been upvoted successfully');
+                expect(data.body.message).toBe('The comment has been upvoted successfully');
             });
             it("votes update test", () => {
                 Comment.findOne({ _id: c_id }).then(function (RetComment) {
@@ -698,7 +698,7 @@ describe("comment tests", () => {
                 });
                 it("status 200 test", () => {
                     expect(data.status).toBe(200);
-                    expect(data.body).toBe('The comment has been downvoted successfully');
+                    expect(data.body.message).toBe('The comment has been downvoted successfully');
                 });
                 it("votes update test", () => {
                     Comment.findOne({ _id: c_id }).then(function (RetComment) {
@@ -726,7 +726,7 @@ describe("comment tests", () => {
                     });
                     it("status 200 test", () => {
                         expect(data.status).toBe(200);
-                        expect(data.body).toBe('The comment has been downvoted successfully');
+                        expect(data.body.message).toBe('The comment has been downvoted successfully');
                     });
                     it("votes update test", () => {
                         Comment.findOne({ _id: c_id }).then(function (RetComment) {
@@ -815,7 +815,7 @@ describe("comment tests", () => {
             });
             it("status 200 test", () => {
                 expect(data.status).toBe(200);
-                expect(data.body).toBe('The comment has been downvoted successfully');
+                expect(data.body.message).toBe('The comment has been downvoted successfully');
             });
             it("votes update test", () => {
                 Comment.findOne({ _id: c_id4 }).then(function (RetComment) {
@@ -843,7 +843,7 @@ describe("comment tests", () => {
                 });
                 it("status 200 test", () => {
                     expect(data.status).toBe(200);
-                    expect(data.body).toBe('The comment has been unvoted successfully');
+                    expect(data.body.message).toBe('The comment has been unvoted successfully');
                 });
                 it("votes update test", () => {
                     Comment.findOne({ _id: c_id4 }).then(function (RetComment) {
@@ -871,7 +871,7 @@ describe("comment tests", () => {
                     });
                     it("status 200 test", () => {
                         expect(data.status).toBe(200);
-                        expect(data.body).toBe('The comment has been upvoted successfully');
+                        expect(data.body.message).toBe('The comment has been upvoted successfully');
                     });
                     it("votes update test", () => {
                         Comment.findOne({ _id: c_id4 }).then(function (RetComment) {
@@ -899,7 +899,7 @@ describe("comment tests", () => {
                         });
                         it("status 200 test", () => {
                             expect(data.status).toBe(200);
-                            expect(data.body).toBe('The comment has been unvoted successfully');
+                            expect(data.body.message).toBe('The comment has been unvoted successfully');
                         });
                         it("votes update test", () => {
                             Comment.findOne({ _id: c_id4 }).then(function (RetComment) {
@@ -931,7 +931,7 @@ describe("comment tests", () => {
             });
             it("status 200 test", () => {
                 expect(data.status).toBe(200);
-                expect(data.body).toBe("You have successfully reported this comment");
+                expect(data.body.message).toBe("You have successfully reported this comment");
             });
             it("Mongo test", () => {
                 report.findOne({ reportedId: c_id }).then(function (RetComment) {
