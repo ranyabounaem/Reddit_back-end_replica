@@ -40,7 +40,7 @@ class SR {
                 adminUsername: admin,
                 rules: subredditRules,
                 modUsername: req.body.modUsername,
-                subredditFile: path,
+                subredditFile: '/uploads/'+Date.now()+'.png',
                 bio: bio
                 //if(imageCheck) { subredditFile: req.file.path }
             });
@@ -77,7 +77,7 @@ class SR {
         const imgdata = req.body.base64image;
         
         if (subredditName && updatedRules && updatedName && newMods && imgdata) {
-            const path = __dirname + '/../uploads/'+Date.now()+'.png'
+            const path = '/uploads/'+Date.now()+'.png',
             const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
             fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
             sr.findOneAndUpdate({ name: subredditName },
@@ -184,7 +184,7 @@ class SR {
                         body: postBody,
                         creatorUsername: creator,
                         subredditName: subrName,
-                        postFile: path
+                        postFile: '/uploads/'+Date.now()+'.png',
                         //if(imageCheck) { subredditFile: req.file.path },
                         //if(spoilerCheck) { spoiler: req.body.spoiler }
                     });
