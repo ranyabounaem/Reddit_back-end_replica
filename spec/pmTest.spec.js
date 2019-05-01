@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const PMmongo = require('../models/PMmongo');
 const privateMessage = PMmongo.pm;
 const users = require('../models/UserSchema');
+const notification = require('../models/notificationSchema');
 const blockList = PMmongo.messageBlockList;
 const jasmine = require('jasmine');
 // testing compose/block/unblock/retrieveblock
@@ -29,7 +30,9 @@ describe('Server', function () {
     afterAll(function (done) {
 
         users.deleteMany({ Username: { $in: ['marwanahmed', 'kefahmohamed', 'ahmedmohamedadel'] } }, function () {
-            done();
+            notification.deleteMany({ username: { $in: ['marwanahmed', 'kefahmohamed', 'ahmedmohamedadel'] } }, function () {
+                done();
+            });
 
         });
 
@@ -430,7 +433,7 @@ describe('Server', function () {
         });
         it('bodymatch ', function () {
             expect(data.body.messages[0].receiverUsername).toBe("kefahmohamed");
-          });
+        });
         afterAll(function (done) {
 
             privateMessage.findOneAndDelete(messageTest1, function () {
@@ -483,7 +486,7 @@ describe('Server', function () {
         });
         it('bodymatch ', function () {
             expect(data.body.messages[0].sender).toBe("ahmedmohamedadel");
-          });
+        });
         it('body', function () {
 
             privateMessage.findOne({ receiverUsername: owner }, function (err, result) {
@@ -884,7 +887,7 @@ describe('Server', function () {
         it('body not empty ', function () {
             expect(data.body).toBe('{"blockList":[{"blocked":"ahmedmohamedadel"},{"blocked":"kefahmohamed"}]}');
         });
-        
+
         it('Database Test', function () {
             blockList.findOneAndDelete(messageTestFind,
                 function (err, result) {
@@ -1188,7 +1191,7 @@ describe('Server', function () {
                             messageId: result._id, isReadRequest: true
 
                         };
-                        request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
+                        request.delete(url + 'me/pm/delete?messageId=' + messageTest1.messageId,
                             { json: true, headers: head2, body: messageTest1 }, function (error, response, body) {
                                 data.status = response.statusCode;
                                 data.body = body;
@@ -1240,7 +1243,7 @@ describe('Server', function () {
                             messageId: result._id, isReadRequest: true
 
                         };
-                        request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
+                        request.delete(url + 'me/pm/delete?messageId=' + messageTest1.messageId,
                             { json: true, headers: head1, body: messageTest1 }, function (error, response, body) {
                                 data.status = response.statusCode;
                                 data.body = body;
@@ -1292,9 +1295,9 @@ describe('Server', function () {
                             messageId: result._id, isReadRequest: true
 
                         };
-                        request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
+                        request.delete(url + 'me/pm/delete?messageId=' + messageTest1.messageId,
                             { json: true, headers: head1, body: messageTest1 }, function (error, response, body) {
-                                request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
+                                request.delete(url + 'me/pm/delete?messageId=' + messageTest1.messageId,
                                     { json: true, headers: head2, body: messageTest1 }, function (error, response, body) {
 
 
@@ -1325,21 +1328,21 @@ describe('Server', function () {
         });
     });
     describe('delete message id error  ', function () {
-        let messageTest1={}
+        let messageTest1 = {}
         let data = {};
         beforeAll(function (done) {  // mocking the post request with message test
 
-        
-                    messageTest1 = {
-                            messageId: "1nejjne2e", isReadRequest: true
 
-                    };
-                        request.delete(url + 'me/pm/delete?messageId='+messageTest1.messageId,
-                            { json: true, headers: head1, body: messageTest1 }, function (error, response, body) {
-                                data.status = response.statusCode;
-                                data.body = body;
-                                done();
-                            });
+            messageTest1 = {
+                messageId: "1nejjne2e", isReadRequest: true
+
+            };
+            request.delete(url + 'me/pm/delete?messageId=' + messageTest1.messageId,
+                { json: true, headers: head1, body: messageTest1 }, function (error, response, body) {
+                    data.status = response.statusCode;
+                    data.body = body;
+                    done();
+                });
 
 
 

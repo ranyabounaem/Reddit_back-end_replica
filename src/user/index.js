@@ -640,10 +640,10 @@ class UserHandler {
             {
             const n = new notification({
               type:'friendRequest',
-              username: userToAdd,
+              username: userToAdd.Username,
               read: false,
               sourceID: null,
-              message: user + ' has sent you a friend request',
+              message: user.Username + ' has sent you a friend request',
               date: Date()
             })
             n.save();

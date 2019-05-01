@@ -1441,13 +1441,13 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
 
 
 
-
+const commentHandler = require('./src/Comments/Comment').cHandler;
 /**
  * @name CommentService
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-
+app.post("/comment/:id", passport.authenticate('jwt', { session: false }), commentHandler.handlePostComment);
 /**
  * @api {post} /comment/:id Post a New Comment
  * @apiName PostComment
@@ -1504,7 +1504,7 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  */
 
 
-
+app.get("/comment/:c_id", commentHandler.handleGetComment);
 /**
  * @api {get} /comment/:c_id Get Details About Comment or a Reply
  * @apiName GetComment
@@ -1512,11 +1512,16 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * 
  * @apiParam {String} c_id Comment Unique ID.
  * 
+ * @apiSucces {String} _id the ID of this comment
  * @apiSuccess {String} content Text of the Comment.
- * @apiSuccess {Date} c_date Date of the Posted Comment.
+ * @apiSuccess {Date} dateAdded Date of the Posted Comment.
  * @apiSuccess {Boolean} reply True if it is a reply.
  * @apiSuccess {Boolean} spoiler True if it is a Spoiler.
  * @apiSuccess {Boolean} locked True if the Replies are Disallowed on this Comment.
+ * @apiSuccess {String} username The user who posted this comment.
+ * @apiSuccess {Number} votes The number of votes.
+ * @apiSuccess {String} subreddit The comment belongs to this subreddit.
+ * @apiSuccess {String} parent_id The id the Post/Comment that is above this Comment/Reply.
  * 
  * @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
@@ -1526,7 +1531,7 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  *  "subreddit": "Sports",
  *  "content":"Al Ahly above all",
  *  "parent_id": "kfh56hdjfp5y5pd86rt3u274",
- *  "dateAded": "2019-04-29 12:31:13.440Z",
+ *  "dateAdded": "2019-04-29 12:31:13.440Z",
  *  "votes": 23,
  *  "spoiler": true,
  *  "locked": false
@@ -1547,7 +1552,7 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * 
  */
 
-
+app.get("/comment/all/:id", commentHandler.handleGetAllComments);
 /**
  * @api {get} /comment/all/:id Get Comments or Replies for this ID
  * @apiName GetAllComments
@@ -1611,7 +1616,7 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  *          "error": "There are no Replies for this Comment
  * }
  */
-
+app.delete("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleDeleteComent);
 /**
  * @api {delete} /comment/:c_id Delete a Comment
  * @apiName DeleteComment
@@ -1642,7 +1647,7 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  *          "error": "There is not a valid ID"
  * }
  */
-
+app.put("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleEditComment);
 /**
  * @api {put} /comment/:c_id Edit a Comment
  * @apiName EditComment
@@ -1687,7 +1692,7 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  *          "error": "You can not post an empty Comment"
  * } 
  */
-
+app.put("/comment/vote/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleVoteComment);
 /**
  * @api {put} /comment/vote/:c_id Vote for a Comment
  * @apiName VoteComment
@@ -1740,33 +1745,7 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  * }
  */
 
-/**
- * @api {post} /comment/save/:c_id Save a Comment
- * @apiName SaveComment
- * @apiGroup Comment
- * 
- * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
- * @apiParam {String} c_id Comment Unique ID.
- * 
- * 
- * @apiError CommentNotFound The id of the comment wasn't found.
- * @apiError CommentAlreadySaved The Comment has already been saved before.
- * @apiError AccessDenied If the user isn't logged in.
- */
-
-/**
- * @api {delete} /comment/unsave/:c_id UnSave a Comment
- * @apiName UnSaveComment
- * @apiGroup Comment
- * 
- * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
- * @apiParam {String} c_id Comment Unique ID.
- * 
- * @apiError CommentNotFound The id of the comment wasn't found.
- * @apiError CommentAlreadySaved You can't unsave an unsaved comment.
- * @apiError AccessDenied If the user isn't logged in.
- */
-
+app.post("/comment/report/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleReportComment);
 /**
  * @api {post} /comment/report/:id Report a comment
  * @apiName ReportComment
@@ -1795,14 +1774,7 @@ app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), re
  *          "error": "There is not a valid ID"
  * }
  */
-const commentHandler = require('./src/Comments/Comment').cHandler;
-app.get("/comment/:c_id", commentHandler.handleGetComment);
-app.get("/comment/all/:id", commentHandler.handleGetAllComments);
-app.post("/comment/:id", passport.authenticate('jwt', { session: false }), commentHandler.handlePostComment);
-app.put("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleEditComment);
-app.delete("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleDeleteComent);
-app.put("/comment/vote/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleVoteComment);
-app.post("/comment/report/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleReportComment);
+
 
 
 
