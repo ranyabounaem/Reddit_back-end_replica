@@ -40,7 +40,7 @@ class SR {
                 adminUsername: admin,
                 rules: subredditRules,
                 modUsername: req.body.modUsername,
-                subredditFile: path,
+                subredditFile: '/uploads/'+Date.now()+'.png',
                 bio: bio
                 //if(imageCheck) { subredditFile: req.file.path }
             });
@@ -48,7 +48,6 @@ class SR {
                 if (err) {
                     // internal Server error 
                     res.status(500).send({ 'error': 'internal server error' });
-                    console.log("help")
 
                 }
                 else {
@@ -85,7 +84,7 @@ class SR {
                     name: updatedName,
                     rules: updatedRules,
                     modUsername: req.body.newMods,
-                    subredditFile: path,
+                    subredditFile: '/uploads/'+Date.now()+'.png',
                     bio: req.body.newBio
                 },
                 function (err, record) {
@@ -184,7 +183,7 @@ class SR {
                         body: postBody,
                         creatorUsername: creator,
                         subredditName: subrName,
-                        postFile: path
+                        postFile: '/uploads/'+Date.now()+'.png',
                         //if(imageCheck) { subredditFile: req.file.path },
                         //if(spoilerCheck) { spoiler: req.body.spoiler }
                     });
