@@ -289,6 +289,24 @@ app.post("/user/CreateFlair", passport.authenticate('jwt', { session: false }), 
 */
 
 
+app.get("/guest", userHandler.getGuestToken);
+/**
+* @api {get} /guest Get guest user token
+* @apiName GetGuestToken
+* @apiGroup Guest
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* {
+*      "Token":"ejb89c512asdf89gg789gh8fku89dvb6x...."
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 No Guest user found...
+*      {
+*      "message": "No one ran the tests..."
+*     }
+*/
 
 
 
