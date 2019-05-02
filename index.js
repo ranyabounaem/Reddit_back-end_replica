@@ -92,6 +92,31 @@ app.use(function (req, res, next) {
 const userHandler = require("./src/user");
 
 
+app.put("/user/ForgetPassword/:username", userHandler.forgetPassword);
+/**
+ * @api {put} /user/ForgetPassword/:username reset password
+ * @apiName ForgetPass
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Username unique Username  of the User.
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *  "message": "Please check your registered email"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    
+ * HTTP/1.1 406 user doesnnt exist
+ * {
+ * "error":"User doesnt exist
+ * }
+ */
+
+
+
 app.post("/user/register", userHandler.handleRegistration);
 
 /**

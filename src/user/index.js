@@ -9,6 +9,8 @@ var bcrypt = require('bcrypt');
 const saltRounds = 10;
 const commentHandler = require('../Comments/Comment').cm;
 
+const nodeMailer=require('nodemailer');
+
 async function checkIfBlockedByMe (user,username)
 {
   
@@ -1012,6 +1014,85 @@ class UserHandler {
     const flairId=flairsReturned._id;
     const flairDelete= await flair.findOneAndDelete({_id:flairId});
     res.status(200).send( {message:"flair removed"});
+    }
+  }
+
+/**
+   *     a function send email with a new password
+   *     @function forgetPassword
+   *     @returns {JSON} the response for the request
+   */
+  async forgetPassword(req,res)
+  {
+
+    /**
+    *    This finds the user that will be sent the recovery email and checks if he even exists
+    * 
+    */
+    const username = req.params.username;
+   const user = await User.findOne({ Username: username });
+
+    if(!user){res.status(404).send({error:"User doesnt exiist"})}
+
+    else{
+
+      /**
+    *    genetartes a random password
+    * 
+    */
+   const userEmail=user.Email;
+   const newPass=Math.floor((Math.random()*10000)*Math.random()*10000*(Math.random()*10000));
+    const newPassString = newPass.toString();
+
+    /**
+    *   setting up nodemailer with the memestock email
+    * 
+    */
+   const trans=nodeMailer.createTransport
+   ({
+      service:'gmail',
+      secure:false,
+      port:25,
+      auth:
+      {
+        user:"memestockhelp@gmail.com",
+        pass:"Meme123456789"
+      },
+      tls:{rejectUnauthorized:false}
+
+   });
+
+   const helperOptions=
+   {
+     from:'"Memestock" = memestockhelp@gmail.com',
+     to:userEmail,
+     subject:"Recover Password",
+     text:"Your new password is:  "+newPass+"\n You are advised to change it when you can.\n \n  \n  Memestock help"
+   };
+
+
+   trans.sendMail(helperOptions,(err,info)=>
+   {
+     if (err){res.send({error:"mailing service is currently down"})}
+
+
+     /**
+    *    This sets password to the new random passwrod that was sent in the email
+    * 
+    */
+      else {  bcrypt.hash(newPassString,saltRounds).then(function(hash){
+
+        User.findOneAndUpdate(
+          { Username: username },
+          { Password: hash}
+        ).then(function(RetUser) {
+          res.status(200).send({message:"Please check your registered email"});
+        });
+      })}
+   });
+   
+
+   
     }
   }
 
