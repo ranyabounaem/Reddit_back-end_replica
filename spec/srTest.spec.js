@@ -24,6 +24,7 @@ let user = {
 //     subredditName: 'Metal'
 // }
 let postid;
+let postid2;
 describe("Subreddits testing", function () {
     let server9;
     beforeAll((done) => {
@@ -174,7 +175,6 @@ describe("Subreddits testing", function () {
             function(error, request, body){
                 data.status = request.statusCode;
                 data.body = body;
-                postid = data.body._id;
                 done();
             });
         });
@@ -203,7 +203,6 @@ describe("Subreddits testing", function () {
             function(error, request, body){
                 data.status = request.statusCode;
                 data.body = body;
-                postid = data.body._id;
                 done();
             });
         });
@@ -232,7 +231,6 @@ describe("Subreddits testing", function () {
             function(error, request, body){
                 data.status = request.statusCode;
                 data.body = body;
-                postid = data.body._id;
                 done();
             });
         });
@@ -260,8 +258,6 @@ describe("Subreddits testing", function () {
             function(error, request, body){
                 data.status = request.statusCode;
                 data.body = body;
-                console.log(data);
-                postid = data.body._id;
                 done();
             });
         });
@@ -293,7 +289,7 @@ describe("Subreddits testing", function () {
             function(error, response, body){
                 data.status = response.statusCode;
                 data.body = body;
-                postid = data.body._id;
+                postid2 = data.body._id;
                 done();
             });
         });
@@ -305,34 +301,109 @@ describe("Subreddits testing", function () {
         });
 
         it("Creating a post inside subreddit database test", function(){
-            post.findOne({_id: postid}, function(err, record){
+            post.findOne({_id: postid2}, function(err, record){
                 expect(record).not.toBe(null);
             });
         });
+    });
+
+    describe("Upvoting a post inside subreddit", function() {
+        let data = {};
+        let body = {"upvote": true}
+        beforeAll(function(done){
+
+            request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+            {json:true, body: body, headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                done();
+            });
+        });
+
+        it("Upvoting a post inside subreddit status test", function(){
+            expect(data.status).toBe(200);
+            //expect(data.body.title).toBe("AskingAlexandria"); IT RETURNS OLD POST THAT WAS UPDATED
+
+        });
+
+        it("Upvoting a post inside subreddit database test", function(){
+            post.findOne({_id: postid, votes: 1}, function(err, record){
+                expect(record).not.toBe(null);
+            });
+        });
+
     });
 
     describe("Listing posts inside subreddit", function() {
         let data = {};
         beforeAll(function(done){
 
-            request.delete(`http://127.0.0.1:4000/sr/Metal/thread/${postid}`,
+            request.get(`http://127.0.0.1:4000/sr/Metal/listing/top`,
             {json:true,headers: head},
             function(error, request, body){
                 data.status = request.statusCode;
                 data.body = body;
-                postid = data.body._id;
+                done();
+            });
+        });
+
+        it("Listing posts inside subreddit status test", function(){
+            expect(data.status).toBe(200);
+            expect(data.body.postList[0].title).toBe("DemonHunter");
+
+        });
+
+    });
+
+    describe("Unvoting a post inside subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+
+            request.delete(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+            {json:true, headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                done();
+            });
+        });
+
+        it("Unvoting a post inside subreddit status test", function(){
+            expect(data.status).toBe(200);
+            //expect(data.body.title).toBe("AskingAlexandria"); IT RETURNS OLD POST THAT WAS UPDATED
+
+        });
+
+        it("Unvoting a post inside subreddit database test", function(){
+            post.findOne({_id: postid, votes: 0}, function(err, record){
+                expect(record).not.toBe(null);
+            });
+        });
+
+    });
+
+    describe("Deleting a post inside subreddit", function() {
+        let data = {};
+        beforeAll(function(done){
+
+            request.delete(`http://127.0.0.1:4000/sr/Metal/thread/${postid2}`,
+            {json:true,headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
                 done();
             });
         });
 
         it("Deleting a post inside subreddit status test", function(){
             expect(data.status).toBe(200);
-            expect(data.body.posts.length).toBe(0);
+            expect(data.body.posts.length).toBe(1);
 
         });
 
         it("Deleting a post inside subreddit database test", function(){
-            post.findOne({_id: postid, title: "AskingAlexandria"}, function(err, record){
+            post.findOne({_id: postid2}, function(err, record){
                 expect(record).toBe(null);
             });
         });
@@ -348,7 +419,6 @@ describe("Subreddits testing", function () {
             function(error, request, body){
                 data.status = request.statusCode;
                 data.body = body;
-                postid = data.body._id;
                 done();
             });
         });
@@ -360,7 +430,7 @@ describe("Subreddits testing", function () {
         });
 
         it("Deleting a post inside subreddit database test", function(){
-            post.findOne({_id: postid, title: "AskingAlexandria"}, function(err, record){
+            post.findOne({_id: postid}, function(err, record){
                 expect(record).toBe(null);
             });
         });
