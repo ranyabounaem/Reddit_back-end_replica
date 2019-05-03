@@ -708,6 +708,26 @@ describe('Server', function () {
         it("Useless", () => {
           expect(1).toBe(1);
         });
+
+        describe("Upvoting a post inside subreddit", function() {
+          let data = {};
+          let body = {"upvote": true}
+          beforeAll(function(done){
+    
+              request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+              {json:true, body: body, headers: atwaToken},
+              function(error, request, body){
+                  data.status = request.statusCode;
+                  data.body = body;
+                  done();
+              });
+          });
+    
+          it("Useless", () => {
+            expect(1).toBe(1);
+          });
+        });
+
       });
     });
   });
@@ -733,6 +753,26 @@ describe('Server', function () {
     it("Useless", () => {
       expect(1).toBe(1);
     });
+
+    describe("Upvoting a post inside subreddit", function() {
+      let data = {};
+      let body = {"upvote": true}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          {json:true, body: body, headers: atwaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+    });
+
     describe("posting a new  comment", () => {
       let data = {};
       let testBody = {
@@ -798,6 +838,26 @@ describe('Server', function () {
     it("Useless", () => {
       expect(1).toBe(1);
     });
+
+    describe("Upvoting a post inside subreddit", function() {
+      let data = {};
+      let body = {"upvote": true}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          {json:true, body: body, headers: atwaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+    });
+
     describe("posting a new  comment", () => {
       let data = {};
       let testBody = {
@@ -862,6 +922,25 @@ describe('Server', function () {
       expect(1).toBe(1);
     });
 
+    describe("Upvoting a post inside subreddit", function() {
+      let data = {};
+      let body = {"upvote": true}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          {json:true, body: body, headers: atwaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+    });
+
   });
 
   describe("Creating 1st post inside 3rd subreddit", function () {
@@ -885,6 +964,27 @@ describe('Server', function () {
     it("Useless", () => {
       expect(1).toBe(1);
     });
+
+    describe("Upvoting a post inside subreddit", function() {
+      let data = {};
+      let body = {"upvote": true}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          {json:true, body: body, headers: atwaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+  });
+
     describe("posting a new  comment", () => {
       let data = {};
       let testBody = {
@@ -930,6 +1030,44 @@ describe('Server', function () {
     it("Useless", () => {
       expect(1).toBe(1);
     });
+
+    describe("Upvoting a post inside subreddit", function() {
+      let data = {};
+      let body = {"upvote": true}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          {json:true, body: body, headers: aliToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+      describe("Upvoting a post inside subreddit", function() {
+        let data = {};
+        let body = {"upvote": true}
+        beforeAll(function(done){
+  
+            request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+            {json:true, body: body, headers: atwaToken},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                done();
+            });
+        });
+  
+        it("Useless", () => {
+          expect(1).toBe(1);
+        });
+      });
+
     describe("posting a new  comment", () => {
       let data = {};
       let testBody = {
@@ -975,6 +1113,46 @@ describe('Server', function () {
     it("Useless", () => {
       expect(1).toBe(1);
     });
+  });
+
+    describe("Upvoting a post inside subreddit", function() {
+      let data = {};
+      let body = {"upvote": true}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          {json:true, body: body, headers: captainmagedToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+    });
+
+    describe("Upvoting a post inside subreddit", function() {
+      let data = {};
+      let body = {"upvote": true}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          {json:true, body: body, headers: atwaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+    });
+
     describe("posting a new  comment", () => {
       let data = {};
       let testBody = {
@@ -1099,6 +1277,26 @@ describe('Server', function () {
     it("Useless", () => {
       expect(1).toBe(1);
     });
+
+    describe("Upvoting a post inside subreddit", function() {
+      let data = {};
+      let body = {"upvote": true}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          {json:true, body: body, headers: atwaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+    });
+
     describe("posting a new  comment", () => {
       let data = {};
       let testBody = {
