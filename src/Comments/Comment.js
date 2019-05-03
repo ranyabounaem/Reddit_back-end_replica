@@ -36,7 +36,7 @@ class CommentHandler {
      * @param {Object} res The response.
      * @returns {JSON} a json response contains the comment id
      */
-    handlePostComment(req, res) {
+    handlePostComment(req, res, emitter) {
         //Checking if the sent string is a valid ObjectID (12 or 24 bytes)
         if (!ObjectId.isValid(req.params.id)) {
             res.status(400).send({ 'error': 'This is not a valid ID' });
@@ -79,7 +79,7 @@ class CommentHandler {
                                 locked: l,
                                 reply: false,
                                 subreddit: retPost.subredditName
-                            })
+                            });
                             c.save();
                             if (getUser(req) != retPost.creatorUsername) {
                                 const n = new notification({
@@ -90,6 +90,14 @@ class CommentHandler {
                                     message: getUser(req) + ' has commented on your post',
                                     date: Date()
                                 })
+                                emitter.emit("notification", {
+                                    type: 'post',
+                                    username: retPost.creatorUsername,
+                                    read: false,
+                                    sourceID: retPost._id,
+                                    message: getUser(req) + ' has commented on your post',
+                                    date: Date()
+                                });
                                 n.save();
                             }
                             res.status(200).send({ c_id: c._id });
@@ -145,8 +153,18 @@ class CommentHandler {
                                         sourceID: retComment._id,
                                         message: getUser(req) + ' has replies on your comment',
                                         date: Date()
-                                    })
+                                    });
+
                                     n.save();
+
+                                    emitter.emit("notification", {
+                                        type: 'comment',
+                                        username: retComment.username,
+                                        read: false,
+                                        sourceID: retComment._id,
+                                        message: getUser(req) + ' has replies on your comment',
+                                        date: Date()
+                                    });
                                 }
                                 res.status(200).send({ c_id: c._id });
                             }
@@ -217,7 +235,7 @@ class CommentHandler {
                             if (comments == null) {
                                 res.status(404).send({ 'error': 'There are no Comments for this Thread' })
                             } else {
-                                res.status(200).send({comments});
+                                res.status(200).send({ comments });
                             }
                         });
                     }
@@ -286,7 +304,7 @@ class CommentHandler {
                             //edit the comment after making all the validations
                             Comment.findOneAndUpdate({ _id: ID },
                                 { content: req.body.content, locked: l, spoiler: s }).then(function (retComment) {
-                                    res.status(200).send({"message":"update successful"});
+                                    res.status(200).send({ "message": "update successful" });
                                 });
                         }
                     }
@@ -346,7 +364,7 @@ class CommentHandler {
                                                         res.status(500);
                                                         res.send({ "error": "internalServerError" });
                                                     } else {
-                                                        res.status(200).send({"message":"Delete Successful"});
+                                                        res.status(200).send({ "message": "Delete Successful" });
                                                     }
                                                 });
                                             }
@@ -394,7 +412,7 @@ class CommentHandler {
                                         retUser.save();
                                     });
                                     v.save();
-                                    res.status(200).json({'message':'The comment has been upvoted successfully'});
+                                    res.status(200).json({ 'message': 'The comment has been upvoted successfully' });
 
                                     //creating a new instace (downvote) & decrementing the votes of the comment
                                 } else if (req.body.direction === -1) {
@@ -411,7 +429,7 @@ class CommentHandler {
                                         retUser.save();
                                     });
                                     v.save();
-                                    res.status(200).json({'message':'The comment has been downvoted successfully'});
+                                    res.status(200).json({ 'message': 'The comment has been downvoted successfully' });
 
                                     //you can't unvote if this comment wasn't voted before by this user
                                 } else if (req.body.direction === 0) {
@@ -434,7 +452,7 @@ class CommentHandler {
                                             retUser.karma = retUser.karma + 2;
                                             retUser.save();
                                         });
-                                        res.status(200).send({'message':'The comment has been upvoted successfully'});
+                                        res.status(200).send({ 'message': 'The comment has been upvoted successfully' });
                                     }
                                 } else if (req.body.direction === -1) {
                                     //updating the vote to downvoted if it wasn't already downvoted
@@ -450,7 +468,7 @@ class CommentHandler {
                                             retUser.karma = retUser.karma - 2;
                                             retUser.save();
                                         });
-                                        res.status(200).json({'message':'The comment has been downvoted successfully'});
+                                        res.status(200).json({ 'message': 'The comment has been downvoted successfully' });
                                     }
                                 } else if (req.body.direction === 0) {
                                     //updating the vote to unvoted and deleting the instance from the vote schema
@@ -476,7 +494,7 @@ class CommentHandler {
                                             }
                                             retComment.save();
                                             res.status(200);
-                                            res.json({"message":"The comment has been unvoted successfully"});
+                                            res.json({ "message": "The comment has been unvoted successfully" });
                                         }
                                     });
                                 }
@@ -511,7 +529,7 @@ class CommentHandler {
                         post: false
                     })
                     r.save();
-                    res.status(200).json({'message':'You have successfully reported this comment'});
+                    res.status(200).json({ 'message': 'You have successfully reported this comment' });
                 }
             });
         }

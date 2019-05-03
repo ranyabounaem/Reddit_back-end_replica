@@ -9,6 +9,8 @@ var bcrypt = require('bcrypt');
 const saltRounds = 10;
 const commentHandler = require('../Comments/Comment').cm;
 
+const nodeMailer = require('nodemailer');
+
 async function checkIfBlockedByMe(user, username) {
 
   const blockedUser = await user.blockedUsers.find(function (userInBlockedArray) {
@@ -100,12 +102,6 @@ function acceptRequest(user, fUser) {
  * await SubscribeGuestUser()
  * @returns {Promise}
  */
-
-// let testBody = {
-//   Username: "guest",
-//   Password: "123456789",
-//   Email: "guest@memestock.cool"
-// };
 async function SubscribeGuestUser() {
   await User.findOne({ Username: "guest" }, function (err) {
     if (err) {
@@ -114,9 +110,9 @@ async function SubscribeGuestUser() {
   }).then(async function (user) {
     const subreddits = await sr.find({});
     const srNames = subreddits.map(sr => sr.name);
-    
+
     user.Subscriptions = srNames;
-    
+
     user.save(function (err) {
       if (err) {
         throw new Error("Couldn't save it...");
@@ -135,15 +131,21 @@ class UserHandler {
       return false;
     }
   }
-  async getGuestToken(req, res){
-    try{
+  /**
+   * @description Subscribes guest User and sends its token
+   * @param {Object<Request>} req 
+   * @param {Object<Response>} res 
+   * @returns {JSON}
+   */
+  async getGuestToken(req, res) {
+    try {
       await SubscribeGuestUser();
-      const guest = await User.findOne({Username: "guest"});
+      const guest = await User.findOne({ Username: "guest" });
       const token = await JWTconfig.getToken(guest);
-      res.status(200).send({"Token": token});  
-    }catch(e){
+      res.status(200).send({ "Token": token });
+    } catch (e) {
       console.error(e);
-      res.status(404).send({"message": "No one ran the tests, or Atwa needs to die... Now? Please?..."});  
+      res.status(404).send({ "message": "No one ran the tests, or Atwa needs to die... Now? Please?..." });
     }
   }
   /**
@@ -607,7 +609,7 @@ class UserHandler {
   *     @function addFriend
   *     @returns {JSON} the response for the request
   */
-  async addFriend(req, res) {
+  async addFriend(req, res, emitter) {
     /**
     *    This finds the user that is going to Send a friend request using the username in token
     */
@@ -668,7 +670,15 @@ class UserHandler {
               sourceID: null,
               message: user.Username + ' has sent you a friend request',
               date: Date()
-            })
+            });
+            emitter.emit("notification", {
+              type: 'friendRequest',
+              username: userToAdd.Username,
+              read: false,
+              sourceID: null,
+              message: user.Username + ' has sent you a friend request',
+              date: Date()
+            });
             n.save();
             AddReq(user, userToAdd);
             res.status(200).send({ message: "Friend request Sent" });
@@ -1005,6 +1015,85 @@ class UserHandler {
       const flairId = flairsReturned._id;
       const flairDelete = await flair.findOneAndDelete({ _id: flairId });
       res.status(200).send({ message: "flair removed" });
+    }
+  }
+
+  /**
+     *     a function send email with a new password
+     *     @function forgetPassword
+     *     @returns {JSON} the response for the request
+     */
+  async forgetPassword(req, res) {
+
+    /**
+    *    This finds the user that will be sent the recovery email and checks if he even exists
+    * 
+    */
+    const username = req.params.username;
+    const user = await User.findOne({ Username: username });
+
+    if (!user) { res.status(404).send({ error: "User doesnt exist" }) }
+
+    else {
+
+      /**
+    *    genetartes a random password
+    * 
+    */
+      const userEmail = user.Email;
+      const newPass = Math.floor((Math.random() * 10000) * Math.random() * 10000 * (Math.random() * 10000));
+      const newPassString = newPass.toString();
+
+      /**
+      *   setting up nodemailer with the memestock email
+      * 
+      */
+      const trans = nodeMailer.createTransport
+        ({
+          service: 'gmail',
+          secure: false,
+          port: 25,
+          auth:
+          {
+            user: "memestockhelp@gmail.com",
+            pass: "Meme123456789"
+          },
+          tls: { rejectUnauthorized: false }
+
+        });
+
+      const helperOptions =
+      {
+        from: '"Memestock" = memestockhelp@gmail.com',
+        to: userEmail,
+        subject: "Recover Password",
+        text: "Your new password is:  " + newPass + "\n You are advised to change it when you can.\n \n  \n  Memestock help"
+      };
+
+
+      trans.sendMail(helperOptions, (err, info) => {
+        if (err) { res.send({ error: "mailing service is currently down" }) }
+
+
+        /**
+       *    This sets password to the new random passwrod that was sent in the email
+       * 
+       */
+        else {
+          bcrypt.hash(newPassString, saltRounds).then(function (hash) {
+
+            User.findOneAndUpdate(
+              { Username: username },
+              { Password: hash }
+            ).then(function (RetUser) {
+              res.status(200).send({ message: "Please check your registered email" });
+            });
+          })
+        }
+      });
+
+
+
     }
   }
 
