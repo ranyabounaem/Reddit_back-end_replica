@@ -289,6 +289,258 @@ describe('Server', function () {
   });
 
 
+  // Messaging AUTOMATION //
+
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "mostafa_hazem", subject: "VIP", messageBody: "Please mostafa Check your phone"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post('http://localhost:4000/me/pm/compose',
+        { json: true, headers: husseinToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "mostafa_hazem", subject: "New post", messageBody: "new post been posted check it mostafa"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post('http://localhost:4000/me/pm/compose',
+        { json: true, headers: husseinToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "mostafa_hazem", subject: "upvote post", messageBody: "upvoteon the new  post been posted mostafa"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post('http://localhost:4000/me/pm/compose',
+        { json: true, headers: husseinToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+
+
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "Ali_yasser", subject: "VIP", messageBody: "Please ali Check your phone"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post(  'http://localhost:4000/me/pm/compose',
+        { json: true, headers: mostafaToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "Ali_yasser", subject: "New post", messageBody: "new post been posted check it ali"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post(  'http://localhost:4000/me/pm/compose',
+        { json: true, headers: mostafaToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "Ali_yasser", subject: "upvote post", messageBody: "upvoteon the new  post been posted ali"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post(  'http://localhost:4000/me/pm/compose',
+        { json: true, headers: mostafaToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+
+  //////////////////////////////////
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "Hussein_ehab", subject: "VIP", messageBody: "Please hussein Check your phone"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post(  'http://localhost:4000/me/pm/compose',
+        { json: true, headers: aliToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "Hussein_ehab", subject: "New post", messageBody: "new post been posted check it hussein"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post(  'http://localhost:4000/me/pm/compose',
+        { json: true, headers: aliToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "Hussein_ehab", subject: "upvote post", messageBody: "upvoteon the new  post been posted hussein"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post(  'http://localhost:4000/me/pm/compose',
+        { json: true, headers: aliToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+  /////////////////////////////////////////
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "zaghwkarim", subject: "VIP", messageBody: "Please karim Check your phone"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post(  'http://localhost:4000/me/pm/compose',
+        { json: true, headers: atwaToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "atwa_leader", subject: "New post", messageBody: "new post been posted check it atwa"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post(  'http://localhost:4000/me/pm/compose',
+        { json: true, headers: zaghwToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+
+  describe("composing new  messages automation ", () => {
+
+    let messageTest1 = {
+       receiverUsername: "zaghwkarim", subject: "upvote post", messageBody: "upvoteon the new  post been posted zaghw"
+    };
+    let data = {};
+    beforeAll(function (done) {  // mocking the post request with message test
+      request.post(  'http://localhost:4000/me/pm/compose',
+        { json: true, headers: atwaToken, body: messageTest1 }, function (error, response, body) {
+          data.status = response.statusCode;
+          data.body = body;
+          done();
+        });
+    });
+
+    it("dummy check for creation", () => {
+      expect(1).toBe(1);
+    })
+
+  });
+
   //// SUBREDDITS AUTOMATION ////
 
 
@@ -788,20 +1040,20 @@ describe('Server', function () {
     describe("posting a new  comment", () => {
       let data = {};
       let testBody = {
-          content: "Well someone didn't like Americas's",
-          spoiler: true,
-          locked: false,
-          reply: false
+        content: "Well someone didn't like Americas's",
+        spoiler: true,
+        locked: false,
+        reply: false
       };
       beforeAll((done) => {
-          request.post("http://localhost:4000/comment/" + postid,   //th_id is the thread created above
-              { json: true, body: testBody, headers: sabekToken },
-              (err, res, body) => {
-                  data.body = body;
-                  data.status = res.statusCode;
-                  done();
-              });
-      });   
+        request.post("http://localhost:4000/comment/" + postid,   //th_id is the thread created above
+          { json: true, body: testBody, headers: sabekToken },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            done();
+          });
+      });
       it("Useless", () => {
         expect(1).toBe(1);
       });

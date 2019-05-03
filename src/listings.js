@@ -20,7 +20,7 @@ class listings {
        * @param {string} owner   the username of the user to retrieve list for
        * @param {Number} lastid the last id of the post retrieved to get its date to avoid duplication
        * @example
-       * // returns   array of 15 posts maximum depending on the start position
+       * // returns   array of 15 posts maximum depending on last id
        * listings.listingPostsbyNew('kefah', 0);
        * @returns {Object[]}    returns array of 15 posts maximum depending on the last post message
        * @example
@@ -53,11 +53,11 @@ class listings {
        * @param {string} hotindex the index of the hot of the last post
        * @param {string} lastid the lastid of the post displayed on user end
        * @example
-       * // returns   array of 15 posts maximum depending on the start position
-       * listings.listingPostsbyHot('kefah', 92323);
+       * // returns   array of 15 posts maximum depending on last id and hot index
+       * listings.listingPostsbyHot('kefah', 5cc45ae0994cc91d02b6dfc1,92323);
        * @returns {Object[]}    returns array of 15 posts maximum depending on the last post
        * @example
-       *  listings.listingPostsbyHot('kefah', 94222);
+       *  listings.listingPostsbyHot('kefah',5cc45ae0994cc91d02b6dfc2 ,94222);
        * @returns {Object[]}  
        */
 
@@ -128,7 +128,7 @@ class listings {
    * @param {String} results   contains the array of posts but in an undesired format
    *  @example
    * // returns   array of 15 posts maximum 
-   * listings.addhotPosts([ { _id: 93843.35235244011, value:   { _id: 5cc395c5ab67c207a6abfe29,title: 'Avengers: Endgame',  body: 'Unpopular opinion: Endgame is super overrated.', creatorUsername: 'captainmaged', subredditName: 'Movies', postDate: 2019-04-26T23:35:33.951Z, __v: 0, votes: 2 } }]);
+   * listings.addhotPosts(['travel','food'],[ { _id: 93843.35235244011, value:   { _id: 5cc395c5ab67c207a6abfe29,title: 'Avengers: Endgame',  body: 'Unpopular opinion: Endgame is super overrated.', creatorUsername: 'captainmaged', subredditName: 'Movies', postDate: 2019-04-26T23:35:33.951Z, __v: 0, votes: 2 } }],5cc45ae0994cc91d02b6dfc1,93292);
    * @returns {Object[]}    returns array of 15 posts maximum depending on the last post
    */
     async addhotPosts(subscribedSubbreddit, results, lastid, lasthot) {
@@ -196,7 +196,7 @@ class listings {
        * @param {string} lastvotes the last votes score for the last post on the user end
        * @param {string} lastid the last id of the last post in user ends
        * @example
-       * // returns   array of 15 posts maximum depending on the start position
+       * // returns   array of 15 posts maximum depending on the last post
        * listings.listingPostsbyTop('kefah',5cc45ae0994cc91d02b6dfc1 ,0);
        * @returns {Object[]}    returns array of 15 posts maximum depending on the last post
        * @example
@@ -319,7 +319,7 @@ class listings {
             }
             else {
                 res.status(404);
-                res.send({ "error": "postsNotFound" });
+                res.send({ error: 'postsNotFound' });
                 return;
             }
 
@@ -336,7 +336,7 @@ class listings {
             }
             else {
                 res.status(404);
-                res.send({ "error": "postsNotFound" });
+                res.send({ error: 'postsNotFound' });
                 return;
             }
         }
@@ -352,13 +352,13 @@ class listings {
             }
             else {
                 res.status(404);
-                res.send({ "error": "postsNotFound" });
+                res.send({ error: 'postsNotFound' });
                 return;
             }
         }
         else {
             res.status(500);
-            res.send({ "error": "internalServerError" });
+            res.send({ error: 'internalServerError' });
             return;
         }
 
