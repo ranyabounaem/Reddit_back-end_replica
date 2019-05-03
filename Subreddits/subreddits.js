@@ -39,7 +39,7 @@ class SR {
                 name: subredditName,
                 adminUsername: admin,
                 rules: subredditRules,
-                modUsername: req.body.modUsername,
+                modUsername: admin,
                 subredditFile: '/uploads/'+Date.now()+'.png',
                 bio: bio
                 //if(imageCheck) { subredditFile: req.file.path }
@@ -51,7 +51,14 @@ class SR {
 
                 }
                 else {
-                    res.status(200).send(record);
+                    User.findOne({ Username:admin}).then(function(user){
+
+                    user.moderates.push(subredditName);
+
+                      user.save(function(){res.status(200).send(record);}) 
+                      
+                    })
+                     
                 }
             });
         }
