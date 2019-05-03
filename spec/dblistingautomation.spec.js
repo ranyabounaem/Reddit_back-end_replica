@@ -1711,6 +1711,122 @@ describe('Server', function () {
 
 
 
+  describe("Create Flair", () => {
+    let data = {};
+    let testBody = {
+      srName:"Technology",
+      flair:"TechMaster"
+    };
+  
+    beforeAll(done => {
+      request.post(
+        "http://localhost:4000/user/CreateFlair",
+        { json: true, body: testBody ,headers:husseinToken },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if missing sr name", () => {
+
+    expect(1).toBe(1);
+
+    
+  });
+    
+  });
+
+
+  describe("Create Flair", () => {
+    let data = {};
+    let testBody = {
+      srName:"Education",
+      flair:"MathMaster"
+    };
+  
+    beforeAll(done => {
+      request.post(
+        "http://localhost:4000/user/CreateFlair",
+        { json: true, body: testBody ,headers:aliToken },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if missing sr name", () => {
+
+    expect(1).toBe(1);
+
+    
+  });
+    
+  });
+  describe("Create Flair", () => {
+    let data = {};
+    let testBody = {
+      srName:"Movies",
+      flair:"The new imdb"
+    };
+  
+    beforeAll(done => {
+      request.post(
+        "http://localhost:4000/user/CreateFlair",
+        { json: true, body: testBody ,headers:mostafaToken },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if missing sr name", () => {
+
+    expect(1).toBe(1);
+
+    
+  });
+    
+  });
+  describe("Create Flair", () => {
+    let data = {};
+    let testBody = {
+      srName:"Parenting",
+      flair:"Mother of 12"
+    };
+  
+    beforeAll(done => {
+      request.post(
+        "http://localhost:4000/user/CreateFlair",
+        { json: true, body: testBody ,headers:mostafaToken },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks if missing sr name", () => {
+
+    expect(1).toBe(1);
+
+    
+  });
+    
+  });
+
+
   // let postsarr = [{
   //     title: 'what is love',
   //     body: 'love is more than anything in the world love is love ',
