@@ -228,7 +228,7 @@ class CommentHandler {
         } else {
             let ID = new ObjectId(req.params.id);
             //if the ID sent is a Thread ID not a comment ID
-            if (!req.query.comment) {
+            if (req.query.comment == "false" || req.query.comment == undefined) {
                 //checking that the ID is in the database
                 Post.findOne({ _id: ID }).then(function (retPost) {
                     if (retPost == null) {

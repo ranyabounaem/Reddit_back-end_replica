@@ -13,10 +13,10 @@ class notificationHandler {
     handleGetNotification(req, res) {
         let user = getUser(req);
         let startPosition;
-        if (req.body.startPosition == undefined) {
+        if (req.query.startPosition == undefined) {
             startPosition = 0;
         } else {
-            startPosition = req.body.startPosition;
+            startPosition = req.query.startPosition;
         }
         notification.find({ username: user }).limit(15).skip(startPosition * 15).then(function (retNotifs) {
             if (retNotifs == null) {
