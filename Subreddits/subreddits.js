@@ -258,7 +258,7 @@ class SR {
                                         res.status(500).send({ 'error': 'internal server error' });
                                     }
                                     else {
-                                        res.status(200).json(record.subscribed_users);
+                                        res.status(200).send({subscribed_users: record.subscribed_users});
                                     };
                                 });
                             });
@@ -371,7 +371,7 @@ class SR {
                                     res.status(500).send({ 'error': 'internal server error' });
                                 }
                                 else {
-                                    res.status(200).json(record.posts);
+                                    res.status(200).send(record);
                                 };
                             });
                         });
