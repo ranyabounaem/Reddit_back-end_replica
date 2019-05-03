@@ -649,6 +649,49 @@ describe('Server', function () {
     it("Useless", () => {
       expect(1).toBe(1);
     });
+
+    describe("Reporting a post inside subreddit", function() {
+      let data = {};
+      let body = {reportText: "This post is fake news, Asus are thieves."}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+          {json:true, body:body, headers: mostafaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
+
+    describe("Reporting a post inside subreddit", function() {
+      let data = {};
+      let body = {reportText: "Definitely fake."}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+          {json:true, body:body, headers: aliToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
+
+
+
     describe("posting a new comment", () => {
       let data = {};
       let testBody = {
@@ -714,7 +757,7 @@ describe('Server', function () {
           let body = {"upvote": true}
           beforeAll(function(done){
     
-              request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+              request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/vote`,
               {json:true, body: body, headers: atwaToken},
               function(error, request, body){
                   data.status = request.statusCode;
@@ -759,7 +802,7 @@ describe('Server', function () {
       let body = {"upvote": true}
       beforeAll(function(done){
 
-          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/vote`,
           {json:true, body: body, headers: atwaToken},
           function(error, request, body){
               data.status = request.statusCode;
@@ -771,6 +814,26 @@ describe('Server', function () {
       it("Useless", () => {
         expect(1).toBe(1);
       });
+    });
+
+    describe("Reporting a post inside subreddit", function() {
+      let data = {};
+      let body = {reportText: "Definitely fake."}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+          {json:true, body:body, headers: aliToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
     });
 
     describe("posting a new  comment", () => {
@@ -844,7 +907,7 @@ describe('Server', function () {
       let body = {"upvote": true}
       beforeAll(function(done){
 
-          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          request.post(`http://127.0.0.1:4000/sr/Parenting/thread/${postid}/vote`,
           {json:true, body: body, headers: atwaToken},
           function(error, request, body){
               data.status = request.statusCode;
@@ -856,6 +919,46 @@ describe('Server', function () {
       it("Useless", () => {
         expect(1).toBe(1);
       });
+    });
+
+    describe("Reporting a post inside subreddit", function() {
+      let data = {};
+      let body = {reportText: "This creator is insane."}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+          {json:true, body:body, headers: aliToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
+
+    describe("Reporting a post inside subreddit", function() {
+      let data = {};
+      let body = {reportText: "Please ban the creator, he must be a serial killer."}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+          {json:true, body:body, headers: mostafaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
     });
 
     describe("posting a new  comment", () => {
@@ -927,7 +1030,7 @@ describe('Server', function () {
       let body = {"upvote": true}
       beforeAll(function(done){
 
-          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          request.post(`http://127.0.0.1:4000/sr/Parenting/thread/${postid}/vote`,
           {json:true, body: body, headers: atwaToken},
           function(error, request, body){
               data.status = request.statusCode;
@@ -939,6 +1042,46 @@ describe('Server', function () {
       it("Useless", () => {
         expect(1).toBe(1);
       });
+    });
+
+    describe("Reporting a post inside subreddit", function() {
+      let data = {};
+      let body = {reportText: "This creator is insane."}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+          {json:true, body:body, headers: aliToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
+
+    describe("Reporting a post inside subreddit", function() {
+      let data = {};
+      let body = {reportText: "Please ban the creator, he must be a serial killer."}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+          {json:true, body:body, headers: mostafaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
     });
 
   });
@@ -970,7 +1113,7 @@ describe('Server', function () {
       let body = {"upvote": true}
       beforeAll(function(done){
 
-          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          request.post(`http://127.0.0.1:4000/sr/Education/thread/${postid}/vote`,
           {json:true, body: body, headers: atwaToken},
           function(error, request, body){
               data.status = request.statusCode;
@@ -982,6 +1125,46 @@ describe('Server', function () {
       it("Useless", () => {
         expect(1).toBe(1);
       });
+
+  });
+
+  describe("Reporting a post inside subreddit", function() {
+    let data = {};
+    let body = {reportText: "Please ban this no lifer."}
+    beforeAll(function(done){
+
+        request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+        {json:true, body:body, headers: aliToken},
+        function(error, request, body){
+            data.status = request.statusCode;
+            data.body = body;
+            done();
+        });
+    });
+
+    it("Useless", () => {
+      expect(1).toBe(1);
+    });
+
+  });
+
+  describe("Reporting a post inside subreddit", function() {
+    let data = {};
+    let body = {reportText: "Ban this nerd."}
+    beforeAll(function(done){
+
+        request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+        {json:true, body:body, headers: mostafaToken},
+        function(error, request, body){
+            data.status = request.statusCode;
+            data.body = body;
+            done();
+        });
+    });
+
+    it("Useless", () => {
+      expect(1).toBe(1);
+    });
 
   });
 
@@ -1036,7 +1219,7 @@ describe('Server', function () {
       let body = {"upvote": true}
       beforeAll(function(done){
 
-          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          request.post(`http://127.0.0.1:4000/sr/Education/thread/${postid}/vote`,
           {json:true, body: body, headers: aliToken},
           function(error, request, body){
               data.status = request.statusCode;
@@ -1048,13 +1231,14 @@ describe('Server', function () {
       it("Useless", () => {
         expect(1).toBe(1);
       });
+      
 
       describe("Upvoting a post inside subreddit", function() {
         let data = {};
         let body = {"upvote": true}
         beforeAll(function(done){
   
-            request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+            request.post(`http://127.0.0.1:4000/sr/Education/thread/${postid}/vote`,
             {json:true, body: body, headers: atwaToken},
             function(error, request, body){
                 data.status = request.statusCode;
@@ -1120,7 +1304,7 @@ describe('Server', function () {
       let body = {"upvote": true}
       beforeAll(function(done){
 
-          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          request.post(`http://127.0.0.1:4000/sr/Movies/thread/${postid}/vote`,
           {json:true, body: body, headers: captainmagedToken},
           function(error, request, body){
               data.status = request.statusCode;
@@ -1134,12 +1318,52 @@ describe('Server', function () {
       });
     });
 
+    describe("Reporting a post inside subreddit", function() {
+      let data = {};
+      let body = {reportText: "This guy should be banned for hating on avengers."}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+          {json:true, body:body, headers: aliToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
+
+    describe("Reporting a post inside subreddit", function() {
+      let data = {};
+      let body = {reportText: "Hater."}
+      beforeAll(function(done){
+
+          request.post(`http://127.0.0.1:4000/sr/Technology/thread/${postid}/report`,
+          {json:true, body:body, headers: mostafaToken},
+          function(error, request, body){
+              data.status = request.statusCode;
+              data.body = body;
+              done();
+          });
+      });
+
+      it("Useless", () => {
+        expect(1).toBe(1);
+      });
+
+    });
+
     describe("Upvoting a post inside subreddit", function() {
       let data = {};
       let body = {"upvote": true}
       beforeAll(function(done){
 
-          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          request.post(`http://127.0.0.1:4000/sr/Movies/thread/${postid}/vote`,
           {json:true, body: body, headers: atwaToken},
           function(error, request, body){
               data.status = request.statusCode;
@@ -1152,6 +1376,7 @@ describe('Server', function () {
         expect(1).toBe(1);
       });
     });
+    
 
     describe("posting a new  comment", () => {
       let data = {};
@@ -1283,7 +1508,7 @@ describe('Server', function () {
       let body = {"upvote": true}
       beforeAll(function(done){
 
-          request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+          request.post(`http://127.0.0.1:4000/sr/Movies/thread/${postid}/vote`,
           {json:true, body: body, headers: atwaToken},
           function(error, request, body){
               data.status = request.statusCode;

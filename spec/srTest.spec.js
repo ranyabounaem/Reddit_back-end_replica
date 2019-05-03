@@ -3,6 +3,7 @@ const request = require('request');
 const mongoose = require('mongoose');
 const usr = require("../models/UserSchema");
 const srs = require('../models/subredditsSchema');
+const report = require('../models/Reports');
 const subreddit=srs.Subreddit;
 const post = srs.SubredditPostSchema;
 const head = {'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJyYW55eSIsImlhdCI6MTU1NTI5MTc2M30.voztNGiGeXV0gAS6sFkipFf9Sczuq917c6S6RGhnCeo'};
@@ -377,6 +378,34 @@ describe("Subreddits testing", function () {
 
         it("Unvoting a post inside subreddit database test", function(){
             post.findOne({_id: postid, votes: 0}, function(err, record){
+                expect(record).not.toBe(null);
+            });
+        });
+
+    });
+
+    describe("Reporting a post inside subreddit", function() {
+        let data = {};
+        let body = {reportText: "DemonHunter created an album that's full of racism."}
+        beforeAll(function(done){
+
+            request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/report`,
+            {json:true, body:body, headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                done();
+            });
+        });
+
+        it("Reporting a post inside subreddit status test", function(){
+            expect(data.status).toBe(200);
+            //expect(data.body.title).toBe("AskingAlexandria"); IT RETURNS OLD POST THAT WAS UPDATED
+
+        });
+
+        it("Reporting a post inside subreddit database test", function(){
+            report.findOne({reportedId: postid, post: true}, function(err, record){
                 expect(record).not.toBe(null);
             });
         });
