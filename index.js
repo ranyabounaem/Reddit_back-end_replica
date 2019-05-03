@@ -2013,16 +2013,15 @@ app.delete("/sr/:srName/subs", passport.authenticate('jwt', { session: false }),
 * @apiSuccess {string[]} subscribersList Returns the new subscribers list.
 */
 
+app.get("/sr/:srName/listing/:type", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.listPost(req, res));
 
 /**
-* @api {get} /sr/:SubredditName/listing/:type   ListSubreddits   Generate a list of subreddits 
+* @api {get} /sr/:srName/listing/:type   ListSubreddits   Generate a list of subreddits 
 * @apiName ListSubreddits
 * @apiGroup SrService
 *
 * @apiParam {string} Token.
-* @apiParam {string} SubredditName Name of subreddit
-* @apiParam {string} Type List according to certain type
-* @apiSuccess {string[]} SubredditIDs Returns list of sorted subreddits
+* @apiSuccess {string[]} List of posts sorted according to type.
 */
 
 

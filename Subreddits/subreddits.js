@@ -774,5 +774,62 @@ class SR {
         }
     }
 
+    /**
+    * @function listPost
+    * @summary Listing post's information. 
+    * @param {object} Req -  Request
+    * @param {object} Res - Response
+    * @returns {JSON} Returns the post's information as an object.
+    */
+
+   listPost(req, res) {
+
+        var subrName = req.params.srName;
+        var type = req.params.type;
+        var yesterday = Date.now() - 1000*60*60*24;
+        if(type)
+        {
+            if(type=="hot")
+            {
+                pt.find({subredditName: subrName, postDate:{$gt:yesterday}})
+                .sort({votes: -1})
+                .limit(5)
+                .exec( function(err, posts) {
+                    if (err) res.status(500).send(err);
+                    else{
+                    console.log(posts);
+                    res.status(200).send(posts);
+                    };
+                });
+            }
+            else if(type=="new")
+            {
+                pt.find({subredditName: subrName})
+                .sort({postDate: -1})
+                .limit(5)
+                .exec( function(err, posts) {
+                    if (err) res.status(500).send(err);
+                    else{
+                    console.log(posts);
+                    res.status(200).send(posts);
+                    };
+                });
+            }
+            else if(type == "top")
+            {
+                pt.find({subredditName: subrName})
+                .sort({votes: -1})
+                .limit(3)
+                .exec( function(err, posts) {
+                    if (err) res.status(500).send(err);
+                    else{
+                    console.log(posts);
+                    res.status(200).send(posts);
+                    };
+                });
+            };
+        };
+    };
+
 };
 module.exports = new SR();
