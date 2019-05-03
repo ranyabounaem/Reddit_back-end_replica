@@ -479,7 +479,7 @@ class UserHandler {
    *   returns a list of blocked username with status 200
    */
 
-  res.status(200).send(user.blockedUsers);
+  res.status(200).send({Blocked :user.blockedUsers});
 
 }
 
