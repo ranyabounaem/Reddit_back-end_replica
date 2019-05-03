@@ -205,13 +205,14 @@ describe("Subreddits testing", function () {
                 data.status = request.statusCode;
                 data.body = body;
                 postid = data.body._id;
+                console.log(data);
                 done();
             });
         });
 
         it("Deleting a post inside subreddit status test", function(){
             expect(data.status).toBe(200);
-            expect(data.body.length).toBe(0);
+            expect(data.body.posts.length).toBe(0);
 
         });
 
@@ -240,8 +241,9 @@ describe("Subreddits testing", function () {
         });
 
         it("Subscribe to a subreddit status test", function(){
+            console.log(data);
             expect(data.status).toBe(200);
-            expect(data.body.length).toBe(1);
+            expect(data.body.subscribed_users.length).toBe(1);
 
         });
 
