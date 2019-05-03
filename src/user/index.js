@@ -666,6 +666,7 @@ class UserHandler {
             const n = new notification({
               type: 'friendRequest',
               username: userToAdd.Username,
+              fromUser: user.Username,
               read: false,
               sourceID: null,
               message: user.Username + ' has sent you a friend request',
@@ -674,6 +675,7 @@ class UserHandler {
             emitter.emit("notification", {
               type: 'friendRequest',
               username: userToAdd.Username,
+              fromUser: user.Username,
               read: false,
               sourceID: null,
               message: user.Username + ' has sent you a friend request',
