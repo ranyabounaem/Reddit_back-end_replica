@@ -382,6 +382,7 @@ class PM {
                         const n = new notification({
                            type: 'message',
                            username: receiverUsername,
+                           fromUser: owner,
                            read: false,
                            sourceID: null,
                            message: owner + ' has sent you a message',
@@ -391,6 +392,7 @@ class PM {
                         emitter.emit("notification", {
                            type: 'message',
                            username: receiverUsername,
+                           fromUser: owner,
                            read: false,
                            sourceID: null,
                            message: owner + ' has sent you a message',

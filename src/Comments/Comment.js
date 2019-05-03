@@ -85,6 +85,7 @@ class CommentHandler {
                                 const n = new notification({
                                     type: 'post',
                                     username: retPost.creatorUsername,
+                                    fromUser: getUser(req),
                                     read: false,
                                     sourceID: retPost._id,
                                     message: getUser(req) + ' has commented on your post',
@@ -93,6 +94,7 @@ class CommentHandler {
                                 emitter.emit("notification", {
                                     type: 'post',
                                     username: retPost.creatorUsername,
+                                    fromUser: getUser(req),
                                     read: false,
                                     sourceID: retPost._id,
                                     message: getUser(req) + ' has commented on your post',
@@ -149,6 +151,7 @@ class CommentHandler {
                                     const n = new notification({
                                         type: 'comment',
                                         username: retComment.username,
+                                        fromUser: getUser(req),
                                         read: false,
                                         sourceID: retComment._id,
                                         message: getUser(req) + ' has replies on your comment',
@@ -160,6 +163,7 @@ class CommentHandler {
                                     emitter.emit("notification", {
                                         type: 'comment',
                                         username: retComment.username,
+                                        fromUser: getUser(req),
                                         read: false,
                                         sourceID: retComment._id,
                                         message: getUser(req) + ' has replies on your comment',
@@ -252,7 +256,7 @@ class CommentHandler {
                             if (comments == null) {
                                 res.status(404).send({ 'error': 'There are no Replies for this Comment' })
                             } else {
-                                res.status(200).send(comments);
+                                res.status(200).send({comments});
                             }
                         });
                     }

@@ -194,7 +194,7 @@ class SR {
                         subredditName: subrName,
                         postFile: imgdata ? '/uploads/'+Date.now()+'.png' : "none",
                         //if(imageCheck) { subredditFile: req.file.path },
-                        //if(spoilerCheck) { spoiler: req.body.spoiler }
+                        spoiler: req.body.spoiler
                     });
                     newPost.save(function (err) {
 
