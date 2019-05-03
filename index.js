@@ -83,7 +83,7 @@ const socketInstance = new SocketHandler(IO);
 // Uploading image
 app.use('/uploads', express.static('uploads'));
 /////
-app.use(bodyparser.json());
+app.use(bodyparser.json({limit: '50mb', extended: true}));
 app.use(passport.initialize());
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
