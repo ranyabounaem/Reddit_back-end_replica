@@ -37,7 +37,8 @@ class PM {
          || isReadRequest == undefined
          || typeof owner != 'string'
          || typeof isReadRequest != 'boolean') {
-         res.send(400);
+         res.status(400);
+         res.json({ error: 'badRequest' });
          return;
 
       }
@@ -46,17 +47,18 @@ class PM {
       privateMessage.updateMany({ receiverUsername: owner }, { isRead: isReadRequest }, function (err, result) {
          if (err) {
             res.status(500);
-            res.json({ "error": "internalServerError" });
+            res.json({ error: 'internalServerError' });
             return;
 
          }
          else if (result == null) {
             res.status(404);
-            res.json({ "error": "messageNotFound" });
+            res.json({ error: 'messageNotFound' });
             return;
          }
          else {
-            res.send(200);
+            res.status(200);
+            res.json({ success: true });
             return;
          }
 
@@ -88,16 +90,17 @@ class PM {
          || messageId == undefined
          || typeof owner != 'string'
          || typeof messageId != 'string') {
-         res.send(400);
+         res.status(400);
+         res.json({ error: 'badRequest' });
          return;
 
       }
 
       // finding the message by its id to be exceuted quickly
-      privateMessage.findById(messageId, function (err,result) {
-        if (result == null) {
+      privateMessage.findById(messageId, function (err, result) {
+         if (result == null) {
             res.status(404);
-            res.json({ "error": "messageNotFound" });
+            res.json({ error: 'messageNotFound' });
          }
          else {
             // if there is no error and the message is found 
@@ -109,10 +112,11 @@ class PM {
                   privateMessage.deleteOne({ _id: messageId }, function (err) {
                      if (err) {
                         res.status(500);
-                        res.json({ "error": "internalServerError" });
+                        res.json({ error: 'internalServerError' });
                      }
                      else {
-                        res.send(200);
+                        res.status(200);
+                        res.json({ success: true });;
                      }
 
 
@@ -124,11 +128,12 @@ class PM {
                   privateMessage.findByIdAndUpdate(messageId, { receiverDelete: true }, function (err) {
                      if (err) {
                         res.status(500);
-                        res.json({ "error": "internalServerError" });
+                        res.json({ error: 'internalServerError' });
 
                      }
                      else {
-                        res.send(200);
+                        res.status(200);
+                        res.json({ success: true });;
                      }
                   });
                }
@@ -140,10 +145,11 @@ class PM {
                   privateMessage.deleteOne({ _id: messageId }, function (err) {
                      if (err) {
                         res.status(500);
-                        res.json({ "error": "internalServerError" });
+                        res.json({ error: 'internalServerError' });
                      }
                      else {
-                        res.send(200);
+                        res.status(200);
+                        res.json({ success: true });
                      }
 
 
@@ -154,13 +160,15 @@ class PM {
                   privateMessage.findByIdAndUpdate(messageId, { senderDelete: true }, function (err) {
                      if (err) {
                         res.status(500);
-                        res.json({ "error": "internalServerError" });
+                        res.json({ error: 'internalServerError' });
 
                      }
                      else {
 
-                        res.send(200);
+                        res.status(200);
+                        res.json({ success: true });
                      }
+
                   }
 
                   );
@@ -170,7 +178,7 @@ class PM {
             else {
 
                res.status(500);
-               res.json({ "error": "internalServerError" });
+               res.json({ error: 'internalServerError' });
 
             }
 
@@ -206,7 +214,8 @@ class PM {
          || typeof owner != 'string'
          || typeof messageId != 'string'
          || typeof isReadRequest != 'boolean') {
-         res.send(400);
+         res.status(400);
+         res.json({ error: 'badRequest' });
          return;
 
       }
@@ -214,12 +223,12 @@ class PM {
       privateMessage.findById(messageId, function (err, result) {
          if (err) {
             res.status(500);
-            res.json({ "error": "internalServerError" });
+            res.json({ error: 'internalServerError' });
 
          }
          else if (result == null) {
             res.status(404);
-            res.json({ "error": "messageNotFound" });
+            res.json({ error: 'messageNotFound' });
          }
          else {
             //if it is the same who send the messag it is okay
@@ -227,12 +236,13 @@ class PM {
                privateMessage.findByIdAndUpdate(messageId, { isRead: isReadRequest }, function (err) {
                   if (err) {
                      res.status(500);
-                     res.json({ "error": "internalServerError" });
+                     res.json({ error: 'internalServerError' });
 
 
                   }
                   else {
-                     res.send(200);
+                     res.status(200);
+                     res.json({ success: true });;
 
 
                   }
@@ -241,9 +251,9 @@ class PM {
                });
 
             }
-                        else { // forbidden for anyone else except the recevier
-               res.send(403);
-
+            else { // forbidden for anyone else except the recevier
+               res.status(403);
+               res.json({ error: 'forbidden' });
             }
          }
 
@@ -320,8 +330,8 @@ class PM {
          res.json({ error: 'parameterEmptyError' });
 
       }
-            // to check self message alerts
-      else if (receiverUsername==owner) {
+      // to check self message alerts
+      else if (receiverUsername == owner) {
          res.status(403);
          res.json({ error: 'selfMessage' });
 
@@ -370,7 +380,7 @@ class PM {
                            });
                         //add notification to the receiver user
                         const n = new notification({
-                           type:'message',
+                           type: 'message',
                            username: receiverUsername,
                            read: false,
                            sourceID: null,
@@ -379,7 +389,7 @@ class PM {
                         })
                         n.save();
                         emitter.emit("notification", {
-                           type:'message',
+                           type: 'message',
                            username: receiverUsername,
                            read: false,
                            sourceID: null,
@@ -395,7 +405,8 @@ class PM {
 
                            }
                            else {
-                              res.send(200);   // if everything worked as mentioned 
+                              res.status(200);
+                              res.json({ success: true });   // if everything worked as mentioned 
                            }
                         });
 
@@ -485,7 +496,7 @@ class PM {
                   }
                   else {
                      // stringfing and setting the header automatically 
-                     res.json({messages:result});
+                     res.json({ messages: result });
                   }
                }).sort({ messageDate: -1 });
 
@@ -511,7 +522,7 @@ class PM {
                   }
                   else {
                      // stringfing and setting the header automatically 
-                     res.json({messages:result});
+                     res.json({ messages: result });
 
                   }
                   // sorting message by the date it was sent        
@@ -613,7 +624,8 @@ class PM {
 
                            }
                            else {
-                              res.send(200);
+                              res.status(200);
+                              res.json({ success: true });
 
                            }
 
@@ -628,7 +640,8 @@ class PM {
                            }
                            else {
                               // blocked successfully
-                              res.send(200);
+                              res.status(200);
+                              res.json({ success: true });
                            }
                         });
 
@@ -705,7 +718,7 @@ class PM {
                }
                else {
                   // stringfing and setting the header automatically 
-                  res.json({blockList:result});
+                  res.json({ blockList: result });
 
                }
 
