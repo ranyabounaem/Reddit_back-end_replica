@@ -9,7 +9,7 @@ const reportSchema = new Schema({
     },
     reportedId: {
         type: String,
-        unique:true,
+        unique:false,
         required: [true, "ID of post/comment is required"]
     },
 

@@ -8,6 +8,10 @@ const UserSchema = new Schema({
         unique:true,
         required: [true, "Username field is required"],
     },
+
+    cakeday : {
+        type: Date
+    },
     Email: {
         type: String,
         unique:true,
@@ -23,13 +27,26 @@ const UserSchema = new Schema({
 
  moderates:[String],
 
+ ModReq:[String],
+
  blockedUsers:[String],
 
  Friends:[String],
 
  SentReq:[String],
 
- RecReq:[String]
+ RecReq:[String],
+
+ SavedPosts:[{
+    postId:String,
+    title:String
+ }],
+
+ About: String,
+
+ karma : {type: Number, default:0}
+
+
 });
 
 const User = mongoose.model("User", UserSchema);

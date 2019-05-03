@@ -42,6 +42,8 @@
  */
 const express = require("express");
 const app = express();
+const HTTP = require('http').Server(app);
+const IO = require('socket.io')(HTTP);
 const mongoose = require('mongoose');
 //Uploading files
 const multer = require ('multer');
@@ -69,18 +71,19 @@ const upload = multer({
 const bodyparser = require('body-parser');
 const passport = require('passport');
 const passportConf = require('./JWT/passport');
-
 //contect to mongo
 mongoose.connect('mongodb://localhost:27017/reddit');
 mongoose.Promise = global.Promise;
 mongoose.connection.once('open', function () { console.log("Connection successful"); }).on('error', function (error) { console.log("error:", error) });
+const SocketHandler = require('./utils/SocketHandler');
+const socketInstance = new SocketHandler(IO);
 
-
+// console.log();
 //middlewares 
 // Uploading image
 app.use('/uploads', express.static('uploads'));
 /////
-app.use(bodyparser.json());
+app.use(bodyparser.json({limit: '50mb', extended: true}));
 app.use(passport.initialize());
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -89,9 +92,38 @@ app.use(function (req, res, next) {
     next();
 });
 
+
+
+// app.get("/a7a", passport.authenticate('jwt', { session: false }), (req, res) => res.send("res"));
+
 const userHandler = require("./src/user");
 
-// console.log(userHandler.handleRegistration);
+
+app.put("/user/ForgetPassword/:username", userHandler.forgetPassword);
+/**
+ * @api {put} /user/ForgetPassword/:username reset password
+ * @apiName ForgetPass
+ * @apiGroup me
+ *
+ *
+ * @apiParam  {String} Username unique Username  of the User.
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *  "message": "Please check your registered email"
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    
+ * HTTP/1.1 406 user doesnnt exist
+ * {
+ * "error":"User doesnt exist
+ * }
+ */
+
+
+
 app.post("/user/register", userHandler.handleRegistration);
 
 /**
@@ -173,9 +205,145 @@ app.post("/user/login", userHandler.handleLogin);
 * }
 */
 
+app.get("/user/Flairs", passport.authenticate('jwt', { session: false }), userHandler.getAllFlairs);
+/**
+* @api {get} /user/Flairs gets all flairs for this user
+* @apiName GetAllFlairs
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* [
+    {
+        "_id": "5cc5e38d58af9d0e34be6663",
+        "username": "mostafa_hazem",
+        "srName": "Education",
+        "flair": "el bob",
+        "__v": 0
+    },
+    {
+        "_id": "5cc5ed2bf14172494416af83",
+        "username": "mostafa_hazem",
+        "srName": "Technology",
+        "flair": "el bob2",
+        "__v": 0
+    }
+]
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 no flair exists
+*      {
+*     error:"No flairs"
+*     }
 
-app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserEmail);
-app.put("/me/edit/Password/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserPassword);
+*/
+
+
+app.get("/user/Flairs/:srName", passport.authenticate('jwt', { session: false }), userHandler.getFlairsSubreddit);
+
+/**
+* @api {get} /user/Flairs/:srName gets flair for this user in specific subreddit
+* @apiName GetFlair
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*@apiParam {string} srName the subreddit name you want to delete from
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+    {
+        "flair": "el bob"
+    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 no flair exists
+*      {
+*     error:"No flairs"
+*     }
+
+*/
+
+app.delete("/user/FlairDelete/:srName", passport.authenticate('jwt', { session: false }), userHandler.deleteFlair);
+
+/**
+* @api {delete} /user/FlairDelete/:srName gets flair for this user in specific subreddit
+* @apiName DeleteFlair
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*@apiParam {string} srName the subreddit name you want to delete from
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+    {
+        "message": "flair deleted"
+    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 no flair exists
+*      {
+*     error:"No flairs"
+*     }
+
+*/
+
+app.post("/user/CreateFlair", passport.authenticate('jwt', { session: false }), userHandler.createFlair);
+/**
+* @api {post} /user/CreateFlair create new flair
+* @apiName CreateFlair
+* @apiGroup me
+* @apiHeader {String} auth Users unique token .
+*  @apiParam  {String} srName  subreddit in which to create flair
+  @apiParam  {String} flair the flair you want to create
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* {
+*    message:"flair created"
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 didnt send srName
+*      {
+*      error:"subreddit name missing"
+*     }
+     HTTP/1.1 404 you alreadfy have a flair in this sr
+*      {
+*      error:"you alredy have a flair in this subreddit"
+*     }
+     HTTP/1.1 404 didnt send flair 
+*      {
+*      {error:"flair missing"
+*     }
+     HTTP/1.1 404 subreddit doent exist
+*      {
+*      error:"subreddit doesnt exist"
+*     }
+*/
+
+
+app.get("/guest", userHandler.getGuestToken);
+/**
+* @api {get} /guest Get guest user token
+* @apiName GetGuestToken
+* @apiGroup Guest
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* {
+*      "Token":"ejb89c512asdf89gg789gh8fku89dvb6x...."
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 No Guest user found...
+*      {
+*      "message": "No one ran the tests..."
+*     }
+*/
+
+
+
+
+
 app.get("/me/About/:Username", passport.authenticate('jwt', { session: false }), userHandler.Getmyinfo);
 
 
@@ -190,6 +358,7 @@ app.get("/user/info/:userToView", userHandler.getUserInfo);
 * {
 *      "Username":"user1",
      Subscriptions:["sub1","sub2","sub3"]
+     ,"cakeday":"2019-04-28T19:07:29.386Z"
 * }
 *    
 * 
@@ -208,11 +377,36 @@ app.get("/me/user/info/:userToView", passport.authenticate('jwt', { session: fal
 * @apiHeader {String} auth Users unique token .
  *  @apiParam  {String} userToView  unique Username  of the User to be viewed.
  *  @apiSuccessExample {json} Success
- *    HTTP/1.1 200 
- * {
- *      "Username":"user1",
-      Subscriptions:["sub1","sub2","sub3"]
- * }
+ *    HTTP/1.1 200 if friends 
+ {
+    "Username": "mostafa_hazem",
+    "Subscriptions": [],
+    "About":"im a nice user, hi",
+    "cakeday": "2019-04-29T01:07:28.002Z",
+    "savedPosts": [
+        {
+            "_id": "5cc64e61cd11128f20a8feb0",
+            "postId": "5cc6402a0eeec17074898ddc",
+            "title": "Laptops"
+        },
+        
+        {
+            "_id": "5cc650cf37392481409af63f",
+            "postId": "5cc6402a0eeec17074898de3",
+            "title": "Rush Hour 4"
+        }
+    ],
+    "Friends": [
+        "Ali_yasser"
+    ]
+}
+
+* HTTP/1.1 200 if not friends 
+{
+    "Username": "TestmanSe7",
+    "cakeday": "2019-04-29T01:07:28.406Z",
+    "About":"im a nicer project"
+}
  *    
  * 
  * @apiErrorExample {json} List error
@@ -304,7 +498,7 @@ app.put("/me/user/block", passport.authenticate('jwt', { session: false }), user
 * 
 */
 
-app.put("/me/user/Add", passport.authenticate('jwt', { session: false }), userHandler.addFriend);
+app.put("/me/user/Add", passport.authenticate('jwt', { session: false }), (req, res) => userHandler.addFriend(req, res, socketInstance.getEmitter()));
 /**
 * @api {put} /me/user/Add  Add new friend
 * @apiName FriendAdd
@@ -678,36 +872,6 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 */
 
 
-// API for information about user
-
-/** 
-* @api {get} /user/:Username/about/ About
-* @apiName AboutUser
-* @apiGroup UserService
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} Username username of the user that the information is about.
-* @apiSuccess {String} Name name of the user
-* @apiSuccess {String} Cakeday date of the user joining reddit.
-* @apiSuccess {Number} Karma karma of the user
-* @apiSuccess {JPG} Pic profile picture of the user
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "Username" : "TheRealBatman",
-*       "Name": "Mark",
-*       "Cakeday": "21-12-2019",
-*       "Karma": 1449,
-*       "Pic" : data:image/jpeg;base64,...............
-*      }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 403 Forbidden
-*     {
-*       "error": "User not found"
-*     }
-*/
-
-
-//API for listings of comments 
 
 /** 
 * @api {get} /user/:Username/comments/listing?type=value  List Comments 
@@ -791,23 +955,57 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
  * @apiSuccess {Number} Karma Karma of the User.
  * @apiSuccess {String} Cakeday Date of joining Reddit.
  * @apiSuccess {String[]} Subscriptions  subreddit subscriptons  of the User.
+ * @apiSuccess {String[]} moderates subreddits moderated
+ * @apiSuccess {String[]} recreq friend requests received
+ * @apiSuccess {String[]} sentreq freind requests sent
+ * @apiSuccess {String[]} modreq moderation requests
+ * @apiSuccess {String[]} freinds list of all friends
+ * @apiSuccess {String[]} blocked list of all blocked users
  * 
- *  @apiParamExample {json} Input
- *    {
- *      "Username": "User1",     
- *    }
  * 
  *  @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
- *    {
- *      "Username": "User1"
- *      "Email": "user@reddit.com",
- *      "About": "Im a reddit user",
- *      "Imageid": "100001"
- *      "Subscriptions": ["subbreddit:askreddit","subbreddit:reddit"],
- *      "Karma" :2,
- *      "Cakeday" : "21-3-1440"
- *    }
+ * {
+    "Subscriptions": [
+        "Movies",
+        "Technology",
+        "Education"
+    ],
+    "moderates": [
+        "Movies"
+    ],
+    "ModReq": [
+        "Technology"
+    ],
+    "blockedUsers": [
+        "Ayman"
+    ],
+    "Friends": [
+        "Ali_yasser"
+    ],
+    "SentReq": [
+        "TestmanSe7"
+    ],
+    "RecReq": [
+        "zaghw"
+    ],
+    "_id": "5cc64e50c206fb368c8e4fa5",
+    "Username": "mostafa_hazem",
+    "Email": "mostafa_hazem@m.com",
+    "SavedPosts": [
+        {
+            "_id": "5cc64e61cd11128f20a8feb0",
+            "postId": "5cc6402a0eeec17074898ddc",
+            "title": "Laptops"
+        },
+        {
+            "_id": "5cc650cf37392481409af63f",
+            "postId": "5cc6402a0eeec17074898de3",
+            "title": "Rush Hour 4"
+        }
+    ],
+    "cakeday": "2019-04-29T01:07:28.002Z"
+}
  * 
  * @apiErrorExample {json} List error
  *    HTTP/1.1 404 User not found
@@ -823,7 +1021,7 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 
 
 
-
+app.put("/me/edit/Password/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserPassword);
 /**
 * @api {Put} /me/edit/Password/:Username Edit User password
 * @apiName EditUserPassword
@@ -863,6 +1061,38 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 *     }
 */
 
+app.put("/me/edit/About", passport.authenticate('jwt', { session: false }), userHandler.editAbout);
+/**
+* @api {Put} /me/edit/About Edit About Info
+* @apiName EditAbout
+* @apiGroup me
+* @apiParam  {String} About the About information of the User.
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParamExample {json} Input
+*    {
+*      "About": "My name is Uzumaki, I am the perfect being on Earth"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*    {
+*        "message": "About Information updated successfully"
+*    }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 About parameter not found
+*      {
+*       "error": "About parameter not found"
+*     }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 Enter a valid String containing information
+*      {
+*       "error": "Enter a valid String containing information"
+*     }
+*/
+
+app.put("/me/edit/email/:Username", passport.authenticate('jwt', { session: false }), userHandler.EditUserEmail);
+
 /**
 * @api {Put} /me/edit/email/:Username Edit User email
 * @apiName EditUserEmail
@@ -898,403 +1128,376 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 *      }
 */
 
-
-
-
+reportHandler = require("./src/Reports/Report");
+app.put("/Moderator/ban", passport.authenticate('jwt', { session: false }), reportHandler.Ban);
 /**
-* @api {get} /Moderator/Reports/   Get all reports
-* @apiName Getreports
+* @api {put} /Moderator/ban   Ban User
+* @apiName Ban
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
-* @apisuccess  {String} ReporId unique ReporId  of the Repor.
-
+* @apiParam  {String} Username unique Username  of the user to be banned .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
 *  @apiSuccessExample {json} Success
 *    HTTP/1.1 200 OK
-* [{
-*         "ReporId":"1010"
-* }]
-*    
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 500 server error
-*/
-
-/**
-* @api {Put} /Moderator/Reports/:id   ignore report
-* @apiName Ignoreports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ReporId unique ReporId  of the Repor.
-* @apiParamExample {json} Input
-*    {
-*      "ReporId": "1101", 
-*    }
+* {    
+*      "message": "User banned successfully" 
+* } 
 *  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"report not found"
-* }
-*/
-
-/**
-* @api {delete} /Moderator/Reports/:id   delete report
-* @apiName deletereports
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ReporId unique ReporId  of the Repor.
-* @apiParamExample {json} Input
-*    {
-*      "ReporId": "1101", 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"report not found"
-* }
-*/
-
-/**
-* @api {post} /Moderator/Ban/:Username&:SubbreditName   ban user
-* @apiName BanUser
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of the User to be banned.
-* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit to be banned from.
-* @apiParamExample {json} Input
-*    {
-*      "Username": "User0",
-*      "SubbreditName":"Ask reddit" 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"user or subreddit not found"
-* }
-*/
-
-/**
-* @api {delete} /Moderator/LeaveMod/:Username&:SubbreditName   Leave or remove Moderation
-* @apiName LeaveMod
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of the Moderaor to remove or leave .
-* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
-* @apiParamExample {json} Input
-*    {
-*      "Username": "User0",
-*      "SubbreditName":"Ask reddit" 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK   
-* 
-* @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
-* {
-*          "error":"user or subreddit not found"
-* }
-*/
-
-/**
-* @api {post} /Moderator/Invite/:Username&:SubbreditName   invite moderator
-* @apiName Addmod
-* @apiGroup Moderator
-* @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} Username unique Username  of the Moderaor to be added .
-* @apiParam  {String} SubbreditName unique SubbreditName  of the Subbredit .
-* @apiSuccess {String} ModREQid unique invite Id  of the request .
-* @apiParamExample {json} Input
-*    {
-*      "Username": "User0",
-*      "SubbreditName":"Ask reddit" 
-*    }
-*  @apiSuccessExample {json} Success
-*    HTTP/1.1 200 OK 
-* {
-* 
-*          "ModREQid":"101"
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Moderator banned successfully" 
 * }  
 * 
 * @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
+*     HTTP/1.1 404 Username not found
 * {
-*          "error":"user or subreddit not found"
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not authorized to ban
+* {
+*          "error":"User is not authorized to ban"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be banned doesn't exist
+* {
+*          "error":"User to be banned doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot ban himself
+* {
+*          "error":"User cannot ban himself"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot ban the creator of the subreddit
+* {
+*          "error":"User cannot ban the creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User doesn't have the authority to ban a moderator
+* {
+*          "error":"User doesn't have the authority to ban a moderator"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is already banned from Subreddit
+* {
+*          "error":"User is already banned from Subreddit"
 * }
 */
 
+app.put("/Moderator/unban", passport.authenticate('jwt', { session: false }), reportHandler.unBan);
 /**
-* @api {post} /Moderator/accept   accept invite moderator
-* @apiName Acceptmod
+* @api {put} /Moderator/unban   unban User
+* @apiName unBan
 * @apiGroup Moderator
 * @apiParam {string} Token SyncToken That is sent with authentication.
-* @apiParam  {String} ModREQid unique invite id  of request.
+* @apiParam  {String} Username unique Username  of the user to be unbanned .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
 * @apiParamExample {json} Input
 *    {
-*      "ModREQid": "1011",
-*       
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "User unbanned successfully" 
+* } 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Username not found
+* {
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not authorized to unban
+* {
+*          "error":"User is not authorized to unban"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be unbanned doesn't exist
+* {
+*          "error":"User to be unbanned doesn't exist"
+*
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User isn't banned from Subreddit
+* {
+*          "error":"UseUser isn't banned from Subreddit"
+* }
+*/
+
+
+app.put("/Moderator/Invite", passport.authenticate('jwt', { session: false }), reportHandler.addMod);
+/**
+* @api {put} /Moderator/Invite   Invite moderator
+* @apiName addMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} Username unique Username  of the Moderator to be added .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Moderator Invite Sent" 
+* }  
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Username not found
+* {
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not creator of the subreddit
+* {
+*          "error":"User is not creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not creator of the subreddit
+* {
+*          "error":"User is not creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be added as moderator doesn't exist
+* {
+*          "error":"User to be added as moderator doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot add himself
+* {
+*          "error":"User cannot add himself"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User has already received a Moderation request
+* {
+*          "error":"User has already received a Moderation request"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User is already a moderator
+* {
+*          "error":"User is already a moderator"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User is banned from Subreddit
+* {
+*          "error":"User is banned from Subreddit"
+* }
+*/
+
+app.put("/Moderator/remove", passport.authenticate('jwt', { session: false }), reportHandler.removeMod);
+/**
+* @api {put} /Moderator/remove   Remove moderator
+* @apiName removeMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} Username unique Username  of the Moderator to be removed .
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "Username": "User0",
+*      "SrName":"Ask reddit" 
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Moderator removed" 
+* } 
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* {    
+*      "message": "Request for moderation removed" 
+* }  
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Username not found
+* {
+*          "error":"Username not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User is not creator of the subreddit
+* {
+*          "error":"User is not creator of the subreddit"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User to be removed from moderation doesn't exist
+* {
+*          "error":"User to be removed from moderation doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 402 User cannot remove himself
+* {
+*          "error":"User cannot remove himself"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 User isn't a moderator
+* {
+*          "error":"User isn't a moderator"
+* }
+*/
+
+app.put("/Moderator/accept", passport.authenticate('jwt', { session: false }), reportHandler.acceptModRequest);
+
+/**
+* @api {put} /Moderator/accept   accept moderator invite
+* @apiName AcceptmodInvite
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "SrName": "funny"
 *    }
 *  @apiSuccessExample {json} Success
 *    HTTP/1.1 200 OK   
+*    {
+*          message: "Moderator request accepted"
+*    }
 * 
 * @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
+*     HTTP/1.1 404 SrName not found
 * {
-*          "error":"request not found"
+*          "error":"SrName not found"
 * }
-*/
-
-
-
-
-
-
-app.get("/users", (req, res) => { });
-app.post("/users", (req, res) => { });
-app.put("/users", (req, res) => { });
-app.delete("/users", (req, res) => { });
-
-
-/**
- * @name EmojiService
- * @note These are the routes for anything related to a user.
- * @note This is just general routing, You can modify as you want but before the delivery of the documentation
- */
-/**
-* @api {get} /emoji/   Get's an emoji
-* @apiName GetEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} Image.
-* 
-*/
-
-/**
-* @api {post} /emoji/   Create an emoji
-* @apiName CreateEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} EMOJI_ID Unique id of image.
-* 
 * @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found
+*     HTTP/1.1 404 Subbreddit doesn't exist
 * {
-*          "error":"request not found"
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Request doesn't exist
+* {
+*          "error": "Request doesn't exist"
 * }
 */
 
+
+app.put("/Moderator/reject", passport.authenticate('jwt', { session: false }), reportHandler.rejectModRequest);
+
 /**
-* @api {delete} /emoji/   Delete an emoji
-* @apiName DeleteEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess HTTP/1.1 200 Ok.
+* @api {put} /Moderator/reject   reject moderator invite
+* @apiName rejectModRequest
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "SrName": "funny"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+*    {
+*          message: "Moderator request rejected"
+*    }
 * 
 * @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found {
-*          "error":"request not found"
-*  }
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Request doesn't exist
+* {
+*          "error": "Request doesn't exist"
+* }
 */
 
+app.put("/Moderator/leave", passport.authenticate('jwt', { session: false }), reportHandler.leaveMod);
+
 /**
-* @api {put} /emoji/   Edit an emoji (instead of deleting then creating)
-* @apiName EditEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
-* @apiSuccess {string} EMOJI_ID New unique id of new image.
+* @api {put} /Moderator/leave   leave moderation
+* @apiName leaveMod
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam  {String} SrName unique SubbreditName  of the Subbredit .
+* @apiParamExample {json} Input
+*    {
+*      "SrName": "funny"
+*    }
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK   
+*    {
+*          message: "User has left moderation"
+*    }
 * 
 * @apiErrorExample {json} List error
-*     HTTP/1.1 404 Report not found {
-*          "error":"request not found"
+*     HTTP/1.1 404 SrName not found
+* {
+*          "error":"SrName not found"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 Subbreddit doesn't exist
+* {
+*          "error":"Subbreddit doesn't exist"
+* }
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 User isn't a moderator
+* {
+*          "error": "User isn't a moderator"
 * }
 */
 
-app.get("/emoji", (req, res) => { });
-app.post("/emoji", (req, res) => { });
-app.put("/emoji", (req, res) => { });
-app.delete("/emoji", (req, res) => { });
-
-/**
-* @api {post} /emoji/   Create an emoji
-* @apiName CreateEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} EMOJI_ID Unique id of image.
-*
-*/
-
-/**
-* @api {post} /emoji/   Create an emoji
-* @apiName CreateEmoji
-* @apiGroup test
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} TESSST  Image(emoji) of the subreddit.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} EMOJI_ID Unique id of image.
-*
-*/
-
-/**
-* @api {delete} /emoji/   Delete an emoji
-* @apiName DeleteEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-*
-*/
-
-/**
-* @api {put} /emoji/   Edit an emoji (instead of deleting then creating)
-* @apiName EditEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiParam {string} Image  Image(emoji) of the subreddit.
-* @apiSuccess {string} EMOJI_ID New unique id of new image.
-*
-*/
-/**
-* @api {get} /emoji/   Edit an emoji (instead of deleting then creating)
-* @apiName GetEmoji
-* @apiGroup EmojiService
-*
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {string} SubredditName Name of subreddit to add image to.
-* @apiSuccess {string} EMOJI_ID New unique id of new image.
-*
-*/
 
 
-/**
- * @name FlairService
- * @note These are the routes for anything related to a user.
- * @note This is just general routing, You can modify as you want but before the delivery of the documentation
- */
-/** 
-* @api {post} /flair/:Srid   Creates  a  Flair 
-* @apiName Create
-* @apiGroup FlairService
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} SubredditName of the subbreddit that  user wants to create flair for.
-* @apiParam {string} FlairName the flair string  added (maximum 100 characters) .
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*     }
-*
-* @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
-* @apiError OverlengthedFlair The string length of the flair is over 100 character.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "SubbRedditNotFound"
-*     }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 403 Forbidden
-*     {
-*       "error": "OverlengthedSubject"
-*     }
-*/
-
-/**
-* @api {delete} /flair/:SrId   Delete
-* @apiName Delete
-* @apiGroup FlairService
-* @apiParam {String} SubredditName of the subbreddit that  user wants to delete flair for.
-* @apiParam {string} FlairName the flair string  user want to delete (maximum 100 characters) .
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack and to verify the deletion of the message.
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*     }
-* @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
-* @apiError OverlengthedFlair The string length of the flair user want to delete is over 100 character.
-* @apiError FlairNotFound The flair string user want to delete is not found.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "FlairNotFound"
-*     }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "SubbRedditNotFound"
-*     }
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 403 Forbidden
-*     {
-*       "error": "OverlengthedSubject"
-*     }
-*/
-
-
-/**
-* @api {get} /flair/:SrID  Flair Retrieval
-* @apiName RetrieveFlairs
-* @apiGroup FlairService
-* @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
-* @apiParam {String} SubredditName of the subbreddit that  user wants to get flair for.
-* @apiSuccess {Array} Flairs   Array of Flairs of the users for the subbredditID requested .
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*  "Flairs":[
-    {
-* "SubbredditID":3
-* ,”FlairID”:1
-* ,”FlairString”:”Doctor”
-*  },
-* {"SubbredditID":3
-* ,”FlairID”:2,
-* ,"FlairString":”Math Teacher"
-* }
-]
-*     }
-
-* @apiError SubbRedditNotFound the subreddit the user want to add flair to is not found
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "SubbRedditNotFound"
-*     }
-
-
-*/
-app.get("/flair", (req, res) => { });
-app.post("/flair", (req, res) => { });
-app.put("/flair", (req, res) => { });
-app.delete("/flair", (req, res) => { });
-
-
+const commentHandler = require('./src/Comments/Comment').cHandler;
 /**
  * @name CommentService
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-
+app.post("/comment/:id", passport.authenticate('jwt', { session: false }), (req, res) => commentHandler.handlePostComment(req, res, socketInstance.getEmitter()));
 /**
  * @api {post} /comment/:id Post a New Comment
  * @apiName PostComment
@@ -1308,14 +1511,50 @@ app.delete("/flair", (req, res) => { });
  * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
  * 
  * @apiSuccess {String} c_id The Created Comment ID.
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {    
+ *      "c_id": "mfh567djfp4y5pd86rt3u274" 
+ * }
  * 
  * @apiError ThreadNotFound The id of the thread wasn't found.
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If the user isn't logged in.
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Post not found
+ * {
+ *          "error": "There is no post with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Wrong request
+ * {
+ *          "error": "The request must include content of the comment"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Empty Comment
+ * {
+ *          "error": "You can not post an empty Comment"
+ * } 
+  *  @apiErrorExample {json} List error
+ *     HTTP/1.1 403 Comment Locked
+ * {
+ *          "error": "You can not reply to a locked comment"
+ * } 
+ * 
  */
 
 
-
+app.get("/comment/:c_id", commentHandler.handleGetComment);
 /**
  * @api {get} /comment/:c_id Get Details About Comment or a Reply
  * @apiName GetComment
@@ -1323,17 +1562,47 @@ app.delete("/flair", (req, res) => { });
  * 
  * @apiParam {String} c_id Comment Unique ID.
  * 
+ * @apiSucces {String} _id the ID of this comment
  * @apiSuccess {String} content Text of the Comment.
- * @apiSuccess {Date} c_date Date of the Posted Comment.
+ * @apiSuccess {Date} dateAdded Date of the Posted Comment.
  * @apiSuccess {Boolean} reply True if it is a reply.
  * @apiSuccess {Boolean} spoiler True if it is a Spoiler.
  * @apiSuccess {Boolean} locked True if the Replies are Disallowed on this Comment.
+ * @apiSuccess {String} username The user who posted this comment.
+ * @apiSuccess {Number} votes The number of votes.
+ * @apiSuccess {String} subreddit The comment belongs to this subreddit.
+ * @apiSuccess {String} parent_id The id the Post/Comment that is above this Comment/Reply.
+ * 
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {    
+ *  "_id": "mfh567djfp4y5pd86rt3u274",
+ *  "username": "Mostafa",
+ *  "subreddit": "Sports",
+ *  "content":"Al Ahly above all",
+ *  "parent_id": "kfh56hdjfp5y5pd86rt3u274",
+ *  "dateAdded": "2019-04-29 12:31:13.440Z",
+ *  "votes": 23,
+ *  "spoiler": true,
+ *  "locked": false
+ * }
  * 
  * @apiError CommentNotFound The id of the comment wasn't found.
- * @apiError AccessDenied If this user can't get info of this comment.
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ * 
  */
 
-
+app.get("/comment/all/:id", commentHandler.handleGetAllComments);
 /**
  * @api {get} /comment/all/:id Get Comments or Replies for this ID
  * @apiName GetAllComments
@@ -1343,12 +1612,61 @@ app.delete("/flair", (req, res) => { });
  * @apiParam {Boolean} [comment=false] True if the ID sent is a Comment ID not a Thread ID.
  * 
  * @apiSuccess {objects[]} comments Array of the comments or replies attached to this thread or comment.
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * [{    
+ *  "_id": "mfh567djfp4y5pd86rt3u274",
+ *  "username": "Mostafa",
+ *  "subreddit": "Sports",
+ *  "content":"Al Ahly above all",
+ *  "parent_id": "kfh56hdjfp5y5pd86rt3u274",
+ *  "dateAded": "2019-04-29 12:31:13.440Z",
+ *  "votes": 23,
+ *  "spoiler": true,
+ *  "locked": false
+ * },{
+ * "_id": "lkhy7djfp4y5pd86rt3u274",
+ *  "username": "Mohamed",
+ *  "subreddit": "Sports",
+ *  "content":"Al Ahly is the best team",
+ *  "parent_id": "kfh56hdjfp5y5pd86rt3u274",
+ *  "dateAded": "2019-04-29 12:31:13.440Z",
+ *  "votes": 12,
+ *  "spoiler": false,
+ *  "locked": true
+ * }]
  * 
  * @apiError ThreadNotFound The id of the thread wasn't found.
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If this user can't get info of this comment.
+ * 
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Post not found
+ * {
+ *          "error": "There is no post with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comments not found
+ * {
+ *          "error": "There are no Comments for this Thread"
+ * }
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Replies not found
+ * {
+ *          "error": "There are no Replies for this Comment
+ * }
  */
-
+app.delete("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleDeleteComent);
 /**
  * @api {delete} /comment/:c_id Delete a Comment
  * @apiName DeleteComment
@@ -1356,11 +1674,30 @@ app.delete("/flair", (req, res) => { });
  * 
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  * @apiParam {Number} c_id Comment Unique ID.
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"Delete Successful"}
  * 
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If this user can't delete this comment.
+ * 
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 403 Access Denied
+ * {
+ *          "error": "You can only delete your own comments"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
  */
-
+app.put("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleEditComment);
 /**
  * @api {put} /comment/:c_id Edit a Comment
  * @apiName EditComment
@@ -1372,10 +1709,40 @@ app.delete("/flair", (req, res) => { });
  * @apiParam {Boolean} [spoiler=false] True if it is a Spoiler.
  * @apiParam {Boolean} [locked=false] True if Replies are Disallowed on this Comment.
  * 
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"update successful"}
+ * 
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If this user can't edit this comment.
+ * 
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 403 Access Denied
+ * {
+ *          "error": "You can only edit your own comments"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Wrong request
+ * {
+ *          "error": "The request must include content of the comment"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Empty Comment
+ * {
+ *          "error": "You can not post an empty Comment"
+ * } 
  */
-
+app.put("/comment/vote/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleVoteComment);
 /**
  * @api {put} /comment/vote/:c_id Vote for a Comment
  * @apiName VoteComment
@@ -1384,37 +1751,51 @@ app.delete("/flair", (req, res) => { });
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  * @apiParam {String} c_id Comment Unique ID.
  * @apiParam {Number=1,0,-1} direction Direction of the Vote as 1 indicates Upvote, -1 indicates Downvote and 0 means unvoting.
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"The comment has been downvoted successfully"}
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"The comment has been upvoted successfully"}
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {"The comment has been unvoted successfully"}
  * 
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError AccessDenied If the user isn't logged in.
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Wrong request
+ * {
+ *          "error": "Please enter a valid value for the direction (1,0,-1)"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 401 Already Upvoted
+ * {
+ *          "error": "You have already upvoted the comment"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 401 Already downvoted
+ * {
+ *          "error": "Please enter a valid value for the direction (1,0,-1)"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 401 Already unvoted
+ * {
+ *          "error": "You have already downvoted the comment"
+ * }
  */
 
-/**
- * @api {post} /comment/save/:c_id Save a Comment
- * @apiName SaveComment
- * @apiGroup Comment
- * 
- * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
- * @apiParam {String} c_id Comment Unique ID.
- * 
- * @apiError CommentNotFound The id of the comment wasn't found.
- * @apiError CommentAlreadySaved The Comment has already been saved before.
- * @apiError AccessDenied If the user isn't logged in.
- */
-
-/**
- * @api {delete} /comment/unsave/:c_id UnSave a Comment
- * @apiName UnSaveComment
- * @apiGroup Comment
- * 
- * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
- * @apiParam {String} c_id Comment Unique ID.
- * 
- * @apiError CommentNotFound The id of the comment wasn't found.
- * @apiError CommentAlreadySaved You can't unsave an unsaved comment.
- * @apiError AccessDenied If the user isn't logged in.
- */
-
+app.post("/comment/report/:id",passport.authenticate('jwt', { session: false }), commentHandler.handleReportComment);
 /**
  * @api {post} /comment/report/:id Report a comment
  * @apiName ReportComment
@@ -1424,16 +1805,27 @@ app.delete("/flair", (req, res) => { });
  * @apiParam {String} id Comment Unique ID.
  * @apiParam {String} text A text containg the reason of the report. 
  * 
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {" You have successfully reported this comment"}
+ * 
  * @apiError CommentNotFound The id of the comment wasn't found.
  * @apiError EmptyText the text is empty.
  * @apiError AccessDenied If the user isn't logged in.
+ * 
+ * @apiErrorExample {json} List error
+ *     HTTP/1.1 404 Comment not found
+ * {
+ *          "error": "There is no Comment with this ID"
+ * }
+ *  @apiErrorExample {json} List error
+ *     HTTP/1.1 400 Invalid ID
+ * {
+ *          "error": "There is not a valid ID"
+ * }
  */
-const commentHandler = require('./src/Comments/Comment');
-app.get("/comment/:c_id", commentHandler.handleGetComment);
-app.get("/comment/all/:id", commentHandler.handleGetAllComments);
-app.post("/comment/:id", passport.authenticate('jwt', { session: false }), commentHandler.handlePostComment);
-app.put("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleEditComment);
-app.delete("/comment/:c_id", passport.authenticate('jwt', { session: false }), commentHandler.handleDeleteComent);
+
+
 
 
 /**
@@ -1452,8 +1844,9 @@ app.post("/sr/create", upload.single('subredditFile'), passport.authenticate('jw
 * @apiParam {string} Token Send token.
 * @apiParam {string} srName  unique Name of the subreddit (no longer than 100 character).
 * @apiParam {string[]} srRules list of subbreddit rules.
-* @apiParam {object} subredditFile Subreddit's image or video (Supported file formats: jpeg/png/mp4).
+* @apiParam {string} base64image Subreddit's image encoded as base64 (Supported file formats: jpeg/png/mp4).
 * @apiParam {string[]}  modUsername Subreddit moderators' usernames.
+* @apiParam {string} bio Subreddit's bio.
 * @apiSuccess {object} newSubreddit Returns the created subreddit (if any).
 */
 
@@ -1513,7 +1906,7 @@ app.put("/sr/:srName", upload.single('subredditFile'), passport.authenticate('jw
 * @apiParam {string} newName  New name
 * @apiParam {string[]} newMods Updated moderators.
 * @apiParam {string}  newBio Updated about.
-* @apiParam {object} newFile New image or video.
+* @apiParam {string} base64image Subreddit's image encoded as base64 (Supported file formats: jpeg/png/mp4).
 * @apiSuccess {object} editedSubreddit Returns the edited subreddit (if any).
 */
 
@@ -1528,9 +1921,39 @@ app.post("/sr/:srName/thread", upload.single('postFile'), passport.authenticate(
 * @apiParam {string} Token Send token.
 * @apiParam {string} title Title of thread
 * @apiParam {string} threadBody Body of the thread.
-* @apiParam {object} postFile Post image or video (Supported file formats: jpeg/png/mp4)
+* @apiParam {string} base64image Post's image encoded as base64 (Supported file formats: jpeg/png/mp4).
 * @apiParam {boolean}  spoiler  Mark if post is spoiler
 */
+app.put("/sr/save/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.savePost(req, res));
+
+/**
+* @api {put} /sr/save/:postId"  save/unsave post to your homepage
+* @apiName save/unsave
+* @apiGroup SrService
+*
+*
+* @apiParam {string} Token Send token.
+* @apiParam {string} postId Id of post you wish to save
+ @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"post saved" }
+
+*    HTTP/1.1 200 OK
+*  {message:"post unsaved" }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 post doesnt exist
+*      {
+*       "error": "post doesnt exist"
+*     }
+*   
+
+*    
+*/
+
+
+
 
 app.put("/sr/:srName/thread/:postId", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.editPost(req, res));
 
@@ -1584,7 +2007,7 @@ app.delete("/sr/:srName/thread/:postId/vote", passport.authenticate('jwt', { ses
 app.post("/sr/:srName/thread/:postId/report", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.reportPost(req, res));
 
 /**
-* @api {post} /sr/:srName/thread/:postId/report    Unvote a thread inside subreddit
+* @api {post} /sr/:srName/thread/:postId/report    report thread
 * @apiName ReportThread
 * @apiGroup SrService
 *
@@ -1615,16 +2038,15 @@ app.delete("/sr/:srName/subs", passport.authenticate('jwt', { session: false }),
 * @apiSuccess {string[]} subscribersList Returns the new subscribers list.
 */
 
+app.get("/sr/:srName/listing/:type", passport.authenticate('jwt', { session: false }), (req, res) => subreddit.listPost(req, res));
 
 /**
-* @api {get} /sr/:SubredditName/listing/:type   ListSubreddits   Generate a list of subreddits 
+* @api {get} /sr/:srName/listing/:type   ListSubreddits   Generate a list of subreddits 
 * @apiName ListSubreddits
 * @apiGroup SrService
 *
 * @apiParam {string} Token.
-* @apiParam {string} SubredditName Name of subreddit
-* @apiParam {string} Type List according to certain type
-* @apiSuccess {string[]} SubredditIDs Returns list of sorted subreddits
+* @apiSuccess {string[]} List of posts sorted according to type.
 */
 
 
@@ -1644,7 +2066,7 @@ const subreddit = require('./Subreddits/subreddits')
 const privateMessage = require('./src/PM/Pm');
 
 
-app.post('/me/pm/compose', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.compose(req, res));
+app.post('/me/pm/compose', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.compose(req, res, socketInstance.getEmitter()));
 /**
 * @api {post} /me/pm/compose    Compose a new message
 * @apiName Compose
@@ -1920,11 +2342,155 @@ app.get('/me/pm/blocklist', passport.authenticate('jwt', { session: false }), (r
  * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
  */
 
-const reportHandler = require("./src/Reports/Report");
- 
+
+
+/**
+* @api {get} /Moderator/Reports/   Get all reports
+* @apiName Getreports
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apisuccess  {String} reportedId id of comment or post
+* @apisuccess  {srName} subreddit of report
+* @apisuccess  {Boolean} post a type that is  true if post , false if comment
+
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+* [{
+*         [
+    {
+        "_id": "5cc4b675d7eb7343e073df38",
+        "reportedId": "121213521",
+        "srName": "Education",
+        "post": true,
+        "__v": 0
+    },
+    {
+        "_id": "5cc4b675d7eb7343e073df39",
+        "reportedId": "435422",
+        "srName": "343545454",
+        "post": true,
+        "__v": 0
+    },
+    {
+        "_id": "5cc4b675d7eb7343e073df3b",
+        "reportedId": "4n",
+        "srName": "Education",
+        "post": true,
+        "__v": 0
+    }
+]
+* }]
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator to any subreddit"
+*     }
+*     HTTP/1.1 401 no reports
+*      {
+*       "error":"No reports"
+*     }
+*/
 app.get('/Moderator/Reports', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.getReports(req, res));
+/**
+* @api {Delete} /Moderator/Reports/:reportId   delete report 
+* @apiName DeleteReport
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"report deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+*/
 
 
+app.delete('/Moderator/Reports/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deleteReport(req, res));
+
+/**
+* @api {Delete} /Moderator/Post/:reportId   delete reported post
+* @apiName DeletePost
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"post deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+
+*     HTTP/1.1 401 Report isnt for a post
+*      {
+*       "error":"This isnt a post report"
+*      }
+*/
+
+app.delete('/Moderator/Post/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deletePost(req, res));
+
+
+/**
+* @api {Delete} /Moderator/Comment/:reportId   delete reported comment
+* @apiName DeleteComment
+* @apiGroup Moderator
+* @apiParam {string} Token SyncToken That is sent with authentication.
+* @apiParam {string} :reportId ID of report.
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 OK
+*  {message:"Comment deleted}
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 401 The user isnt a moderator
+*      {
+*       "error": "You are not a moderator in this subreddit"
+*     }
+*     HTTP/1.1 401 report doesnt exist
+*      {
+*       "error":"report doesnt exist"
+*     }
+
+*     HTTP/1.1 401 ReportId not valid format
+*      {
+*       "error":"ReportId not valid"
+*     }
+*     HTTP/1.1 401 Report isnt for a post
+*      {
+*       "error":"This isnt a Comment report"
+*      }
+*/
+
+app.delete('/Moderator/Comment/:reportId', passport.authenticate('jwt', { session: false }), (req, res) => reportHandler.deleteComment(req, res));
 
 
 const notificationHandler = require("./src/notifications");
@@ -1933,5 +2499,5 @@ app.put("/notif/read/:id",passport.authenticate('jwt', { session: false }), noti
 app.put("/notif/unread/:id",passport.authenticate('jwt', { session: false }), notificationHandler.handleUnreadNotification);
 app.put("/notif/readall/",passport.authenticate('jwt', { session: false }), notificationHandler.handleReadAllNotifications);
 
-var server = app.listen(4000, function () { console.log('listening') });
+var server = HTTP.listen(4000, function () { console.log('listening') });
 module.exports = server;
