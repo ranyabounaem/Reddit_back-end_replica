@@ -29,7 +29,6 @@ describe("Subreddits testing", function () {
     beforeAll((done) => {
         server9 = require('../index');
         usr.create(user).then(function(record){
-            console.log(record);
             done();
         });
     });
@@ -57,7 +56,6 @@ describe("Subreddits testing", function () {
             };    
             request.post('http://127.0.0.1:4000/sr/create', {body: sr, json: true, headers:head}, function (error, res, body) {
                 data.status = res.statusCode;
-                console.log(res.statusCode);
                 data.body = body;
                 done();
             });
@@ -205,7 +203,6 @@ describe("Subreddits testing", function () {
                 data.status = request.statusCode;
                 data.body = body;
                 postid = data.body._id;
-                console.log(data);
                 done();
             });
         });
@@ -241,7 +238,6 @@ describe("Subreddits testing", function () {
         });
 
         it("Subscribe to a subreddit status test", function(){
-            console.log(data);
             expect(data.status).toBe(200);
             expect(data.body.subscribed_users.length).toBe(1);
 
