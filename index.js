@@ -2079,6 +2079,7 @@ app.post('/me/pm/compose', passport.authenticate('jwt', { session: false }), (re
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
+*       "success": true
 *     }
 *
 * @apiError userNotFound The <code>id</code> of the User was not found.
@@ -2116,6 +2117,7 @@ app.post('/me/pm/block', passport.authenticate('jwt', { session: false }), (req,
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
+*       "success": true
 *     }
 *
 * @apiError userNotFound The <code>id</code> of the User was not found.
@@ -2156,6 +2158,7 @@ app.delete('/me/pm/delete', passport.authenticate('jwt', { session: false }), (r
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
+*       "success": true
 *     }
 *
 * @apiError messageNotFound The <code>id</code> of the Message was not found.
@@ -2179,6 +2182,7 @@ app.put('/me/pm/markread', passport.authenticate('jwt', { session: false }), (re
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
+*      "success": true
 *     }
 *
 * @apiError messageNotFound The <code>id</code> of the Message was not found.
@@ -2201,6 +2205,7 @@ app.post('/me/pm/markreadall', passport.authenticate('jwt', { session: false }),
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     {
+*       "success": true
 *     }
 * @apiError messageNotFound No messages to mark empty array
 * @apiError internalServererror  internal error caused by unexplained behavior

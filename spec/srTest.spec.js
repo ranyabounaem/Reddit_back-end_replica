@@ -193,6 +193,36 @@ describe("Subreddits testing", function () {
 
     });
 
+    describe("Voting to a post inside subreddit", function() {
+        let data = {};
+        let body = {"upvote": true}
+        beforeAll(function(done){
+
+            request.post(`http://127.0.0.1:4000/sr/Metal/thread/${postid}/vote`,
+            {json:true, body: body, headers: head},
+            function(error, request, body){
+                data.status = request.statusCode;
+                data.body = body;
+                postid = data.body._id;
+                done();
+            });
+        });
+
+        it("Voting to a post inside subreddit status test", function(){
+            console.log(data);
+            expect(data.status).toBe(200);
+            //expect(data.body.title).toBe("AskingAlexandria"); IT RETURNS OLD POST THAT WAS UPDATED
+
+        });
+
+        it("Voting to a post inside subreddit database test", function(){
+            post.findOne({_id: postid, votes: 1}, function(err, record){
+                expect(record).not.toBe(null);
+            });
+        });
+
+    });
+
     describe("Deleting a post inside subreddit", function() {
         let data = {};
         beforeAll(function(done){
