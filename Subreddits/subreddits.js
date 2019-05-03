@@ -818,7 +818,6 @@ class SR {
                 .exec( function(err, posts) {
                     if (err) res.status(500).send(err);
                     else{
-                    console.log(posts);
                     res.status(200).send({postList: posts});
                     };
                 });
@@ -831,7 +830,6 @@ class SR {
                 .exec( function(err, posts) {
                     if (err) res.status(500).send(err);
                     else{
-                    console.log(posts);
                     res.status(200).send({postList: posts});
                     };
                 });
