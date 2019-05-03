@@ -51,6 +51,30 @@ describe('Server', function () {
   describe("tests registering new users", () => {
     let data = {};
     let testBody = {
+      Username: "guest",
+      Password: "123456789",
+      Email: "guest@memestock.cool"
+    };
+
+    beforeAll(done => {
+      request.post(
+        "http://localhost:4000/user/register",
+        { json: true, body: testBody },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          done();
+        }
+      );
+    });
+    it("checks creation of new User in database", () => {
+      expect(1).toBe(1);
+    })
+  });
+
+  describe("tests registering new users", () => {
+    let data = {};
+    let testBody = {
       Username: "Ali_yasser",
       Password: "12345678",
       Email: "Ali_yasser@m.com"

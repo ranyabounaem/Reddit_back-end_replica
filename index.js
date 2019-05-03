@@ -42,6 +42,8 @@
  */
 const express = require("express");
 const app = express();
+const HTTP = require('http').Server(app);
+const IO = require('socket.io')(HTTP);
 const mongoose = require('mongoose');
 //Uploading files
 const multer = require ('multer');
@@ -69,13 +71,14 @@ const upload = multer({
 const bodyparser = require('body-parser');
 const passport = require('passport');
 const passportConf = require('./JWT/passport');
-
 //contect to mongo
 mongoose.connect('mongodb://localhost:27017/reddit');
 mongoose.Promise = global.Promise;
 mongoose.connection.once('open', function () { console.log("Connection successful"); }).on('error', function (error) { console.log("error:", error) });
+const SocketHandler = require('./utils/SocketHandler');
+const socketInstance = new SocketHandler(IO);
 
-
+// console.log();
 //middlewares 
 // Uploading image
 app.use('/uploads', express.static('uploads'));
@@ -88,6 +91,10 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, auth");
     next();
 });
+
+
+
+// app.get("/a7a", passport.authenticate('jwt', { session: false }), (req, res) => res.send("res"));
 
 const userHandler = require("./src/user");
 
@@ -314,6 +321,24 @@ app.post("/user/CreateFlair", passport.authenticate('jwt', { session: false }), 
 */
 
 
+app.get("/guest", userHandler.getGuestToken);
+/**
+* @api {get} /guest Get guest user token
+* @apiName GetGuestToken
+* @apiGroup Guest
+*  @apiSuccessExample {json} Success
+*    HTTP/1.1 200 
+* {
+*      "Token":"ejb89c512asdf89gg789gh8fku89dvb6x...."
+* }
+*    
+* 
+* @apiErrorExample {json} List error
+*     HTTP/1.1 404 No Guest user found...
+*      {
+*      "message": "No one ran the tests..."
+*     }
+*/
 
 
 
@@ -473,7 +498,7 @@ app.put("/me/user/block", passport.authenticate('jwt', { session: false }), user
 * 
 */
 
-app.put("/me/user/Add", passport.authenticate('jwt', { session: false }), userHandler.addFriend);
+app.put("/me/user/Add", passport.authenticate('jwt', { session: false }), (req, res) => userHandler.addFriend(req, res, socketInstance.getEmitter()));
 /**
 * @api {put} /me/user/Add  Add new friend
 * @apiName FriendAdd
@@ -1472,7 +1497,7 @@ const commentHandler = require('./src/Comments/Comment').cHandler;
  * @note These are the routes for anything related to a user.
  * @note This is just general routing, You can modify as you want but before the delivery of the documentation
  */
-app.post("/comment/:id", passport.authenticate('jwt', { session: false }), commentHandler.handlePostComment);
+app.post("/comment/:id", passport.authenticate('jwt', { session: false }), (req, res) => commentHandler.handlePostComment(req, res, socketInstance.getEmitter()));
 /**
  * @api {post} /comment/:id Post a New Comment
  * @apiName PostComment
@@ -2042,7 +2067,7 @@ const subreddit = require('./Subreddits/subreddits')
 const privateMessage = require('./src/PM/Pm');
 
 
-app.post('/me/pm/compose', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.compose(req, res));
+app.post('/me/pm/compose', passport.authenticate('jwt', { session: false }), (req, res) => privateMessage.compose(req, res, socketInstance.getEmitter()));
 /**
 * @api {post} /me/pm/compose    Compose a new message
 * @apiName Compose
@@ -2475,5 +2500,5 @@ app.put("/notif/read/:id",passport.authenticate('jwt', { session: false }), noti
 app.put("/notif/unread/:id",passport.authenticate('jwt', { session: false }), notificationHandler.handleUnreadNotification);
 app.put("/notif/readall/",passport.authenticate('jwt', { session: false }), notificationHandler.handleReadAllNotifications);
 
-var server = app.listen(4000, function () { console.log('listening') });
+var server = HTTP.listen(4000, function () { console.log('listening') });
 module.exports = server;

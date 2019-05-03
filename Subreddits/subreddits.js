@@ -163,7 +163,7 @@ class SR {
         //var spoilerCheck = req.body.spoiler;
 
 
-        if (creator && postTitle && postBody && imgdata) {
+        if (creator && postTitle && postBody) {
 
             sr.findOne({ name: subrName }, function (err) {
 
@@ -175,15 +175,17 @@ class SR {
                     res.status(400).send({ 'error': 'invalid subreddit name' });
                 }
                 else {
-                    const path = __dirname + '/../uploads/'+Date.now()+'.png'
-                    const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
-                    fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
+                    if(imgdata){
+                        const path = __dirname + '/../uploads/'+Date.now()+'.png'
+                        const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+                        fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
+                    }
                     let newPost = new pt({
                         title: postTitle,
                         body: postBody,
                         creatorUsername: creator,
                         subredditName: subrName,
-                        postFile: '/uploads/'+Date.now()+'.png',
+                        postFile: imgdata ? '/uploads/'+Date.now()+'.png' : "none",
                         //if(imageCheck) { subredditFile: req.file.path },
                         //if(spoilerCheck) { spoiler: req.body.spoiler }
                     });

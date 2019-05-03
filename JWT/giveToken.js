@@ -17,11 +17,20 @@ module.exports=
     else return false;
    },
 
-   getUsernameFromToken:function(req)
+   getUsernameFromToken:function(req, token)
    {
-    const stringToken=JSON.stringify(req.headers.auth);
+    let stringToken = null;
+    if(token){
+        stringToken = token;
+    }else{
+        stringToken = JSON.stringify(req.headers.auth);
+    }
     const decodedValue = jwtDecode(stringToken);
-    return decodedValue.sub;
+    if(decodedValue && decodedValue.sub){
+        return decodedValue.sub;
+    }else{
+        return null;
+    }
    },
 
    getToken: function(user)

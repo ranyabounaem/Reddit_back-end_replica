@@ -275,7 +275,7 @@ class PM {
     * @returns {JSON} {error: 'internalServerError'} 
     */
 
-   compose(req, res) {
+   compose(req, res, emitter) {
 
       // middle ware shall be used for checking for the validation for the user 
       let owner = ath.getUsernameFromToken(req);
@@ -378,6 +378,14 @@ class PM {
                            date: Date()
                         })
                         n.save();
+                        emitter.emit("notification", {
+                           type:'message',
+                           username: receiverUsername,
+                           read: false,
+                           sourceID: null,
+                           message: owner + ' has sent you a message',
+                           date: Date()
+                        })
                         // save   with fire back function  to see the error 
                         message.save(function (err) {
                            if (err) {

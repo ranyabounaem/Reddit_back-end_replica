@@ -1,5 +1,4 @@
 const User = require("../../models/UserSchema");
-const notification = require('../../models/notificationSchema.js');
 const reports = require('../../models/Reports');
 const srs =require('../../models/subredditsSchema');
 const posts=srs.SubredditPostSchema;

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jasmine",
+    "automate": "jasmine ./spec/dblistautomation.spec.js",
     "test-cover": "istanbul cover --include-all-sources spec/specs.js && istanbul check-coverage"
   },
   "repository": {
@@ -37,6 +38,7 @@
     "passport-jwt": "^4.0.0",
     "request": "^2.88.0",
     "should": "^13.2.3",
+    "socket.io": "^2.2.0",
     "supertest": "^4.0.2",
     "urlencode": "^1.1.0"
   },
