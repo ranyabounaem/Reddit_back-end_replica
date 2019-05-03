@@ -79,7 +79,7 @@ describe('Server', function () {
         //  status 200 for ok
         it('Status 200', function () {
             expect(data.status).toBe(200);
-            expect(data.body).toBe('OK');
+            expect(data.body.success).toBe(true);
         });
         it('Database Test', function () {
             privateMessage.findOne(messageTest1,
@@ -112,7 +112,7 @@ describe('Server', function () {
         //  status 200 for ok
         it('Status 200', function () {
             expect(data.status).toBe(200);
-            expect(data.body).toBe('OK');
+            expect(data.body.success).toBe(true);
         });
         it('Database Test', function () {
             privateMessage.findOne(messageTest1,
@@ -241,7 +241,7 @@ describe('Server', function () {
         //  status 200 for ok
         it('Status 200', function () {
             expect(data.status).toBe(200);
-            expect(data.body).toBe('OK');
+            expect(data.body.success).toBe(true);
         });
         it('Database Test', function () {
             privateMessage.findOne(messageTest1,
@@ -641,7 +641,7 @@ describe('Server', function () {
         //  status 200 for ok
         it('Status 200', function () {
             expect(data.status).toBe(200);
-            expect(data.body).toBe('OK');
+            expect(data.body.success).toBe(true);
         });
         it('Database Test', function () {
             blockList.findOneAndDelete(messageTestFind,
@@ -707,7 +707,7 @@ describe('Server', function () {
         //  status 200 for ok
         it('Status 200', function () {
             expect(data.status).toBe(200);
-            expect(data.body).toBe('OK');
+            expect(data.body.success).toBe(true);
         });
         it('Database Test', function () {
             blockList.findOneAndDelete(messageTestFind,
@@ -767,12 +767,12 @@ describe('Server', function () {
         //  status 200 for ok
         it('Status 200', function () {
             expect(data.status).toBe(200);
-            expect(data.body).toBe('OK');
+            expect(data.body.success).toBe(true);
         });
 
         it('unblock test', function () {
             expect(data.status).toBe(200);
-            expect(data.body).toBe('OK');
+            expect(data.body.success).toBe(true);
         });
         it('database test', function () {
             blockList.findOne(messageTestFind,
