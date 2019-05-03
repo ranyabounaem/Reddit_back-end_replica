@@ -586,7 +586,7 @@ class SR {
                                     res.status(500).send({ 'error': 'internal server error' });
                                 }
                                 else {
-                                    res.status(200).send({ record3 });
+                                    res.status(200).send(record3);
                                 };
                             });
                         });
