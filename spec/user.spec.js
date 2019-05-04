@@ -1580,7 +1580,7 @@ describe("Adds user", () => {
           (err, res, body) => {
             data.body = body;
             data.status = res.statusCode;
-            reportId=data.body[0]._id;
+            reportId=data.body.reports[0]._id;
             done();
           
             
@@ -1589,7 +1589,7 @@ describe("Adds user", () => {
       });
       it("checks if correct sr", () => {
         expect(data.status).toBe(200);
-        expect(data.body[0].srName).toEqual("TestSr");
+        expect(data.body.reports[0].srName).toEqual("TestSr");
       });
     });
 
@@ -1716,7 +1716,7 @@ describe("Adds user", () => {
           (err, res, body) => {
             data.body = body;
             data.status = res.statusCode;
-            reportId=data.body[0]._id;
+            reportId=data.body.reports[0]._id;
             done();
           
             
@@ -1725,7 +1725,7 @@ describe("Adds user", () => {
       });
       it("checks if correct sr", () => {
         expect(data.status).toBe(200);
-        expect(data.body[0].srName).toEqual("TestSr");
+        expect(data.body.reports[0].srName).toEqual("TestSr");
       });
     });
 

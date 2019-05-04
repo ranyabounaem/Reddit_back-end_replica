@@ -120,7 +120,7 @@ class reportHandler {
     if (reportsToBeHandled.length==0){res.status(404).send({error:"No reports"});}
 
     else
-    res.status(200).send(reportsToBeHandled);
+    res.status(200).send({reports:reportsToBeHandled});
   }
 
 }
