@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
 const ObjectId = require('mongodb').ObjectID
 
 //let sSubreddit name or ID whatever the thread needs
-let th_id, c_id, c_id2, c_id3, c_id4, c_id5;
+let th_id, c_id, c_id2, c_id3, c_id4, c_id5, srName;
 let isodate = new Date().toISOString();
 const head = { 'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJNb3N0YWZhMFNoZXJpZiIsImlhdCI6MTU1NTA5Njg3MX0.9eXtK141KOGTKTghedqMJmtN6XwDs4g9FVzvpTEePMo' };
 const head2 = { 'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZW1lc3RvY2siLCJzdWIiOiJNb3N0YWZhMVNoZXJpZiIsImlhdCI6MTU1NTEwMTU4OX0.qTTyz_xxtZdTK8IouDGfxBLl8oqDK5cm1sAP_snYhDs' };
@@ -207,7 +207,7 @@ describe("comment tests", () => {
                 });
             });
             it("Notification test", () => {
-                notification.findOne({ $and: [{ username: 'Mostafa0Sherif' },{type:'post'}, { sourceID: th_id }] }).then(function (RetNotif) {
+                notification.findOne({ $and: [{ username: 'Mostafa0Sherif' },{type:'post'}, { sourceID: `/sr/${post1.subredditName}/thread/${th_id}` }] }).then(function (RetNotif) {
                     expect(RetNotif).not.toBe(null);
                 })
             });

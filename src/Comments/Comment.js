@@ -87,7 +87,7 @@ class CommentHandler {
                                     username: retPost.creatorUsername,
                                     fromUser: getUser(req),
                                     read: false,
-                                    sourceID: retPost._id,
+                                    sourceID: `/sr/${retPost.subredditName}/thread/${retPost._id}`,
                                     message: getUser(req) + ' has commented on your post',
                                     date: Date()
                                 })
@@ -96,7 +96,7 @@ class CommentHandler {
                                     username: retPost.creatorUsername,
                                     fromUser: getUser(req),
                                     read: false,
-                                    sourceID: retPost._id,
+                                    sourceID: `/sr/${retPost.subredditName}/thread/${retPost._id}`,
                                     message: getUser(req) + ' has commented on your post',
                                     date: Date()
                                 });
