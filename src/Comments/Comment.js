@@ -382,7 +382,14 @@ class CommentHandler {
             });
         }
     }
-
+    /**
+     * @function handleVoteComment
+     * @summary A function that votes for a comment (upvote(1)-unvote(0)-downvote(-1))
+     * @summary Takes the id of a comment and the direction of the vote and adds it if it's already added
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON} a message that contains if you've successfully voted or an error occured.
+     */
     handleVoteComment(req, res) {
         let user = getUser(req);
         if (!ObjectId.isValid(req.params.id)) {
@@ -509,7 +516,14 @@ class CommentHandler {
             });
         }
     }
-
+    /**
+     * @function handleReportComment
+     * @summary A function that reports a comment or a reply.
+     * @summary Takes the id of a comment and the description if available and adds it to the reports.
+     * @param {Object} req The request.
+     * @param {Object} res The response.
+     * @returns {JSON} a message indicating if you've reporteed the comment successfully or not.
+     */
     handleReportComment(req, res) {
         if (!ObjectId.isValid(req.params.id)) {
             res.status(400).send({ 'error': 'This is not a valid ID' });
