@@ -5,7 +5,7 @@ const posts=srs.SubredditPostSchema;
 const JWTconfig = require("../../JWT/giveToken");
 const ObjectId = require('mongodb').ObjectID;
 const Comment = require('../../models/commentSchema.js');
-const commentHandler = require('../Comments/Comment').cm;
+const deleteComment = require('../Comments/Comment').cm;
 
 sr = srs.Subreddit;
 
@@ -282,7 +282,7 @@ class reportHandler {
     *    This deletes  
     */
       else { 
-       commentHandler.deleteComment(reportToDelete.reportedId);
+        await deleteComment(reportToDelete.reportedId);
       res.status(404).send({message:"Comment deleted"});}
     
       }
