@@ -1791,8 +1791,1090 @@ describe("Adds user", () => {
       });
     });
 
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "asdfasdf"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if creator tries to add a non existing user", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error": "User to be added as moderator doesn't exist"
+        }
+        );
+      });
+    });
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "mostafa"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks creator adding himself", () => {
+        expect(data.status).toBe(402);
+        expect(data.body).toEqual({
+          "error" : "User cannot add himself"
+        }
+        );
+      });
+    });
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "Username" : "mostafa"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks creator adding himself", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error" : "SrName not found"
+        }
+        );
+      });
+    });
 
 
 
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("No entry for username", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error" : "Username not found"
+        }
+        );
+      });
+    });
+
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks moderator request sent", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message" : "Moderator request Sent"
+        }
+        );
+      });
+    });
+
+
+
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if moderator has already received a request", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({
+          "error": "User has already received a Moderation request"
+        }
+        );
+      });
+    });
+
+    describe("removing a Moderator request", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/remove/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if moderator request removed", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message": "Request for moderation removed"
+        }
+        );
+      });
+    });
+
+    describe("removing a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "mostafa"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/remove/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks that normal user can't get access to remove functionality", () => {
+        expect(data.status).toBe(402);
+        expect(data.body).toEqual({
+          "error": "User is not creator of the subreddit"
+        }
+        );
+      });
+    });
+    
+
+    describe("removing a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/remove/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if moderator to be removed isn't a moderator", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({
+          "error": "User isn't a moderator"
+        }
+        );
+      });
+    });
+
+    describe("removing a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "mostafa"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/remove/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if moderator tries to remove himself", () => {
+        expect(data.status).toBe(402);
+        expect(data.body).toEqual({
+          "error": "User cannot remove himself"
+        }
+        );
+      });
+    });
+
+    describe("removing a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "asdfasdf"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/remove/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if creator tries to remove a non existing moderator", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error": "User to be removed from moderation doesn't exist"
+        }
+        );
+      });
+    });
+
+
+    describe("removing a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "damn",
+        "Username" : "mostafa"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/remove/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if creator tries to remove a moderator from a non existing subreddit", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error": "Subbreddit doesn't exist"
+        }
+        );
+      });
+    });
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks moderator request sent", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message" : "Moderator request Sent"
+        }
+        );
+      });
+    });
+
+    describe("Accepting a moderator request", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/accept/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks accepting moderator request sent", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message" : "Moderator request accepted"
+        }
+        );
+      });
+    });
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks sending a moderator invite to an already existing moderator", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({
+          "error" : "User is already a moderator"
+        }
+        );
+      });
+    });
+
+    describe("removing a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/remove/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks if moderator  removed", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message": "Moderator removed"
+        }
+        );
+      });
+    });
+
+
+
+    describe("Accepting a moderator request", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/accept/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks accepting moderator request sent", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error" : "Request doesn't exist"
+        }
+        );
+      });
+    });
+
+    describe("Accepting a moderator request", () => {
+      let data = {};
+      let testBody = {
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/accept/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks accepting moderator request sent when there's no entry for SrName", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error" : "SrName not found"
+        }
+        );
+      });
+    });
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      }; 
+    beforeAll(done => {
+      request.put(
+        "http://localhost:4000/Moderator/Invite/",
+        { json: true, body: testBody ,headers:head2 },
+        (err, res, body) => {
+          data.body = body;
+          data.status = res.statusCode;
+          
+          done();
+        
+          
+        }
+      );
+    });
+    it("checks moderator request sent", () => {
+      expect(data.status).toBe(200);
+      expect(data.body).toEqual({
+        "message" : "Moderator request Sent"
+      }
+      );
+    });
+
+
+    describe("rejecting a moderator request", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/reject/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks rejecting moderator request", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message" : "Moderator request rejected"
+        }
+        );
+      });
+    });
+  
+   
+  
+    describe("rejecting a moderator request", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/reject/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks rejecting moderator request", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error" : "Request doesn't exist"
+        }
+        );
+      });
+    });
+  
+    describe("rejecting a moderator request", () => {
+      let data = {};
+      let testBody = {
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/reject/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks rejecting moderator request sent when there's no entry for SrName", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error" : "SrName not found"
+        }
+        );
+      });
+    });
+
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks moderator request sent", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message" : "Moderator request Sent"
+        }
+        );
+      });
+    });
+
+    describe("Accepting a moderator request", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/accept/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks accepting moderator request sent", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message" : "Moderator request accepted"
+        }
+        );
+      });
+    });
+
+    describe("Banning a user", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "mostafa"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/ban/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks moderator trying to ban the creator of the subreddit", () => {
+        expect(data.status).toBe(402);
+        expect(data.body).toEqual({
+          "error" : "User cannot ban the creator of the subreddit"
+        }
+        );
+      });
+    });
+
+    describe("Banning a user", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "adsfa"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/ban/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks moderator trying to ban a non existing user", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error" : "User to be banned doesn't exist"
+        }
+        );
+      });
+    });
+
+    describe("Banning a user", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/ban/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks moderator trying to ban a non existing user", () => {
+        expect(data.status).toBe(402);
+        expect(data.body).toEqual({
+          "error" : "User cannot ban himself"
+        }
+        );
+      });
+    });
+
+    describe("Banning a user", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/ban/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks creator banning a moderator", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message": "Moderator banned successfully"
+        }
+        );
+      });
+    });
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks adding moderator to a banned user", () => {
+        expect(data.status).toBe(401);
+        expect(data.body).toEqual({
+          "error" : "User is banned from Subreddit"
+        }
+        );
+      });
+    });
+
+    describe("Banning a user", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/ban/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks creator banning an already banned user", () => {
+        expect(data.status).toBe(402);
+        expect(data.body).toEqual({
+          "error":"User is already banned from Subreddit"
+        }
+        );
+      });
+    });
+
+    describe("Banning a user", () => {
+      let data = {};
+      let testBody = {
+        
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/ban/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks creator banning an already banned user", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error":"SrName not found"
+        }
+        );
+      });
+    });
+
+    describe("Unbanning a user", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/unban/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks creator unbanning an already banned user", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message": "User unbanned successfully" 
+        }
+        );
+      });
+    });
+    
+
+    describe("Unbanning a user", () => {
+      let data = {};
+      let testBody = {
+        
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/unban/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks banning a user with missing SrName entry ", () => {
+        expect(data.status).toBe(404);
+        expect(data.body).toEqual({
+          "error":"SrName not found"
+        }
+        );
+      });
+    });
+
+    describe("Unbanning a user", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/unban/",
+          { json: true, body: testBody ,headers:head },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks unbanning a user while not being a moderator ", () => {
+        expect(data.status).toBe(402);
+        expect(data.body).toEqual({
+          "error":"User is not authorized to unban"
+        }
+        );
+      });
+    });
+
+
+    describe("Unbanning a user", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/unban/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("Checks creator unbanning an unbanned user", () => {
+        expect(data.status).toBe(402);
+        expect(data.body).toEqual({
+          "error":"User isn't banned from Subreddit"
+        }
+        );
+      });
+    });
+
+    describe("Adding a Moderator", () => {
+      let data = {};
+      let testBody = {
+        "SrName" : "TestSr",
+        "Username" : "Uzumaki"
+        
+      };    
+      beforeAll(done => {
+        request.put(
+          "http://localhost:4000/Moderator/Invite/",
+          { json: true, body: testBody ,headers:head2 },
+          (err, res, body) => {
+            data.body = body;
+            data.status = res.statusCode;
+            
+            done();
+          
+            
+          }
+        );
+      });
+      it("checks moderator request sent", () => {
+        expect(data.status).toBe(200);
+        expect(data.body).toEqual({
+          "message" : "Moderator request Sent"
+        }
+        );
+      });
+    });
+
+  });
 
 });

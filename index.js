@@ -118,7 +118,7 @@ app.use(function (req, res, next) {
 
 const userHandler = require("./src/user");
 
-
+app.get("/user/search", passport.authenticate('jwt', { session: false }), userHandler.search);
 app.put("/user/ForgetPassword/:username", userHandler.forgetPassword);
 /**
  * @api {put} /user/ForgetPassword/:username reset password

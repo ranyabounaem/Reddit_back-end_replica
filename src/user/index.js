@@ -1140,5 +1140,83 @@ class UserHandler {
       return res.status(200).send({ message: "About Information updated successfully" })
     }
   }
+
+
+
+  async search(req, res)
+  {
+    const username = JWTconfig.getUsernameFromToken(req);
+    const user = await User.findOne({ Username: username });
+    if(req.body.search == "")
+    {
+      res.status(404).send({error : "Empty search"});
+    }
+    else 
+    {
+      const users =await User.find({Username: {'$regex' : req.body.search , '$options' : 'i'}});
+      const subreddits =await sr.find({name: {'$regex' : req.body.search,  '$options' : 'i'}});
+      const posts =  await Post.find({"$or" :[{title: {'$regex' : req.body.search,  '$options' : 'i'}}, {body: {'$regex' : req.body.search,  '$options' : 'i'}}] });
+      //[{title: {'$regex' : req.body.search,  '$options' : 'i'} , body :{'$regex' : req.body.search,  '$options' : 'i'}}]
+      var sentUsers = [];
+      var sentSubreddits = [];
+      var sentPosts = [];
+      for (var someUser in users)
+      {
+        var push = true;
+        for (var block in users[someUser].blockedUsers )
+        {
+          if(username  == users[someUser].blockedUsers[block]) 
+          {
+            push = false;
+            continue;
+          }
+        }
+        if (push == true)
+        {
+          sentUsers.push(users[someUser]);
+        }
+      }
+
+      for (var subreddit in subreddits)
+      {
+        var push = true;
+        for (var banned in subreddits[subreddit].bannedUsers )
+        {
+          if(username  == subreddits[subreddit].bannedUsers[banned]) 
+          {
+            push = false;
+            continue;
+          }
+        }
+        if (push == true)
+        {
+          sentSubreddits.push(subreddits[subreddit]);
+        }
+      }
+
+      for (var post in posts)
+      {
+        var SR = await sr.findOne({ name: posts[post].subredditName });
+        var push = true;
+        for (var banned in SR.bannedUsers )
+        {
+          if(username  == SR.bannedUsers[banned]) 
+          {
+            push = false;
+            continue;
+          }
+        }
+        if (push == true)
+        {
+          sentPosts.push(posts[post]);
+        }
+      }
+
+        
+      
+      res.status(200).send({Users : sentUsers, Subreddits : sentSubreddits, Posts : sentPosts});
+    }
+
+  } 
 }
 module.exports = new UserHandler();

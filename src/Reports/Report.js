@@ -494,7 +494,7 @@ class reportHandler {
     *    This checks if the SrName is in the request
     *     if not found it sends error 404 with message "SrName not found"
     */
-    if(req.body.SrName == null) res.status(404).send("SrName not found");
+    if(req.body.SrName == null) res.status(404).send({error:"SrName not found"});
 
     else
     {
@@ -550,7 +550,7 @@ class reportHandler {
     *    This checks if the SrName is in the request
     *     if not found it sends error 404 with message "SrName not found"
     */
-    if(req.body.SrName == null) res.status(404).send("SrName not found");
+    if(req.body.SrName == null) res.status(404).send({error :"SrName not found"});
 
     else
     {
@@ -606,7 +606,7 @@ class reportHandler {
     *    This checks if the SrName is in the request
     *     if not found it sends error 404 with message "SrName not found"
     */
-    if(req.body.SrName == null) res.status(404).send("SrName not found");
+    if(req.body.SrName == null) res.status(404).send({error:"SrName not found"});
 
     else
     {
