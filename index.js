@@ -118,7 +118,6 @@ app.use(function (req, res, next) {
 
 const userHandler = require("./src/user");
 
-app.get("/user/search", passport.authenticate('jwt', { session: false }), userHandler.search);
 app.put("/user/ForgetPassword/:username", userHandler.forgetPassword);
 /**
  * @api {put} /user/ForgetPassword/:username reset password
@@ -822,6 +821,92 @@ app.put("/me/user/removeReq", passport.authenticate('jwt', { session: false }), 
 
 
 //TODO POSTS: listing posts for a subreddit or only popular posts
+
+app.get("/user/search", passport.authenticate('jwt', { session: false }), userHandler.search);
+/**
+ * @api {get} /user/search    Search
+ * @apiName Search
+ * @apiGroup UserService
+ *
+ *
+ * @apiParam  {String} search value to search for .
+ *  @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * {
+ *       {
+    "Users": [
+        {
+            "Subscriptions": [
+                "Movies"
+            ],
+            "moderates": [],
+            "ModReq": [],
+            "blockedUsers": [],
+            "Friends": [],
+            "SentReq": [],
+            "RecReq": [],
+            "karma": 38,
+            "_id": "5cd1576c970fb97e787e5f42",
+            "Username": "captainmaged",
+            "Password": "$2b$10$ZKEppIXkkQ2I13hJYpz3W.plgXUdny3a6iqqFj2yesIB.7CE3efCe",
+            "Email": "aldarbaalsa3eka@m.com",
+            "SavedPosts": [],
+            "__v": 1,
+            "cakeday": "2019-05-07T10:01:16.162Z"
+        }
+    ],
+    "Subreddits": [
+        {
+            "rules": [
+                "No kids allowed."
+            ],
+            "posts": [
+                "5cd1576c970fb97e787e5f68",
+                "5cd1576c970fb97e787e5f6e",
+                "5cd15e950f25813ae44d2b23"
+            ],
+            "subscribed_users": [
+                "zaghwkarim",
+                "Ali_yasser"
+            ],
+            "bio": [],
+            "modUsername": [
+                "mostafa_hazem"
+            ],
+            "bannedUsers": [],
+            "_id": "5cd1576c970fb97e787e5f57",
+            "name": "Parenting",
+            "adminUsername": "mostafa_hazem",
+            "subredditFile": "/uploads/1557223276397.jpg",
+            "date": "2019-05-07T10:01:16.398Z",
+            "__v": 78
+        }
+    ],
+    "Posts": [
+        {
+            "spoiler": false,
+            "votes": 1,
+            "_id": "5cd1576c970fb97e787e5f68",
+            "title": "Getting rid of your kid",
+            "body": "If you can't take it anymore, here are 5 steps to get rid of your child!",
+            "creatorUsername": "amir_maloosh-lazma",
+            "subredditName": "Parenting",
+            "postFile": "/uploads/1557223276575.png",
+            "postDate": "2019-05-07T10:01:16.576Z",
+            "__v": 0
+        }
+    ]
+}
+ * }
+ *    
+ * 
+ * @apiErrorExample {json} List error
+ *    
+ * HTTP/1.1 406 user doesnnt exist
+ * {
+ * "error":"Empty search"
+ * }
+ */
 
 
 const listings = require('./src/listings');
