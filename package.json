@@ -40,7 +40,8 @@
     "should": "^13.2.3",
     "socket.io": "^2.2.0",
     "supertest": "^4.0.2",
-    "urlencode": "^1.1.0"
+    "urlencode": "^1.1.0",
+    "web-push": "^3.3.3"
   },
   "devDependencies": {
     "grunt-template-jasmine-istanbul": "^0.5.0"

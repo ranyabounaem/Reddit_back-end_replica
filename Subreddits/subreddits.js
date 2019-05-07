@@ -22,8 +22,8 @@ class SR {
      * @param {object} Response - 200 (Success).
      * @returns {JSON} Returns the created subreddit.
      */
-    createSr(req, res) {
 
+    createSr(req, res) {
         var admin = getUser(req);
         var subredditName = req.body.srName;
         var subredditRules = req.body.srRules;
@@ -32,18 +32,27 @@ class SR {
         //ar imageCheck = req.file;
 
         if (admin && subredditName && subredditRules && imgdata) {
-            const path = __dirname + '/../uploads/'+Date.now()+'.png'
+            let extension = undefined;
+
+            if (imgdata.indexOf("png") !== -1) extension = ".png"
+            else if (imgdata.indexOf("jpg") !== -1 || imgdata.indexOf("jpeg") !== -1)
+                extension = ".jpg"
+            else extension = ".tiff";
+
+            const fName = Date.now() + extension;
+            const path = __dirname + '/../uploads/' + fName;
             const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
-            fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
+            fs.writeFileSync(path, base64Data, { encoding: 'base64' });
             var subreddit = new sr({
                 name: subredditName,
                 adminUsername: admin,
                 rules: subredditRules,
                 modUsername: admin,
-                subredditFile: '/uploads/'+Date.now()+'.png',
+                subredditFile: '/uploads/' + fName,
                 bio: bio
                 //if(imageCheck) { subredditFile: req.file.path }
             });
+            console.log("path:" , path);
             subreddit.save(function (err, record) {
                 if (err) {
                     // internal Server error 
@@ -51,14 +60,14 @@ class SR {
 
                 }
                 else {
-                    User.findOne({ Username:admin}).then(function(user){
+                    User.findOne({ Username: admin }).then(function (user) {
 
-                    user.moderates.push(subredditName);
+                        user.moderates.push(subredditName);
 
-                      user.save(function(){res.status(200).send(record);}) 
-                      
+                        user.save(function () { res.status(200).send(record); })
+
                     })
-                     
+
                 }
             });
         }
@@ -81,17 +90,19 @@ class SR {
         var updatedName = req.body.newName;
         var newMods = req.body.newMods;
         const imgdata = req.body.base64image;
-        
+
         if (subredditName && updatedRules && updatedName && newMods && imgdata) {
-            const path = __dirname + '/../uploads/'+Date.now()+'.png'
+
+            const crrDate = Date.now();
+            const path = __dirname + '/../uploads/' + crrDate + '.png'
             const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
-            fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
+            fs.writeFileSync(path, base64Data, { encoding: 'base64' });
             sr.findOneAndUpdate({ name: subredditName },
                 {
                     name: updatedName,
                     rules: updatedRules,
                     modUsername: req.body.newMods,
-                    subredditFile: '/uploads/'+Date.now()+'.png',
+                    subredditFile: '/uploads/' + crrDate + '.png',
                     bio: req.body.newBio
                 },
                 function (err, record) {
@@ -182,17 +193,18 @@ class SR {
                     res.status(400).send({ 'error': 'invalid subreddit name' });
                 }
                 else {
-                    if(imgdata){
-                        const path = __dirname + '/../uploads/'+Date.now()+'.png'
+                    const crrDate = Date.now();
+                    if (imgdata) {
+                        const path = __dirname + '/../uploads/' + crrDate + '.png'
                         const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
-                        fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
+                        fs.writeFileSync(path, base64Data, { encoding: 'base64' });
                     }
                     let newPost = new pt({
                         title: postTitle,
                         body: postBody,
                         creatorUsername: creator,
                         subredditName: subrName,
-                        postFile: imgdata ? '/uploads/'+Date.now()+'.png' : "none",
+                        postFile: imgdata ? '/uploads/' + crrDate + '.png' : "none",
                         //if(imageCheck) { subredditFile: req.file.path },
                         spoiler: req.body.spoiler
                     });
@@ -265,7 +277,7 @@ class SR {
                                         res.status(500).send({ 'error': 'internal server error' });
                                     }
                                     else {
-                                        res.status(200).send({subscribed_users: record.subscribed_users});
+                                        res.status(200).send({ subscribed_users: record.subscribed_users });
                                     };
                                 });
                             });
@@ -759,20 +771,20 @@ class SR {
             if (checkIfSaved) { res.status(404).send({ error: "post already saved" }); }
 
 
-             if(checkIfSaved) {
+            if (checkIfSaved) {
 
-                user.SavedPosts.pop({"postId":postId,"title":postSave.title});
+                user.SavedPosts.pop({ "postId": postId, "title": postSave.title });
 
                 user.save();
-                 
-                res.status(404).send({error:"post Unsaved"});
-            
+
+                res.status(404).send({ error: "post Unsaved" });
+
             }
-             
-             
-            else{
-                
-            user.SavedPosts.push({"postId":postId,"title":postSave.title});
+
+
+            else {
+
+                user.SavedPosts.push({ "postId": postId, "title": postSave.title });
 
                 user.SavedPosts.push({ "postId": postId, "title": postSave.title });
 
@@ -791,48 +803,44 @@ class SR {
     * @returns {JSON} Returns the post's information as an object.
     */
 
-   listPost(req, res) {
+    listPost(req, res) {
 
         var subrName = req.params.srName;
         var type = req.params.type;
-        var yesterday = Date.now() - 1000*60*60*24;
-        if(type)
-        {
-            if(type=="hot")
-            {
-                pt.find({subredditName: subrName, postDate:{$gt:yesterday}})
-                .sort({votes: -1})
-                .limit(5)
-                .exec( function(err, posts) {
-                    if (err) res.status(500).send(err);
-                    else{
-                    res.status(200).send({postList: posts});
-                    };
-                });
+        var yesterday = Date.now() - 1000 * 60 * 60 * 24;
+        if (type) {
+            if (type == "hot") {
+                pt.find({ subredditName: subrName, postDate: { $gt: yesterday } })
+                    .sort({ votes: -1 })
+                    .limit(5)
+                    .exec(function (err, posts) {
+                        if (err) res.status(500).send(err);
+                        else {
+                            res.status(200).send({ postList: posts });
+                        };
+                    });
             }
-            else if(type=="new")
-            {
-                pt.find({subredditName: subrName})
-                .sort({postDate: -1})
-                .limit(5)
-                .exec( function(err, posts) {
-                    if (err) res.status(500).send(err);
-                    else{
-                    res.status(200).send({postList: posts});
-                    };
-                });
+            else if (type == "new") {
+                pt.find({ subredditName: subrName })
+                    .sort({ postDate: -1 })
+                    .limit(5)
+                    .exec(function (err, posts) {
+                        if (err) res.status(500).send(err);
+                        else {
+                            res.status(200).send({ postList: posts });
+                        };
+                    });
             }
-            else if(type == "top")
-            {
-                pt.find({subredditName: subrName})
-                .sort({votes: -1})
-                .limit(3)
-                .exec( function(err, posts) {
-                    if (err) res.status(500).send(err);
-                    else{
-                    res.status(200).send({postList: posts});
-                    };
-                });
+            else if (type == "top") {
+                pt.find({ subredditName: subrName })
+                    .sort({ votes: -1 })
+                    .limit(3)
+                    .exec(function (err, posts) {
+                        if (err) res.status(500).send(err);
+                        else {
+                            res.status(200).send({ postList: posts });
+                        };
+                    });
             };
         };
     };

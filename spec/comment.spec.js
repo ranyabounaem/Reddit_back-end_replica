@@ -173,7 +173,7 @@ describe("comment tests", () => {
             });
             it("Mongo test", () => {
                 Comment.findOne({ content: "Messi is the GOAT" }).then(function (RetComment) {
-                    expect(RetComment).not.toBe(null);
+                    expect(RetComment).not.toEqual(null);
                 });
             });
             it("Notification test", () => {

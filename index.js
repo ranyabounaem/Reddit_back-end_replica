@@ -81,7 +81,7 @@ const socketInstance = new SocketHandler(IO);
 // console.log();
 //middlewares 
 // Uploading image
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static(__dirname + "/uploads/"));
 /////
 app.use(bodyparser.json({limit: '50mb', extended: true}));
 app.use(passport.initialize());
@@ -91,10 +91,30 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, auth");
     next();
 });
+// const vapidKeys = {
+//     publicKey: 'BER0W2tD4sWrG7dYLjSp4avRvtjovXykHkxC9yUKoHjuM5or977KdoShVn_d4XUkWDDMcjrs8-dyjlkXbqD-5ZA',
+//     privateKey: 'OPVChfpRX8j3oiRJza_HxqrW2jTxn7N_BsEX9kht_AA'
+// }
+// const webpush = require('web-push');
 
+// webpush.setGCMAPIKey('<Your GCM API Key Here>');
+// webpush.setVapidDetails(
+//     'mailto:m.atwa@articlebox.net',
+//     vapidKeys.publicKey,
+//     vapidKeys.privateKey
+// );
+// app.post('/subscribe', (req, res) => {
+//     const subscription = req.body;
+//     res.status(201).json({});
+//     const payload = JSON.stringify({ title: 'test' });
+  
+//     console.log(subscription);
+  
+//     webpush.sendNotification(subscription, payload).catch(error => {
+//       console.error(error.stack);
+//     });
+// });
 
-
-// app.get("/a7a", passport.authenticate('jwt', { session: false }), (req, res) => res.send("res"));
 
 const userHandler = require("./src/user");
 
@@ -871,10 +891,10 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 *     }
 */
 
-
+app.get("/user/:Username/posted", passport.authenticate('jwt', { session: false }), (req, res) => userHandler.list(req, res))
 
 /** 
-* @api {get} /user/:Username/comments/listing?type=value  List Comments 
+* @api {get} /user/:Username/posted/listing?type=value  List Comments 
 * @apiName ListComments
 * @apiGroup UserService
 * @apiParam {String} SyncToken Sent as Header used for Synchronization and preventing CHRF Attack.
@@ -892,7 +912,8 @@ app.get('/me/listing', passport.authenticate('jwt', { session: false }), (req, r
 *       "SubbredditName": "r/funny",
 *       "PostID" :1,
 *       "Content" : "Let's see who wins this contest "
-*       }]
+*       },
+*        "Posts": [{}]]
 *     }
 *
 * @apiError CommentsNotFound no comments found to be listed

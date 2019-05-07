@@ -8,7 +8,8 @@ const JWTconfig = require("../../JWT/giveToken");
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 const commentHandler = require('../Comments/Comment').cm;
-
+const Post = require("../../models/subredditsSchema").SubredditPostSchema;
+const Comment = require("../../models/commentSchema");
 const nodeMailer = require('nodemailer');
 
 async function checkIfBlockedByMe(user, username) {
@@ -130,6 +131,21 @@ class UserHandler {
     } else {
       return false;
     }
+  }
+  /**
+   * @description Gets all posted posts and comments of a username
+   * @param {Object<Request>} req 
+   * @param {Object<Response>} res 
+   * @returns {JSON}
+   */
+  async list(req, res){
+    const username = req.params.Username;
+    const Posts = await Post.find({creatorUsername: username});
+    const Comments = await Comment.find({username: username});
+    res.status(200).send({
+      posts: Posts,
+      comments: Comments
+    });
   }
   /**
    * @description Subscribes guest User and sends its token

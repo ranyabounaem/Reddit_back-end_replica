@@ -4,11 +4,35 @@ const jwt = require('../JWT/giveToken');
 const getUser = jwt.getUsernameFromToken;
 const notification = require('../models/notificationSchema');
 const ObjectId = require('mongodb').ObjectID;
+const webpush = require('web-push');
+
 
 
 class notificationHandler {
     constructor() {
+        // VAPID keys should only be generated only once.
+        // this.vapidKeys = {
+        //     publicKey: 'BER0W2tD4sWrG7dYLjSp4avRvtjovXykHkxC9yUKoHjuM5or977KdoShVn_d4XUkWDDMcjrs8-dyjlkXbqD-5ZA',
+        //     privateKey: 'OPVChfpRX8j3oiRJza_HxqrW2jTxn7N_BsEX9kht_AA'
+        // }
 
+        // webpush.setGCMAPIKey('<Your GCM API Key Here>');
+        // webpush.setVapidDetails(
+        //     'mailto:m.atwa@articlebox.net',
+        //     this.vapidKeys.publicKey,
+        //     this.vapidKeys.privateKey
+        // );
+
+        // // This is the same output of calling JSON.stringify on a PushSubscription
+        // const pushSubscription = {
+        //     endpoint: '.....',
+        //     keys: {
+        //         auth: '.....',
+        //         p256dh: '.....'
+        //     }
+        // };
+
+        // webpush.sendNotification(pushSubscription, 'Your Push Payload Text');
     }
     handleGetNotification(req, res) {
         let user = getUser(req);
@@ -22,7 +46,7 @@ class notificationHandler {
             if (retNotifs == null) {
                 res.status(404).send({ 'error': 'You do not have any Notifications' });
             } else {
-                res.status(200).send({notifications:retNotifs});
+                res.status(200).send({ notifications: retNotifs });
             }
         });
     }
@@ -39,7 +63,7 @@ class notificationHandler {
                 if (retNotif == null) {
                     res.status(404).send({ 'error': 'There is no Notification with this ID for this user' });
                 } else {
-                    res.status(200).json({"message":"marked read successfully"});
+                    res.status(200).json({ "message": "marked read successfully" });
                 }
             });
         }
@@ -57,7 +81,7 @@ class notificationHandler {
                 if (retNotif == null) {
                     res.status(404).send({ 'error': 'There is no Notification with this ID for this user' });
                 } else {
-                    res.status(200).json({"message":"marked unread successfully"});
+                    res.status(200).json({ "message": "marked unread successfully" });
                 }
             });
         }
@@ -69,7 +93,7 @@ class notificationHandler {
             if (retNotif == null) {
                 res.status(404).send({ 'error': 'There is no Notification for this user' });
             } else {
-                res.status(200).json({"message":"All notifications marked read successfully"});
+                res.status(200).json({ "message": "All notifications marked read successfully" });
             }
         });
     }
