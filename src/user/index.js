@@ -1147,15 +1147,15 @@ class UserHandler {
   {
     const username = JWTconfig.getUsernameFromToken(req);
     const user = await User.findOne({ Username: username });
-    if(req.body.search == "")
+    if(req.query.q == "")
     {
       res.status(404).send({error : "Empty search"});
     }
     else 
     {
-      const users =await User.find({Username: {'$regex' : req.body.search , '$options' : 'i'}});
-      const subreddits =await sr.find({name: {'$regex' : req.body.search,  '$options' : 'i'}});
-      const posts =  await Post.find({"$or" :[{title: {'$regex' : req.body.search,  '$options' : 'i'}}, {body: {'$regex' : req.body.search,  '$options' : 'i'}}] });
+      const users =await User.find({Username: {'$regex' : req.query.q , '$options' : 'i'}});
+      const subreddits =await sr.find({name: {'$regex' : req.query.q,  '$options' : 'i'}});
+      const posts =  await Post.find({"$or" :[{title: {'$regex' : req.query.q,  '$options' : 'i'}}, {body: {'$regex' : req.query.q,  '$options' : 'i'}}] });
       //[{title: {'$regex' : req.body.search,  '$options' : 'i'} , body :{'$regex' : req.body.search,  '$options' : 'i'}}]
       var sentUsers = [];
       var sentSubreddits = [];
